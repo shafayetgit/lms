@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | BankLearn Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #1a4f8c;
+            --secondary: #3a7cbd;
+            --accent: #ff6b00;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: #f5f7f9;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #e55f00;
+            transform: translateY(-2px);
+        }
+        
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        /* Hero Section */
+        .about-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .about-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Mission Section */
+        .mission {
+            background-color: white;
+        }
+        
+        .mission-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .mission-text {
+            flex: 1;
+        }
+        
+        .mission-text h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+        
+        .mission-text p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .mission-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mission-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Values Section */
+        .values {
+            background-color: #f5f7f9;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .value-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .value-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        /* Team Section */
+        .team {
+            background-color: white;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .team-member {
+            text-align: center;
+        }
+        
+        .team-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 5px solid #f5f7f9;
+        }
+        
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .team-member h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .team-role {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* CTA Section */
+        .cta {
+            background-color: #f5f7f9;
+            text-align: center;
+        }
+        
+        .cta h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-col ul li a:hover {
+            color: var(--accent);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .mission-content {
+                flex-direction: column;
+            }
+            
+            .mission-image {
+                order: -1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .about-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">Bank<span>Learn</span> Pro</a>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="#">Instructors</a></li>
+                    <li><a href="#" class="active">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>About BankLearn Pro</h1>
+            <p>Empowering banking professionals with industry-leading education and training solutions since 2010.</p>
+            <a href="#" class="btn">Explore Our Courses</a>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="section mission">
+        <div class="container">
+            <div class="mission-content">
+                <div class="mission-text">
+                    <h2>Our Mission</h2>
+                    <p>At BankLearn Pro, we are dedicated to advancing the banking industry through comprehensive education and professional development. Our mission is to provide banking professionals with the knowledge, skills, and credentials needed to excel in an ever-evolving financial landscape.</p>
+                    <p>We partner with industry experts, financial institutions, and regulatory bodies to deliver cutting-edge courses that address real-world challenges and opportunities in banking.</p>
+                    <a href="#" class="btn">Our Courses</a>
+                </div>
+                <div class="mission-image">
+                    <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Banking professionals discussing">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="section values">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Values</h2>
+                <p>These core principles guide everything we do at BankLearn Pro</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Excellence in Education</h3>
+                    <p>We maintain the highest standards in course content, instruction, and learning outcomes.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Integrity & Trust</h3>
+                    <p>We operate with transparency and ethical practices, earning the trust of our learners.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Innovation</h3>
+                    <p>We continuously evolve our platform and content to meet the changing needs of the banking sector.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="section team">
+        <div class="container">
+            <div class="section-title">
+                <h2>Leadership Team</h2>
+                <p>Meet the experts guiding our mission to transform banking education</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="Sarah Johnson">
+                    </div>
+                    <h3>Sarah Johnson</h3>
+                    <div class="team-role">CEO & Founder</div>
+                    <p>Former VP of Risk Management at Global Bank with 15+ years experience.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="Michael Chen">
+                    </div>
+                    <h3>Michael Chen</h3>
+                    <div class="team-role">Chief Learning Officer</div>
+                    <p>Learning & Development expert specializing in financial services education.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="Emily Rodriguez">
+                    </div>
+                    <h3>Emily Rodriguez</h3>
+                    <div class="team-role">Director of Content</div>
+                    <p>Former compliance officer with deep expertise in banking regulations.</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-image">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80" alt="David Williams">
+                    </div>
+                    <h3>David Williams</h3>
+                    <div class="team-role">Head of Partnerships</div>
+                    <p>Connects banks with tailored learning solutions for their teams.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>50,000+</h3>
+                    <p>Banking Professionals Trained</p>
+                </div>
+                <div class="stat-item">
+                    <h3>200+</h3>
+                    <p>Expert Instructors</p>
+                </div>
+                <div class="stat-item">
+                    <h3>500+</h3>
+                    <p>Course Offerings</p>
+                </div>
+                <div class="stat-item">
+                    <h3>98%</h3>
+                    <p>Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section cta">
+        <div class="container">
+            <h2>Ready to Advance Your Banking Career?</h2>
+            <p>Join thousands of banking professionals who have accelerated their careers with BankLearn Pro's specialized courses and certifications.</p>
+            <a href="#" class="btn">Get Started Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>BankLearn Pro</h3>
+                    <p>Premier online education platform specializing in banking and financial services training.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Courses</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Top Courses</h3>
+                    <ul>
+                        <li><a href="#">Commercial Lending</a></li>
+                        <li><a href="#">Risk Management</a></li>
+                        <li><a href="#">Compliance Training</a></li>
+                        <li><a href="#">Digital Banking</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Financial District, NYC</li>
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@banklearnpro.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 BankLearn Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
