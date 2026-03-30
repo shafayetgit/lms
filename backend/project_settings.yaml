@@ -1,0 +1,228 @@
+# ============================================================================
+# LMS Backend - Project Settings Configuration
+# ============================================================================
+# This file allows administrators to configure project features, providers,
+# and policies without modifying environment variables or code.
+# ============================================================================
+
+# ============================================================================
+# PROJECT METADATA
+# ============================================================================
+project:
+  name: "LMS Backend"
+  version: "1.0.0"
+  description: "Learning Management System with comprehensive authentication"
+  organization: "MyOrganization"
+
+# ============================================================================
+# FEATURE FLAGS - Enable/Disable Features
+# ============================================================================
+features:
+  authentication:
+    enabled: true
+    email_verification: true
+    forgot_password: true
+
+  two_factor_auth:
+    enabled: true
+    allow_email_otp: true
+    allow_sms_otp: true
+    allow_totp: true
+
+  oauth:
+    enabled: false
+    providers:
+      google: false
+      github: false
+
+  email:
+    enabled: true
+    send_welcome_email: true
+    send_verification_email: true
+    send_password_reset_email: true
+
+  sms:
+    enabled: false
+    send_verification_sms: false
+    send_2fa_sms: false
+
+  rate_limiting:
+    enabled: true
+
+# ============================================================================
+# PROVIDER CONFIGURATION
+# ============================================================================
+providers:
+  email:
+    # Options: 'smtp' | 'sendgrid'
+    type: "smtp"
+
+  sms:
+    # Options: 'twilio' | 'vonage'
+    type: "twilio"
+
+  database:
+    # Options: 'postgresql' | 'mysql'
+    type: "postgresql"
+
+  cache:
+    # Options: 'redis' | 'memcached'
+    type: "redis"
+
+# ============================================================================
+# SECURITY POLICIES
+# ============================================================================
+security:
+  password:
+    min_length: 8
+    require_uppercase: true
+    require_lowercase: true
+    require_digits: true
+    require_special_chars: true
+    # Special characters required: !@#$%^&*
+
+  login:
+    max_attempts: 5
+    lockout_minutes: 15
+    track_failed_attempts: true
+
+  session:
+    access_token_expire_minutes: 30
+    refresh_token_expire_days: 7
+    absolute_timeout_days: 30
+
+  account:
+    auto_logout_inactive_minutes: 60
+    enforce_unique_email: true
+    enforce_unique_username: true
+
+# ============================================================================
+# RATE LIMITING & QUOTAS
+# ============================================================================
+rate_limiting:
+  global:
+    # Requests per minute
+    requests_per_minute: 60
+
+  endpoints:
+    auth_register:
+      requests_per_minute: 5
+    auth_login:
+      requests_per_minute: 10
+    auth_forgot_password:
+      requests_per_minute: 3
+    auth_verify_email:
+      requests_per_minute: 10
+    auth_resend_otp:
+      requests_per_minute: 3
+
+  otp:
+    max_resend_attempts: 5
+    resend_cooldown_seconds: 60
+    expiration_minutes: 10
+    length: 6
+
+# ============================================================================
+# API CONFIGURATION
+# ============================================================================
+api:
+  title: "LMS Backend"
+  version: "v1"
+  description: "Professional Learning Management System"
+  prefix: "/api"
+
+  # CORS configuration
+  cors:
+    allow_origins:
+      - "http://localhost:3000"
+      - "http://127.0.0.1:3000"
+    allow_credentials: true
+    allow_methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "PATCH"
+    allow_headers:
+      - "Content-Type"
+      - "Authorization"
+
+  # Pagination defaults
+  pagination:
+    default_limit: 20
+    max_limit: 100
+    default_offset: 0
+
+# ============================================================================
+# OTP CONFIGURATION
+# ============================================================================
+otp:
+  expiration_minutes: 10
+  length: 6
+  max_resend_attempts: 5
+  resend_cooldown_seconds: 60
+  # Storage location
+  storage: "redis"
+
+# ============================================================================
+# EMAIL TEMPLATES
+# ============================================================================
+email_templates:
+  enabled: true
+  # All emails sent with HTML templates from app/templates/emails/
+  from_name: "LMS Notifications"
+  from_address: "noreply@lms.example.com"
+
+  templates:
+    email_verification: "email_verification.html"
+    password_reset: "password_reset.html"
+    welcome: "welcome.html"
+    account_locked: "account_locked.html"
+    two_factor_setup: "two_factor_setup.html"
+
+# ============================================================================
+# LOGGING & MONITORING
+# ============================================================================
+logging:
+  level: "INFO"  # DEBUG | INFO | WARNING | ERROR | CRITICAL
+  log_auth_events: true
+  log_failed_logins: true
+  log_password_changes: true
+  log_2fa_events: true
+  log_oauth_events: true
+
+# ============================================================================
+# USER ROLES & PERMISSIONS
+# ============================================================================
+roles:
+  enabled: true
+  default_role: "student"
+  available_roles:
+    - "admin"
+    - "instructor"
+    - "student"
+
+# ============================================================================
+# DATABASE FEATURES
+# ============================================================================
+database:
+  # Auto-create missing tables
+  auto_migrate: false
+  # Enable connection pooling
+  pool_enabled: true
+  pool_size: 20
+  # Enable query logging
+  log_queries: false
+
+# ============================================================================
+# CACHE CONFIGURATION
+# ============================================================================
+cache:
+  # Default TTL in seconds
+  default_ttl_seconds: 3600
+  # Cache OTP in Redis
+  cache_otp: true
+  # Cache user sessions
+  cache_sessions: true
+  # Cache API responses
+  cache_api_responses: false

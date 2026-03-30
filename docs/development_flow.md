@@ -1,7 +1,3 @@
-Perfect! Let’s generalize the **sequence task flow** so it applies to **any module** in your FastAPI project (Users, Courses, Lessons, Uploads, etc.). This will let you follow a **repeatable pattern** for fast development.
-
----
-
 ## **🟢 Universal Module Development Flow (FastAPI + Async + JWT + SQLAlchemy)**
 
 ### **1. Define the Data Model**

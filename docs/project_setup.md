@@ -75,15 +75,5 @@ pip install pydantic-settings
 You could also run this in one go:
 
 ```bash
-uv add "fastapi[standard-no-fastapi-cloud-cli]" uvicorn[standard] sqlalchemy[asyncio] asyncpg alembic pyjwt "pwdlib[argon2]" redis httpx pydantic-settings
+uv add "fastapi[standard-no-fastapi-cloud-cli]" uvicorn[standard] sqlalchemy[asyncio] asyncpg alembic pyjwt "pwdlib[argon2]" redis httpx pydantic-settings psycopg2-binary
 ```
-
----
-
-After this, you will have **everything needed** to implement the OAuth2 + JWT auth flow you studied, with async-ready database and tasks.
-
----
-
-If you want, I can now give you a **ready-to-run async FastAPI auth project skeleton** with JWT and PostgreSQL so you can start coding immediately.
-
-Do you want me to do that?
