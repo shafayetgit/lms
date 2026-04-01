@@ -72,7 +72,7 @@ export default function VendorCard({ vendor, onVisitStore }) {
                   border: "4px solid",
                   borderColor: "background.paper",
                   boxShadow: 3,
-                  backgroundColor: "white",
+                  backgroundColor: "background.paper",
                 }}
               />
             </Box>
@@ -84,7 +84,7 @@ export default function VendorCard({ vendor, onVisitStore }) {
                 bottom: 4,
                 right: 4,
                 bgcolor: "primary.main",
-                color: "#fff",
+                color: "white",
                 borderRadius: "50%",
                 width: 22,
                 height: 22,
@@ -93,7 +93,8 @@ export default function VendorCard({ vendor, onVisitStore }) {
                 justifyContent: "center",
                 fontSize: 14,
                 fontWeight: "bold",
-                border: "2px solid white",
+                border: "2px solid",
+                borderColor: "background.paper",
               }}
             >
               ✔

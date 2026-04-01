@@ -6,23 +6,22 @@ import {
   TextField,
   MenuItem,
   Chip,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Paper,
-  TableSortLabel,
-  TablePagination,
-  useTheme,
-  useMediaQuery,
-  Divider,
+  Stack,
+  IconButton,
+  Tooltip,
+  Grid
 } from "@mui/material";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import DownloadIcon from "@mui/icons-material/Download";
+import {
+  Download as DownloadIcon,
+  ReceiptLong as ReceiptLongIcon,
+  FilterList as FilterIcon,
+  Event as EventIcon,
+  Payment as PaymentIcon,
+  AttachMoney as AmountIcon
+} from "@mui/icons-material";
 import AccountsLayout from "../AccountsLayout";
+import CButton from "@/components/CButton";
 
 const ordersData = [
   {
@@ -31,237 +30,178 @@ const ordersData = [
     price: 94.99,
     status: "Completed",
     paymentMethod: "Stripe",
-    date: "2025-09-21",
+    date: "21 September, 2025",
+    image: "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&q=80&w=400"
   },
   {
     id: "ORD-1002",
-    courseTitle: "Digital Marketing Masterclass",
+    courseTitle: "Digital Marketing Masterclass & SEO",
     price: 79.99,
     status: "Pending",
     paymentMethod: "PayPal",
-    date: "2025-10-01",
+    date: "01 October, 2025",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400"
   },
   {
     id: "ORD-1003",
-    courseTitle: "Machine Learning for Finance",
+    courseTitle: "Machine Learning for Modern Finance",
     price: 129.99,
     status: "Completed",
     paymentMethod: "Stripe",
-    date: "2025-08-15",
+    date: "15 August, 2025",
+    image: "https://images.unsplash.com/photo-1551288049-bbbda5366391?auto=format&fit=crop&q=80&w=400"
   },
 ];
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) return -1;
-  if (b[orderBy] > a[orderBy]) return 1;
-  return 0;
-}
-function getComparator(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
 export default function MyOrdersPage() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [filter, setFilter] = useState("");
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("date");
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleSort = (property) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const handleChangePage = (event, newPage) => setPage(newPage);
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   const filteredOrders =
     filter === "" ? ordersData : ordersData.filter((o) => o.status === filter);
 
-  const sortedOrders = [...filteredOrders].sort(getComparator(order, orderBy));
-
-  const paginatedOrders = sortedOrders.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+  const getStatusChip = (status) => {
+    const isCompleted = status === "Completed";
+    return (
+      <Chip
+        label={status}
+        size="small"
+        sx={{
+          fontWeight: 800,
+          fontSize: '0.7rem',
+          bgcolor: isCompleted ? "secondary.main" : "rgba(255, 176, 0, 0.1)",
+          color: isCompleted ? "white" : "#FFB000",
+          px: 1,
+          borderRadius: "6px",
+          height: 24,
+          textTransform: 'uppercase'
+        }}
+      />
+    );
+  };
 
   return (
     <AccountsLayout
-      pageTitle="My Orders"
+      pageTitle="Purchase History"
       actionButton={
-        <Box >
-          <TextField
-            select
-            label="Filter by Status"
-            size="small"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            sx={{ minWidth: 200 }}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value="Completed">Completed</MenuItem>
-            <MenuItem value="Pending">Pending</MenuItem>
-          </TextField>
-        </Box>
+        <TextField
+          select
+          label="Filter Status"
+          size="small"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          sx={{ minWidth: 160, '& .MuiOutlinedInput-root': { borderRadius: '50px' } }}
+          InputProps={{
+            startAdornment: <FilterIcon sx={{ mr: 1, color: 'text.secondary', fontSize: 18 }} />
+          }}
+        >
+          <MenuItem value="">All Purchases</MenuItem>
+          <MenuItem value="Completed">Completed</MenuItem>
+          <MenuItem value="Pending">Pending</MenuItem>
+        </TextField>
       }
     >
-      {!isMobile ? (
-        <TableContainer sx={{ borderRadius: 3, boxShadow: 1 }}>
-          <Table>
-            <TableHead sx={{ backgroundColor: theme.palette.action.hover }}>
-              <TableRow>
-                {[
-                  { id: "id", label: "Order ID" },
-                  { id: "courseTitle", label: "Course Title" },
-                  { id: "date", label: "Date" },
-                  { id: "status", label: "Status" },
-                  { id: "price", label: "Amount" },
-                  { id: "paymentMethod", label: "Payment" },
-                ].map((col) => (
-                  <TableCell key={col.id}>
-                    <TableSortLabel
-                      active={orderBy === col.id}
-                      direction={orderBy === col.id ? order : "asc"}
-                      onClick={() => handleSort(col.id)}
-                    >
-                      <strong>{col.label}</strong>
-                    </TableSortLabel>
-                  </TableCell>
-                ))}
-                <TableCell align="right">
-                  <strong>Action</strong>
-                </TableCell>
-              </TableRow>
-            </TableHead>
+      <Stack spacing={3}>
+        {filteredOrders.map((order) => (
+          <Paper
+            key={order.id}
+            elevation={0}
+            sx={{
+              p: { xs: 2, sm: 3 },
+              borderRadius: 6,
+              border: "1px solid",
+              borderColor: "rgba(0,0,0,0.06)",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                borderColor: "primary.main",
+                transform: "translateY(-4px)",
+                boxShadow: "0 12px 24px rgba(0,0,0,0.04)"
+              }
+            }}
+          >
+            <Grid container spacing={3} alignItems="center">
+              {/* Product Info */}
+              <Grid size={{ xs: 12, md: 7 }}>
+                <Stack direction="row" spacing={3} alignItems="center">
+                  <Box
+                    component="img"
+                    src={order.image}
+                    alt={order.courseTitle}
+                    sx={{
+                      width: { xs: 80, sm: 100 },
+                      height: { xs: 60, sm: 75 },
+                      borderRadius: 3,
+                      objectFit: 'cover',
+                      display: { xs: 'none', sm: 'block' }
+                    }}
+                  />
+                  <Box>
+                    <Stack direction="row" alignItems="center" spacing={1} mb={0.5}>
+                      <Typography variant="caption" sx={{ fontWeight: 800, color: 'primary.main', opacity: 0.6 }}>
+                        #{order.id}
+                      </Typography>
+                      {getStatusChip(order.status)}
+                    </Stack>
+                    <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
+                      {order.courseTitle}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Grid>
 
-            <TableBody>
-              {paginatedOrders.map((order) => (
-                <TableRow key={order.id} hover>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.courseTitle}</TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell>
-                    <Chip
-                      label={order.status}
-                      color={
-                        order.status === "Completed" ? "success" : "warning"
-                      }
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>${order.price}</TableCell>
-                  <TableCell>{order.paymentMethod}</TableCell>
-                  <TableCell align="right">
-                    <Button
+              {/* Purchase Details */}
+              <Grid size={{ xs: 12, md: 5 }}>
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  justifyContent="space-between"
+                  alignItems="center"
+                  spacing={3}
+                  sx={{
+                    bgcolor: 'rgba(0,0,0,0.02)',
+                    p: { xs: 2, sm: 2.5 },
+                    borderRadius: 4
+                  }}
+                >
+                  <Stack spacing={0.5} sx={{ textAlign: { xs: 'center', sm: 'left' } }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+                      <EventIcon fontSize="inherit" /> {order.date}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+                      <PaymentIcon fontSize="inherit" /> {order.paymentMethod}
+                    </Typography>
+                  </Stack>
+
+                  <Box sx={{ textAlign: { xs: 'center', sm: 'right' } }}>
+                    <Typography variant="h5" sx={{ fontWeight: 900, color: 'primary.main', mb: 1 }}>
+                      ${order.price.toFixed(2)}
+                    </Typography>
+                    <CButton
                       variant="outlined"
                       size="small"
+                      label="Invoice"
                       startIcon={<DownloadIcon />}
-                    >
-                      Invoice
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      sx={{ borderRadius: '50px', py: 0.5 }}
+                    />
+                  </Box>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Paper>
+        ))}
 
-              {paginatedOrders.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={7} align="center">
-                    <Typography color="text.secondary" py={2}>
-                      No orders found.
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-
-          <TablePagination
-            component="div"
-            count={filteredOrders.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[5, 10, 25]}
-          />
-        </TableContainer>
-      ) : (
-        <Box>
-          {paginatedOrders.map((order) => (
-            <Paper
-              key={order.id}
-              sx={{
-                mb: 2,
-                p: 2,
-                borderRadius: 3,
-                boxShadow: 1,
-              }}
-            >
-              <Typography variant="subtitle2" color="text.secondary">
-                {order.id}
-              </Typography>
-              <Typography variant="h6" mt={1}>
-                {order.courseTitle}
-              </Typography>
-              <Divider sx={{ my: 1 }} />
-              <Typography variant="body2" color="text.secondary">
-                Date: {order.date}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Payment: {order.paymentMethod}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Amount: ${order.price}
-              </Typography>
-              <Box
-                mt={1}
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Chip
-                  label={order.status}
-                  color={
-                    order.status === "Completed" ? "success" : "warning"
-                  }
-                  size="small"
-                />
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<DownloadIcon />}
-                >
-                  Invoice
-                </Button>
-              </Box>
-            </Paper>
-          ))}
-
-          {paginatedOrders.length === 0 && (
-            <Typography align="center" color="text.secondary" py={2}>
-              No orders found.
+        {filteredOrders.length === 0 && (
+          <Stack spacing={2} py={12} alignItems="center">
+            <ReceiptLongIcon sx={{ fontSize: 64, color: 'text.secondary', opacity: 0.15 }} />
+            <Typography variant="h6" color="text.secondary" fontWeight={700}>
+              No purchase records found.
             </Typography>
-          )}
-
-          <TablePagination
-            component="div"
-            count={filteredOrders.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            rowsPerPageOptions={[5, 10, 25]}
-          />
-        </Box>
-      )}
+            <CButton
+              label="Browse Courses"
+              variant="contained"
+              sx={{ borderRadius: '50px', mt: 2 }}
+            />
+          </Stack>
+        )}
+      </Stack>
     </AccountsLayout>
   );
 }

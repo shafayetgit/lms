@@ -4,23 +4,23 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const light = [
-  "#FFFFFF", // Soft Pink
-  "#fdeef3", // Soft Rose
-  "#f5f0fc", // Soft Lavender
-  "#edf7ff", // Soft Sky Blue
-  "#eaf7ed", // Soft Mint Green
-  "#fff4ec", // Soft Peach
-  "#fff5f5", // Soft Pink (repeat)
+  "#FFFFFF", // Pure White
+  "#F0F4F8", // Soft Cool Blue-Gray
+  "#E8F0FE", // Very Light Professional Blue
+  "#F3F0FF", // Very Light Lavender
+  "#FDF6E3", // Soft Warm Cream
+  "#F0FAF5", // Refreshing Light Mint
+  "#FFFFFF", // Pure White (repeat)
 ];
 
 const dark = [
-  "#1F1315", // Deep Burgundy
-  "#1F121B", // Deep Maroon
-  "#1B141D", // Deep Eggplant
-  "#0F1720", // Deep Navy
-  "#0D1912", // Deep Forest Green
-  "#1F1206", // Deep Brown
-  "#1F1315", // Deep Burgundy (repeat)
+  "#0A0A0A", // Obsidian Black
+  "#121826", // Deep Navy
+  "#1A1625", // Deep Royal Charcoal
+  "#201A18", // Deep Warm Charcoal
+  "#12201D", // Deep Forest Black
+  "#0D1117", // Rich GitHub Dark
+  "#0A0A0A", // Obsidian Black (repeat)
 ];
 
 const useScrollBackgroundColor = () => {

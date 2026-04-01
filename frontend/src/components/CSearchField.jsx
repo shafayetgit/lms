@@ -1,7 +1,7 @@
 import { Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 
-export default function CSearchField({ onChange = () => {}, sx = {}, ...other }) {
+export default function CSearchField({ onChange = () => { }, sx = {}, ...other }) {
   return (
     <OutlinedInput
       fullWidth
@@ -14,12 +14,12 @@ export default function CSearchField({ onChange = () => {}, sx = {}, ...other })
       }}
       endAdornment={
         <InputAdornment position="end">
-          <IconButton 
-            edge="end" 
+          <IconButton
+            edge="end"
             sx={{
-              color: "#555", 
-              transition: "color 0.3s ease-in-out", 
-              "&:hover": { color: "#000" } 
+              color: "text.secondary",
+              transition: "color 0.2s ease",
+              "&:hover": { color: "text.primary" }
             }}
           >
             <Search />

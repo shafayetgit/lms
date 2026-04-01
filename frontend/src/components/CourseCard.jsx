@@ -17,6 +17,7 @@ import {
   Favorite,
   MenuBook,
   AccessTime,
+  ArrowForward,
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import CButton from "@/components/CButton";
@@ -43,10 +44,14 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
           display: "flex",
           flexDirection: "column",
           cursor: "pointer",
-          borderRadius: 2,
+          borderRadius: 4,
           overflow: "hidden",
-          boxShadow: 2,
+          boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
           position: "relative",
+          transition: "box-shadow 0.3s ease",
+          "&:hover": {
+            boxShadow: "0 15px 40px rgba(0,0,0,0.1)",
+          }
         }}
       >
         {/* Favorite Button */}
@@ -75,7 +80,7 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "rgba(0,0,0,0.03)",
             position: "relative",
           }}
         >
@@ -94,7 +99,7 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
               right: 0,
               bottom: 0,
               background:
-                "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%)",
+                "linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%)",
               display: "flex",
               alignItems: "flex-end",
               padding: 2,
@@ -104,27 +109,32 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
               label={course.category || "Course"}
               size="small"
               sx={{
-                backgroundColor: "primary.main",
-                color: "white",
-                fontWeight: 600,
+                backgroundColor: "rgba(0,0,0,0.85)",
+                color: "#ffffff",
+                backdropFilter: "blur(4px)",
+                fontWeight: 700,
+                fontSize: "0.65rem",
+                textTransform: "uppercase",
+                letterSpacing: 0.5,
+                borderRadius: "50px",
               }}
             />
           </Box>
         </Box>
 
-        <CardContent>
+        <CardContent sx={{ p: 3 }}>
           {/* Title */}
-          <Typography variant="h6" component="h3" gutterBottom>
+          <Typography variant="h6" component="h3" sx={{ fontWeight: 700, mb: 1, lineHeight: 1.3, height: 48, overflow: "hidden" }}>
             {course.title}
           </Typography>
 
           {/* Instructor */}
-          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
             <Avatar
               src={course.instructorAvatar}
-              sx={{ width: 24, height: 24, mr: 1 }}
+              sx={{ width: 22, height: 22, mr: 1 }}
             />
-            <Typography variant="body2" color="textSecondary">
+            <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 500 }}>
               {course.instructor}
             </Typography>
           </Box>
@@ -136,36 +146,37 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
               readOnly
               size="small"
               precision={0.1}
+              sx={{ mt: 0.2 }}
             />
-            <Typography variant="body2" sx={{ ml: 1 }}>
+            <Typography variant="caption" sx={{ ml: 1, fontWeight: 700 }}>
               {course.rating}
             </Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ ml: 1 }}>
+            <Typography variant="caption" color="textSecondary" sx={{ ml: 0.5 }}>
               ({course.students.toLocaleString()})
             </Typography>
           </Box>
 
+          <Divider sx={{ mb: 2, opacity: 0.1 }} />
+
           {/* Lessons & Duration */}
-          <Stack direction="row" justifyContent="space-between" mb={2}>
-            <Stack direction="row">
+          <Stack direction="row" spacing={2} mb={3}>
+            <Stack direction="row" alignItems="center">
               <MenuBook
-                sx={{ fontSize: 16, mr: 0.5, color: "text.secondary" }}
+                sx={{ fontSize: 14, mr: 0.5, color: "text.secondary" }}
               />
-              <Typography variant="body2" color="textSecondary">
+              <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 600 }}>
                 {course.lessons} Lessons
               </Typography>
             </Stack>
-            <Stack direction="row">
+            <Stack direction="row" alignItems="center">
               <AccessTime
-                sx={{ fontSize: 16, mr: 0.5, color: "text.secondary" }}
+                sx={{ fontSize: 14, mr: 0.5, color: "text.secondary" }}
               />
-              <Typography variant="body2" color="textSecondary">
+              <Typography variant="caption" color="textSecondary" sx={{ fontWeight: 600 }}>
                 {course.duration}
               </Typography>
             </Stack>
           </Stack>
-
-          <Divider sx={{ my: 2 }} />
 
           {/* Price + Button */}
           <Stack
@@ -174,12 +185,12 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
             justifyContent="space-between"
           >
             <Box>
-              <Typography variant="h6" component="span">
+              <Typography variant="h6" component="span" sx={{ fontWeight: 800, color: "text.primary" }}>
                 ${course.price}
               </Typography>
               {course.originalPrice && (
                 <Typography
-                  variant="body2"
+                  variant="caption"
                   component="span"
                   sx={{
                     textDecoration: "line-through",
@@ -191,7 +202,20 @@ const CourseCard = ({ course, isFavorite, onToggleFavorite }) => {
                 </Typography>
               )}
             </Box>
-            <CButton component={Link} href='/courses/detail' label="Enroll Now" size="small" />
+            <CButton
+              component={Link}
+              href='/courses/detail'
+              label="Enroll"
+              size="small"
+              color="secondary"
+              endIcon={<ArrowForward sx={{ fontSize: "1.1rem" }} />}
+              sx={{
+                borderRadius: "50px",
+                px: 3,
+                py: 0.8,
+                fontWeight: 700,
+              }}
+            />
           </Stack>
         </CardContent>
       </Card>

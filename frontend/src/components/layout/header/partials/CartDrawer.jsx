@@ -145,9 +145,24 @@ export default function CartDrawer() {
 
   return (
     <>
-      <IconButton color="primary" onClick={toggleDrawer(true)}>
-        <Badge badgeContent={total_quantity} color="primary">
-          <ShoppingCartOutlinedIcon color="primary" sx={{fontSize:30}} />
+      <IconButton
+        onClick={toggleDrawer(true)}
+        sx={{
+          transition: "all 0.2s ease",
+          "&:hover": { transform: "translateY(-2px)", color: "secondary.main" }
+        }}
+      >
+        <Badge
+          badgeContent={total_quantity}
+          color="secondary"
+          sx={{
+            "& .MuiBadge-badge": {
+              fontWeight: 800,
+              fontSize: "0.7rem"
+            }
+          }}
+        >
+          <ShoppingCartOutlinedIcon sx={{ fontSize: 26 }} />
         </Badge>
       </IconButton>
 

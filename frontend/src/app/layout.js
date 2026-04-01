@@ -3,6 +3,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import RootLayout from "@/components/layout/RootLayout";
 import light from "@/theme/light";
+import { Store } from "@mui/icons-material";
+import StoreProvider from "@/redux/storeProvider";
 
 export const metadata = {
   title: "Create Next App",
@@ -13,17 +15,17 @@ export default function Layout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={light}>
-          <CssBaseline />
-          {/* <CToaster /> */}
-          {/* <TopHeader /> */}
-          {/* <BottomHeader /> */}
-          <RootLayout>
-            {children}
-          </RootLayout>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+        <StoreProvider>
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={light}>
+              <CssBaseline />
+              {/* <CToaster /> */}
+              {/* <TopHeader /> */}
+              {/* <BottomHeader /> */}
+              <RootLayout>{children}</RootLayout>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </StoreProvider>
       </body>
     </html>
   );

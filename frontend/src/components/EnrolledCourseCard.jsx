@@ -52,7 +52,7 @@ const EnrolledCourseCard = ({ course }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "rgba(0,0,0,0.03)",
             position: "relative",
           }}
         >
@@ -81,7 +81,7 @@ const EnrolledCourseCard = ({ course }) => {
               label={course.category || "Course"}
               size="small"
               sx={{
-                backgroundColor: "primary.main",
+                backgroundColor: "secondary.main",
                 color: "white",
                 fontWeight: 600,
               }}
@@ -153,6 +153,7 @@ const EnrolledCourseCard = ({ course }) => {
                 href={`/accounts/courses/${course.id}`}
                 label="Continue"
                 size="small"
+                color="secondary"
               />
             </Grid>
           </Grid>

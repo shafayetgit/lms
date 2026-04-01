@@ -1,42 +1,54 @@
 "use client";
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  display: "swap",
+});
 
 let light = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#000000",
+      main: "#1E2D44", // Navy Blue from logo
+      light: "#2C3E50",
+      dark: "#15202B",
       contrastText: "#FFFFFF",
     },
     secondary: {
-      main: "#000000",
+      main: "#76B82A", // Vibrant Green from logo
+      light: "#8ED045",
+      dark: "#5E9321",
       contrastText: "#FFFFFF",
     },
     background: {
       default: "#FFFFFF",
       paper: "#FFFFFF",
     },
-    // background: {
-    //   default: "#F9FAFB",
-    //   paper: "#FFFFFF",
-    // },
     custom: {
       light: "#FFFFFF",
+      glass: "rgba(255, 255, 255, 0.7)",
+      border: "rgba(0, 0, 0, 0.1)",
+      navy: "#1E2D44",
+      green: "#76B82A",
+      rating: "#FFB000",
     },
     text: {
-      primary: "#1A1A1A",
-      secondary: "#666666",
+      primary: "#1A222B", // Darker Navy-tinted black
+      secondary: "#5A6A7E", // Slate blue-gray
     },
   },
   typography: {
-    // fontFamily: "dejavu sans, sans-serif",
-    // fontSize: 13,
-    // allVariants: {
-    //   fontFamily: "dejavu sans, sans-serif",
-    // },
+    fontFamily: inter.style.fontFamily,
     h1: {
-      fontWeight: 700,
+      fontWeight: 900,
       fontSize: "2.25rem",
+      letterSpacing: "-0.04em",
+      background: "linear-gradient(135deg, #1E2D44 10%, #76B82A 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
       "@media (max-width:600px)": {
         fontSize: "1.6rem",
       },
@@ -45,8 +57,12 @@ let light = createTheme({
       },
     },
     h2: {
-      fontWeight: 700,
+      fontWeight: 800,
       fontSize: "1.75rem",
+      letterSpacing: "-0.04em",
+      background: "linear-gradient(135deg, #1E2D44 10%, #76B82A 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
       "@media (max-width:600px)": {
         fontSize: "1.35rem",
       },
@@ -193,6 +209,16 @@ let light = createTheme({
         root: {
           padding: "16px",
           backgroundColor: "rgba(0,0,0,0.02)", // light background for details
+        },
+      },
+    },
+    MuiRating: {
+      styleOverrides: {
+        iconFilled: {
+          color: "#FFB000",
+        },
+        iconHover: {
+          color: "#E69E00",
         },
       },
     },

@@ -19,13 +19,14 @@ import PaymentIcon from "@mui/icons-material/Payment";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReceiptLong, School } from "@mui/icons-material";
+import { ReceiptLong, School, AutoStories } from "@mui/icons-material";
 
 const menuSections = [
   {
     subheader: "Dashboard",
     items: [
       { label: "Courses", url: "/accounts/courses", icon: <School /> },
+      { label: "E-Books", url: "/accounts/ebooks", icon: <AutoStories /> },
       { label: "Orders", url: "/accounts/orders", icon: <ReceiptLong /> },
       {
         label: "Wishlist",

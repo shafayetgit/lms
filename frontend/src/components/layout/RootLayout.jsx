@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import Link from "next/link";
-import BottomHeader from "./header/BottomHeader";
+import Topbar from "./header/Topbar";
 import useScrollBackgroundColor from "@/hooks/useScrollBackgroundColor";
 import Footer from "./Footer";
 export default function RootLayout({ children }) {
@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
   return (
     <>
       {/* Navbar */}
-      <BottomHeader dynamicColor={dynamicColor} />
+      <Topbar dynamicColor={dynamicColor} />
 
       {/* Main Content */}
       <Box component="main" mt={4}>

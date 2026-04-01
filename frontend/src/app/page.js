@@ -1,7 +1,6 @@
-import HeroBanner from "./_partials/HeroBanner";
-import Categories from "./_partials/Categories";
-import FeaturedCourses from "./_partials/FeaturedCourses";
-import { Divider } from "@mui/material";
+import HeroBanner from "./_components/HeroBanner";
+import Categories from "./_components/Categories";
+import FeaturedCourses from "./_components/FeaturedCourses"
 
 export default function Home() {
   return (

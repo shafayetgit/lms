@@ -10,113 +10,194 @@ import {
   Stack,
   Divider,
 } from "@mui/material";
-import { Facebook, Twitter, Instagram, YouTube, LinkedIn } from "@mui/icons-material";
+import { Facebook, Twitter, Instagram, YouTube, LinkedIn, Mail } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { logo } from "@/constants";
 
 const Footer = () => {
   const paymentLogos = [
-    "https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg", // Visa ✅
-    "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg", // Mastercard ✅
-    "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg", // PayPal ✅
-    "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg", // Stripe ✅
+    { name: "Visa", url: "https://img.icons8.com/color/1200/visa.jpg" },
+    { name: "Mastercard", url: "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" },
+    { name: "PayPal", url: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" },
+    { name: "Stripe", url: "https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" },
+  ];
+
+  const socialIcons = [
+    { icon: <Facebook fontSize="small" />, color: "#1877F2" },
+    { icon: <Twitter fontSize="small" />, color: "#1DA1F2" },
+    { icon: <Instagram fontSize="small" />, color: "#E4405F" },
+    { icon: <YouTube fontSize="small" />, color: "#FF0000" },
+    { icon: <LinkedIn fontSize="small" />, color: "#0A66C2" },
   ];
 
   return (
     <Box
       component="footer"
       sx={{
-        pt: 7,
+        pt: 10,
+        pb: 4,
+        // bgcolor: "#F8F9FA",
+        borderTop: "1px solid rgba(0,0,0,0.05)",
       }}
     >
       <Container maxWidth="lg">
-        <Divider sx={{ mb: 4 }} />
-        <Grid container spacing={4}>
+        <Grid container spacing={6}>
           {/* Logo + About */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="h6" fontWeight={700} gutterBottom>
-              E-Courses
-            </Typography>
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              Your gateway to quality online learning. Explore courses, upgrade
-              your skills, and achieve your goals with us.
-            </Typography>
-            <Stack direction="row" spacing={1}>
-              <IconButton size="small" color="inherit">
-                <Facebook />
-              </IconButton>
-              <IconButton size="small" color="inherit">
-                <Twitter />
-              </IconButton>
-              <IconButton size="small" color="inherit">
-                <Instagram />
-              </IconButton>
-              <IconButton size="small" color="inherit">
-                <YouTube />
-              </IconButton>
-              <IconButton size="small" color="inherit">
-                <LinkedIn />
-              </IconButton>
+            <Stack spacing={3}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                <img src={logo} alt="EcoFin Logo" style={{ height: 40 }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.8, maxWidth: "320px" }}>
+                Empowering the next generation of financial professionals through expert-led,
+                high-conversion banking and finance education globally.
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                {socialIcons.map((social, idx) => (
+                  <IconButton
+                    key={idx}
+                    component={motion.button}
+                    whileHover={{ y: -4, color: social.color }}
+                    size="small"
+                    sx={{
+                      bgcolor: "rgba(0,0,0,0.03)",
+                      transition: "all 0.3s ease",
+                      "&:hover": { bgcolor: "rgba(0,0,0,0.06)" }
+                    }}
+                  >
+                    {social.icon}
+                  </IconButton>
+                ))}
+              </Stack>
             </Stack>
           </Grid>
 
-          {/* Quick Links */}
+          {/* Explore */}
           <Grid size={{ xs: 6, md: 2 }}>
-            <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-              Quick Links
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 3, textTransform: "uppercase", letterSpacing: "1px", color: "text.primary" }}>
+              Explore
             </Typography>
-            <Stack spacing={1}>
-              <Link href="/" underline="hover" variant="body2">
-                Home
-              </Link>
-              <Link href="/about" underline="hover" variant="body2">
-                About
-              </Link>
-              <Link href="/courses" underline="hover" variant="body2">
-                Courses
-              </Link>
-              <Link href="/contact" underline="hover" variant="body2">
-                Contact
-              </Link>
+            <Stack spacing={1.5}>
+              {[
+                { name: "Home", path: "/" },
+                { name: "Courses", path: "/courses" },
+                { name: "E-Books", path: "/ebooks" },
+                { name: "About Us", path: "/about" }
+              ].map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  underline="none"
+                  component={motion.a}
+                  whileHover={{ x: 5 }}
+                  sx={{
+                    variant: "body2",
+                    color: "text.secondary",
+                    fontWeight: 500,
+                    transition: "color 0.2s ease",
+                    "&:hover": { color: "primary.main" }
+                  }}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </Stack>
           </Grid>
 
           {/* Support */}
           <Grid size={{ xs: 6, md: 2 }}>
-            <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-              Support
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 3, textTransform: "uppercase", letterSpacing: "1px", color: "text.primary" }}>
+              Resources
             </Typography>
-            <Stack spacing={1}>
-              <Link href="/faq" underline="hover" variant="body2">
-                FAQ
-              </Link>
-              <Link href="/privacy" underline="hover" variant="body2">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" underline="hover" variant="body2">
-                Terms & Conditions
-              </Link>
+            <Stack spacing={1.5}>
+              {[
+                { name: "FAQ", path: "/faq" },
+                { name: "Privacy Policy", path: "/privacy" },
+                { name: "Terms of Service", path: "/terms" },
+                { name: "Student Portal", path: "#" }
+              ].map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.path}
+                  underline="none"
+                  component={motion.a}
+                  whileHover={{ x: 5 }}
+                  sx={{
+                    variant: "body2",
+                    color: "text.secondary",
+                    fontWeight: 500,
+                    transition: "color 0.2s ease",
+                    "&:hover": { color: "primary.main" }
+                  }}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </Stack>
           </Grid>
 
-          {/* Payment Methods */}
+          {/* Newsletter / Contact */}
           <Grid size={{ xs: 12, md: 4 }}>
-            <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-              Payment Methods
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 3, textTransform: "uppercase", letterSpacing: "1px", color: "text.primary" }}>
+              Stay Updated
             </Typography>
-            <Stack
-              direction="row"
-              spacing={2}
-              flexWrap="wrap"
-              alignItems="center"
-            >
-              {paymentLogos.map((logo, index) => (
+            <Typography variant="body2" sx={{ color: "text.secondary", mb: 3 }}>
+              Subscribe to get the latest in financial trends and exclusive course offers.
+            </Typography>
+            <Box sx={{ display: "flex", gap: 1, mb: 4 }}>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  height: 48,
+                  borderRadius: "12px",
+                  bgcolor: "white",
+                  border: "1px solid rgba(0,0,0,0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                  px: 2
+                }}
+              >
+                <Mail sx={{ color: "text.secondary", fontSize: 20, mr: 1 }} />
+                <input
+                  placeholder="Your email address"
+                  style={{
+                    border: "none",
+                    background: "none",
+                    width: "100%",
+                    fontSize: "0.85rem",
+                    outline: "none",
+                    fontWeight: 500
+                  }}
+                />
+              </Box>
+              <IconButton
+                sx={{
+                  bgcolor: "primary.main",
+                  color: "white",
+                  borderRadius: "12px",
+                  width: 48,
+                  height: 48,
+                  "&:hover": { bgcolor: "primary.dark", transform: "scale(1.05)" },
+                  transition: "all 0.2s ease"
+                }}
+              >
+                <Twitter fontSize="small" sx={{ transform: "rotate(90deg)" }} />
+              </IconButton>
+            </Box>
+
+            <Stack direction="row" spacing={2} alignItems="center">
+              {paymentLogos.map((payment, idx) => (
                 <Box
-                  key={index}
+                  key={idx}
                   component="img"
-                  src={logo}
-                  alt="Payment Method"
+                  src={payment.url}
+                  alt={payment.name}
                   sx={{
-                    height: 32,
-                    objectFit: "contain",
+                    height: 20,
+                    filter: "grayscale(100%)",
+                    opacity: 0.6,
+                    transition: "all 0.3s ease",
+                    "&:hover": { filter: "grayscale(0%)", opacity: 1, transform: "scale(1.1)" }
                   }}
                 />
               ))}
@@ -124,11 +205,26 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        <Divider sx={{ my: 3, }} />
+        <Divider sx={{ my: 6, opacity: 0.1 }} />
 
-        <Typography variant="body2" align="center" color="text.secondary" sx={{ pb: 3 }}>
-          © {new Date().getFullYear()} E-Courses. All rights reserved.
-        </Typography>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+        >
+          <Typography variant="caption" sx={{ color: "text.secondary", fontWeight: 500 }}>
+            © {new Date().getFullYear()} ecoFin Institute. Powered by Coderiven.
+          </Typography>
+          <Stack direction="row" spacing={3}>
+            <Link href="#" sx={{ variant: "caption", color: "text.secondary", textDecoration: "none", "&:hover": { color: "primary.main" } }}>
+              Sitemap
+            </Link>
+            <Link href="#" sx={{ variant: "caption", color: "text.secondary", textDecoration: "none", "&:hover": { color: "primary.main" } }}>
+              Cookies
+            </Link>
+          </Stack>
+        </Stack>
       </Container>
     </Box>
   );

@@ -1,0 +1,76 @@
+import { School, People, AssignmentTurnedIn, EmojiEvents } from "@mui/icons-material";
+
+export const categories = [
+    { id: 1, title: "Web Development", image: "https://picsum.photos/400/400?1", courseCount: 128 },
+    { id: 2, title: "Data Science", image: "https://picsum.photos/400/400?2", courseCount: 96 },
+    { id: 3, title: "Graphic Design", image: "https://picsum.photos/400/400?3", courseCount: 78 },
+    { id: 4, title: "Languages", image: "https://picsum.photos/400/400?4", courseCount: 65 },
+    { id: 5, title: "Business", image: "https://picsum.photos/400/400?5", courseCount: 112 },
+    { id: 6, title: "Photography", image: "https://picsum.photos/400/400?6", courseCount: 54 },
+    { id: 7, title: "Music", image: "https://picsum.photos/400/400?7", courseCount: 47 },
+    { id: 8, title: "Health & Fitness", image: "https://picsum.photos/400/400?8", courseCount: 83 },
+];
+
+export const featuredCourses = [
+    {
+        id: 1,
+        title: "Learn JavaScript and Express to become a Expert",
+        instructor: "Sarah Johnson",
+        image: "images/course-16x9-1.jpg",
+        rating: 4.8,
+        students: 1245,
+        duration: "22h 30m",
+        lessons: 48,
+        progress: 65,
+        price: 89.99,
+        originalPrice: 129.99,
+        category: "Web Development",
+        instructorAvatar: "https://randomuser.me/api/portraits/women/12.jpg",
+    },
+    {
+        id: 2,
+        title: "Machine Learning Fundamentals",
+        instructor: "David Chen",
+        image:
+            "https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+        rating: 4.9,
+        students: 2876,
+        duration: "35h 15m",
+        lessons: 62,
+        price: 94.99,
+        originalPrice: 139.99,
+        instructorAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    },
+    {
+        id: 3,
+        title: "UI/UX Design Masterclass",
+        instructor: "Emily Rodriguez",
+        image:
+            "https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+        rating: 4.7,
+        students: 1893,
+        duration: "28h 45m",
+        lessons: 54,
+        progress: 100,
+        price: 79.99,
+        originalPrice: 119.99,
+        category: "Design",
+        instructorAvatar: "https://randomuser.me/api/portraits/women/43.jpg",
+    },
+    {
+        id: 4,
+        title: "Business Analytics Bootcamp",
+        instructor: "Michael Thompson",
+        image:
+            "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+        rating: 4.6,
+        students: 2156,
+        duration: "42h 10m",
+        lessons: 78,
+        progress: 30,
+        price: 99.99,
+        originalPrice: 149.99,
+        category: "Business",
+        instructorAvatar: "https://randomuser.me/api/portraits/men/65.jpg",
+    },
+];

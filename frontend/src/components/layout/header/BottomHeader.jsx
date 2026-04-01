@@ -32,7 +32,9 @@ import SignOut from "./partials/SignOut";
 const navItems = [
   { label: "Home", url: "/" },
   { label: "Courses", url: "/courses" },
+  { label: "E-Books", url: "/ebooks" },
   { label: "About", url: "/about" },
+  { label: "Contact", url: "/contact" },
 ];
 
 export default function TopBar({ dynamicColor }) {
@@ -73,7 +75,7 @@ export default function TopBar({ dynamicColor }) {
             textDecoration: "none",
           }}
         >
-          E-Courses
+          EcoFin Institute
         </Box>
         <IconButton onClick={handleDrawerToggle}>
           <Close />
@@ -175,16 +177,15 @@ export default function TopBar({ dynamicColor }) {
               href="/"
               sx={{
                 color: "text.primary",
-                fontWeight: 600,
+                fontWeight: 800,
                 fontSize: { xs: "1rem", md: "1.25rem" },
-                letterSpacing: 0.5,
-                textTransform: "capitalize",
+                letterSpacing: "-0.01em",
                 cursor: "pointer",
                 userSelect: "none",
                 textDecoration: "none",
               }}
             >
-              E-Courses
+              EcoFin Institute
             </Box>
           </Stack>
 
@@ -200,20 +201,31 @@ export default function TopBar({ dynamicColor }) {
 
           {/* Cart */}
           <CartDrawer />
-          <CButton
-            // tooltip="Sign In / Sign Up"
-            tooltip="Go to Profile"
-            iconButton
+          <IconButton
             component={Link}
             href="/accounts/profile"
             size="small"
-            icon={
-              <Avatar
-                color="primary"
-                sx={{ width: 30, height: 30, color: "primary.main" }}
-              />
-            }
-          />
+            sx={{
+              ml: 1,
+              transition: "all 0.2s ease",
+              "&:hover": { transform: "scale(1.05)" }
+            }}
+          >
+            <Avatar
+              sx={{
+                width: 34,
+                height: 34,
+                border: "2px solid",
+                borderColor: "rgba(0,0,0,0.06)",
+                bgcolor: "rgba(0,0,0,0.03)",
+                color: "primary.main",
+                fontSize: "1rem",
+                fontWeight: 800
+              }}
+            >
+              U
+            </Avatar>
+          </IconButton>
           {/* <AccountMenu /> */}
 
           {/* Auth */}
