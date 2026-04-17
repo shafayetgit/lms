@@ -1,6 +1,6 @@
 # Quick Start Guide - Professional Auth System
 
-> ℹ️ **For detailed configuration guides**, see [02_SETUP.md](./02_SETUP.md) for step-by-step email, SMS, OAuth, and database setup with all available options.
+> ℹ️ **For detailed configuration guides**, see [02_SETUP.md](./02_SETUP.md) for step-by-step email, SMS, OAuthand database setup with all available options.
 
 ## 🚀 Get Started in 5 Minutes
 

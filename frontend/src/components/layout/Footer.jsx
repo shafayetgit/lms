@@ -9,10 +9,12 @@ import {
   IconButton,
   Stack,
   Divider,
+  alpha,
 } from "@mui/material";
 import { Facebook, Twitter, Instagram, YouTube, LinkedIn, Mail } from "@mui/icons-material";
 import { motion } from "framer-motion";
-import { logo } from "@/constants";
+import Image from "next/image";
+import { LOGO, LOGO_HEIGHT, LOGO_WIDTH } from "@/lib/constants";
 
 const Footer = () => {
   const paymentLogos = [
@@ -36,8 +38,7 @@ const Footer = () => {
       sx={{
         pt: 10,
         pb: 4,
-        // bgcolor: "#F8F9FA",
-        borderTop: "1px solid rgba(0,0,0,0.05)",
+        borderTop: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.05)}`,
       }}
     >
       <Container maxWidth="lg">
@@ -46,7 +47,13 @@ const Footer = () => {
           <Grid size={{ xs: 12, md: 4 }}>
             <Stack spacing={3}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                <img src={logo} alt="EcoFin Logo" style={{ height: 40 }} />
+                <Image
+                  src={LOGO}
+                  width={LOGO_WIDTH}
+                  height={LOGO_HEIGHT}
+                  alt="Logo"
+                  style={{ width: "auto", height: "40px" }}
+                />
               </Box>
               <Typography variant="body2" sx={{ color: "text.secondary", lineHeight: 1.8, maxWidth: "320px" }}>
                 Empowering the next generation of financial professionals through expert-led,
@@ -60,9 +67,9 @@ const Footer = () => {
                     whileHover={{ y: -4, color: social.color }}
                     size="small"
                     sx={{
-                      bgcolor: "rgba(0,0,0,0.03)",
+                      bgcolor: (theme) => alpha(theme.palette.text.primary, 0.03),
                       transition: "all 0.3s ease",
-                      "&:hover": { bgcolor: "rgba(0,0,0,0.06)" }
+                      "&:hover": { bgcolor: (theme) => alpha(theme.palette.text.primary, 0.06) }
                     }}
                   >
                     {social.icon}
@@ -150,8 +157,8 @@ const Footer = () => {
                   flexGrow: 1,
                   height: 48,
                   borderRadius: "12px",
-                  bgcolor: "white",
-                  border: "1px solid rgba(0,0,0,0.1)",
+                  bgcolor: "background.paper",
+                  border: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.1)}`,
                   display: "flex",
                   alignItems: "center",
                   px: 2
@@ -205,7 +212,7 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        <Divider sx={{ my: 6, opacity: 0.1 }} />
+        <Divider sx={{ my: 6, borderColor: (theme) => alpha(theme.palette.divider, 0.1) }} />
 
         <Stack
           direction={{ xs: "column", md: "row" }}

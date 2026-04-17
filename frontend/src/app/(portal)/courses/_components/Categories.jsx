@@ -1,14 +1,14 @@
+import CTextField from "@/components/ui/CTextField";
 import { useState } from "react";
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  TextField,
   List,
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CRadioGroup from "@/components/CRadioGroup";
+import CRadioGroup from "@/components/ui/CRadioGroup";
 
 export default function CategoryFilter() {
   // Dummy categories
@@ -48,7 +48,7 @@ export default function CategoryFilter() {
         </Typography>
       </AccordionSummary>
       <AccordionDetails>
-        <TextField
+        <CTextField
           fullWidth
           variant="outlined"
           size="small"

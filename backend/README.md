@@ -1,6 +1,6 @@
 # LMS Backend
 
-A production-ready FastAPI-based Learning Management System backend with comprehensive authentication, email verification, SMS 2FA, OAuth2 integration, and async PostgreSQL support.
+A production-ready FastAPI-based Learning Management System backend with comprehensive authentication, email verification, SMS 2FA, OAuth2 integrationand async PostgreSQL support.
 
 ## ✨ Features
 
@@ -68,8 +68,9 @@ Essential documentation is organized in the `docs/` folder:
 
 1. **[01_QUICKSTART.md](docs/01_QUICKSTART.md)** - Start the project in 5 minutes
 2. **[02_SETUP.md](docs/02_SETUP.md)** - Complete setup guide (database, email, SMS, OAuth, credentials)
-3. **[03_ARCHITECTURE.md](docs/03_ARCHITECTURE.md)** - System architecture, design patterns, and structure
+3. **[03_ARCHITECTURE.md](docs/03_ARCHITECTURE.md)** - System architecture, design patternsand structure
 4. **[04_PROJECT_SETTINGS.md](docs/04_PROJECT_SETTINGS.md)** - Administrator project configuration guide
+5. **[05_CELERY.md](docs/05_CELERY.md)** - Background tasks with Celery (worker + beat)
 
 ## Quick Start
 

@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.db.base import Base
-from app.models import user 
+from app.models import user, category, course, review, wishlist, module, lesson, lesson_progress, discussion, comment, enrollment, quiz, question
 
 
 

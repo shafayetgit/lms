@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
-import { Grid, Card, CardContent, Typography, TextField, Button, useTheme } from "@mui/material";
+import { Grid, Card, CardContent, Typography, Button, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
 import SendIcon from "@mui/icons-material/Send";
+
+import CTextField from "@/components/ui/CTextField";
 
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -45,7 +47,7 @@ const ContactForm = () => {
                     <form noValidate autoComplete="off">
                         <Grid container spacing={3}>
                             <Grid size={{ xs: 12, sm: 6 }}>
-                                <TextField
+                                <CTextField
                                     fullWidth
                                     label="First Name"
                                     variant="outlined"
@@ -54,7 +56,7 @@ const ContactForm = () => {
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
-                                <TextField
+                                <CTextField
                                     fullWidth
                                     label="Last Name"
                                     variant="outlined"
@@ -63,7 +65,7 @@ const ContactForm = () => {
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
-                                <TextField
+                                <CTextField
                                     fullWidth
                                     label="Email Address"
                                     variant="outlined"
@@ -73,7 +75,7 @@ const ContactForm = () => {
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
-                                <TextField
+                                <CTextField
                                     fullWidth
                                     label="Subject"
                                     variant="outlined"
@@ -82,7 +84,7 @@ const ContactForm = () => {
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
-                                <TextField
+                                <CTextField
                                     fullWidth
                                     label="Message"
                                     variant="outlined"

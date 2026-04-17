@@ -29,12 +29,6 @@ features:
     allow_sms_otp: true
     allow_totp: true
 
-  oauth:
-    enabled: false
-    providers:
-      google: false
-      github: false
-
   email:
     enabled: true
     send_welcome_email: true
@@ -126,7 +120,7 @@ rate_limiting:
 # API CONFIGURATION
 # ============================================================================
 api:
-  title: "LMS Backend"
+  title: "LMS"
   version: "v1"
   description: "Professional Learning Management System"
   prefix: "/api"

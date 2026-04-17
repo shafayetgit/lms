@@ -1,9 +1,10 @@
 """
 OTP (One-Time Password) Service
-Handles generation, validation, and storage of OTP codes for email and SMS verification.
+Handles generation, validationand storage of OTP codes for email and SMS verification.
 """
 
 import secrets
+import hmac
 import redis.asyncio as redis
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -39,17 +40,24 @@ class OTPService:
         )
 
     async def send_email_otp(self, email: str) -> str:
-        """
-        Generate and store OTP for email verification.
+        email = email.lower().strip()
         
-        Args:
-            email: User's email address
-            
-        Returns:
-            str: Generated OTP
-        """
-        otp = await self.generate_otp()
         redis_client = await self._get_redis_client()
+        
+        cooldown_key = f"otp:email:cooldown:{email}"
+        if await redis_client.exists(cooldown_key):
+            raise Exception("Please wait before requesting another OTP")
+        
+        attempt_key = f"otp:email:attempts:{email}"
+        attempts = await redis_client.incr(attempt_key)
+        
+        if attempts == 1:
+            await redis_client.expire(attempt_key, 3600)
+        
+        if attempts > self.settings.OTP_RESEND_MAX_ATTEMPTS:
+            raise Exception("Too many OTP requests")
+        
+        otp = await self.generate_otp()
         
         key = f"otp:email:{email}"
         await redis_client.setex(
@@ -58,17 +66,6 @@ class OTPService:
             otp,
         )
         
-        # Store attempt count
-        attempt_key = f"otp:email:attempts:{email}"
-        attempts = await redis_client.incr(attempt_key)
-        if attempts == 1:
-            await redis_client.expire(
-                attempt_key,
-                3600,  # 1 hour window for attempt counting
-            )
-        
-        # Store cooldown timer for resend
-        cooldown_key = f"otp:email:cooldown:{email}"
         await redis_client.setex(
             cooldown_key,
             self.settings.OTP_RESEND_COOLDOWN_SECONDS,
@@ -76,7 +73,7 @@ class OTPService:
         )
         
         return otp
-
+    
     async def send_sms_otp(self, phone_number: str) -> str:
         """
         Generate and store OTP for SMS verification.
@@ -116,49 +113,48 @@ class OTPService:
         
         return otp
 
+
     async def verify_email_otp(self, email: str, otp: str) -> bool:
-        """
-        Verify email OTP.
+        email = email.lower().strip()
         
-        Args:
-            email: User's email
-            otp: OTP code to verify
-            
-        Returns:
-            bool: True if OTP is valid, False otherwise
-        """
         redis_client = await self._get_redis_client()
         key = f"otp:email:{email}"
         
         stored_otp = await redis_client.get(key)
-        if stored_otp and stored_otp == otp:
-            # Delete OTP after successful verification
+
+        if not stored_otp:
+            return False
+
+        if hmac.compare_digest(str(stored_otp), str(otp)):
+            # cleanup
             await redis_client.delete(key)
+            await redis_client.delete(f"otp:email:cooldown:{email}")
+            await redis_client.delete(f"otp:email:attempts:{email}")
             return True
         
         return False
 
     async def verify_sms_otp(self, phone_number: str, otp: str) -> bool:
-        """
-        Verify SMS OTP.
-        
-        Args:
-            phone_number: User's phone number
-            otp: OTP code to verify
+            """
+            Verify SMS OTP.
             
-        Returns:
-            bool: True if OTP is valid, False otherwise
-        """
-        redis_client = await self._get_redis_client()
-        key = f"otp:sms:{phone_number}"
-        
-        stored_otp = await redis_client.get(key)
-        if stored_otp and stored_otp == otp:
-            # Delete OTP after successful verification
-            await redis_client.delete(key)
-            return True
-        
-        return False
+            Args:
+                phone_number: User's phone number
+                otp: OTP code to verify
+                
+            Returns:
+                bool: True if OTP is valid, False otherwise
+            """
+            redis_client = await self._get_redis_client()
+            key = f"otp:sms:{phone_number}"
+            
+            stored_otp = await redis_client.get(key)
+            if stored_otp and stored_otp == otp:
+                # Delete OTP after successful verification
+                await redis_client.delete(key)
+                return True
+            
+            return False
 
     async def get_otp_attempts(self, email: str) -> int:
         """Get number of OTP send attempts in current window."""

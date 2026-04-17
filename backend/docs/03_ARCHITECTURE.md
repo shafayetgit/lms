@@ -1,6 +1,6 @@
 # LMS Backend Architecture Guide
-
-This document explains how the three main phases of the application work: Project Setup, User Setup (Registration), and Authentication (Auth Setup).
+Model -> Repository -> Schema -> Service -> API Endpoint
+This document explains how the three main phases of the application work: Project Setup, User Setup (Registration)and Authentication (Auth Setup).
 
 ---
 
@@ -1225,7 +1225,7 @@ Stateless authentication (no session storage):
 # - Server only verifies signature, no database lookup needed
 
 # Refresh Token:
-# - Long-lived (7 days), contains user info, type marker, and expiration  
+# - Long-lived (7 days), contains user info, type markerand expiration  
 # - Used only for obtaining new access tokens
 # - Reduces need for users to login frequently
 # - Server verifies token type to prevent misuse
@@ -1346,7 +1346,7 @@ APP_TITLE=LMS Backend
 3. **Access API docs:** `http://localhost:8000/docs`
 4. **Try endpoints:** Use Swagger UI or curl commands above
 5. **Implement client-side token refresh logic** (see Token Management section)
-6. **Extend:** Add more models, services, and endpoints following this pattern
+6. **Extend:** Add more models, servicesand endpoints following this pattern
 
 ---
 

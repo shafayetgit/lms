@@ -2,8 +2,9 @@ from pydantic import BaseModel, EmailStr, ConfigDict, Field
 from typing import Optional
 from datetime import date, datetime
 from app.models.user import UserRole
+from app.core.base import BaseSchema
 
-class UserBase(BaseModel):
+class UserBase(BaseSchema):
     username: str
     email: EmailStr
     first_name: str
@@ -11,7 +12,7 @@ class UserBase(BaseModel):
     role: UserRole
     is_active: bool = True
 
-class UserCreate(BaseModel):
+class UserCreate(BaseSchema):
     """User registration schema supporting role-specific fields in child tables."""
     # Core identity
     username: str
@@ -74,7 +75,7 @@ class InstructorRead(UserRead):
     department: Optional[str] = None
     profile_picture_url: Optional[str] = None
 
-class UserUpdate(BaseModel):
+class UserUpdate(BaseSchema):
     """User update schema - all fields optional."""
     # Core identity (limited updates)
     email: Optional[EmailStr] = None
@@ -103,12 +104,12 @@ class UserUpdate(BaseModel):
     specialization: Optional[str] = None
     bio: Optional[str] = None
 
-class TokenResponse(BaseModel):
-    access_token: str
-    refresh_token: str
-    token_type: str
+# class TokenResponse(BaseModel):
+#     access_token: str
+#     refresh_token: str
+#     token_type: str
 
-class TokenResponse(BaseModel):
-    access_token: str
-    refresh_token: str
-    token_type: str
+class RegisterResponse(BaseModel):
+    status: str = "success"
+    user: UserRead
+    message: Optional[str] = None

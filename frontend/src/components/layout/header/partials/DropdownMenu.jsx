@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, MenuItem, Button } from "@mui/material";
 import { ArrowDropDown, KeyboardArrowDown } from "@mui/icons-material";
-import CButton from "@/components/CButton";
+import CButton from "@/components/ui/CButton";
 
 const NestedMenu = ({ items, anchorEl, handleClose, open }) => {
   return (

@@ -25,7 +25,7 @@ import {
   removeFromCart,
   clearCart,
 } from "@/app/store/product/_features/productCartSlice" // adjust path if needed
-import CButton from "@/components/CButton"
+import CButton from "@/components/ui/CButton"
 import Link from "next/link"
 
 export default function CartDrawer() {

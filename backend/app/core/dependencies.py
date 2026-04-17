@@ -11,7 +11,7 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.core.security import oauth2_scheme, get_user_by_username
 import jwt
 from jwt.exceptions import InvalidTokenError
@@ -57,3 +57,17 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
+
+
+async def get_admin_or_instructor(
+    user: User = Depends(get_current_active_user),
+) -> User:
+    """
+    Verify that the current user is either an Admin or an Instructor.
+    """
+    if user.role not in [UserRole.ADMIN, UserRole.INSTRUCTOR]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user doesn't have enough privileges"
+        )
+    return user

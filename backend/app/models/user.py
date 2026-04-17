@@ -1,12 +1,31 @@
-from typing import Optional
-
-from sqlalchemy import DateTime, String, Boolean, ForeignKey, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-
+from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime, timezone, date
 import enum
 
+from sqlalchemy import (
+    DateTime,
+    String,
+    Boolean,
+    ForeignKey,
+    Index,
+    func,
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.db.base import Base
+
+
+if TYPE_CHECKING:
+    from app.models.course import Course
+    from app.models.review import Review
+    from app.models.wishlist import Wishlist
+    from app.models.lesson_progress import LessonProgress
+    from app.models.discussion import Discussion
+    from app.models.comment import Comment
+    from app.models.enrollment import Enrollment
+
+
+# ---------------- ENUM ---------------- #
 
 
 class UserRole(str, enum.Enum):
@@ -16,194 +35,174 @@ class UserRole(str, enum.Enum):
     USER = "user"
 
 
+# ---------------- BASE USER ---------------- #
+
+
 class User(Base):
     """
     Base User model using Joined Table Inheritance (Polymorphic pattern).
-    
-    All users (ADMIN, INSTRUCTOR, STUDENT) share these core fields.
-    Role-specific fields are in Student and Instructor child tables.
     """
+
     __tablename__ = "users"
+
+    __mapper_args__ = {
+        "polymorphic_identity": "user",
+        "polymorphic_on": "type",
+    }
+
+    # Indexes
+    __table_args__ = (
+        Index("idx_users_email", "email"),
+        Index("idx_users_username", "username"),
+        Index("idx_users_type", "type"),
+    )
 
     # Core identity
     id: Mapped[int] = mapped_column(primary_key=True)
-    username: Mapped[str] = mapped_column(String(50), unique=True)
-    email: Mapped[str] = mapped_column(String(100), unique=True)
+
+    username: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+
+    email: Mapped[str] = mapped_column(String(100), unique=True, index=True)
+
     first_name: Mapped[str] = mapped_column(String(50))
     last_name: Mapped[str] = mapped_column(String(50))
-    hashed_password: Mapped[str]
-    
+
+    hashed_password: Mapped[str] = mapped_column(String(255))
+
     # Account Status
     role: Mapped[UserRole] = mapped_column(String(20), default=UserRole.STUDENT)
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+
     email_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     is_deleted: Mapped[bool] = mapped_column(Boolean, default=False)
-    
+
     # Preferences
     preferred_language: Mapped[str] = mapped_column(String(10), default="en")
+
     timezone: Mapped[str] = mapped_column(String(50), default="UTC")
-    
+
     # Security - Password
-    last_password_change: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
-    
+    last_password_change: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True)
+    )
+
     # Security - 2FA
     two_factor_enabled: Mapped[bool] = mapped_column(Boolean, default=False)
-    two_factor_method: Mapped[Optional[str]] = mapped_column(String(20))  # 'email', 'sms', 'totp'
-    totp_secret: Mapped[Optional[str]] = mapped_column(String(255))  # Encrypted TOTP secret
-    backup_codes: Mapped[Optional[str]] = mapped_column(String(500))  # Encrypted JSON array
+
+    two_factor_method: Mapped[Optional[str]] = mapped_column(String(20))
+    totp_secret: Mapped[Optional[str]] = mapped_column(String(255))
+    backup_codes: Mapped[Optional[str]] = mapped_column(String(500))
+
     phone_number: Mapped[Optional[str]] = mapped_column(String(20))
-    
-    # Security - Login Management
-    login_attempts: Mapped[int] = mapped_column(default=0)
-    last_failed_login: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+
+    # Security - Sign In
+    sign_in_attempts: Mapped[int] = mapped_column(default=0, nullable=False)
+
+    last_failed_sign_in: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True)
+    )
+
     is_locked: Mapped[bool] = mapped_column(Boolean, default=False)
+
     locked_until: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
-    
-    # OAuth2 Integration - Relationship to OAuth accounts
-    oauth_accounts: Mapped[list["OAuthAccount"]] = relationship(
-        "OAuthAccount",
-        back_populates="user",
-        cascade="all, delete-orphan",
-        lazy="selectin",
-    )
-    
-    # Discriminator column for polymorphic queries
-    type: Mapped[str] = mapped_column(String(20), default="user")
-    
-    # Timestamps
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        nullable=False,
-    )
-    
-    updated_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        onupdate=lambda: datetime.now(timezone.utc),
-        nullable=True,
-    )
-    
-    last_login: Mapped[Optional[datetime]] = mapped_column(
+
+    # Discriminator
+    type: Mapped[str] = mapped_column(String(20), default="user", index=True)
+
+    last_sign_in: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
     )
-    
+
     deleted_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True),
         nullable=True,
     )
 
-    __mapper_args__ = {
-        "polymorphic_identity": "user",
-        "polymorphic_on": type,
-    }
+    # Relationships (common for ALL users to avoid polymorphic mapper issues)
+    courses: Mapped[List["Course"]] = relationship(
+        "Course", back_populates="instructor", cascade="all, delete-orphan"
+    )
+
+    reviews: Mapped[List["Review"]] = relationship(
+        "Review", back_populates="student", cascade="all, delete-orphan"
+    )
+
+    wishlist_items: Mapped[List["Wishlist"]] = relationship(
+        "Wishlist", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    lesson_progress: Mapped[List["LessonProgress"]] = relationship(
+        "LessonProgress", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    discussions: Mapped[List["Discussion"]] = relationship(
+        "Discussion", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    comments: Mapped[List["Comment"]] = relationship(
+        "Comment", back_populates="user", cascade="all, delete-orphan"
+    )
+
+    enrollments: Mapped[List["Enrollment"]] = relationship(
+        "Enrollment", back_populates="user", cascade="all, delete-orphan"
+    )
+
+
+# ---------------- STUDENT ---------------- #
 
 
 class Student(User):
     """
-    Student user with student-specific fields.
-    Inherits all base User fields via foreign key relationship.
+    Student-specific model
     """
-    __tablename__ = "students"
 
-    id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    
-    # Student-specific fields (phone_number inherited from User)
-    student_id: Mapped[str] = mapped_column(String(50), unique=True)
-    enrollment_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
-    date_of_birth: Mapped[Optional[date]]
-    department: Mapped[Optional[str]] = mapped_column(String(100))
-    profile_picture_url: Mapped[Optional[str]]
+    __tablename__ = "students"
 
     __mapper_args__ = {
         "polymorphic_identity": "student",
     }
 
+    id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
+    )
+
+    student_id: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+
+    enrollment_date: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+
+    date_of_birth: Mapped[Optional[date]]
+
+    department: Mapped[Optional[str]] = mapped_column(String(100))
+
+    profile_picture_url: Mapped[Optional[str]] = mapped_column(String(255))
+
+
+# ---------------- INSTRUCTOR ---------------- #
+
 
 class Instructor(User):
     """
-    Instructor user with instructor-specific fields.
-    Inherits all base User fields via foreign key relationship.
+    Instructor-specific model
     """
-    __tablename__ = "instructors"
 
-    id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    
-    # Instructor-specific fields
-    qualification: Mapped[str] = mapped_column(String(200))
-    specialization: Mapped[Optional[str]] = mapped_column(String(200))
-    bio: Mapped[Optional[str]] = mapped_column(String(500))
-    department: Mapped[Optional[str]] = mapped_column(String(100))
-    profile_picture_url: Mapped[Optional[str]]
+    __tablename__ = "instructors"
 
     __mapper_args__ = {
         "polymorphic_identity": "instructor",
     }
 
-
-class OAuthAccount(Base):
-    """
-    OAuth2 account linked to a user.
-    
-    Supports multiple OAuth providers per user (Google, GitHub, Facebook, etc.)
-    Normalized design allows scalability without schema changes.
-    """
-    __tablename__ = "oauth_accounts"
-
-    # Primary key
-    id: Mapped[int] = mapped_column(primary_key=True)
-    
-    # Foreign key to user
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        nullable=False,
-    )
-    
-    # Provider information
-    provider: Mapped[str] = mapped_column(
-        String(50),
-        nullable=False,
-        comment="OAuth provider: 'google', 'github', 'facebook', 'linkedin', etc.",
-    )
-    provider_user_id: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
-        comment="User ID from the OAuth provider",
-    )
-    provider_email: Mapped[Optional[str]] = mapped_column(
-        String(100),
-        comment="Email from OAuth provider",
-    )
-    
-    # Profile data from provider (stored as JSON string)
-    profile_data: Mapped[Optional[str]] = mapped_column(
-        String(2000),
-        comment="JSON: name, picture, bio, location, etc. from provider",
-    )
-    
-    # Tracking
-    linked_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=lambda: datetime.now(timezone.utc),
-        nullable=False,
-    )
-    last_used_at: Mapped[Optional[datetime]] = mapped_column(
-        DateTime(timezone=True),
-        comment="Last time this OAuth account was used for login",
-    )
-    
-    # Relationship back to user
-    user: Mapped["User"] = relationship(
-        "User",
-        back_populates="oauth_accounts",
-    )
-    
-    # Unique constraints
-    __table_args__ = (
-        # One provider per user (can't link Google twice)
-        UniqueConstraint("user_id", "provider", name="uq_user_oauth_provider"),
-        # Provider IDs must be unique globally (can't reuse same Google ID)
-        UniqueConstraint("provider", "provider_user_id", name="uq_provider_user_id"),
+    id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
     )
 
+    qualification: Mapped[str] = mapped_column(String(200))
+
+    specialization: Mapped[Optional[str]] = mapped_column(String(200))
+
+    bio: Mapped[Optional[str]] = mapped_column(String(500))
+
+    department: Mapped[Optional[str]] = mapped_column(String(100))
+
+    profile_picture_url: Mapped[Optional[str]] = mapped_column(String(255))

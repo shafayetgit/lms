@@ -8,8 +8,10 @@ from typing import Optional
 from datetime import datetime
 import re
 
+from app.core.base import BaseSchema
 
-class TokenResponse(BaseModel):
+
+class TokenResponse(BaseSchema):
     """Token response with access and refresh tokens."""
     access_token: str
     refresh_token: str
@@ -119,28 +121,6 @@ class Disable2FARequest(BaseModel):
     password: str
 
 
-class OAuthCallbackRequest(BaseModel):
-    """OAuth callback request."""
-    code: str
-    state: str
-
-
-class OAuthTokenRequest(BaseModel):
-    """Request token from OAuth."""
-    code: str
-    redirect_uri: str
-
-
-class GoogleOAuthRequest(BaseModel):
-    """Google OAuth login request."""
-    code: str
-
-
-class GitHubOAuthRequest(BaseModel):
-    """GitHub OAuth login request."""
-    code: str
-
-
 class LoginAuditResponse(BaseModel):
     """Login attempt audit response."""
     id: int
@@ -169,3 +149,9 @@ class PasswordPolicyResponse(BaseModel):
     require_lowercase: bool
     require_digits: bool
     require_special_chars: bool
+
+
+class SignInSchema(BaseModel):
+    """Sign-in request schema."""
+    username: str
+    password: str

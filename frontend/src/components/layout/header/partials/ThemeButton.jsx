@@ -4,7 +4,7 @@
 // import { useDispatch } from "react-redux";
 // import { removeCredentials } from "@/apps/user/auth/authSlice";
 // import { useSignOutMutation } from "@/apps/user/auth/authApiSlice";
-import CButton from "@/components/CButton";
+import CButton from "@/components/ui/CButton";
 
 export default function SignOut() {
   // const [signOut] = useSignOutMutation();

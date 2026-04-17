@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 //   removeFromCart,
 //   clearCart,
 // } from "@/app/store/cart/_features/cartSlice"
-import CButton from "@/components/CButton";
+import CButton from "@/components/ui/CButton";
 import Link from "next/link";
 
 export default function CartDrawer() {

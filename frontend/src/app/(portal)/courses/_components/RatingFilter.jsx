@@ -8,7 +8,7 @@ import {
   Stack,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CRadioGroup from "@/components/CRadioGroup";
+import CRadioGroup from "@/components/ui/CRadioGroup";
 
 const ratings = [5, 4, 3, 2, 1];
 

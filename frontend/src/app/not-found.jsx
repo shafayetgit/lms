@@ -4,7 +4,7 @@ import { Container, Box, Typography, Stack, useTheme, Grid, Divider, Paper } fro
 import { Home, School, LibraryBooks, Info, Search, ArrowForward } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import CButton from "@/components/CButton";
+import CButton from "@/components/ui/CButton";
 
 export default function NotFound() {
     const theme = useTheme();

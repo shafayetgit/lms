@@ -12,6 +12,7 @@
     "@emotion/cache": "latest",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
+    "@hookform/resolvers": "^5.2.2",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "@mui/material-nextjs": "latest",
@@ -21,20 +22,24 @@
     "dayjs": "latest",
     "formik": "latest",
     "framer-motion": "latest",
+    "jose": "^6.2.2",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.544.0",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "next": "^16.2.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.72.0",
     "react-redux": "latest",
     "react-slick": "latest",
     "react-toastify": "latest",
     "slick-carousel": "latest",
     "tinycolor2": "^1.6.0",
-    "yup": "latest"
+    "yup": "latest",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "eslint": "^9",
-    "eslint-config-next": "15.5.2"
+    "eslint-config-next": "^16.2.2"
   }
 }

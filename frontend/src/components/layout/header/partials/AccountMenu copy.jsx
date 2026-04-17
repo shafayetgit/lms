@@ -10,7 +10,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import Logout from "@mui/icons-material/Logout";
 
-import CButton from "@/components/CButton";
+import CButton from "@/components/ui/CButton";
 import { useSignoutMutation } from "@/app/accounts/auth/_features/authApiSlice";
 import { toast } from "react-toastify";
 import { setIsAuth } from "@/redux/features/appSlice";

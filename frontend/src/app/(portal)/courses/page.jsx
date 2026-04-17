@@ -1,6 +1,6 @@
 "use client";
 
-import CourseCard from "@/components/CourseCard";
+import CourseCard from "@/components/ui/CourseCard";
 import { Box, Container, Grid, Typography, Drawer, IconButton, Button, Chip } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CloseIcon from "@mui/icons-material/Close";
@@ -11,7 +11,7 @@ import CategoryFilter from "./_components/Categories";
 import PriceRange from "./_components/PriceRange";
 import RatingFilter from "./_components/RatingFilter";
 
-export default function page() {
+export default function CoursesPage() {
   const [favorites, setFavorites] = useState({});
   const [isMobileFilterOpen, setMobileFilterOpen] = useState(false);
 

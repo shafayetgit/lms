@@ -36,9 +36,7 @@ class TwoFactorAuthFeatures(BaseModel):
     allow_totp: bool = True
 
 
-class OAuthFeatures(BaseModel):
-    enabled: bool = True
-    providers: Dict[str, bool] = Field(default={"google": True, "github": True})
+
 
 
 class EmailFeatures(BaseModel):
@@ -61,7 +59,7 @@ class RateLimitingFeatures(BaseModel):
 class Features(BaseModel):
     authentication: AuthenticationFeatures = Field(default_factory=AuthenticationFeatures)
     two_factor_auth: TwoFactorAuthFeatures = Field(default_factory=TwoFactorAuthFeatures)
-    oauth: OAuthFeatures = Field(default_factory=OAuthFeatures)
+
     email: EmailFeatures = Field(default_factory=EmailFeatures)
     sms: SMSFeatures = Field(default_factory=SMSFeatures)
     rate_limiting: RateLimitingFeatures = Field(default_factory=RateLimitingFeatures)
@@ -177,7 +175,6 @@ class Logging(BaseModel):
     log_failed_logins: bool = True
     log_password_changes: bool = True
     log_2fa_events: bool = True
-    log_oauth_events: bool = True
 
 
 class Roles(BaseModel):
@@ -224,7 +221,7 @@ class ProjectSettings(BaseModel):
 # ============================================================================
 
 class ProjectSettingsManager:
-    """Load, validate, and manage project settings from YAML configuration"""
+    """Load, validate and manage project settings from YAML configuration"""
 
     _instance: Optional["ProjectSettingsManager"] = None
     _settings: Optional[ProjectSettings] = None

@@ -22,12 +22,22 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     return user
 
 @router.put("/{user_id}", response_model=UserRead, tags=["Users"])
-async def update_user(user_id: int, updates: UserUpdate, db: AsyncSession = Depends(get_db)):
+async def update_user(
+    user_id: int, 
+    updates: UserUpdate, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
     """Update user information."""
+    if current_user.id != user_id and current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="Not authorized to update this user"
+        )
     user = await get_user_by_id(db, user_id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    
+
     try:
         return await update_user_info(db, user, updates)
     except ValueError as e:

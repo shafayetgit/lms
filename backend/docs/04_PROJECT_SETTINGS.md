@@ -2,7 +2,7 @@
 
 ## Overview
 
-The **Project Settings Module** allows administrators to configure all project features, security policies, and provider settings through a centralized `project_settings.yaml` file—without modifying code or environment variables.
+The **Project Settings Module** allows administrators to configure all project features, security policiesand provider settings through a centralized `project_settings.yaml` file—without modifying code or environment variables.
 
 ## Location & Files
 

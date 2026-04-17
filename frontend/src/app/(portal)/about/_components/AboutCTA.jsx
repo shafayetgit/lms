@@ -2,7 +2,7 @@
 import React from "react";
 import { Box, Typography, Stack, useTheme, useMediaQuery } from "@mui/material";
 import { motion } from "framer-motion";
-import CButton from "@/components/CButton";
+import CButton from "@/components/ui/CButton";
 
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },

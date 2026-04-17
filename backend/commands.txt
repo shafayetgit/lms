@@ -1,0 +1,18 @@
+I want you to implement the QuizAttempt module. Follow the patterns used in the existing modules:
+
+Model: Create the SQLAlchemy model in app/models/.
+Repository: Create the database queries in app/repositories/.
+Service: Implement the business logic and validations in app/services/.
+Schemas: Create the Pydantic schemas in app/schemas/ (ensure they inherit from BaseSchema for camelCase support).
+API: Create the CRUD endpoints in app/api/v1/endpoints/.
+Security: Protect the endpoints so only Authenticated Admin/Instructors can access them.
+Migration: Generate and run the Alembic migration script.
+Testing: Write full integration tests in app/tests/ that verify CRUD and edge cases.
+Docs: write a dedicated documentation file in docs/."
+
+Full Lifecycle: Model → Migration → Repository → Service → API → Integration Tests → Documentation.
+Check Missing Relation with Category, user, Course etc
+Add required complete features if needed.
+Please read the existing files first to ensure perfect consistency.
+There is a .venv to run app.
+give me the command to run test.
