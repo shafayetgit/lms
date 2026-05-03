@@ -1,12 +1,12 @@
 import { Box, Pagination, PaginationItem, alpha } from "@mui/material"
 import { ArrowBack, ArrowForward } from "@mui/icons-material"
 
-export default function CPagination({ data, onPageChange }) {
+export default function CPagination({ meta, onPageChange }) {
   return (
     <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
       <Pagination
-        count={Number(data?.last_page) || 1}
-        page={Number(data?.current_page) || 1}
+        count={Number(meta?.pages) || 1}
+        page={Number(meta?.page) || 1}
         onChange={onPageChange}
         color="primary"
         sx={{
@@ -17,12 +17,16 @@ export default function CPagination({ data, onPageChange }) {
               fontWeight: 700,
             },
             "&:hover": {
-              backgroundColor: theme => alpha(theme.palette.primary.main, 0.1),
-            }
-          }
+              backgroundColor: (theme) =>
+                alpha(theme.palette.primary.main, 0.1),
+            },
+          },
         }}
-        renderItem={item => (
-          <PaginationItem slots={{ previous: ArrowBack, next: ArrowForward }} {...item} />
+        renderItem={(item) => (
+          <PaginationItem
+            slots={{ previous: ArrowBack, next: ArrowForward }}
+            {...item}
+          />
         )}
         shape="circular"
         variant="text"
@@ -30,3 +34,4 @@ export default function CPagination({ data, onPageChange }) {
     </Box>
   )
 }
+

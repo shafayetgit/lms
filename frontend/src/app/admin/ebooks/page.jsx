@@ -29,7 +29,7 @@ import {
     PlayCircleFilled
 } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
-import StudentLayout from "../StudentLayout";
+import StudentLayout from "@/app/student/StudentLayout";
 import CButton from "@/components/ui/CButton";
 import NeuralPanel from "@/components/ui/NeuralPanel";
 

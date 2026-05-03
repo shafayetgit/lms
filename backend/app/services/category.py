@@ -1,6 +1,6 @@
 import math
 from typing import Optional, List
-from sqlalchemy import select
+from sqlalchemy import desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.category import Category, CategoryType
 from app.repositories import category as category_repo
@@ -37,7 +37,7 @@ class CategoryService:
             description=category_in.description,
             is_active=category_in.is_active,
             type=category_in.type,
-            image_url=category_in.image_url,
+            thumbnail=category_in.thumbnail,
         )
         return await category_repo.create_category(db, db_category)
 
@@ -50,14 +50,14 @@ class CategoryService:
         db: AsyncSession,
         page: int = 1,
         size: int = 10,
-        name: str | None = None,
+        term: str | None = None,
         is_active: bool | None = None,
         type: CategoryType | None = None,
     ) -> dict:
-        query = select(Category).order_by(Category.created_at)
+        query = select(Category).order_by(desc(Category.id))
 
-        if name:
-            query = query.where(Category.name.ilike(f"%{name}%"))
+        if term:
+            query = query.where(Category.name.ilike(f"%{term}%"))
         if is_active is not None:
             query = query.where(Category.is_active == is_active)
         if type is not None:

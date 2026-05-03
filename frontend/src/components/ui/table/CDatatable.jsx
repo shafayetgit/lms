@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   Box,
   Stack,
@@ -10,24 +10,22 @@ import {
   TextField,
   InputAdornment,
   alpha,
-} from "@mui/material"
-import SearchIcon from "@mui/icons-material/Search"
-import CToolbar from "./CToolbar"
-import CPagination from "./CPagination"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useDebouncedCallback } from "use-debounce"
-import StripedDataGrid from "./StripedDataGrid"
-import { getRole } from "@/lib/utils/cutils"
-import CCircularProgress from "./CCircularProgress"
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import CToolbar from "./parts/CToolbar";
+import CPagination from "./parts/CPagination";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
+import StripedDataGrid from "./parts/StripedDataGrid";
 
 const RowCard = ({ row, columns }) => {
-  const theme = useTheme()
+  const theme = useTheme();
   const gridParams = {
     row,
     id: row.id,
     rowId: row.id,
     columns,
-  }
+  };
 
   return (
     <Card
@@ -44,38 +42,40 @@ const RowCard = ({ row, columns }) => {
     >
       <Stack spacing={1.2}>
         {columns.map((col, index) => {
-          const field = col.field
-          let value = row[field]
+          const field = col.field;
+          let value = row[field];
 
           const cellParams = {
             ...gridParams,
             value,
             field,
             formattedValue: value,
-          }
+          };
 
           if (col.valueGetter) {
             try {
-              value = col.valueGetter(cellParams)
-              cellParams.value = value
-              cellParams.formattedValue = value
+              value = col.valueGetter(cellParams);
+              cellParams.value = value;
+              cellParams.formattedValue = value;
             } catch (e) {
-              console.warn(`Error in valueGetter for ${field}:`, e)
+              console.warn(`Error in valueGetter for ${field}:`, e);
             }
           }
 
-          const cellValue = col.renderCell ? col.renderCell(cellParams) : value?.toString() || "-"
+          const cellValue = col.renderCell
+            ? col.renderCell(cellParams)
+            : value?.toString() || "-";
 
           return (
             <Stack
               key={`${field || "col"}-${index}`}
               direction="column"
-            // sx={{
-            //   display: "flex",
-            //   justifyContent: "space-between",
-            //   alignItems: "flex-start",
-            //   gap: 2,
-            // }}
+              // sx={{
+              //   display: "flex",
+              //   justifyContent: "space-between",
+              //   alignItems: "flex-start",
+              //   gap: 2,
+              // }}
             >
               <Typography
                 variant="caption"
@@ -91,26 +91,40 @@ const RowCard = ({ row, columns }) => {
               >
                 {col.headerName || field || "---"}
               </Typography>
-              <Box sx={{ flex: 1, textAlign: "right", color: "text.primary", overflow: "hidden" }}>
-                {typeof cellValue === "string" || typeof cellValue === "number" ? (
-                  <Typography variant="body2" sx={{ fontWeight: 600, wordBreak: "break-word" }}>
+              <Box
+                sx={{
+                  flex: 1,
+                  textAlign: "right",
+                  color: "text.primary",
+                  overflow: "hidden",
+                }}
+              >
+                {typeof cellValue === "string" ||
+                typeof cellValue === "number" ? (
+                  <Typography
+                    variant="body2"
+                    sx={{ fontWeight: 600, wordBreak: "break-word" }}
+                  >
                     {cellValue}
                   </Typography>
                 ) : (
-                  <Box sx={{ display: "inline-block", maxWidth: "100%" }}>{cellValue}</Box>
+                  <Box sx={{ display: "inline-block", maxWidth: "100%" }}>
+                    {cellValue}
+                  </Box>
                 )}
               </Box>
             </Stack>
-          )
+          );
         })}
       </Stack>
     </Card>
-  )
-}
+  );
+};
 
 export default function CDataTable(props) {
   const {
-    data,
+    rows = [],
+    meta,
     columns,
     isLoading,
     filterMode = "server",
@@ -120,29 +134,27 @@ export default function CDataTable(props) {
     getRowHeight,
     hasFilter = true,
     tableHeight = 820,
-  } = props
+  } = props;
 
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const params = new URLSearchParams(searchParams)
-  const theme = useTheme()
-  const isLgScreen = useMediaQuery(theme.breakpoints.down("lg"))
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const theme = useTheme();
+  const isLgScreen = useMediaQuery(theme.breakpoints.down("lg"));
 
-  const handleFilterModelChange = useDebouncedCallback(filterModel => {
-    const quickFilterValue = filterModel.quickFilterValues?.join(" ") || ""
+  const handleFilterModelChange = useDebouncedCallback((filterModel) => {
+    const quickFilterValue = filterModel.quickFilterValues?.join(" ") || "";
 
-    params.set("term", quickFilterValue)
-    params.set("page", 1)
+    params.set("term", quickFilterValue);
+    params.set("page", 1);
 
-    router.push(`?${params.toString()}`)
-  }, 500)
+    router.push(`?${params.toString()}`);
+  }, 500);
 
   const handlePageChange = (_, value) => {
-    params.set("page", value)
-    router.push(`?${params.toString()}`)
-  }
-
-  const rows = Array.isArray(data) ? data : data?.data || []
+    params.set("page", value);
+    router.push(`?${params.toString()}`);
+  };
 
   return (
     <Box
@@ -151,16 +163,17 @@ export default function CDataTable(props) {
         width: "100%",
         borderRadius: isLgScreen ? 0 : 4,
         // backgroundColor: "background.paper",
-        border: theme =>
+        border: (theme) =>
           `1px solid ${theme.palette.patient?.generic?.border || "rgba(255,255,255,0.06)"}`,
-        boxShadow: theme => theme.palette.patient?.generic?.shadow || "none",
+        boxShadow: (theme) => theme.palette.patient?.generic?.shadow || "none",
         overflow: "hidden",
         "& .MuiDataGrid-root": {
           border: "none",
         },
         "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: theme =>
-            theme.palette.patient?.generic?.tableHeadBg || "rgba(255,255,255,0.03)",
+          backgroundColor: (theme) =>
+            theme.palette.patient?.generic?.tableHeadBg ||
+            "rgba(255,255,255,0.03)",
         },
       }}
     >
@@ -172,17 +185,24 @@ export default function CDataTable(props) {
               size="small"
               placeholder="Search..."
               defaultValue={searchParams.get("term") || ""}
-              onKeyDown={e => {
+              onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleFilterModelChange({ quickFilterValues: [e.target.value] })
+                  handleFilterModelChange({
+                    quickFilterValues: [e.target.value],
+                  });
                 }
               }}
-              onChange={e => handleFilterModelChange({ quickFilterValues: [e.target.value] })}
+              onChange={(e) =>
+                handleFilterModelChange({ quickFilterValues: [e.target.value] })
+              }
               slotProps={{
                 input: {
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon fontSize="small" sx={{ color: "text.secondary" }} />
+                      <SearchIcon
+                        fontSize="small"
+                        sx={{ color: "text.secondary" }}
+                      />
                     </InputAdornment>
                   ),
                 },
@@ -190,7 +210,7 @@ export default function CDataTable(props) {
               sx={{
                 "& .MuiInputBase-root": {
                   borderRadius: 3,
-                  bgcolor: theme => alpha(theme.palette.common.white, 0.03),
+                  bgcolor: (theme) => alpha(theme.palette.common.white, 0.03),
                 },
               }}
             />
@@ -206,7 +226,7 @@ export default function CDataTable(props) {
                 gap: 2,
               }}
             >
-              <CCircularProgress size={30} />
+              {/* <CCircularProgress size={30} /> */}
               <Typography variant="body2" color="text.secondary">
                 Loading records...
               </Typography>
@@ -214,14 +234,18 @@ export default function CDataTable(props) {
           ) : rows.length > 0 ? (
             <Stack>
               {rows.map((row, rIdx) => {
-                const key = getRowId ? getRowId(row) : (row.id ?? rIdx)
+                const key = getRowId ? getRowId(row) : (row.id ?? rIdx);
 
-                return <RowCard key={key} row={row} columns={columns} />
+                return <RowCard key={key} row={row} columns={columns} />;
               })}
             </Stack>
           ) : (
             <Box sx={{ p: 6, textAlign: "center" }}>
-              <Typography variant="body1" color="text.secondary" sx={{ fontWeight: 500 }}>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ fontWeight: 500 }}
+              >
                 No records found.
               </Typography>
               <Typography variant="caption" color="text.disabled">
@@ -230,13 +254,13 @@ export default function CDataTable(props) {
             </Box>
           )}
 
-          {hasFilter && data && !Array.isArray(data) && rows.length > 0 && (
-            <CPagination data={data} onPageChange={handlePageChange} />
+          {hasFilter && meta && rows.length > 0 && (
+            <CPagination meta={meta} onPageChange={handlePageChange} />
           )}
         </Stack>
       ) : (
         <StripedDataGrid
-          // autoHeight
+          autoHeight
           density="standard"
           rows={rows}
           columns={columns}
@@ -253,21 +277,25 @@ export default function CDataTable(props) {
           hideFooter={hideFooter || false}
           slots={{
             pagination: () =>
-              hasFilter && <CPagination data={data} onPageChange={handlePageChange} />,
+              hasFilter && (
+                <CPagination meta={meta} onPageChange={handlePageChange} />
+              ),
             toolbar: CustomToolbar || CToolbar,
           }}
-          showToolbar={getRole() === "super_admin" && hasFilter}
+          showToolbar={hasFilter}
           filterMode={filterMode || "client"}
           onFilterModelChange={handleFilterModelChange}
           getRowId={getRowId}
-          getRowHeight={params => {
-            return getRowHeight
+          getRowHeight={(params) => {
+            return getRowHeight;
           }}
-          getRowClassName={params => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
+          }
         />
       )}
     </Box>
-  )
+  );
 }
 
 // {

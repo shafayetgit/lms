@@ -57,9 +57,9 @@ export default function AccountMenu() {
 
   const getProfileLink = () => {
     switch (currentUser?.role?.toLowerCase()) {
-      case "admin": return "/admin/profile";
-      case "student": return "/student /profile";
-      default: return "/student /profile";
+      case "admin": return "/admin/";
+      case "student": return "/student/";
+      default: return "/student/";
     }
   };
 

@@ -196,17 +196,26 @@ const Footer = () => {
               {paymentLogos.map((payment, idx) => (
                 <Box
                   key={idx}
-                  component="img"
-                  src={payment.url}
-                  alt={payment.name}
                   sx={{
                     height: 20,
+                    width: 40, // Estimated width for logos
+                    position: 'relative',
                     filter: "grayscale(100%)",
                     opacity: 0.6,
                     transition: "all 0.3s ease",
                     "&:hover": { filter: "grayscale(0%)", opacity: 1, transform: "scale(1.1)" }
                   }}
-                />
+                >
+                  <Image
+                    src={payment.url}
+                    alt={payment.name}
+                    width={30}
+                    height={20}
+                    preload
+                    // fill
+                    style={{ objectFit: "contain" }}
+                  />
+                </Box>
               ))}
             </Stack>
           </Grid>

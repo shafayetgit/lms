@@ -19,6 +19,7 @@ import { motion } from "framer-motion";
 import CButton from "@/components/ui/CButton";
 import Link from "next/link";
 import NeuralPanel from "./NeuralPanel";
+import Image from "next/image";
 
 const cardHoverVariants = {
   rest: { y: 0, transition: { duration: 0.5, ease: "circOut" } },
@@ -58,17 +59,22 @@ const EnrolledCourseCard = ({ course }) => {
         {/* Hero Image Section */}
         <Box sx={{ position: 'relative', height: 200, overflow: 'hidden' }}>
           <Box
-            component="img"
-            src={course.image}
-            alt={course.title}
             sx={{
               width: "100%",
               height: "100%",
-              objectFit: "cover",
               transition: 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)',
-              '.hover &': { transform: 'scale(1.1)' }
+              '.hover &': { transform: 'scale(1.1)' },
+              position: 'relative'
             }}
-          />
+          >
+            <Image
+              src={course.image.startsWith('http') ? course.image : `/${course.image}`}
+              alt={course.title}
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          </Box>
           <Box sx={{
             position: 'absolute',
             inset: 0,

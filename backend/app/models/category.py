@@ -24,7 +24,7 @@ class Category(Base):
     type: Mapped[CategoryType] = mapped_column(
         String(20), default=CategoryType.NORMAL.value, index=True
     )
-    image_url: Mapped[Optional[str]] = mapped_column(Text)
+    thumbnail: Mapped[Optional[str]] = mapped_column(String(255), index=True)
 
     # Relationships
     courses: Mapped[List["Course"]] = relationship("Course", back_populates="category")

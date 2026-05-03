@@ -26,7 +26,7 @@ import {
   SearchOutlined
 } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
-import StudentLayout from "../StudentLayout";
+import StudentLayout from "@/app/student/StudentLayout";
 import EnrolledCourseCard from "@/components/ui/EnrolledCourseCard";
 import CButton from "@/components/ui/CButton";
 import NeuralPanel from "@/components/ui/NeuralPanel";

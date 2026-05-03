@@ -22,6 +22,8 @@ class MediaBase(BaseSchema):
     width: Optional[int] = None
     height: Optional[int] = None
 
+    is_used: bool = False
+
 
 class MediaCreate(MediaBase):
     """
@@ -32,10 +34,12 @@ class MediaCreate(MediaBase):
 
 class MediaUpdate(BaseSchema):
     """
-    Optional: only if you plan metadata edits
-    (usually media is immutable)
+    Used to mark media as used or update metadata
     """
     original_filename: Optional[str] = None
+
+    # ✅ allow marking as used
+    is_used: Optional[bool] = None
 
 
 class MediaRead(MediaBase):

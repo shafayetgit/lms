@@ -2,6 +2,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const HeroVisuals = () => {
     return (
@@ -24,16 +25,24 @@ const HeroVisuals = () => {
                 }}
             >
                 <Box
-                    component="img"
-                    src="/images/banners/hero-girl.png"
-                    alt="A smiling woman looking at a laptop"
                     sx={{
+                        position: "relative",
                         width: "100%",
-                        objectFit: "cover",
+                        height: { xs: 400, md: 550 },
                         borderRadius: "24px",
+                        overflow: "hidden",
                         boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
                     }}
-                />
+                >
+                    <Image
+                        src="/images/banners/hero-girl.png"
+                        alt="A smiling woman looking at a laptop"
+                        fill
+                        priority
+                        style={{ objectFit: "cover" }}
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                </Box>
             </Box>
         </motion.div>
     );

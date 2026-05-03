@@ -3,6 +3,7 @@ import React from "react"
 import { Box, Card, CardMedia, Avatar, Typography, Rating } from "@mui/material"
 import CButton from "@/components/ui/CButton" // Adjust path as needed
 import Link from "next/link"
+import Image from "next/image"
 
 export default function VendorCard({ vendor, onVisitStore }) {
   return (
@@ -19,17 +20,15 @@ export default function VendorCard({ vendor, onVisitStore }) {
     >
       {/* Banner Image */}
       <Box sx={{ position: "relative", aspectRatio: "3 / 1" }}>
-        <CardMedia
-          component="img"
-          image={vendor.banner}
+        <Image
+          src={vendor.banner.startsWith('http') ? vendor.banner : `/${vendor.banner}`}
           alt={`${vendor.name} banner`}
-          sx={{
-            width: "100%",
-            height: "100%",
+          fill
+          style={{
             objectFit: "cover",
             transition: "transform 0.4s ease",
-            "&:hover": { transform: "scale(1.02)" },
           }}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <Box
           sx={{

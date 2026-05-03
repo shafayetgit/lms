@@ -31,11 +31,11 @@ export const viewport = {
 
 export default function Layout({ children }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body className={`${dmSans.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth"  suppressHydrationWarning>
+      <body className={`${dmSans.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
         <StoreProvider>
           <CToaster />
-          <AppRouterCacheProvider>
+          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
             <ThemeProvider theme={light}>
               <CssBaseline />
               {children}

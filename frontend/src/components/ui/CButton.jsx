@@ -11,6 +11,44 @@ import {
   DialogContent,
   Stack,
 } from "@mui/material"
+import {
+  Add,
+  Edit,
+  Delete,
+  Save,
+  Print,
+  Send,
+  Email,
+  Visibility,
+  VisibilityOff,
+  Download,
+  Upload,
+  Search,
+  Refresh,
+  Check,
+  Close,
+  Cancel,
+  ArrowBack,
+  ArrowForward,
+  Settings,
+  Info,
+  Warning,
+  FileCopy,
+  List,
+  Lock,
+  // Unlock,
+  CloudUpload,
+  CloudDownload,
+  LockOpen,
+  TrackChanges,
+  Article,
+  RequestQuote,
+  CurrencyExchange,
+  Login,
+  Logout,
+  LocalShipping,
+  HowToReg,
+} from "@mui/icons-material"
 
 export default function CButton({
   label,
@@ -23,17 +61,131 @@ export default function CButton({
   variant = "contained",
   yesNo = false,
   yesNoText = "",
-  color = "primary",
+  action = null,
   ...other
 }) {
   const [open, setOpen] = useState(false)
 
-  const handleClick = () => {
-    if (yesNo) {
-      setOpen(true)
-    } else {
-      onClick?.()
+  // 🔹 Map actions to icons
+  const getActionIcon = () => {
+    switch (action?.toLowerCase()) {
+      // CRUD
+      case "add":
+      case "create":
+      case "new":
+        return <Add />
+      case "edit":
+      case "update":
+        return <Edit />
+      case "delete":
+      case "remove":
+      case "destroy":
+        return <Delete />
+      case "save":
+        return <Save />
+      case "track":
+      case "tracking":
+        return <LocalShipping />
+      case "log":
+      case "logs":
+      case "report":
+        return <Article />
+      case "invoice":
+      case "billing":
+      case "bill":
+        return <RequestQuote />
+      case "refund":
+      case "return":
+        return <CurrencyExchange />
+      case "login":
+      case "sign-in":
+      case "signin":
+        return <Login />
+      case "logout":
+      case "sign-out":
+      case "signout":
+        return <Logout />
+      case "sign-up":
+        return <HowToReg />
+      case "submit":
+        return <ArrowForward />
+        
+      // File / Print / Upload / Download
+      case "print":
+        return <Print />
+      case "upload":
+        return <Upload />
+      case "cloud-upload":
+        return <CloudUpload />
+      case "download":
+        return <Download />
+      case "cloud-download":
+        return <CloudDownload />
+      case "copy":
+      case "duplicate":
+        return <FileCopy />
+
+      // Communication
+      case "send":
+      case "email":
+      case "mail":
+        return <Send />
+      case "message":
+        return <Email />
+
+      // Navigation
+      case "back":
+        return <ArrowBack />
+      case "next":
+      case "forward":
+        return <ArrowForward />
+
+      // State / Action
+      case "view":
+      case "show":
+        return <Visibility />
+      case "hide":
+        return <VisibilityOff />
+      case "search":
+        return <Search />
+      case "refresh":
+      case "reload":
+        return <Refresh />
+      case "confirm":
+      case "approve":
+      case "ok":
+        return <Check />
+      case "cancel":
+      case "close":
+        return <Cancel />
+      case "lock":
+        return <Lock />
+      case "unlock":
+        return <LockOpen />
+      case "list":
+      case "all":
+        return <List />
+
+      // Settings / Info / Warning
+      case "settings":
+      case "config":
+        return <Settings />
+      case "info":
+        return <Info />
+      case "warn":
+      case "warning":
+        return <Warning />
+
+      default:
+        return null
     }
+  }
+
+  const startIcon = icon || getActionIcon()
+
+  const handleClick = event => {
+    if (yesNo) setOpen(true)
+    else onClick?.(event)
   }
 
   const handleConfirm = () => {
@@ -41,21 +193,19 @@ export default function CButton({
     onClick?.()
   }
 
-  const handleClose = () => {
-    setOpen(false)
-  }
+  const handleClose = () => setOpen(false)
 
   const ButtonContent = iconButton ? (
-    <IconButton size={size} sx={sx} onClick={handleClick} color={color} {...other}>
-      {icon}
+    <IconButton size={size} sx={sx} onClick={handleClick} {...other}>
+      {startIcon}
     </IconButton>
   ) : (
     <Button
       size={size}
-      color={color}
       variant={variant}
-      sx={{ fontWeight: "bold", ...sx }}
+      sx={{ fontWeight: "bold", textTransform: "capitalize", ...sx }}
       onClick={handleClick}
+      startIcon={startIcon}
       {...other}
     >
       {label}

@@ -1,3 +1,4 @@
+import { removeAuthCookie, setAuthCookie } from "@/lib/auth/cookie";
 import { getCookie } from "@/utils/shared";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -14,17 +15,15 @@ const rawBaseQuery = fetchBaseQuery({
 
 const baseQuery = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions);
-
   if (result.error?.status !== 401) return result;
 
   const url = typeof args === "string" ? args : args?.url;
-  if (url && url.includes("auth/login")) return result;
+  if (url && url.includes("auth/sign-in")) return result;
 
-  const refreshToken = getData("refreshToken");
-
+  const refreshToken = getCookie("refreshToken");
   if (!refreshToken) {
-    removeAuthData();
-    window.location.href = "/auth/login";
+    removeAuthCookie();
+    if (typeof window !== "undefined") window.location.href = "/auth/sign-in";
     return result;
   }
 
@@ -39,14 +38,14 @@ const baseQuery = async (args, api, extraOptions) => {
   );
 
   if (refreshResult.data) {
-    setAuthData(refreshResult.data);
+    setAuthCookie(refreshResult.data);
     result = await rawBaseQuery(args, api, extraOptions);
   } else {
-    removeAuthData();
-    window.location.href = "/auth/login";
+    removeAuthCookie();
+    if (typeof window !== "undefined") window.location.href = "/auth/sign-in";
   }
 
   return result;
 };
 
-export default baseQuery
+export default baseQuery;

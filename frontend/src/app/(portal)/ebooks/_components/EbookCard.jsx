@@ -4,6 +4,8 @@ import { Box, Card, CardMedia, CardContent, Typography, Stack, Chip, IconButton,
 import { Favorite, FavoriteBorder, Star, ArrowForward } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
+import Image from "next/image";
+
 const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
     return (
         <motion.div
@@ -31,16 +33,23 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                     }
                 }}
             >
-                <CardMedia
-                    component="img"
+                <Box
                     sx={{
                         width: { xs: "100%", md: 220 },
                         height: { xs: 280, md: "auto" },
-                        objectFit: "cover"
+                        minHeight: { md: 320 },
+                        position: 'relative',
+                        overflow: 'hidden'
                     }}
-                    image={book.image}
-                    alt={book.title}
-                />
+                >
+                    <Image
+                        src={book.image.startsWith('http') ? book.image : `/${book.image}`}
+                        alt={book.title}
+                        fill
+                        style={{ objectFit: "cover" }}
+                        sizes="(max-width: 768px) 100vw, 220px"
+                    />
+                </Box>
                 <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
                     <CardContent sx={{ p: 4, flex: "1 0 auto" }}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>

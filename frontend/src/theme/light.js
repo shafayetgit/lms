@@ -135,7 +135,7 @@ const typography = {
 };
 
 // ─── Shape ────────────────────────────────────────────────────────────────────
-const shape = { borderRadius: 10 };
+const shape = { borderRadius: 2 };
 
 // ─── Shadows  (navy-tinted instead of generic grey) ───────────────────────────
 const navyShadow = (a, blur, spread = 0) =>
@@ -733,7 +733,7 @@ const light = createTheme({
         MuiDialog: {
             styleOverrides: {
                 paper: {
-                    borderRadius: 16,
+                    // borderRadius: 16,
                     border: `1px solid ${alpha(palette.primary.main, 0.08)}`,
                     boxShadow: navyShadow(0.2, 48),
                 },

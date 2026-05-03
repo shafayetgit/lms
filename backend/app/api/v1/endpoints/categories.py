@@ -28,13 +28,13 @@ async def create_category(
 async def read_categories(
     page: int = Query(default=1, ge=1),
     size: int = Query(default=10, ge=1, le=100),
-    name: str | None = None,
+    term: str | None = None,
     is_active: bool | None = None,
     type: CategoryType | None = None,
     db: AsyncSession = Depends(get_db),
 ):
     return await CategoryService.get_categories(
-        db, page=page, size=size, name=name, is_active=is_active, type=type
+        db, page=page, size=size, term=term, is_active=is_active, type=type
     )
 
 

@@ -294,3 +294,7 @@ alembic upgrade head
 - Ensure SECRET_KEY matches between token creation and validation
 - Check token expiration time
 - Verify user's `is_active` status
+
+
+TO run celery:
+celery -A app.core.celery worker --loglevel=info

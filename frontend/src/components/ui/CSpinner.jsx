@@ -2,6 +2,7 @@
 import React from "react";
 import { Box, Typography, Stack, useTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 /**
  * CSpinner Component
@@ -73,18 +74,15 @@ export default function CSpinner({ fullPage = true, label = "Loading Elite Conte
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        p: 1.5
+                        p: 1.5,
+                        position: 'relative'
                     }}
                 >
-                    <Box
-                        component="img"
+                    <Image
                         src="/images/ecofin-circle-logo.png"
                         alt="EcoFin Logo"
-                        sx={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "contain"
-                        }}
+                        fill
+                        style={{ objectFit: "contain", padding: '12px' }}
                     />
                 </Box>
             </Box>

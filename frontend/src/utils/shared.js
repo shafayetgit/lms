@@ -134,6 +134,42 @@ export function objectToFormData(obj, form = null, namespace = null) {
   return formData;
 }
 
+
+/**
+ * Converts a media object into a FormData instance.
+ * Iterates through media.columns and appends file values using their colName as the key.
+ * Supports both single and multiple file uploads.
+ *
+ * @param {Object} media - Media payload object.
+ * @param {string} media.model - The associated model name (e.g., "Category").
+ * @param {number|null} media.id - The associated model ID (optional).
+ * @param {Array<Object>} media.columns - Array of media column definitions.
+ * @param {string} media.columns[].colName - Key to use in FormData.
+ * @param {File|File[]|null} media.columns[].value - File or array of files.
+ * @param {boolean} media.columns[].multiple - Whether multiple files are allowed.
+ *
+ * @returns {FormData} - FormData instance populated with media files.
+ */
+export function objectToMediaFormData(media) {
+  const formData = new FormData();
+
+  if (!media?.columns?.length) return formData;
+
+  media.columns.forEach((row) => {
+    if (!row?.value) return;
+
+    if (row.multiple && Array.isArray(row.value)) {
+      row.value.forEach((file) => {
+        formData.append(row.colName, file);
+      });
+    } else {
+      formData.append(row.colName, row.value);
+    }
+  });
+
+  return formData;
+}
+
 /**
  * Retrieves the value of a specific cookie by name.
  * Parses document.cookie and returns the cookie value if found.
@@ -228,3 +264,5 @@ const formik = useFormik({
   },
 });
 */
+
+

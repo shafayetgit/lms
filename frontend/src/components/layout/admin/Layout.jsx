@@ -8,7 +8,7 @@ import Topbar from "./parts/Topbar";
 
 const drawerWidth = 280;
 
-export default function Layout({ children, pageTitle='hello', actionButton='helli' }) {
+export default function Layout({ children, pageTitle='', actionButton='helli' }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 

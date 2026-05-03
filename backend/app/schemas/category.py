@@ -11,7 +11,7 @@ class CategoryBase(BaseSchema):
     description: Optional[str] = None
     is_active: bool = True
     type: CategoryType = CategoryType.NORMAL
-    image_url: Optional[str] = None
+    thumbnail: Optional[str] = None
 
 
 class CategoryCreate(CategoryBase):
@@ -25,10 +25,11 @@ class CategoryUpdate(BaseSchema):
     description: Optional[str] = None
     is_active: Optional[bool] = None
     type: Optional[CategoryType] = None
-    image_url: Optional[str] = None
+    thumbnail: Optional[str] = None
 
 
 class CategoryRead(CategoryBase):
+    id:int
     slug: str
     created_at: datetime
     updated_at: datetime

@@ -42,7 +42,7 @@ import {
   Send,
   ThumbUpOutlined
 } from "@mui/icons-material";
-import StudentLayout from "../../StudentLayout";
+import StudentLayout from "@/app/student/StudentLayout";
 import CButton from "@/components/ui/CButton";
 
 const courseData = {

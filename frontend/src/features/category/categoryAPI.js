@@ -1,22 +1,25 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import baseQuery from "../baseQuery";
+import { objectToFormData } from "@/utils/shared";
 
 const PREFIX = "api/v1/categories";
 
 const categoryAPI = createApi({
   reducerPath: "category.api",
   baseQuery: baseQuery,
+  tagTypes: ["CATEGORIES"],
   endpoints: (builder) => ({
     create: builder.mutation({
       query: (body) => ({
-        url: `${PREFIX}/create`,
+        url: `${PREFIX}`,
         method: "POST",
-        body,
+        body: body,
       }),
+      invalidatesTags: ["CATEGORIES"],
     }),
 
     list: builder.query({
-      query: ({ type='', size, page, term }) => {
+      query: ({ type = "", size, page, term }) => {
         const params = new URLSearchParams();
 
         if (term) params.set("term", term);
@@ -27,9 +30,11 @@ const categoryAPI = createApi({
         const queryString = params.toString();
         return queryString ? `${PREFIX}/?${queryString}` : PREFIX;
       },
+      providesTags: ["CATEGORIES"],
     }),
   }),
 });
 
-export const { useCreateMutation, useListQuery, useLazyListQuery } = categoryAPI;
+export const { useCreateMutation, useListQuery, useLazyListQuery } =
+  categoryAPI;
 export default categoryAPI;

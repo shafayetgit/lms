@@ -4,28 +4,32 @@ import { getCurrentUser } from "./lib/auth/server";
 export default async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  const user = await getCurrentUser(request);
-
-  // admin access
-  if (pathname.startsWith("/admin")) {
-    if (!user) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
-    if (user.role !== "admin") {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
+  // Prevent redirect loops
+  if (pathname === "/unauthorized") {
+    return NextResponse.next();
   }
 
-  // student access
-  if (pathname.startsWith("/student")) {
-    if (!user) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
+  let requiredRole = null;
 
-    if (user.role !== "student") {
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
+  if (pathname.startsWith("/admin")) {
+    requiredRole = "admin";
+  } else if (pathname.startsWith("/student")) {
+    requiredRole = "student";
+  }
+
+  // If route doesn't require role (extra safety)
+  if (!requiredRole) {
+    return NextResponse.next();
+  }
+
+  const user = await getCurrentUser(request);
+
+  if (!user) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
+  if (user.role !== requiredRole) {
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
   }
 
   return NextResponse.next();

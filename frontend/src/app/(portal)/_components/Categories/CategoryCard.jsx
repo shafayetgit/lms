@@ -11,6 +11,7 @@ import {
 import { motion } from "framer-motion";
 import { CATEGORY_DEFAULT_IMAGE, PAGES } from "@/lib/constants";
 import Link from "next/link";
+import { CldImage } from "next-cloudinary";
 
 const imageHover = {
   rest: { scale: 1 },
@@ -54,7 +55,7 @@ const CategoryCard = ({ category, index }) => {
             }}
           >
             {/* Image */}
-            <Box
+            {/* <Box
               sx={{
                 aspectRatio: "1 / 1",
                 overflow: "hidden",
@@ -80,6 +81,41 @@ const CategoryCard = ({ category, index }) => {
                   bottom: 0,
                   background: (theme) =>
                     `linear-gradient(to bottom, transparent 60%, ${alpha(theme.palette.common.black, 0.4)} 100%)`,
+                }}
+              />
+            </Box> */}
+
+            <Box
+              sx={{
+                aspectRatio: "1 / 1",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              <CldImage
+                src={category.image_url || "start-up-business-meeting_bbw3sj"}
+                alt={category.name}
+                fill
+                aspectRatio="1:1"
+                // crop="fill"
+                // gravity="auto"
+                // style={{
+                //   objectFit: "cover",
+                // }}
+              />
+
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: (theme) =>
+                    `linear-gradient(to bottom, transparent 60%, ${alpha(
+                      theme.palette.common.black,
+                      0.4,
+                    )} 100%)`,
                 }}
               />
             </Box>

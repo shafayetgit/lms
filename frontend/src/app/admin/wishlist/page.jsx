@@ -3,7 +3,7 @@
 import CourseCard from "@/components/ui/CourseCard";
 import { Box, Typography, Stack, Grid, useTheme, alpha, Avatar } from "@mui/material";
 import React, { useState } from "react";
-import StudentLayout from "../StudentLayout";
+import StudentLayout from "@/app/student/StudentLayout";
 import { motion, AnimatePresence } from "framer-motion";
 import { Favorite, FavoriteBorder, SearchOutlined, ReceiptLong as ReceiptLongIcon, BookmarkOutlined } from "@mui/icons-material";
 import CButton from "@/components/ui/CButton";

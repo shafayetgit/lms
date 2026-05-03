@@ -1,6 +1,5 @@
-from sqlalchemy import select, func, Select
+from sqlalchemy import Select, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.models.media import Media
 
 
@@ -25,16 +24,19 @@ async def get_media(
     db: AsyncSession, query: Select | None = None, skip: int = 0, limit: int = 10
 ) -> list[Media]:
     q = query if query is not None else select(Media)
-
     result = await db.execute(q.offset(skip).limit(limit))
-
     return result.scalars().all()
 
 
 async def count_media(db: AsyncSession, query: Select | None = None) -> int:
     q = query if query is not None else select(Media)
-
     return await db.scalar(select(func.count()).select_from(q.subquery()))
+
+
+async def update_media(db: AsyncSession, media: Media) -> Media:
+    await db.commit()
+    await db.refresh(media)
+    return media
 
 
 async def delete_media(db: AsyncSession, media: Media) -> None:
