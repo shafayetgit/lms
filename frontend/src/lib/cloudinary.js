@@ -68,13 +68,19 @@ export async function uploadMultipleToCloudinary({
     while (queue.length) {
       const file = queue.shift();
       try {
-        const uploaded = await uploadToCloudinary({
-          file,
+        const metadata = await uploadToCloudinary({
+          file: file.file,
           cloudName,
           uploadPreset,
           folder,
         });
-        results.push(uploaded);
+
+        delete file.file; 
+
+        results.push({
+          ...file,
+          metadata: metadata,
+        });
       } catch (err) {
         console.error("Upload failed:", file.name, err);
       }

@@ -16,7 +16,10 @@ import { useCreateMutation } from "@/features/category/categoryAPI";
 import { categoryValidationSchema } from "@/schema/category";
 import { mapApiErrorsToFormik, objectToMediaFormData } from "@/utils/shared";
 import CFileField from "@/components/ui/CFileField";
-import { uploadToCloudinary } from "@/lib/cloudinary";
+import {
+  uploadMultipleToCloudinary,
+  uploadToCloudinary,
+} from "@/lib/cloudinary";
 
 export default function Create() {
   const [open, setOpen] = useState(false);
@@ -42,37 +45,27 @@ export default function Create() {
     validationSchema: categoryValidationSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
-        // console.log();
-
         const { thumbnail, ...createPayload } = values;
-        // console.log(uploaded);
-        // const response = await create(createPayload).unwrap();
+        const response = await create(createPayload).unwrap();
 
         // if (response?.id) {
-          const files = {
-            ...(values.thumbnail && { thumbnail: values.thumbnail }),
-          };
+        const files = values.thumbnail
+          ? [
+              {
+                file: values.thumbnail,
+                field: "thumbnail",
+                model: "Category",
+                id: response.id,
+              },
+            ]
+          : [];
 
-
-          if(Object.keys(files).length > 0) {
-            const metadata = await uploadToCloudinary({
-              files,
-            });
-          }
-
-          // if (!file) return;
-          // const metadata = await uploadToCloudinary({
-          //   file,
-          // });
-          // const payload = {
-          //   model: "Category",
-          //   id: response.id,
-          //   secure_url: metadata.secure_url,
-          //   field: "thumbnail",
-          //   metadata: metadata,
-          // };
-          // console.log(payload);
-        // }
+        if (files.length > 0) {
+          const uploadedFiles = await uploadMultipleToCloudinary({
+            files,
+          });
+          console.log(uploadedFiles);
+        }
 
         // toast.success(response?.message || "Category created successfully");
         // resetForm();
