@@ -1,54 +1,62 @@
-from pydantic import BaseModel, ConfigDict
-from typing import Optional, List
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 from app.core.base import BaseSchema, PaginationMeta
-from app.models.media import MediaType
 
 
 class MediaBase(BaseSchema):
-    public_id: str
-    secure_url: str
-
-    original_filename: Optional[str] = None
-    mime_type: Optional[str] = None
-
-    size: int
-
-    type: MediaType
-    resource_type: str
-    format: str
-
-    width: Optional[int] = None
-    height: Optional[int] = None
-
-    is_used: bool = False
-
-
-class MediaCreate(MediaBase):
-    """
-    Used after uploading file to Cloudinary
-    """
+    """Base schema for media with common fields"""
     pass
 
 
-class MediaUpdate(BaseSchema):
-    """
-    Used to mark media as used or update metadata
-    """
-    original_filename: Optional[str] = None
+class MediaCreate(BaseSchema):
+    """Schema for creating media from provider upload response"""
+    meta: Dict[str, Any] = Field(default_factory=dict)
 
-    # ✅ allow marking as used
+
+class MediaUpdate(BaseSchema):
+    """Schema for updating media"""
     is_used: Optional[bool] = None
 
 
-class MediaRead(MediaBase):
-    id: int
-    created_at: datetime
+class MediaAttach(BaseSchema):
+    """
+    Schema for attaching media to a model.
+    Used when receiving payload with field, model, and model_id
+    """
+    field: str
+    model: str
+    model_id: int
+    meta: Dict[str, Any]
 
+    # @field_validator("meta", mode="before")
+    # @classmethod
+    # def unwrap_meta(cls, v):
+    #     """Unwrap nested meta if present (prevents double-wrapping bugs)"""
+    #     if isinstance(v, dict) and "meta" in v and isinstance(v["meta"], dict):
+    #         nested = v["meta"]
+    #         if any(k in nested for k in ["secure_url", "url", "Location", "location"]):
+    #             return nested
+    #     return v
+
+
+class MediaRead(BaseSchema):
+    """Schema for reading media"""
+    id: int
+    provider: str
+    model: Optional[str] = None
+    model_id: Optional[int] = None
+    is_used: bool
+    meta: Dict[str, Any]
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    
     model_config = ConfigDict(from_attributes=True)
 
 
 class MediaListResponse(BaseModel):
+    """Paginated list of media items"""
     items: List[MediaRead]
     meta: PaginationMeta
+

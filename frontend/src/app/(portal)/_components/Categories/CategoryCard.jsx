@@ -9,7 +9,7 @@ import {
   alpha,
 } from "@mui/material";
 import { motion } from "framer-motion";
-import { CATEGORY_DEFAULT_IMAGE, PAGES } from "@/lib/constants";
+import { CATEGORY_DEFAULT_IMAGE, ROUTES } from "@/lib/constants";
 import Link from "next/link";
 import { CldImage } from "next-cloudinary";
 
@@ -30,7 +30,7 @@ const CategoryCard = ({ category, index }) => {
       }}
     >
       <motion.div initial="rest" whileHover="hover" animate="rest">
-        <Link href={`${PAGES.PORTAL.COURSES.path}?category=${category.slug}`}>
+        <Link href={`${ROUTES.portal.courses.path}?category=${category.slug}`}>
           <Card
             component={CardActionArea}
             sx={{
@@ -63,7 +63,7 @@ const CategoryCard = ({ category, index }) => {
               }}
             >
               <motion.img
-                src={category.image_url || CATEGORY_DEFAULT_IMAGE}
+                src={category.thumbnail || CATEGORY_DEFAULT_IMAGE}
                 alt={category.name}
                 variants={imageHover}
                 style={{
@@ -93,7 +93,7 @@ const CategoryCard = ({ category, index }) => {
               }}
             >
               <CldImage
-                src={category.image_url || "start-up-business-meeting_bbw3sj"}
+                src={category.thumbnail || "start-up-business-meeting_bbw3sj"}
                 alt={category.name}
                 fill
                 aspectRatio="1:1"

@@ -1,9 +1,7 @@
-import authAPI from "@/features/auth/authAPI";
-import categoryAPI from "@/features/category/categoryAPI";
+import api from "@/redux/api";
 
 export const middleware = (getDefaultMiddleware) =>
   getDefaultMiddleware({
     serializableCheck: false,
   })
-    .concat(authAPI.middleware)
-    .concat(categoryAPI.middleware);
+    .concat(api.middleware);

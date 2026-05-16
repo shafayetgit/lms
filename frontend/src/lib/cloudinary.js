@@ -39,12 +39,7 @@ export async function uploadToCloudinary({
 
   const data = await res.json();
 
-  return {
-    url: data.secure_url,
-    public_id: data.public_id,
-    type: data.resource_type,
-    original: data,
-  };
+  return data;
 }
 // Usage;
 // const result = await uploadToCloudinary({
@@ -68,7 +63,7 @@ export async function uploadMultipleToCloudinary({
     while (queue.length) {
       const file = queue.shift();
       try {
-        const metadata = await uploadToCloudinary({
+        const meta = await uploadToCloudinary({
           file: file.file,
           cloudName,
           uploadPreset,
@@ -79,7 +74,7 @@ export async function uploadMultipleToCloudinary({
 
         results.push({
           ...file,
-          metadata: metadata,
+          meta: meta,
         });
       } catch (err) {
         console.error("Upload failed:", file.name, err);

@@ -86,55 +86,7 @@ export default function Sidebar({
         </Box>
       )}
 
-      {/* Branding Module */}
-      <Box sx={{ px: 0 }}>
-        <Box
-          sx={{
-            p: "1px",
-            borderRadius: "24px",
-            background: "transparent",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <Box
-            sx={{
-              bgcolor: "rgba(255,255,255,0.7)",
-              backdropFilter: "blur(20px)",
-              borderRadius: "23px",
-              p: 2.5,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-              zIndex: 2,
-            }}
-          >
-            <Link
-              href="/"
-              style={{ textDecoration: "none", display: "flex", width: "100%" }}
-            >
-              {/* <Box
-                component="img"
-                src={LOGO}
-                alt="logo"
-                sx={{ height: { xs: 40, md: 55 }, width: "auto" }}
-              /> */}
-              <Image
-                src={LOGO}
-                width={LOGO_WIDTH}
-                height={LOGO_HEIGHT}
-                style={{
-                  width: "auto",
-                  height: "auto",
-                }}
-                alt="Logo"
-                priority
-              />{" "}
-            </Link>
-          </Box>
-        </Box>
-      </Box>
+
 
       <List sx={{ px: 2, flexGrow: 1 }}>
         {menuItems.map((item) => {

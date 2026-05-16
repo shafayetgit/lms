@@ -16,7 +16,7 @@ import { useSignUpMutation } from "@/features/auth/authAPI";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { mapApiErrorsToFormik } from "@/utils/shared";
-import { PAGES } from "@/lib/constants";
+import { ROUTES } from "@/lib/constants";
 
 export default function Page() {
   const router = useRouter();
@@ -261,7 +261,7 @@ export default function Page() {
         Already have an account?{" "}
         <Typography
           component={Link}
-          href={PAGES.PORTAL.SIGNIN.path}
+          href={ROUTES.portal.signIn.path}
           variant="body2"
           sx={{
             color: "text.primary",

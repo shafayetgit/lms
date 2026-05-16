@@ -1,13 +1,9 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQuery from "../baseQuery";
+import api from "@/redux/api";
 import { objectToFormData } from "@/utils/shared";
 
 const PREFIX = "api/v1/categories";
 
-const categoryAPI = createApi({
-  reducerPath: "category.api",
-  baseQuery: baseQuery,
-  tagTypes: ["CATEGORIES"],
+const categoryAPI = api.injectEndpoints({
   endpoints: (builder) => ({
     create: builder.mutation({
       query: (body) => ({
@@ -33,6 +29,7 @@ const categoryAPI = createApi({
       providesTags: ["CATEGORIES"],
     }),
   }),
+  overrideExisting: false,
 });
 
 export const { useCreateMutation, useListQuery, useLazyListQuery } =

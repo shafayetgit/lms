@@ -6,6 +6,8 @@ import CDataTable from "@/components/ui/table/CDatatable";
 import Image from "next/image";
 import { CATEGORY_DEFAULT_IMAGE } from "@/lib/constants";
 import { formatDate } from "@/utils/cdayjs";
+import { renderCell } from "@/utils/tableTools";
+import CDelete from "@/components/actions/CDelete";
 
 function CategoriesContent() {
   const searchParams = useSearchParams();
@@ -35,12 +37,12 @@ function CategoriesContent() {
     },
 
     {
-      field: "image_url",
+      field: "thumbnail",
       headerName: "Thumbnail",
       flex: 1,
       renderCell: ({ value }) => (
         <Image
-          src={CATEGORY_DEFAULT_IMAGE}
+          src={value || CATEGORY_DEFAULT_IMAGE}
           alt="image"
           width={50}
           height={50}
@@ -53,6 +55,28 @@ function CategoriesContent() {
       flex: 1,
       renderCell: ({ value }) => value && formatDate(value),
     },
+
+    {
+      field: "Actions",
+      headerName: "Actions",
+      flex: 1,
+      renderCell: (row) =>
+        renderCell(
+          <CDelete
+            values={{
+              model: "Category",
+              filters: [
+                {
+                  field: "id",
+                  operator: "eq",
+                  value: row.id,
+                },
+              ],
+            }}
+            invalidateTag="CATEGORIES"
+          />,
+        ),
+    },
   ];
 
   return (
@@ -61,7 +85,6 @@ function CategoriesContent() {
       rows={items}
       meta={meta}
       loading={isLoading}
-    // getRowId={(row) => row.slug}
     />
   );
 }
@@ -73,4 +96,3 @@ export default function Page() {
     </Suspense>
   );
 }
-

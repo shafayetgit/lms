@@ -1,11 +1,8 @@
-import { createApi } from "@reduxjs/toolkit/query/react"
-import baseQuery from "../baseQuery"
+import api from "@/redux/api"
 
 const PREFIX = "api/v1/auth"
 
-const authAPI = createApi({
-    reducerPath: "auth.api",
-    baseQuery: baseQuery,
+const authAPI = api.injectEndpoints({
     endpoints: builder => ({
         signIn: builder.mutation({
             query: body => ({
@@ -67,6 +64,7 @@ const authAPI = createApi({
             }),
         }),
     }),
+    overrideExisting: false,
 })
 
 export const {

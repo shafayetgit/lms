@@ -8,7 +8,9 @@ import Topbar from "./parts/Topbar";
 
 const drawerWidth = 280;
 
-export default function Layout({ children, pageTitle='', actionButton='helli' }) {
+export default function Layout({
+  children,
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
@@ -85,61 +87,27 @@ export default function Layout({ children, pageTitle='', actionButton='helli' })
           component="main"
           sx={{
             flexGrow: 1,
-            p: { xs: 2.5, sm: 3, md: 4, lg: 6 },
-            width: { xs: "100%", md: `calc(100% - ${drawerWidth + 48}px)` },
+            width: {
+              xs: "calc(100% - 32px)",
+              md: `calc(100% - ${drawerWidth + 72}px)`,
+            },
             maxWidth: "100%",
-            mt: { xs: "60px", md: "50px" },
-            mr: { md: "24px" },
+            mt: { xs: "96px", md: "118px" },
+            ml: { xs: "16px", md: "48px" },
+            mr: { xs: "16px", md: "24px" },
             minHeight: "100vh",
             position: "relative",
             zIndex: 1,
-            overflowX: "hidden",
           }}
         >
-          {/* Page Content Header (If Title is provided elsewhere or here) */}
-          {(pageTitle || actionButton) && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                mb: 5,
-                flexWrap: "wrap",
-                gap: 2,
-              }}
-            >
-              <Box>
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontWeight: 900,
-                    color: "primary.main",
-                    letterSpacing: "-0.04em",
-                    mb: 0.5,
-                    fontSize: { xs: "1.75rem", md: "2.5rem" },
-                  }}
-                >
-                  {pageTitle}
-                </Typography>
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 4,
-                    bgcolor: "secondary.main",
-                    borderRadius: "4px",
-                  }}
-                />
-              </Box>
-              {actionButton && actionButton}
-            </Box>
-          )}
-
           {children}
         </Box>
+
+
       </Box>
+
     </Box>
   );
 }
 
-// Importing Typography inside layout since it's used for pageTitle
-import { Typography } from "@mui/material";
+

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from email.policy import default
 from typing import Optional, Dict, Any
 import enum
 
@@ -20,17 +21,11 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
-
+from app.core.config import init_settings
 
 # -------------------------
 # Enums
 # -------------------------
-
-class MediaType(str, enum.Enum):
-    IMAGE = "image"
-    VIDEO = "video"
-    RAW = "raw"
-
 
 class MediaProvider(str, enum.Enum):
     CLOUDINARY = "cloudinary"
@@ -38,6 +33,7 @@ class MediaProvider(str, enum.Enum):
     IMAGEKIT = "imagekit"
     LOCAL = "local"
 
+settings = init_settings()
 
 # -------------------------
 # Model
@@ -50,10 +46,9 @@ class Media(Base):
 
     provider: Mapped[MediaProvider] = mapped_column(
         Enum(MediaProvider, name="media_provider_enum"),
-        nullable=False,
+        default=settings.MEDIA_PROVIDER,
     )
 
-    # Avoid SQLAlchemy reserved name collision
     meta: Mapped[Dict[str, Any]] = mapped_column(
         "metadata",
         JSONB,
@@ -62,7 +57,6 @@ class Media(Base):
         nullable=False,
     )
 
-    # Polymorphic reference (soft relation)
     model: Mapped[Optional[str]] = mapped_column(String(100))
     model_id: Mapped[Optional[int]] = mapped_column(Integer)
 
@@ -73,28 +67,7 @@ class Media(Base):
         nullable=False,
         index=True,
     )
-
-    # Common media fields
-    url: Mapped[Optional[str]] = mapped_column(Text)
-    public_id: Mapped[Optional[str]] = mapped_column(String(255), index=True)
-
-    resource_type: Mapped[Optional[MediaType]] = mapped_column(
-        Enum(MediaType, name="media_type_enum")
-    )
-
-    # Timestamps
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False,
-    )
-
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False,
-    )
+    
 
     # -------------------------
     # Constraints & Indexes

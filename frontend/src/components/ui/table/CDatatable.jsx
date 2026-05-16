@@ -159,7 +159,8 @@ export default function CDataTable(props) {
   return (
     <Box
       sx={{
-        height: isLgScreen ? "auto" : tableHeight,
+        height: "auto",
+
         width: "100%",
         borderRadius: isLgScreen ? 0 : 4,
         // backgroundColor: "background.paper",

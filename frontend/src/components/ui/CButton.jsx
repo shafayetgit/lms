@@ -52,7 +52,7 @@ import {
 
 export default function CButton({
   label,
-  size = "small",
+  size = "medium",
   onClick,
   sx,
   icon,

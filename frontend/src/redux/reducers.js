@@ -1,11 +1,8 @@
-import authAPI from "@/features/auth/authAPI";
-import categoryAPI from "@/features/category/categoryAPI";
+import api from "@/redux/api";
 import { combineReducers } from "@reduxjs/toolkit";
 
 const reducers = combineReducers({
-    // placeholder: (state = {}) => state // TODO: Add your actual slices/reducers here
-    [authAPI.reducerPath]: authAPI.reducer,
-    [categoryAPI.reducerPath]: categoryAPI.reducer,
+    [api.reducerPath]: api.reducer,
 });
 
 export default reducers;

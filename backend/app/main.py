@@ -8,16 +8,14 @@ from app.api.v1.api import api_router
 from app.core.config import init_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.project_settings import get_project_settings
+from app.core.logging_config import setup_logging
 
 # Initialize settings
 settings = init_settings()
 project_settings = get_project_settings()
 
-# Configure logging
-logging.basicConfig(
-    level=logging.DEBUG if settings.DEBUG else logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
+# Configure logging (writes to console and files)
+setup_logging(settings)
 logger = logging.getLogger(__name__)
 
 

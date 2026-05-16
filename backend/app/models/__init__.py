@@ -13,3 +13,4 @@ from .enrollment import Enrollment
 from .quiz import Quiz
 from .question import Question, Choice
 from .quiz_attempt import QuizAttempt, QuizAttemptAnswer
+from .media import Media

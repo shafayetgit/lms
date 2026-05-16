@@ -13,21 +13,20 @@ import { toast } from "react-toastify";
 
 import { CATEGORY_CHOICES } from "@/choices/category";
 import { useCreateMutation } from "@/features/category/categoryAPI";
+import { useAttachMutation } from "@/features/media/mediaApi";
 import { categoryValidationSchema } from "@/schema/category";
-import { mapApiErrorsToFormik, objectToMediaFormData } from "@/utils/shared";
+import { mapApiErrorsToFormik } from "@/utils/shared";
 import CFileField from "@/components/ui/CFileField";
-import {
-  uploadMultipleToCloudinary,
-  uploadToCloudinary,
-} from "@/lib/cloudinary";
+import { uploadMultipleToCloudinary } from "@/lib/cloudinary";
 
-export default function Create() {
+export default function CreateDialog() {
   const [open, setOpen] = useState(false);
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
-  const [create, { isLoading }] = useCreateMutation();
+  const [create, { isLoading: isCreatingCategory }] = useCreateMutation();
+  const [attach, { isLoading: isAttachingMedia }] = useAttachMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -35,53 +34,57 @@ export default function Create() {
       description: "",
       type: CATEGORY_CHOICES[0]?.value || "",
       isActive: false,
-      thumbnail: "",
-      // media: {
-      //   model: "Category",
-      //   id: null,
-      //   secure_url: null,
-      // },
+      thumbnail: null,
     },
     validationSchema: categoryValidationSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         const { thumbnail, ...createPayload } = values;
-        const response = await create(createPayload).unwrap();
 
-        // if (response?.id) {
-        const files = values.thumbnail
-          ? [
-              {
-                file: values.thumbnail,
-                field: "thumbnail",
-                model: "Category",
-                id: response.id,
-              },
-            ]
-          : [];
+        // Step 1: Create category
+        const categoryResponse = await create(createPayload).unwrap();
+        const categoryId = categoryResponse.id;
 
-        if (files.length > 0) {
-          const uploadedFiles = await uploadMultipleToCloudinary({
-            files,
-          });
-          console.log(uploadedFiles);
+        // Step 2: Upload to Cloudinary and attach media (if thumbnail provided)
+        if (thumbnail) {
+          try {
+            const uploadedFiles = await uploadMultipleToCloudinary({
+              files: [
+                {
+                  file: thumbnail,
+                  field: "thumbnail",
+                  model: "Category",
+                  model_id: categoryId,
+                },
+              ],
+            });
+
+            // Step 3: Attach media to category
+            if (uploadedFiles && uploadedFiles.length > 0) {
+              await attach(uploadedFiles).unwrap();
+              console.log("Media attached successfully");
+            }
+          } catch (mediaError) {
+            console.error("Error uploading/attaching media:", mediaError);
+            toast.warning(
+              "Category created successfully, but media attachment failed. You can retry uploading the thumbnail."
+            );
+          }
         }
 
-        // toast.success(response?.message || "Category created successfully");
-        // resetForm();
-        // handleClose();
-
-        // media.id = response.id;
-        // const mediaFormData = objectToMediaFormData(media);
-        // console.log(mediaFormData);
+        toast.success(categoryResponse?.message || "Category created successfully");
+        resetForm();
+        handleClose();
       } catch (error) {
         const errors = mapApiErrorsToFormik(error);
         setErrors(errors);
-        console.log(error);
+        console.error("Create error:", error);
         toast.error(error?.data?.message || "Create failed. Please try again.");
       }
     },
   });
+
+  const isLoading = isCreatingCategory || isAttachingMedia;
 
   return (
     <CDialog
@@ -156,6 +159,7 @@ export default function Create() {
             />
           </Grid>
 
+          {/* Thumbnail */}
           <Grid size={{ xs: 12 }}>
             <CFileField
               label="Thumbnail"
