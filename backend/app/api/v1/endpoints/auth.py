@@ -4,15 +4,16 @@ Handles registration, sign in, 2FA, password management, etc.
 """
 
 from datetime import timedelta, datetime, timezone
-from fastapi import APIRouter, Depends, HTTPException, status, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Request, Body
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 import logging
+from typing import Optional
 
 from app.api.deps import get_db
 from app.core.dependencies import get_current_active_user, get_current_user
-from app.core.responses import success_response
+from app.core.responses import read_response
 from app.core.security import (
     create_access_token,
     create_refresh_token,
@@ -249,25 +250,47 @@ async def resend_otp(
 
 @router.post("/token", response_model=TokenResponse)
 async def sign_in(
-    data: SignInSchema,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ):
     """
     Sign in with username/email and password.
 
+    Accepts both JSON and form-encoded data.
     Returns access and refresh tokens for authenticated user.
     Requires email verification before sign in.
     """
     settings = init_settings()
+    
+    # Parse request based on content type
+    content_type = request.headers.get("content-type", "")
+    
+    if "application/json" in content_type:
+        # Parse JSON body
+        body = await request.json()
+        username = body.get("username")
+        password = body.get("password")
+    else:
+        # Parse form data
+        form_data = await request.form()
+        username = form_data.get("username")
+        password = form_data.get("password")
+    
+    # Validate required fields
+    if not username or not password:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="username and password are required",
+        )
 
     # Try authentication with username first
-    user = await authenticate_user(db, data.username, data.password)
+    user = await authenticate_user(db, username, password)
 
     # If not found, try with email
     if not user:
-        user_by_email = await get_user_by_email(db, data.username)
+        user_by_email = await get_user_by_email(db, username)
         if user_by_email and verify_password(
-            data.password, user_by_email.hashed_password
+            password, user_by_email.hashed_password
         ):
             user = user_by_email
 

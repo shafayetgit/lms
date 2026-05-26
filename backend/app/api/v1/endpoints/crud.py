@@ -5,8 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_admin_or_instructor
 from app.schemas.crud import DeleteSchema, DeleteResponse
 from app.services.crud import CrudService
-from app.utils.string import get_model
-from app.core.responses import error_response, success_response
+
 
 logger = logging.getLogger(__name__)
 

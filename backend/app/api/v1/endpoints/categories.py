@@ -1,9 +1,15 @@
 from typing import List
+from app.core.responses import create_response, read_response, update_response
 from app.models.category import CategoryType
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_admin_or_instructor
-from app.schemas.category import CategoryCreate, CategoryListResponse, CategoryUpdate, CategoryRead
+from app.schemas.category import (
+    CategoryCreate,
+    CategoryListResponse,
+    CategoryUpdate,
+    CategoryRead,
+)
 from app.services.category import CategoryService
 
 router = APIRouter()
@@ -11,7 +17,6 @@ router = APIRouter()
 
 @router.post(
     "/",
-    response_model=CategoryRead,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(get_admin_or_instructor)],
 )
@@ -19,7 +24,8 @@ async def create_category(
     category_in: CategoryCreate, db: AsyncSession = Depends(get_db)
 ):
     try:
-        return await CategoryService.create_category(db, category_in)
+        await CategoryService.create_category(db, category_in)
+        return create_response()
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
@@ -33,9 +39,11 @@ async def read_categories(
     type: CategoryType | None = None,
     db: AsyncSession = Depends(get_db),
 ):
-    return await CategoryService.get_categories(
+    data = await CategoryService.get_categories(
         db, page=page, size=size, term=term, is_active=is_active, type=type
     )
+
+    return read_response(data)
 
 
 @router.get("/{category_id}", response_model=CategoryRead)
@@ -45,7 +53,7 @@ async def read_category(category_id: int, db: AsyncSession = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
         )
-    return category
+    return read_response(category)
 
 
 @router.put("/{category_id}", response_model=CategoryRead)
@@ -53,7 +61,8 @@ async def update_category(
     category_id: int, category_in: CategoryUpdate, db: AsyncSession = Depends(get_db)
 ):
     try:
-        return await CategoryService.update_category(db, category_id, category_in)
+        await CategoryService.update_category(db, category_id, category_in)
+        return update_response()
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 

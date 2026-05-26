@@ -39,6 +39,7 @@ app = FastAPI(
     description=project_settings.api.description,
     version=project_settings.api.version,
     lifespan=lifespan,
+    swagger_ui_parameters={"docExpansion": "none"},
 )
 
 # Add CORS middleware with project settings

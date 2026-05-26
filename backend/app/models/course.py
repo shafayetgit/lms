@@ -28,8 +28,6 @@ if TYPE_CHECKING:
     from app.models.enrollment import Enrollment
 
 # ---------------- ENUMS ---------------- #
-
-
 class CourseLevel(str, Enum):
     beginner = "beginner"
     intermediate = "intermediate"
@@ -82,7 +80,7 @@ class Course(Base):
     )
 
     description: Mapped[Optional[str]] = mapped_column(Text)
-    thumbnail_url: Mapped[Optional[str]] = mapped_column(Text)
+    thumbnail: Mapped[Optional[str]] = mapped_column(Text)
 
     # Enums (named for Alembic safety)
     level: Mapped[CourseLevel] = mapped_column(

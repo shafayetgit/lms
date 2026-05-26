@@ -23,7 +23,7 @@ def register_exception_handlers(app):
         return JSONResponse(
             status_code=exc.status_code,
             content={
-                "status": "error",
+                "success": False,
                 "message": exc.detail,
             },
         )
@@ -50,7 +50,7 @@ def register_exception_handlers(app):
         return JSONResponse(
             status_code=422,
             content={
-                "status": "error",
+                "success": False,
                 "message": "Validation error",
                 "errors": errors,
             },
@@ -61,7 +61,7 @@ def register_exception_handlers(app):
         return JSONResponse(
             status_code=500,
             content={
-                "status": "error",
+                "success": False,
                 "message": "Internal server error",
             },
         )

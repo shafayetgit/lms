@@ -176,7 +176,7 @@ class Student(User):
 
     department: Mapped[Optional[str]] = mapped_column(String(100))
 
-    profile_picture_url: Mapped[Optional[str]] = mapped_column(String(255))
+    avatar: Mapped[Optional[str]] = mapped_column(String(255))
 
 
 # ---------------- INSTRUCTOR ---------------- #
@@ -205,4 +205,4 @@ class Instructor(User):
 
     department: Mapped[Optional[str]] = mapped_column(String(100))
 
-    profile_picture_url: Mapped[Optional[str]] = mapped_column(String(255))
+    avatar: Mapped[Optional[str]] = mapped_column(String(255))

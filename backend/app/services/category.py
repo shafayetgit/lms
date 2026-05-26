@@ -43,7 +43,9 @@ class CategoryService:
 
     @staticmethod
     async def get_category(db: AsyncSession, category_id: int) -> Category | None:
-        return await category_repo.get_category_by_id(db, category_id)
+        return {
+            "data": await category_repo.get_category_by_id(db, category_id),
+        }
 
     @staticmethod
     async def get_categories(
@@ -65,13 +67,13 @@ class CategoryService:
 
         skip = (page - 1) * size
         total = await category_repo.count_categories(db, query=query)
-        items = await category_repo.get_categories(
+        data = await category_repo.get_categories(
             db, query=query, skip=skip, limit=size
         )
         total_pages = math.ceil(total / size) if total else 0
 
         return {
-            "items": items,
+            "data": data,
             "meta": {
                 "total": total,
                 "page": page,
@@ -128,5 +130,3 @@ class CategoryService:
         if not category:
             raise ValueError("Category not found")
         await category_repo.delete_category(db, category)
-
-

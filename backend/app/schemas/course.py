@@ -15,7 +15,7 @@ class CourseBase(BaseSchema):
     is_free: bool = False
     is_active: bool = True
     status: CourseStatus = CourseStatus.draft
-    thumbnail_url: Optional[str] = None
+    thumbnail: Optional[str] = None
     duration: Optional[int] = None
 
 class CourseCreate(CourseBase):
@@ -33,7 +33,7 @@ class CourseUpdate(BaseSchema):
     is_free: Optional[bool] = None
     is_active: Optional[bool] = None
     status: Optional[CourseStatus] = None
-    thumbnail_url: Optional[str] = None
+    thumbnail: Optional[str] = None
     duration: Optional[int] = None
 
 class CourseRead(CourseBase):
