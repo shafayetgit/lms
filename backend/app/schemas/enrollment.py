@@ -1,7 +1,7 @@
-from pydantic import ConfigDict
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import Optional
-from app.core.base import BaseSchema
+from app.core.base import BaseSchema, PaginationMeta
 from app.models.enrollment import EnrollmentStatus
 
 class EnrollmentBase(BaseSchema):
@@ -26,3 +26,7 @@ class EnrollmentRead(EnrollmentBase):
     completed_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+class EnrollmentListResponse(BaseModel):
+    data: list[EnrollmentRead]
+    meta: PaginationMeta

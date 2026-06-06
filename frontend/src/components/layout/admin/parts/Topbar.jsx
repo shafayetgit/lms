@@ -5,69 +5,72 @@ import {
   Toolbar,
   IconButton,
   Badge,
-  Avatar,
   Box,
   Tooltip,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  Divider,
   Typography,
+  alpha,
   Drawer,
   List,
   ListItem,
-  alpha,
+  Avatar,
+  useTheme,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
-  NotificationsNone,
-  SettingsOutlined,
-  ExitToAppOutlined,
-  PersonOutline,
+  Notifications as NotificationsIcon,
   Search,
-  Close,
-  Circle,
+  Close as CloseIcon,
+  DarkModeOutlined,
+  LightModeOutlined,
 } from "@mui/icons-material";
-import NeuralPanel from "@/components/ui/NeuralPanel";
+import AccountMenu from "@/components/ui/AccountMenu";
 import { useState } from "react";
 import Link from "next/link";
-import AccountMenu from "@/components/ui/AccountMenu";
+import { LOGO } from "@/lib/constants/app";
 import Image from "next/image";
-import { LOGO, LOGO_HEIGHT, LOGO_WIDTH } from "@/lib/constants";
+import { useDispatch } from "react-redux";
+import { toggleTheme } from "@/features/app/appSlice";
 
 const mockNotifications = [
   {
     id: 1,
-    title: "New Course Available",
-    desc: "Advanced Financial modeling is now live!",
+    title: "New User Registered",
+    desc: "Sarah Jenkins joined the platform",
     time: "2 min ago",
     read: false,
-    color: "#2EB82E",
+    color: "success.main",
   },
   {
     id: 2,
-    title: "Order Completed",
-    desc: 'Your purchase of "SEO Masterclass" was successful',
+    title: "System Update",
+    desc: "Version 2.4.0 is now live with enhanced security",
     time: "1 hour ago",
     read: false,
-    color: "#2EB82E",
+    color: "info.main",
   },
   {
     id: 3,
-    title: "Welcome to Elite",
-    desc: "Start your journey by completing your profile",
+    title: "Revenue Alert",
+    desc: "Monthly target reached! +25% growth this week",
     time: "5 hours ago",
     read: true,
-    color: "#0ea5e9",
+    color: "secondary.main",
+  },
+  {
+    id: 4,
+    title: "Storage Warning",
+    desc: "Cloud storage is at 85% capacity",
+    time: "1 day ago",
+    read: true,
+    color: "warning.main",
   },
 ];
 
-export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+export default function Topbar({ handleDrawerToggle, drawerWidth }) {
+  const theme = useTheme();
+  const dispatch = useDispatch();
   const [notifOpen, setNotifOpen] = useState(false);
 
-  const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-  const handleMenuClose = () => setAnchorEl(null);
   const toggleNotifDrawer = (open) => () => setNotifOpen(open);
 
   return (
@@ -76,19 +79,17 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
         position="fixed"
         elevation={0}
         sx={{
-          width: {
-            xs: "calc(100% - 32px)",
-            md: `calc(100% - ${drawerWidth + 48 + 24}px)`,
-          },
-          ml: { md: `${drawerWidth + 24 + 24}px` },
-          mt: { xs: 2, md: 3 },
-          right: { xs: 16, md: 24 },
-          backdropFilter: "blur(20px) !important",
-          borderRadius: "20px",
-          bgcolor: "rgba(255,255,255,0.8)",
-          border: "1px solid",
-          borderColor: (theme) => alpha(theme.palette.common.black, 0.05),
-          transition: "all 0.3s ease",
+          width: { xs: "100%", md: `calc(100% - ${drawerWidth + 48 + 20}px)` },
+          ml: { md: `${drawerWidth + 24 + 20}px` },
+          mt: { xs: 0, md: 3 },
+          right: { xs: 0, md: 24 },
+          backdropFilter: "blur(24px) !important",
+          WebkitBackdropFilter: "blur(24px) !important",
+          borderRadius: { xs: 0, md: "24px" },
+          bgcolor: "transparent",
+          border: "none",
+          backgroundImage: "none !important",
+          transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           zIndex: 1100,
           overflow: "hidden",
         }}
@@ -96,7 +97,7 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
         <Toolbar
           sx={{
             justifyContent: "space-between",
-            // px: { xs: 2, md: 4 },
+            px: { xs: 2, md: 1 },
             minHeight: { xs: 64, md: 70 },
           }}
         >
@@ -104,29 +105,32 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
             <IconButton
               color="inherit"
               edge="start"
+              aria-label="open drawer"
               onClick={handleDrawerToggle}
               sx={{ mr: 2, display: { md: "none" }, color: "text.primary" }}
             >
               <MenuIcon />
             </IconButton>
-
-            <Link
-              href="/"
-              style={{ textDecoration: "none", display: "flex", width: "100%" }}
-            >
-              <Image
-                src={LOGO}
-                // width={LOGO_WIDTH}
-                // height={LOGO_HEIGHT}
-                width={80}
-                height={40}
-                style={{
-                  width: "auto",
-                  height: "auto",
+            <Link href="/" style={{ textDecoration: "none", display: "flex" }}>
+              {/* <Image /> */}
+              <Box
+                sx={{
+                  width: 106,
+                  height: 62,
+                  position: "relative",
                 }}
-                alt="Logo"
-                priority
-              />{" "}
+              >
+                <Image
+                  src={theme.palette.mode === "dark" ? LOGO : LOGO}
+                  alt="TheBioSport Logo"
+                  fill
+                  sizes="106px"
+                  style={{
+                    objectFit: "contain",
+                  }}
+                  priority
+                />
+              </Box>
             </Link>
           </Box>
 
@@ -137,30 +141,33 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
               gap: { xs: 1, md: 2 },
             }}
           >
-            <IconButton
-              sx={{
-                bgcolor: "rgba(0,0,0,0.02)",
-                border: "1px solid rgba(0,0,0,0.05)",
-              }}
-            >
-              <Search fontSize="small" />
-            </IconButton>
-
-            <Tooltip title="Notifications">
+            {/* <Tooltip title="Notifications">
               <IconButton
                 onClick={toggleNotifDrawer(true)}
                 sx={{
                   color: "text.secondary",
-                  bgcolor: "rgba(0,0,0,0.02)",
-                  border: "1px solid rgba(0,0,0,0.05)",
+                  bgcolor: "background.panel",
+                  border: "1px solid",
+                  borderColor: (theme) =>
+                    alpha(theme.palette.common.white, 0.05),
                   "&:hover": {
-                    color: "secondary.main",
-                    bgcolor: "rgba(0,0,0,0.04)",
+                    color: "text.primary",
+                    bgcolor: (theme) => alpha(theme.palette.common.white, 0.08),
                   },
                 }}
               >
-                <Badge badgeContent={2} color="secondary">
-                  <NotificationsNone fontSize="small" />
+                <Badge
+                  badgeContent={2}
+                  color="primary"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontWeight: 800,
+                      border: "2px solid",
+                      borderColor: "background.default",
+                    },
+                  }}
+                >
+                  <NotificationsIcon fontSize="small" />
                 </Badge>
               </IconButton>
             </Tooltip>
@@ -169,11 +176,36 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
               sx={{
                 width: "1px",
                 height: 24,
-                bgcolor: "rgba(0,0,0,0.1)",
+                bgcolor: "rgba(255,255,255,0.1)",
                 mx: 0.5,
                 display: { xs: "none", sm: "block" },
               }}
-            />
+            /> */}
+
+            <Tooltip
+              title={`Switch to ${theme.palette.mode === "dark" ? "light" : "dark"} mode`}
+            >
+              <IconButton
+                onClick={() => dispatch(toggleTheme())}
+                sx={{
+                  color: "text.secondary",
+                  bgcolor: "background.panel",
+                  border: "1px solid",
+                  borderColor: (theme) =>
+                    alpha(theme.palette.common.white, 0.05),
+                  "&:hover": {
+                    color: "text.primary",
+                    bgcolor: (theme) => alpha(theme.palette.common.white, 0.08),
+                  },
+                }}
+              >
+                {theme.palette.mode === "dark" ? (
+                  <LightModeOutlined fontSize="small" />
+                ) : (
+                  <DarkModeOutlined fontSize="small" />
+                )}
+              </IconButton>
+            </Tooltip>
 
             <AccountMenu />
           </Box>
@@ -185,40 +217,55 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
         anchor="right"
         open={notifOpen}
         onClose={toggleNotifDrawer(false)}
-        PaperProps={{
-          sx: {
-            width: { xs: "100%", sm: 400 },
-            bgcolor: "rgba(255,255,255,0.95)",
-            backdropFilter: "blur(40px)",
-            backgroundImage: "none",
-            borderLeft: "1px solid",
-            borderColor: "rgba(0,0,0,0.05)",
-            color: "text.primary",
+        transitionDuration={{ enter: 350, exit: 250 }}
+        disableScrollLock
+        ModalProps={{
+          keepMounted: true,
+        }}
+        slotProps={{
+          transition: {
+            easing: {
+              enter: "cubic-bezier(0, 0, 0.2, 1)", // Deceleration curve
+              exit: "cubic-bezier(0.4, 0, 1, 1)", // Acceleration curve
+            },
+          },
+          paper: {
+            sx: {
+              width: { xs: "100%", sm: 400 },
+              bgcolor: (theme) => alpha(theme.palette.background.paper, 0.8),
+              backdropFilter: "blur(20px)",
+              backgroundImage: "none",
+              borderLeft: "1px solid",
+              borderColor: (theme) => alpha(theme.palette.common.white, 0.08),
+              color: "text.primary",
+              boxShadow: (theme) =>
+                `-20px 0 50px ${alpha(theme.palette.common.black, 0.5)}`,
+            },
           },
         }}
       >
         <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
           <Box
             sx={{
-              p: 4,
+              p: 3,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              borderBottom: "1px solid rgba(0,0,0,0.05)",
+              borderBottom: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.05)}`,
             }}
           >
             <Typography
               variant="h6"
-              fontWeight="900"
+              fontWeight="800"
               sx={{ letterSpacing: -0.5 }}
             >
               Notifications
             </Typography>
             <IconButton
               onClick={toggleNotifDrawer(false)}
-              sx={{ color: "rgba(0,0,0,0.5)" }}
+              sx={{ color: "text.secondary" }}
             >
-              <Close />
+              <CloseIcon />
             </IconButton>
           </Box>
 
@@ -233,12 +280,12 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
                   border: notif.read
                     ? "1px solid transparent"
                     : (theme) =>
-                        `1px solid ${alpha(theme.palette.secondary.main, 0.1)}`,
+                        `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
                   bgcolor: notif.read
                     ? "transparent"
-                    : (theme) => alpha(theme.palette.secondary.main, 0.03),
+                    : (theme) => alpha(theme.palette.primary.main, 0.03),
                   "&:hover": {
-                    bgcolor: "rgba(0,0,0,0.02)",
+                    bgcolor: (theme) => alpha(theme.palette.text.primary, 0.03),
                   },
                 }}
               >
@@ -254,21 +301,21 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
                     <Box
                       sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
                     >
-                      <Circle
+                      <Avatar
                         sx={{
                           width: 8,
                           height: 8,
-                          color: notif.color,
-                          filter: `drop-shadow(0 0 5px ${notif.color})`,
+                          bgcolor: notif.color,
+                          boxShadow: `0 0 10px ${notif.color}`,
                         }}
                       />
-                      <Typography variant="body2" fontWeight="800">
+                      <Typography variant="body2" fontWeight="700">
                         {notif.title}
                       </Typography>
                     </Box>
                     <Typography
                       variant="caption"
-                      sx={{ color: "text.disabled", fontWeight: 600 }}
+                      sx={{ color: "text.secondary", opacity: 0.7 }}
                     >
                       {notif.time}
                     </Typography>
@@ -279,7 +326,6 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
                       color: "text.secondary",
                       pl: 3.5,
                       lineHeight: 1.4,
-                      fontWeight: 500,
                     }}
                   >
                     {notif.desc}
@@ -289,19 +335,25 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
             ))}
           </List>
 
-          <Box sx={{ p: 3, borderTop: "1px solid rgba(0,0,0,0.05)" }}>
+          <Box
+            sx={{
+              p: 3,
+              borderTop: "1px solid",
+              borderColor: (theme) => alpha(theme.palette.common.white, 0.05),
+            }}
+          >
             <Typography
               variant="button"
               sx={{
                 display: "block",
                 textAlign: "center",
-                color: "secondary.main",
-                fontWeight: 900,
+                color: "primary.main",
+                fontWeight: 800,
                 cursor: "pointer",
                 "&:hover": { textDecoration: "underline" },
               }}
             >
-              Mark All as Read
+              View All Activity
             </Typography>
           </Box>
         </Box>

@@ -30,7 +30,8 @@ async def test_delete_category_by_id(client: AsyncClient, db_session, unique_nam
     category_id = category.id
     
     # Delete using CRUD endpoint
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -41,8 +42,9 @@ async def test_delete_category_by_id(client: AsyncClient, db_session, unique_nam
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 1
-    assert data["status"] == "success"
+    assert data["success"] is True
+    assert "deleted" not in data
+    assert "status" not in data
     assert "Successfully deleted" in data["message"]
     
     # Verify deletion
@@ -80,7 +82,8 @@ async def test_delete_multiple_categories_with_in_operator(
     ids = [cat.id for cat in categories]
     
     # Delete using 'in' operator with list
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -91,7 +94,7 @@ async def test_delete_multiple_categories_with_in_operator(
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 2
+    assert data["success"] is True
 
 
 @pytest.mark.asyncio
@@ -114,7 +117,8 @@ async def test_delete_with_in_operator_scalar_value(
     category_id = category.id
     
     # Delete using 'in' operator with scalar value
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -125,13 +129,14 @@ async def test_delete_with_in_operator_scalar_value(
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 1
+    assert data["success"] is True
 
 
 @pytest.mark.asyncio
 async def test_delete_no_matching_records(client: AsyncClient):
     """Test deleting with filter that matches no records."""
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -142,14 +147,15 @@ async def test_delete_no_matching_records(client: AsyncClient):
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 0
+    assert data["success"] is True
     assert "No records matched" in data["message"]
 
 
 @pytest.mark.asyncio
 async def test_delete_invalid_model(client: AsyncClient):
     """Test deleting with invalid model name."""
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "InvalidModel",
@@ -159,7 +165,7 @@ async def test_delete_invalid_model(client: AsyncClient):
         }
     )
     assert delete_resp.status_code == 400
-    assert "Invalid model" in delete_resp.json()["detail"]
+    assert "Invalid model" in delete_resp.json()["message"]
 
 
 @pytest.mark.asyncio
@@ -173,7 +179,8 @@ async def test_delete_invalid_filter_field(client: AsyncClient, unique_name):
     assert create_resp.status_code == 201
     
     # Try to delete with invalid filter field
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -183,7 +190,7 @@ async def test_delete_invalid_filter_field(client: AsyncClient, unique_name):
         }
     )
     assert delete_resp.status_code == 500
-    assert "Invalid filter field" in delete_resp.json()["detail"]
+    assert "Invalid filter field" in delete_resp.json()["message"]
 
 
 @pytest.mark.asyncio
@@ -197,7 +204,8 @@ async def test_delete_category_with_name_filter(client: AsyncClient, unique_name
     assert create_resp.status_code == 201
     
     # Try to delete using 'name' field - but 'name' is not in ALLOWED_FILTERS, should fail
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -208,7 +216,7 @@ async def test_delete_category_with_name_filter(client: AsyncClient, unique_name
     )
     # Should get 500 error with "Invalid filter field" message
     assert delete_resp.status_code == 500
-    assert "Invalid filter field" in delete_resp.json()["detail"]
+    assert "Invalid filter field" in delete_resp.json()["message"]
 
 
 @pytest.mark.asyncio
@@ -241,7 +249,8 @@ async def test_delete_category_with_is_active_filter(
     await db_session.commit()
     
     # Delete using multiple filters (id and is_active)
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -253,7 +262,7 @@ async def test_delete_category_with_is_active_filter(
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 1
+    assert data["success"] is True
     
     # Verify the active category still exists
     result = await db_session.execute(
@@ -278,9 +287,6 @@ async def test_delete_multiple_filters(client: AsyncClient, db_session, unique_n
     )
     assert cat2_resp.status_code == 201
     
-    # Refresh db_session and get fresh references
-    await db_session.refresh(db_session)
-    
     # Get both category IDs
     result = await db_session.execute(
         select(Category).where(
@@ -301,7 +307,8 @@ async def test_delete_multiple_filters(client: AsyncClient, db_session, unique_n
     
     # Delete with multiple conditions: id = cat2_id AND is_active = False
     # This should only delete cat2
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -313,7 +320,7 @@ async def test_delete_multiple_filters(client: AsyncClient, db_session, unique_n
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 1
+    assert data["success"] is True
     
     # Verify cat1 still exists and is active
     result = await db_session.execute(
@@ -345,7 +352,8 @@ async def test_delete_requires_admin_or_instructor(
     
     # The test fixture automatically sets admin role for the client,
     # so delete should succeed with admin credentials
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -357,7 +365,7 @@ async def test_delete_requires_admin_or_instructor(
     # Should succeed with admin role
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] == 1
+    assert data["success"] is True
 
 
 @pytest.mark.asyncio
@@ -372,7 +380,8 @@ async def test_delete_empty_filters_list(client: AsyncClient, unique_name):
     
     # Try to delete with empty filters - this generally should fail for safety
     # Most implementations require at least one filter to prevent accidental mass deletion
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -422,20 +431,28 @@ async def test_delete_with_ne_operator(client: AsyncClient, db_session, unique_n
     assert total_count == 2
     
     # Delete only cat2 (by excluding cat1)
-    delete_resp = await client.delete(
+    # We restrict to our test-created category IDs to avoid deleting pre-existing DB rows
+    result2 = await db_session.execute(
+        select(Category).where(Category.name == f"{unique_name}-2")
+    )
+    cat2 = result2.scalars().first()
+    cat2_id = cat2.id
+
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
             "filters": [
-                {"field": "id", "operator": "ne", "value": cat1_id}
+                {"field": "id", "operator": "ne", "value": cat1_id},
+                {"field": "id", "operator": "in", "value": [cat1_id, cat2_id]}
             ]
         }
     )
-    # This might delete more than just cat2 if there are other categories
-    # So we just verify at least cat2 was deleted
+    # Verify cat2 was deleted
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    assert data["deleted"] >= 1
+    assert data["success"] is True
 
 
 @pytest.mark.asyncio
@@ -459,7 +476,8 @@ async def test_delete_with_gt_operator(client: AsyncClient, db_session, unique_n
     cat1_id = cat1.id
     
     # Delete categories with id > cat1_id
-    delete_resp = await client.delete(
+    delete_resp = await client.request(
+        "DELETE",
         "/api/v1/crud/delete",
         json={
             "model": "Category",
@@ -470,5 +488,4 @@ async def test_delete_with_gt_operator(client: AsyncClient, db_session, unique_n
     )
     assert delete_resp.status_code == 200
     data = delete_resp.json()
-    # At least cat2 and cat3 should be deleted
-    assert data["deleted"] >= 1
+    assert data["success"] is True

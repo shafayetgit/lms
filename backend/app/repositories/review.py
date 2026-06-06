@@ -1,6 +1,17 @@
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.review import Review
+
+async def count_reviews(db: AsyncSession, query) -> int:
+    count_query = select(func.count()).select_from(query.subquery())
+    result = await db.execute(count_query)
+    return result.scalar()
+
+async def get_reviews_with_query(
+    db: AsyncSession, query, skip: int = 0, limit: int = 10
+) -> list[Review]:
+    result = await db.execute(query.offset(skip).limit(limit))
+    return result.scalars().all()
 
 async def create_review(db: AsyncSession, review: Review) -> Review:
     db.add(review)

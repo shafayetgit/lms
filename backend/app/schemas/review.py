@@ -1,7 +1,8 @@
 from pydantic import ConfigDict, Field
 from typing import Optional
 from datetime import datetime
-from app.core.base import BaseSchema
+from app.core.base import BaseSchema, PaginationMeta
+from pydantic import BaseModel
 
 class ReviewBase(BaseSchema):
     course_id: int
@@ -24,3 +25,7 @@ class ReviewRead(ReviewBase):
     updated_at: datetime
     
     model_config = ConfigDict(from_attributes=True)
+
+class ReviewListResponse(BaseModel):
+    data: list[ReviewRead]
+    meta: PaginationMeta

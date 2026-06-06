@@ -23,6 +23,10 @@ def build_expression(column, operator, value):
             value = [value]
         return column.in_(value)
     
+    # Handle boolean/None comparisons in SQLAlchemy 2.0
+    if value in (True, False, None) and operator in ("eq", "ne"):
+        return column.is_(value) if operator == "eq" else column.is_not(value)
+
     # Handle other operators
     operators = {
         "eq": column == value,

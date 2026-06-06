@@ -12,8 +12,8 @@ from app.models.lesson import Lesson
 async def test_admin(db_session):
     """Create a test admin user."""
     user = User(
-        username=f"admin_{uuid.uuid4().hex[:4]}",
-        email=f"admin_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"admin_{uuid.uuid4().hex[:8]}",
+        email=f"admin_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.ADMIN,
         is_active=True,
@@ -29,8 +29,8 @@ async def test_admin(db_session):
 async def test_student(db_session):
     """Create a test student user."""
     user = User(
-        username=f"student_{uuid.uuid4().hex[:4]}",
-        email=f"student_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"student_{uuid.uuid4().hex[:8]}",
+        email=f"student_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.STUDENT,
         is_active=True,
@@ -45,10 +45,10 @@ async def test_student(db_session):
 @pytest_asyncio.fixture
 async def test_lesson(db_session):
     """Create a course, module, and lesson."""
-    category = Category(name=f"Cat-{uuid.uuid4().hex[:4]}", slug=f"cat-{uuid.uuid4().hex[:4]}")
+    category = Category(name=f"Cat-{uuid.uuid4().hex[:8]}", slug=f"cat-{uuid.uuid4().hex[:8]}")
     instructor = User(
-        username=f"ins_{uuid.uuid4().hex[:4]}",
-        email=f"ins_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"ins_{uuid.uuid4().hex[:8]}",
+        email=f"ins_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.INSTRUCTOR,
         is_active=True,
@@ -59,8 +59,8 @@ async def test_lesson(db_session):
     await db_session.commit()
     
     course = Course(
-        title=f"C-{uuid.uuid4().hex[:4]}", 
-        slug=f"c-{uuid.uuid4().hex[:4]}", 
+        title=f"C-{uuid.uuid4().hex[:8]}", 
+        slug=f"c-{uuid.uuid4().hex[:8]}", 
         instructor_id=instructor.id, 
         category_id=category.id
     )
@@ -74,7 +74,7 @@ async def test_lesson(db_session):
     lesson = Lesson(
         module_id=module.id, 
         title="Lesson 1", 
-        slug=f"lesson-1-{uuid.uuid4().hex[:4]}",
+        slug=f"lesson-1-{uuid.uuid4().hex[:8]}",
         order_index=1
     )
     db_session.add(lesson)

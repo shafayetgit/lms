@@ -1,28 +1,40 @@
 "use client";
 import React, { Suspense, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { useLazyListQuery } from "@/features/category/categoryAPI";
-import CDataTable from "@/components/ui/table/CDatatable";
+import { useLazyReadCategoriesQuery } from "@/features/category/categoryAPI";
+import CDataTable from "@/components/table/CDatatable";
 import Image from "next/image";
 import { CATEGORY_DEFAULT_IMAGE } from "@/lib/constants";
 import { formatDate } from "@/utils/cdayjs";
 import { renderCell } from "@/utils/tableTools";
 import CDelete from "@/components/actions/CDelete";
+import CPageLoader from "@/components/ui/CPageLoader";
+import CError from "@/components/ui/CError";
+import ModuleContainer from "@/components/ui/ModuleContainer";
+import CreateDialog from "./_parts/CreateDialog";
 
-function CategoriesContent() {
-  const searchParams = useSearchParams();
-  const term = searchParams.get("term") ?? "";
-  const page = searchParams.get("page") ?? 1;
+const breadcrumbs = [
+  { label: "Dashboard", path: "/" },
+  { label: "Categories", path: "/admin/categories" },
+];
 
-  const [trigger, { data: { items, meta } = {}, isLoading, isError }] =
-    useLazyListQuery();
+import { Stack } from "@mui/material";
+import CButton from "@/components/ui/CButton";
+import Link from "next/link";
+
+function CategoryList() {
+  const searchParams = useSearchParams()
+  const term = searchParams.get("term") ?? ""
+  const page = searchParams.get("page") ?? 1
+
+  const [trigger, { data: { data, meta } = {}, isLoading, isError }] = useLazyReadCategoriesQuery()
 
   useEffect(() => {
-    trigger({ page, term });
-  }, [page, term, trigger]);
+    trigger({ page, term })
+  }, [page, term, trigger])
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Something went wrong.</div>;
+  if (isLoading) return <CPageLoader fullPage={false} />
+  if (isError) return <CError fullPage={false} />
 
   const columns = [
     {
@@ -50,7 +62,7 @@ function CategoriesContent() {
       ),
     },
     {
-      field: "createdAt",
+      field: "created_at",
       headerName: "Created At",
       flex: 1,
       renderCell: ({ value }) => value && formatDate(value),
@@ -62,37 +74,41 @@ function CategoriesContent() {
       flex: 1,
       renderCell: (row) =>
         renderCell(
-          <CDelete
-            values={{
-              model: "Category",
-              filters: [
-                {
-                  field: "id",
-                  operator: "eq",
-                  value: row.id,
-                },
-              ],
-            }}
-            invalidateTag="CATEGORIES"
-          />,
+          <Stack direction="row" spacing={1}>
+            <CDelete
+              values={{
+                model: "Category",
+                filters: [
+                  {
+                    field: "id",
+                    operator: "eq",
+                    value: row.id,
+                  },
+                ],
+              }}
+              invalidateTag="CATEGORIES"
+            />
+
+            <CButton
+              iconButton
+              action="edit"
+              component={Link}
+              href={`/admin/categories/${row.id}`}
+            />
+          </Stack>,
         ),
     },
   ];
 
-  return (
-    <CDataTable
-      columns={columns}
-      rows={items}
-      meta={meta}
-      loading={isLoading}
-    />
-  );
+  return <CDataTable columns={columns} rows={data} meta={meta} loading={isLoading} />
 }
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading categories...</div>}>
-      <CategoriesContent />
-    </Suspense>
+    <ModuleContainer breadcrumbs={breadcrumbs} action={<CreateDialog />}>
+      <Suspense fallback={<CPageLoader fullPage={false} />}>
+        <CategoryList />
+      </Suspense>
+    </ModuleContainer>
   );
 }

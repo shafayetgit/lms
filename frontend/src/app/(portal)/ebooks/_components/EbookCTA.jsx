@@ -47,7 +47,7 @@ const EbookCTA = () => {
                         letterSpacing: "-0.04em",
                         mb: 3,
                         color: "white",
-                        background: (theme) => `linear-gradient(to bottom, #FFFFFF 0%, ${alpha("#FFFFFF", 0.7)} 100%)`,
+                        background: (theme) => `linear-gradient(to bottom, ${theme.palette.common.white} 0%, ${alpha(theme.palette.common.white, 0.7)} 100%)`,
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent"
                     }}

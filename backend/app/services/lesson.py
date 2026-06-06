@@ -21,6 +21,15 @@ class LessonService:
         if existing_slug:
             raise ValueError(f"Lesson with slug '{slug}' already exists")
 
+        # 3. Handle order_index
+        if lesson_in.order_index == 0:
+            from sqlalchemy import select, func
+            result = await db.execute(
+                select(func.max(Lesson.order_index)).where(Lesson.module_id == lesson_in.module_id)
+            )
+            max_order = result.scalar()
+            lesson_in.order_index = 0 if max_order is None else max_order + 1
+
         db_lesson = Lesson(**lesson_in.model_dump(exclude={"slug"}))
         db_lesson.slug = slug
         
@@ -72,6 +81,33 @@ class LessonService:
             raise ValueError("Lesson not found")
         await lesson_repo.delete_lesson(db, lesson)
 
+    @staticmethod
+    async def reorder_lessons(db: AsyncSession, module_id: int, order: List[dict]) -> None:
+        from fastapi import HTTPException, status
+        
+        # 1. Fetch and validate all lessons
+        lessons_to_update = []
+        for item in order:
+            lesson = await lesson_repo.get_lesson_by_id(db, item["id"])
+            if not lesson or lesson.module_id != module_id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Lesson {item['id']} does not belong to module {module_id}",
+                )
+            lessons_to_update.append((lesson, item["order_index"]))
+            
+        # 2. Assign temporary safe order_index to avoid UNIQUE constraint violation on flush
+        for lesson, _ in lessons_to_update:
+            lesson.order_index = -lesson.id
+            
+        await db.flush()
+        
+        # 3. Assign final order_index
+        for lesson, new_order in lessons_to_update:
+            lesson.order_index = new_order
+            
+        await db.commit()
+
 # Functional aliases
 async def create_lesson(db: AsyncSession, lesson_in: LessonCreate) -> Lesson:
     return await LessonService.create_lesson(db, lesson_in)
@@ -87,3 +123,6 @@ async def update_lesson(db: AsyncSession, lesson_id: int, lesson_in: LessonUpdat
 
 async def delete_lesson(db: AsyncSession, lesson_id: int):
     return await LessonService.delete_lesson(db, lesson_id)
+
+async def reorder_lessons(db: AsyncSession, module_id: int, order: List[dict]) -> None:
+    return await LessonService.reorder_lessons(db, module_id, order)

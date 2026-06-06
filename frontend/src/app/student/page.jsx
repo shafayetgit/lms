@@ -610,7 +610,7 @@ export default function StudentDashboard() {
                             }}>
                                 <NeuralPanel particleCount={20} opacity={0.2} color="ffffff" />
                                 <Typography variant={isMobile ? "h5" : "h4"} fontWeight={900}>Financial Engineering</Typography>
-                                <Typography variant="body2" sx={{ color: theme.palette.brand.green[300], mt: 1, maxWidth: 400, fontWeight: 700, fontSize: '0.85rem' }}>Master the mathematics of modern finance with our advanced derivatives and risk management track.</Typography>
+                                <Typography variant="body2" sx={{ color: theme.palette.brand?.green?.[300] || "#70BE84", mt: 1, maxWidth: 400, fontWeight: 700, fontSize: '0.85rem' }}>Master the mathematics of modern finance with our advanced derivatives and risk management track.</Typography>
                                 <Box sx={{ mt: 3 }}>
                                     <Chip label="Masterclass" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 800 }} />
                                 </Box>
@@ -679,7 +679,7 @@ export default function StudentDashboard() {
                             }}>
                                 <NeuralPanel particleCount={20} opacity={0.2} color="ffffff" />
                                 <Typography variant={isMobile ? "h5" : "h4"} fontWeight={900}>Digital Economies</Typography>
-                                <Typography variant="body2" sx={{ color: theme.palette.brand.navy[100], mt: 1, maxWidth: 400, fontWeight: 700, fontSize: '0.85rem' }}>Analyze the shift towards decentralized finance and the impact of blockchain on global markets.</Typography>
+                                <Typography variant="body2" sx={{ color: theme.palette.brand?.navy?.[100] || "#C6CBDF", mt: 1, maxWidth: 400, fontWeight: 700, fontSize: '0.85rem' }}>Analyze the shift towards decentralized finance and the impact of blockchain on global markets.</Typography>
                                 <Box sx={{ mt: 3 }}>
                                     <Chip label="New Track" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.1)', color: 'white', fontWeight: 800 }} />
                                 </Box>

@@ -42,3 +42,10 @@ async def update_category(db: AsyncSession, category: Category) -> Category:
 async def delete_category(db: AsyncSession, category: Category) -> None:
     await db.delete(category)
     await db.commit()
+
+
+async def get_category_choices(db: AsyncSession) -> list[dict]:
+    """Get a list of categories for dropdown choices."""
+    stmt = select(Category.id, Category.name.label("label"))
+    result = await db.execute(stmt)
+    return result.mappings().all()

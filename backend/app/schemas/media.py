@@ -57,6 +57,6 @@ class MediaRead(BaseSchema):
 
 class MediaListResponse(BaseModel):
     """Paginated list of media items"""
-    items: List[MediaRead]
+    data: List[MediaRead]
     meta: PaginationMeta
 

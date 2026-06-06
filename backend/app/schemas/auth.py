@@ -11,7 +11,7 @@ import re
 from app.core.base import BaseSchema
 
 
-class TokenResponse(BaseSchema):
+class TokenResponse(BaseModel):
     """Token response with access and refresh tokens."""
     access_token: str
     refresh_token: str

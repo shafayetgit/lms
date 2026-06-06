@@ -6,3 +6,4 @@ export const LOGO_HEIGHT = Number(process.env.NEXT_PUBLIC_LOGO_HEIGHT) || 69;
 
 // Default
 export const CATEGORY_DEFAULT_IMAGE = "https://res.cloudinary.com/deu2mmdzj/image/upload/f_auto,q_auto/start-up-business-meeting_bbw3sj";
+export const COURSE_DEFAULT_IMAGE = "https://res.cloudinary.com/deu2mmdzj/image/upload/f_auto,q_auto/start-up-business-meeting_bbw3sj";

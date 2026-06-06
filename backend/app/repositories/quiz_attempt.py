@@ -3,6 +3,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from app.models.quiz_attempt import QuizAttempt, QuizAttemptAnswer
+from sqlalchemy import func
+
+async def count_attempts(db: AsyncSession, query) -> int:
+    count_query = select(func.count()).select_from(query.subquery())
+    result = await db.execute(count_query)
+    return result.scalar()
+
+async def get_attempts_with_query(
+    db: AsyncSession, query, skip: int = 0, limit: int = 10
+) -> list[QuizAttempt]:
+    result = await db.execute(query.offset(skip).limit(limit))
+    return result.scalars().all()
 
 async def create_attempt(db: AsyncSession, attempt: QuizAttempt) -> QuizAttempt:
     db.add(attempt)

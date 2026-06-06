@@ -2,7 +2,9 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db, get_admin_or_instructor, get_current_active_user
-from app.schemas.review import ReviewCreate, ReviewUpdate, ReviewRead
+from app.schemas.review import ReviewCreate, ReviewUpdate, ReviewRead, ReviewListResponse
+from app.core.responses import create_response, read_response, update_response, delete_response
+from fastapi import Query
 from app.services import review as review_service
 
 router = APIRouter()
@@ -21,18 +23,34 @@ async def create_review(
             detail="Cannot create review for another user"
         )
     try:
-        return await review_service.create_review(db, review_in)
+        review = await review_service.create_review(db, review_in)
+        return create_response(ReviewRead.model_validate(review).model_dump(by_alias=False))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
-@router.get("/", response_model=List[ReviewRead])
+@router.get("/", response_model=ReviewListResponse)
 async def read_reviews(
-    skip: int = 0, 
-    limit: int = 100, 
+    page: int = Query(default=1, ge=1),
+    size: int = Query(default=10, ge=1, le=100),
+    course_id: int | None = None,
+    student_id: int | None = None,
+    is_active: bool | None = None,
     db: AsyncSession = Depends(get_db)
 ):
     """Retrieve all reviews (Public)."""
-    return await review_service.get_reviews(db, skip=skip, limit=limit)
+    data = await review_service.get_reviews(db, page=page, size=size, course_id=course_id, student_id=student_id, is_active=is_active)
+    return read_response(data)
+
+@router.get("/{review_id}", response_model=ReviewRead)
+async def read_review(
+    review_id: int, 
+    db: AsyncSession = Depends(get_db)
+):
+    """Retrieve a specific review."""
+    review = await review_service.get_review(db, review_id)
+    if not review:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return read_response({"data": ReviewRead.model_validate(review).model_dump(by_alias=False)})
 
 @router.get("/course/{course_id}", response_model=List[ReviewRead])
 async def read_reviews_by_course(
@@ -42,7 +60,9 @@ async def read_reviews_by_course(
     db: AsyncSession = Depends(get_db)
 ):
     """Retrieve reviews for a specific course (Public)."""
-    return await review_service.get_reviews_by_course(db, course_id, skip=skip, limit=limit)
+    reviews = await review_service.get_reviews_by_course(db, course_id, skip=skip, limit=limit)
+    items = [ReviewRead.model_validate(r).model_dump(by_alias=False) for r in reviews]
+    return read_response({"data": items})
 
 @router.put("/{review_id}", response_model=ReviewRead)
 async def update_review(
@@ -60,7 +80,8 @@ async def update_review(
         raise HTTPException(status_code=403, detail="Not enough permissions")
         
     try:
-        return await review_service.update_review(db, review_id, review_in)
+        review = await review_service.update_review(db, review_id, review_in)
+        return update_response(ReviewRead.model_validate(review).model_dump(by_alias=False))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 

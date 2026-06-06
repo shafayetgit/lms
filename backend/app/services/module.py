@@ -13,6 +13,14 @@ class ModuleService:
         if not course:
             raise ValueError(f"Course with id {module_in.course_id} does not exist")
             
+        if module_in.order_index == 0:
+            from sqlalchemy import select, func
+            result = await db.execute(
+                select(func.max(Module.order_index)).where(Module.course_id == module_in.course_id)
+            )
+            max_order = result.scalar()
+            module_in.order_index = 0 if max_order is None else max_order + 1
+            
         db_module = Module(**module_in.model_dump())
         try:
             return await module_repo.create_module(db, db_module)
@@ -53,6 +61,33 @@ class ModuleService:
             raise ValueError("Module not found")
         await module_repo.delete_module(db, module)
 
+    @staticmethod
+    async def reorder_modules(db: AsyncSession, course_id: int, order: List[dict]) -> None:
+        from fastapi import HTTPException, status
+        
+        # 1. Fetch and validate all modules
+        modules_to_update = []
+        for item in order:
+            module = await module_repo.get_module_by_id(db, item["id"])
+            if not module or module.course_id != course_id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Module {item['id']} does not belong to course {course_id}",
+                )
+            modules_to_update.append((module, item["order_index"]))
+            
+        # 2. Assign temporary safe order_index to avoid UNIQUE constraint violation on flush
+        for module, _ in modules_to_update:
+            module.order_index = -module.id
+            
+        await db.flush()
+        
+        # 3. Assign final order_index
+        for module, new_order in modules_to_update:
+            module.order_index = new_order
+            
+        await db.commit()
+
 # Functional aliases
 async def create_module(db: AsyncSession, module_in: ModuleCreate) -> Module:
     return await ModuleService.create_module(db, module_in)
@@ -68,3 +103,6 @@ async def update_module(db: AsyncSession, module_id: int, module_in: ModuleUpdat
 
 async def delete_module(db: AsyncSession, module_id: int):
     return await ModuleService.delete_module(db, module_id)
+
+async def reorder_modules(db: AsyncSession, course_id: int, order: List[dict]) -> None:
+    return await ModuleService.reorder_modules(db, course_id, order)

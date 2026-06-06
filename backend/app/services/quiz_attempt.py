@@ -4,6 +4,8 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.quiz_attempt import QuizAttempt, QuizAttemptAnswer, AttemptStatus
+from sqlalchemy import select, desc
+import math
 from app.models.question import QuestionType
 from app.schemas.quiz_attempt import QuizAttemptCreate, QuizAttemptSubmit
 from app.repositories import quiz_attempt as attempt_repo
@@ -112,3 +114,36 @@ async def get_attempt(db: AsyncSession, attempt_id: int, user_id: int) -> QuizAt
 
 async def get_my_attempts(db: AsyncSession, user_id: int, quiz_id: Optional[int] = None) -> List[QuizAttempt]:
     return await attempt_repo.get_user_attempts(db, user_id, quiz_id)
+
+async def get_attempts(
+    db: AsyncSession,
+    page: int = 1,
+    size: int = 10,
+    quiz_id: Optional[int] = None,
+    user_id: Optional[int] = None,
+) -> dict:
+    query = select(QuizAttempt).order_by(desc(QuizAttempt.id))
+
+    if quiz_id:
+        query = query.where(QuizAttempt.quiz_id == quiz_id)
+    if user_id:
+        query = query.where(QuizAttempt.user_id == user_id)
+
+    skip = (page - 1) * size
+    total = await attempt_repo.count_attempts(db, query=query)
+    data = await attempt_repo.get_attempts_with_query(
+        db, query=query, skip=skip, limit=size
+    )
+    total_pages = math.ceil(total / size) if total else 0
+
+    return {
+        "data": data,
+        "meta": {
+            "total": total,
+            "page": page,
+            "size": size,
+            "pages": total_pages,
+            "has_next": page < total_pages,
+            "has_prev": page > 1,
+        },
+    }

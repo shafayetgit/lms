@@ -1,8 +1,19 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 from typing import List, Optional
 from app.models.enrollment import Enrollment
+
+async def count_enrollments(db: AsyncSession, query) -> int:
+    count_query = select(func.count()).select_from(query.subquery())
+    result = await db.execute(count_query)
+    return result.scalar()
+
+async def get_enrollments_with_query(
+    db: AsyncSession, query, skip: int = 0, limit: int = 10
+) -> List[Enrollment]:
+    result = await db.execute(query.offset(skip).limit(limit))
+    return result.scalars().all()
 
 async def create_enrollment(db: AsyncSession, enrollment: Enrollment) -> Enrollment:
     db.add(enrollment)

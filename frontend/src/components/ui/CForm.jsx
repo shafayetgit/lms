@@ -33,8 +33,8 @@ export default function CForm({
       component="form"
       onSubmit={onSubmit}
       sx={{
-        // width: isSmallScreen ? "100%" : width,
-        maxWidth: "100%",
+        width: isSmallScreen ? "100%" : dialog ? "100%": width,
+        // maxWidth: "100%",
         ...(!dialog && {
           p: { xs: 2, sm: 3, md: 4 },
           borderRadius: { xs: 0, sm: 3 },

@@ -8,12 +8,13 @@ from app.models.course import Course, CourseLevel
 from app.models.category import Category
 from app.models.quiz import Quiz
 from app.models.question import QuestionType
+import httpx
 
 @pytest_asyncio.fixture
 async def test_admin(db_session: AsyncSession):
     user = User(
-        username=f"admin_{uuid.uuid4().hex[:4]}",
-        email=f"admin_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"admin_{uuid.uuid4().hex[:8]}",
+        email=f"admin_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.ADMIN,
         is_active=True,
@@ -27,7 +28,7 @@ async def test_admin(db_session: AsyncSession):
 
 @pytest_asyncio.fixture
 async def test_category(db_session: AsyncSession):
-    category = Category(name=f"Cat_{uuid.uuid4().hex[:4]}", slug=f"cat_{uuid.uuid4().hex[:4]}")
+    category = Category(name=f"Cat_{uuid.uuid4().hex[:8]}", slug=f"cat_{uuid.uuid4().hex[:8]}")
     db_session.add(category)
     await db_session.commit()
     await db_session.refresh(category)
@@ -37,11 +38,11 @@ async def test_category(db_session: AsyncSession):
 async def test_course(db_session: AsyncSession, test_admin, test_category):
     course = Course(
         title="Test Course",
-        slug=f"test-course-{uuid.uuid4().hex[:4]}",
+        slug=f"test-course-{uuid.uuid4().hex[:8]}",
         description="Description",
         instructor_id=test_admin.id,
         category_id=test_category.id,
-        level=CourseLevel.beginner,
+        level=CourseLevel.BEGINNER,
         price=10.0
     )
     db_session.add(course)

@@ -1,4 +1,4 @@
-import CTextField from "@/components/ui/CTextField";
+import CTextField from "@/components/form/CTextField";
 import { useState } from "react";
 import {
   Accordion,
@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import CRadioGroup from "@/components/ui/CRadioGroup";
+import CRadioGroup from "@/components/form/CRadioGroup";
 
 export default function CategoryFilter() {
   // Dummy categories

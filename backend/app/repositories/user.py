@@ -1,8 +1,11 @@
+from app.api.v1.endpoints import instructors
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
+from sqlalchemy import Select, func
 from app.models.user import User, Student, Instructor, UserRole
 from app.core.security import get_password_hash
 from datetime import datetime
+
 
 async def create_user(db: AsyncSession, user: User) -> User:
     db.add(user)
@@ -10,19 +13,20 @@ async def create_user(db: AsyncSession, user: User) -> User:
     await db.refresh(user)
     return user
 
+
 async def create_user_from_schema(db: AsyncSession, user_data) -> User:
     """
     Create a user (Student, Instructor, or base User) based on role and provided data.
-    
+
     Args:
         db: AsyncSession
         user_data: UserCreate schema with base and role-specific fields
-        
+
     Returns:
         User: The created user (Student, Instructor, or base User)
     """
     hashed_password = get_password_hash(user_data.password)
-    
+
     # Common fields for all user types
     common_fields = {
         "username": user_data.username,
@@ -37,17 +41,18 @@ async def create_user_from_schema(db: AsyncSession, user_data) -> User:
         "timezone": user_data.timezone,
         "two_factor_enabled": user_data.two_factor_enabled,
     }
-    
+
     if user_data.role == UserRole.STUDENT:
         # Create Student user with role-specific fields
         student_fields = {
             **common_fields,
-            "student_id": user_data.student_id or f"{user_data.username}_{int(datetime.utcnow().timestamp())}",
+            "student_id": user_data.student_id
+            or f"{user_data.username}_{int(datetime.utcnow().timestamp())}",
             "enrollment_date": user_data.enrollment_date,
             "phone_number": user_data.phone_number,
             "date_of_birth": user_data.date_of_birth,
             "department": user_data.department,
-            "profile_picture_url": user_data.profile_picture_url,
+            "avatar": user_data.avatar,
         }
         user = Student(**student_fields)
     elif user_data.role == UserRole.INSTRUCTOR:
@@ -61,38 +66,44 @@ async def create_user_from_schema(db: AsyncSession, user_data) -> User:
             "bio": user_data.bio,
             "phone_number": user_data.phone_number,
             "department": user_data.department,
-            "profile_picture_url": user_data.profile_picture_url,
+            "avatar": user_data.avatar,
         }
         user = Instructor(**instructor_fields)
     else:
         # Create base User (admin or generic user)
         user = User(**common_fields)
-    
+
     db.add(user)
     await db.commit()
     await db.refresh(user)
     return user
 
+
 async def get_user_by_id(db: AsyncSession, user_id: int) -> User | None:
     result = await db.execute(select(User).where(User.id == user_id))
     return result.scalars().first()
+
 
 async def get_user_by_username(db: AsyncSession, username: str) -> User | None:
     result = await db.execute(select(User).where(User.username == username))
     return result.scalars().first()
 
+
 async def get_user_by_email(db: AsyncSession, email: str) -> User | None:
     result = await db.execute(select(User).where(User.email == email))
     return result.scalars().first()
+
 
 async def get_users(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[User]:
     result = await db.execute(select(User).offset(skip).limit(limit))
     return result.scalars().all()
 
+
 async def update_user(db: AsyncSession, user: User) -> User:
     await db.commit()
     await db.refresh(user)
     return user
+
 
 async def delete_user(db: AsyncSession, user: User):
     await db.delete(user)
@@ -104,24 +115,78 @@ async def get_student_by_id(db: AsyncSession, student_id: int) -> Student | None
     result = await db.execute(select(Student).where(Student.id == student_id))
     return result.scalars().first()
 
+
 async def get_student_by_username(db: AsyncSession, username: str) -> Student | None:
     result = await db.execute(select(Student).where(Student.username == username))
     return result.scalars().first()
 
-async def get_students(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[Student]:
+
+async def get_students(
+    db: AsyncSession, skip: int = 0, limit: int = 100
+) -> list[Student]:
     result = await db.execute(select(Student).offset(skip).limit(limit))
     return result.scalars().all()
 
 
+async def get_students_with_query(
+    db: AsyncSession, query: Select | None = None, skip: int = 0, limit: int = 10
+) -> list[Student]:
+    """Get students with custom query, skip, and limit."""
+    q = query if query is not None else select(Student)
+    result = await db.execute(q.offset(skip).limit(limit))
+    return result.scalars().all()
+
+
+async def count_students(db: AsyncSession, query: Select | None = None) -> int:
+    """Count students matching query."""
+    q = query if query is not None else select(Student)
+    return await db.scalar(select(func.count()).select_from(q.subquery()))
+
+
 # Instructor-specific functions
-async def get_instructor_by_id(db: AsyncSession, instructor_id: int) -> Instructor | None:
+async def get_instructor_by_id(
+    db: AsyncSession, instructor_id: int
+) -> Instructor | None:
     result = await db.execute(select(Instructor).where(Instructor.id == instructor_id))
     return result.scalars().first()
 
-async def get_instructor_by_username(db: AsyncSession, username: str) -> Instructor | None:
+
+async def get_instructor_by_username(
+    db: AsyncSession, username: str
+) -> Instructor | None:
     result = await db.execute(select(Instructor).where(Instructor.username == username))
     return result.scalars().first()
 
-async def get_instructors(db: AsyncSession, skip: int = 0, limit: int = 100) -> list[Instructor]:
+
+async def get_instructors(
+    db: AsyncSession, skip: int = 0, limit: int = 100
+) -> list[Instructor]:
     result = await db.execute(select(Instructor).offset(skip).limit(limit))
     return result.scalars().all()
+
+
+async def get_instructors_with_query(
+    db: AsyncSession, query: Select | None = None, skip: int = 0, limit: int = 10
+) -> list[Instructor]:
+    """Get instructors with custom query, skip, and limit."""
+    q = query if query is not None else select(Instructor)
+    result = await db.execute(q.offset(skip).limit(limit))
+    return result.scalars().all()
+
+
+async def count_instructors(db: AsyncSession, query: Select | None = None) -> int:
+    """Count instructors matching query."""
+    q = query if query is not None else select(Instructor)
+    return await db.scalar(select(func.count()).select_from(q.subquery()))
+
+
+async def get_instructor_choices(db: AsyncSession) -> list[dict]:
+    """Get a list of instructors for dropdown choices."""
+    stmt = select(
+        Instructor.id,
+        func.concat(Instructor.first_name, " ", Instructor.last_name).label(
+            "label"
+        ),
+    )
+    result = await db.execute(stmt)
+    return result.mappings().all()

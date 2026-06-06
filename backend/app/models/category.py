@@ -5,10 +5,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
 
-class CategoryType(str, Enum):
-    NORMAL = "normal"
+class CategoryBadge(str, Enum):
+    NONE = "none"
     FEATURED = "featured"
-    DRAFT = "draft"
 
 
 class Category(Base):
@@ -19,13 +18,12 @@ class Category(Base):
     name: Mapped[str] = mapped_column(String(100), unique=True)
     slug: Mapped[str] = mapped_column(String(120), unique=True)
     description: Mapped[Optional[str]] = mapped_column(Text)
-    is_active: Mapped[bool] = mapped_column(default=True)
+    is_active: Mapped[bool] = mapped_column(default=False, index=True)
 
-    type: Mapped[CategoryType] = mapped_column(
-        String(20), default=CategoryType.NORMAL.value, index=True
+    badge: Mapped[CategoryBadge] = mapped_column(
+        String(20), default=CategoryBadge.NONE.value, index=True
     )
     thumbnail: Mapped[Optional[str]] = mapped_column(String(255), index=True)
-    banner: Mapped[Optional[str]] = mapped_column(String(255), index=True)
 
     # Relationships
     courses: Mapped[List["Course"]] = relationship("Course", back_populates="category")

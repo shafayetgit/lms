@@ -2,7 +2,7 @@ import math
 from typing import Optional, List
 from sqlalchemy import desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models.category import Category, CategoryType
+from app.models.category import Category, CategoryBadge
 from app.repositories import category as category_repo
 from app.schemas.category import CategoryCreate, CategoryUpdate
 from app.utils.string import slugify
@@ -36,16 +36,17 @@ class CategoryService:
             slug=slug,
             description=category_in.description,
             is_active=category_in.is_active,
-            type=category_in.type,
+            badge=category_in.badge,
             thumbnail=category_in.thumbnail,
         )
-        return await category_repo.create_category(db, db_category)
+        return {"data": await category_repo.create_category(db, db_category)}
 
     @staticmethod
-    async def get_category(db: AsyncSession, category_id: int) -> Category | None:
-        return {
-            "data": await category_repo.get_category_by_id(db, category_id),
-        }
+    async def get_category(db: AsyncSession, category_id: int) -> dict | None:
+        category = await category_repo.get_category_by_id(db, category_id)
+        if not category:
+            return None
+        return {"data": category}
 
     @staticmethod
     async def get_categories(
@@ -54,7 +55,7 @@ class CategoryService:
         size: int = 10,
         term: str | None = None,
         is_active: bool | None = None,
-        type: CategoryType | None = None,
+        badge: CategoryBadge | None = None,
     ) -> dict:
         query = select(Category).order_by(desc(Category.id))
 
@@ -62,8 +63,8 @@ class CategoryService:
             query = query.where(Category.name.ilike(f"%{term}%"))
         if is_active is not None:
             query = query.where(Category.is_active == is_active)
-        if type is not None:
-            query = query.where(Category.type == type)
+        if badge is not None:
+            query = query.where(Category.badge == badge)
 
         skip = (page - 1) * size
         total = await category_repo.count_categories(db, query=query)
@@ -122,7 +123,7 @@ class CategoryService:
         for field, value in update_data.items():
             setattr(category, field, value)
 
-        return await category_repo.update_category(db, category)
+        return {"data": await category_repo.update_category(db, category)}
 
     @staticmethod
     async def delete_category(db: AsyncSession, category_id: int) -> None:

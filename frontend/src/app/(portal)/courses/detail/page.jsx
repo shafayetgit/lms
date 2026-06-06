@@ -32,6 +32,7 @@ import {
   DialogContent,
   Stack,
   CardHeader,
+  alpha
 } from "@mui/material";
 import {
   PlayCircleOutline,
@@ -197,13 +198,13 @@ function CourseDetailPage() {
             sx={{
               mb: 4,
               borderRadius: 4,
-              boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
-              border: "1px solid rgba(0,0,0,0.04)",
+              boxShadow: (theme) => `0 12px 40px ${alpha(theme.palette.common.black, 0.08)}`,
+              border: (theme) => `1px solid ${alpha(theme.palette.common.black, 0.04)}`,
               overflow: "hidden",
               transition: "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease",
               "&:hover": {
                 transform: "translateY(-6px)",
-                boxShadow: "0 20px 50px rgba(0,0,0,0.12)",
+                boxShadow: (theme) => `0 20px 50px ${alpha(theme.palette.common.black, 0.12)}`,
               },
             }}
           >
@@ -224,7 +225,7 @@ function CourseDetailPage() {
                 backgroundBlendMode: "darken",
                 "&:hover .play-overlay": {
                   transform: "scale(1.05)",
-                  backgroundColor: "rgba(255,255,255,0.15)",
+                  backgroundColor: (theme) => alpha(theme.palette.common.white, 0.15),
                 },
               }}
               aria-label="Watch course preview video"
@@ -395,7 +396,7 @@ function CourseDetailPage() {
               <Typography variant="body1" color="text.secondary" sx={{ textDecoration: "line-through", fontWeight: 600 }}>
                 ${courseData.originalPrice}
               </Typography>
-              <Chip label="37% OFF" size="small" sx={{ fontWeight: 800, bgcolor: "rgba(0,0,0,0.06)", color: "text.primary" }} />
+              <Chip label="37% OFF" size="small" sx={{ fontWeight: 800, bgcolor: (theme) => alpha(theme.palette.common.black, 0.06), color: "text.primary" }} />
             </Box>
             <Stack direction="row" spacing={2}>
               <Button
@@ -410,7 +411,7 @@ function CourseDetailPage() {
                   fontWeight: 700,
                   fontSize: "1rem",
                   color: "white",
-                  boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
+                  boxShadow: (theme) => `0 8px 16px ${alpha(theme.palette.common.black, 0.1)}`,
                   "&:hover": { bgcolor: "secondary.dark", transform: "scale(1.02)" },
                   transition: "all 0.2s ease"
                 }}
@@ -427,8 +428,8 @@ function CourseDetailPage() {
                   fontWeight: 700,
                   fontSize: "1rem",
                   color: "text.primary",
-                  borderColor: "rgba(0,0,0,0.15)",
-                  "&:hover": { bgcolor: "rgba(0,0,0,0.03)", borderColor: "text.primary" }
+                  borderColor: (theme) => alpha(theme.palette.common.black, 0.15),
+                  "&:hover": { bgcolor: (theme) => alpha(theme.palette.common.black, 0.03), borderColor: "text.primary" }
                 }}
               >
                 Add to Cart
@@ -514,7 +515,7 @@ function CourseDetailPage() {
                 disableGutters
                 elevation={0}
                 sx={{
-                  border: "1px solid rgba(0,0,0,0.08)",
+                  border: (theme) => `1px solid ${alpha(theme.palette.common.black, 0.08)}`,
                   borderRadius: index === 0 ? "12px 12px 0 0" : index === courseData.curriculum.length - 1 ? "0 0 12px 12px" : 0,
                   "&:not(:last-child)": { borderBottom: 0 },
                   "&:before": { display: "none" },
@@ -663,7 +664,7 @@ function CourseDetailPage() {
               component="div"
               sx={{
                 height: 200,
-                backgroundColor: "#f5f5f5",
+                backgroundColor: "background.default",
                 backgroundImage: `url('https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80')`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -694,7 +695,7 @@ function CourseDetailPage() {
                 <Chip
                   label="37% OFF"
                   size="small"
-                  sx={{ fontWeight: 800, bgcolor: "rgba(0,0,0,0.06)", color: "text.primary" }}
+                  sx={{ fontWeight: 800, bgcolor: (theme) => alpha(theme.palette.common.black, 0.06), color: "text.primary" }}
                 />
               </Box>
 
@@ -740,7 +741,7 @@ function CourseDetailPage() {
                   "&:hover": {
                     transform: "translateY(-2px)",
                     borderColor: "text.primary",
-                    bgcolor: "rgba(0,0,0,0.03)"
+                    bgcolor: (theme) => alpha(theme.palette.common.black, 0.03)
                   },
                   transition: "all 0.3s ease"
                 }}

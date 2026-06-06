@@ -3,7 +3,9 @@ import { removeCookie, setCookie } from "@/utils/shared"
 const AUTH_KEYS = ["user", "accessToken", "refreshToken", "profileSetupComplete", "auth", "emailVerified"]
 
 export const setAuthCookie = (payload) => {
-  const { accessToken, refreshToken, user, emailVerified } = payload
+  const { accessToken, access_token, refreshToken, refresh_token, user, emailVerified } = payload
+  const finalAccessToken = accessToken || access_token
+  const finalRefreshToken = refreshToken || refresh_token
 
   if (emailVerified !== undefined) {
     setCookie("emailVerified", emailVerified.toString())
@@ -13,12 +15,12 @@ export const setAuthCookie = (payload) => {
     setCookie("user", JSON.stringify(user))
   }
 
-  if (accessToken !== undefined) {
-    setCookie("accessToken", accessToken)
+  if (finalAccessToken !== undefined) {
+    setCookie("accessToken", finalAccessToken)
   }
 
-  if (refreshToken !== undefined) {
-    setCookie("refreshToken", refreshToken)
+  if (finalRefreshToken !== undefined) {
+    setCookie("refreshToken", finalRefreshToken)
   }
 
 }

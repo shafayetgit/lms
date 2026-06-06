@@ -26,6 +26,5 @@ class DeleteSchema(BaseSchema):
 
 
 class DeleteResponse(BaseSchema):
-    deleted: int
-    status: str = "success"
-    message: str
+    success: bool = True
+    message: str = "Resource(s) deleted successfully"

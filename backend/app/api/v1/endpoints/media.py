@@ -1,4 +1,5 @@
 from typing import List
+from app.core.responses import create_response
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -31,10 +32,10 @@ async def attach_media_to_models(
 ):
     """
     Attach media to model instances.
-    
+
     Accepts a list of media payloads with field, model, model_id, and metadata.
     For each item, creates a media record and updates the target model's field.
-    
+
     Example payload:
     [
         {
@@ -52,29 +53,29 @@ async def attach_media_to_models(
     ]
     """
     created_media = []
-    
+
     try:
         for media_item in payload:
             # Get the model class from the map
             model_class = MODEL_MAP.get(media_item.model)
-            
+
             if not model_class:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"Unknown model: {media_item.model}. Supported models: {', '.join(MODEL_MAP.keys())}",
                 )
-            
+
             # Attach media to the model
             media = await MediaService.attach_media_to_model(
                 db=db,
                 media_payload=media_item,
                 model_class=model_class,
             )
-            
-            created_media.append(media)
-        
-        return created_media
-    
+
+            created_media.append(MediaRead.model_validate(media).model_dump(by_alias=False))
+
+        return create_response(data=created_media, message="Media attached successfully")
+
     except HTTPException:
         raise
     except ValueError as e:

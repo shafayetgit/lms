@@ -71,9 +71,9 @@ async def test_create_enrollment(client: AsyncClient, test_admin, test_student, 
     }
     response = await client.post("/api/v1/enrollments/", json=payload)
     assert response.status_code == 201
-    data = response.json()
-    assert data["userId"] == test_student.id
-    assert data["courseId"] == test_course.id
+    data = response.json()["data"]
+    assert data["user_id"] == test_student.id
+    assert data["course_id"] == test_course.id
     assert data["status"] == "active"
     
     app.dependency_overrides.clear()
@@ -108,12 +108,12 @@ async def test_read_enrollments(client: AsyncClient, test_admin, test_student, t
     # Read by user
     response = await client.get(f"/api/v1/enrollments/user/{test_student.id}")
     assert response.status_code == 200
-    assert len(response.json()) == 1
+    assert len(response.json()["data"]) == 1
     
     # Read by course
     response = await client.get(f"/api/v1/enrollments/course/{test_course.id}")
     assert response.status_code == 200
-    assert len(response.json()) == 1
+    assert len(response.json()["data"]) == 1
     
     app.dependency_overrides.clear()
 

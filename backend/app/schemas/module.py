@@ -2,6 +2,7 @@ from pydantic import ConfigDict, Field
 from typing import Optional
 from datetime import datetime
 from app.core.base import BaseSchema
+from app.schemas.course import CourseSimple
 
 class ModuleBase(BaseSchema):
     course_id: int
@@ -23,5 +24,10 @@ class ModuleRead(ModuleBase):
     id: int
     created_at: datetime
     updated_at: datetime
+    course: Optional[CourseSimple] = None
     
     model_config = ConfigDict(from_attributes=True)
+
+class ModuleListResponse(BaseSchema):
+    data: list[ModuleRead]
+

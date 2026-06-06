@@ -10,6 +10,7 @@ from app.models.course import Course, CourseLevel
 from app.models.category import Category
 from app.models.quiz import Quiz
 from app.models.question import Question, Choice, QuestionType
+import httpx
 
 @pytest.mark.asyncio
 async def test_quiz_attempt_lifecycle(client: AsyncClient, db_session: AsyncSession):
@@ -136,7 +137,14 @@ async def test_quiz_attempt_lifecycle(client: AsyncClient, db_session: AsyncSess
 
 @pytest.mark.asyncio
 async def test_smoke_user(db_session: AsyncSession):
-    user = User(username="smoke", email="smoke@example.com", hashed_password="pw")
+    uid = uuid.uuid4().hex[:8]
+    user = User(
+        username=f"smoke_{uid}",
+        email=f"smoke_{uid}@example.com",
+        hashed_password="pw",
+        first_name="Smoke",
+        last_name="User"
+    )
     db_session.add(user)
     await db_session.commit()
     assert user.id is not None

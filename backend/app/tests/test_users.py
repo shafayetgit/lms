@@ -120,8 +120,8 @@ async def test_login_and_me(client: AsyncClient, db_session: AsyncSession):
     response = await client.post("/api/v1/auth/token", json=login_payload)
     assert response.status_code == 200
     token_data = response.json()
-    assert "accessToken" in token_data
-    access_token = token_data["accessToken"]
+    assert "access_token" in token_data
+    access_token = token_data["access_token"]
 
     # 3. Get /me
     headers = {"Authorization": f"Bearer {access_token}"}

@@ -2,6 +2,8 @@ from fastapi import APIRouter
 from .endpoints import (
     auth,
     users,
+    students,
+    instructors,
     categories,
     courses,
     reviews,
@@ -22,6 +24,8 @@ from .endpoints import (
 api_router = APIRouter()
 api_router.include_router(auth.router, prefix="/auth", tags=["Auth"])
 api_router.include_router(users.router, prefix="/users", tags=["Users"])
+api_router.include_router(students.router, prefix="/students", tags=["Students"])
+api_router.include_router(instructors.router, prefix="/instructors", tags=["Instructors"])
 api_router.include_router(categories.router, prefix="/categories", tags=["Categories"])
 api_router.include_router(courses.router, prefix="/courses", tags=["Courses"])
 api_router.include_router(reviews.router, prefix="/reviews", tags=["Reviews"])
@@ -45,3 +49,4 @@ api_router.include_router(
 )
 api_router.include_router(media.router, prefix="/media", tags=["Media"])
 api_router.include_router(crud.router, prefix="/crud", tags=["CRUD"])
+

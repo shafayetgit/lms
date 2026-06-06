@@ -13,8 +13,8 @@ import { Google, Person } from "@mui/icons-material";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-import CTextField from "@/components/ui/CTextField";
-import CPasswordField from "@/components/ui/CPasswordField";
+import CTextField from "@/components/form/CTextField";
+import CPasswordField from "@/components/form/CPasswordField";
 
 import { useFormik } from "formik";
 import { useSignInMutation } from "@/features/auth/authAPI";
@@ -44,8 +44,8 @@ export default function SignInPage() {
           response.message ||
           "Sign-in successful! Welcome back to your account.",
         );
-        // Perform a hard redirect instead of router.push so global layouts like Topbar correctly re-hydrate their cookie state.
         window.location.href = '/';
+        router.push('/')
       } catch (error) {
         const errors = mapApiErrorsToFormik(error);
         setErrors(errors);
@@ -68,9 +68,8 @@ export default function SignInPage() {
             </div>,
           );
         } else {
-          console.log(error)
           toast.error(
-            error?.message || "Sign-in failed. Please try again.",
+            error?.data?.message || "Sign-in failed. Please try again.",
           );
         }
       }

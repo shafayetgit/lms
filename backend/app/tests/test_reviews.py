@@ -5,13 +5,12 @@ from httpx import AsyncClient
 from app.models.user import User, UserRole
 from app.models.category import Category
 from app.models.course import Course
-
 @pytest_asyncio.fixture
 async def test_student(db_session):
     """Create a student user."""
     user = User(
-        username=f"student_{uuid.uuid4().hex[:4]}",
-        email=f"student_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"student_{uuid.uuid4().hex[:8]}",
+        email=f"student_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.STUDENT,
         is_active=True,
@@ -26,10 +25,10 @@ async def test_student(db_session):
 @pytest_asyncio.fixture
 async def test_course(db_session):
     """Create a course for reviews."""
-    category = Category(name=f"Cat-{uuid.uuid4().hex[:4]}", slug=f"cat-{uuid.uuid4().hex[:4]}")
+    category = Category(name=f"Cat-{uuid.uuid4().hex[:8]}", slug=f"cat-{uuid.uuid4().hex[:8]}")
     instructor = User(
-        username=f"ins_{uuid.uuid4().hex[:4]}",
-        email=f"ins_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"ins_{uuid.uuid4().hex[:8]}",
+        email=f"ins_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.INSTRUCTOR,
         is_active=True,
@@ -43,8 +42,8 @@ async def test_course(db_session):
     await db_session.refresh(instructor)
     
     course = Course(
-        title=f"Course-{uuid.uuid4().hex[:4]}",
-        slug=f"course-{uuid.uuid4().hex[:4]}",
+        title=f"Course-{uuid.uuid4().hex[:8]}",
+        slug=f"course-{uuid.uuid4().hex[:8]}",
         instructor_id=instructor.id,
         category_id=category.id,
         price=10.0
@@ -129,8 +128,8 @@ async def test_course_aggregation_stats(client: AsyncClient, db_session, test_co
     # 2. Create multiple students and reviews
     for i in range(1, 4):
         student = User(
-            username=f"s{i}_{uuid.uuid4().hex[:4]}",
-            email=f"s{i}_{uuid.uuid4().hex[:4]}@example.com",
+            username=f"s{i}_{uuid.uuid4().hex[:8]}",
+            email=f"s{i}_{uuid.uuid4().hex[:8]}@example.com",
             hashed_password="h",
             role=UserRole.STUDENT,
             is_active=True,

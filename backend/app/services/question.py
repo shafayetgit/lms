@@ -46,6 +46,16 @@ async def validate_question_data(db: AsyncSession, question_in: QuestionCreate):
 async def create_question(db: AsyncSession, question_in: QuestionCreate, user_id: int) -> Question:
     await validate_question_data(db, question_in)
     
+    if question_in.order_index == 0:
+        from sqlalchemy import select, func
+        # A question belongs to a quiz, or maybe course/category. If quiz_id is present, we auto-increment by quiz.
+        if question_in.quiz_id:
+            result = await db.execute(
+                select(func.max(Question.order_index)).where(Question.quiz_id == question_in.quiz_id)
+            )
+            max_order = result.scalar()
+            question_in.order_index = 0 if max_order is None else max_order + 1
+    
     question_data = question_in.model_dump(exclude={"choices"})
     choices_data = question_in.choices
     
@@ -76,3 +86,15 @@ async def delete_question(db: AsyncSession, question_id: int) -> None:
 
 async def get_questions_by_quiz(db: AsyncSession, quiz_id: int) -> List[Question]:
     return await question_repo.get_questions_by_quiz(db, quiz_id)
+
+async def reorder_questions(db: AsyncSession, quiz_id: int, order: list[dict]) -> None:
+    """Bulk update order_index for questions within a quiz."""
+    for item in order:
+        question = await question_repo.get_question(db, item["id"])
+        if not question or question.quiz_id != quiz_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Question {item['id']} does not belong to quiz {quiz_id}",
+            )
+        question.order_index = item["order_index"]
+    await db.commit()

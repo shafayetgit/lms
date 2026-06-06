@@ -3,7 +3,7 @@ import React from "react";
 import { Box, Grid, InputAdornment, Stack, Chip } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
-import CTextField from "@/components/ui/CTextField";
+import CTextField from "@/components/form/CTextField";
 
 const EbookFilters = ({
   searchQuery,

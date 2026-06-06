@@ -26,13 +26,19 @@ import { currentUser } from "@/lib/auth/client";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [mounted, setMounted] = React.useState(false);
   const open = Boolean(anchorEl);
   const router = useRouter();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Get User Details for dynamic header and initials
   
 
   const getInitials = () => {
+    if (!mounted) return "US";
     if (currentUser?.first_name && currentUser?.last_name) {
       return `${currentUser.first_name[0]}${currentUser.last_name[0]}`.toUpperCase();
     }
@@ -49,6 +55,7 @@ export default function AccountMenu() {
   };
 
   const getFullName = () => {
+    if (!mounted) return "Authenticated CurrentUser";
     if (currentUser?.first_name && currentUser?.last_name) {
       return `${currentUser.first_name} ${currentUser.last_name}`;
     }
@@ -56,6 +63,7 @@ export default function AccountMenu() {
   };
 
   const getProfileLink = () => {
+    if (!mounted) return "/student/";
     switch (currentUser?.role?.toLowerCase()) {
       case "admin": return "/admin/";
       case "student": return "/student/";
@@ -64,6 +72,7 @@ export default function AccountMenu() {
   };
 
   const getDashboardLink = () => {
+    if (!mounted) return "/student ";
     switch (currentUser?.role?.toLowerCase()) {
       case "admin": return "/admin";
       case "student": return "/student ";
@@ -174,7 +183,7 @@ export default function AccountMenu() {
             color="text.secondary"
             sx={{ fontWeight: 600 }}
           >
-            {currentUser?.email || "No email provided"}
+            {mounted && currentUser?.email ? currentUser.email : "No email provided"}
           </Typography>
         </Box>
         <Divider sx={{ opacity: 0.5 }} />

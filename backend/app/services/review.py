@@ -5,6 +5,8 @@ from app.repositories import course as course_repo
 from app.repositories import user as user_repo
 from app.schemas.review import ReviewCreate, ReviewUpdate
 from typing import List, Optional
+from sqlalchemy import select, desc
+import math
 
 class ReviewService:
     @staticmethod
@@ -37,8 +39,41 @@ class ReviewService:
         return await review_repo.get_review_by_id(db, review_id)
 
     @staticmethod
-    async def get_reviews(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Review]:
-        return await review_repo.get_reviews(db, skip=skip, limit=limit)
+    async def get_reviews(
+        db: AsyncSession,
+        page: int = 1,
+        size: int = 10,
+        course_id: Optional[int] = None,
+        student_id: Optional[int] = None,
+        is_active: Optional[bool] = None,
+    ) -> dict:
+        query = select(Review).order_by(desc(Review.id))
+
+        if course_id:
+            query = query.where(Review.course_id == course_id)
+        if student_id:
+            query = query.where(Review.student_id == student_id)
+        if is_active is not None:
+            query = query.where(Review.is_active == is_active)
+
+        skip = (page - 1) * size
+        total = await review_repo.count_reviews(db, query=query)
+        data = await review_repo.get_reviews_with_query(
+            db, query=query, skip=skip, limit=size
+        )
+        total_pages = math.ceil(total / size) if total else 0
+
+        return {
+            "data": data,
+            "meta": {
+                "total": total,
+                "page": page,
+                "size": size,
+                "pages": total_pages,
+                "has_next": page < total_pages,
+                "has_prev": page > 1,
+            },
+        }
 
     @staticmethod
     async def get_reviews_by_course(db: AsyncSession, course_id: int, skip: int = 0, limit: int = 100) -> List[Review]:
@@ -70,8 +105,17 @@ async def create_review(db: AsyncSession, review_in: ReviewCreate) -> Review:
 async def get_review(db: AsyncSession, review_id: int) -> Optional[Review]:
     return await ReviewService.get_review(db, review_id)
 
-async def get_reviews(db: AsyncSession, skip: int = 0, limit: int = 100) -> List[Review]:
-    return await ReviewService.get_reviews(db, skip=skip, limit=limit)
+async def get_reviews(
+    db: AsyncSession,
+    page: int = 1,
+    size: int = 10,
+    course_id: Optional[int] = None,
+    student_id: Optional[int] = None,
+    is_active: Optional[bool] = None,
+) -> dict:
+    return await ReviewService.get_reviews(
+        db, page=page, size=size, course_id=course_id, student_id=student_id, is_active=is_active
+    )
 
 async def get_reviews_by_course(db: AsyncSession, course_id: int, skip: int = 0, limit: int = 100) -> List[Review]:
     return await ReviewService.get_reviews_by_course(db, course_id, skip=skip, limit=limit)

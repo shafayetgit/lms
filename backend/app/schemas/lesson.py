@@ -8,7 +8,7 @@ class LessonBase(BaseSchema):
     title: str = Field(..., max_length=220)
     slug: Optional[str] = Field(None, max_length=250)
     description: Optional[str] = None
-    video_url: Optional[str] = None
+    video: Optional[str] = None
     content: Optional[str] = None
     duration: Optional[int] = Field(None, ge=0)
     order_index: int = Field(0, ge=0)
@@ -22,7 +22,7 @@ class LessonUpdate(BaseSchema):
     title: Optional[str] = Field(None, max_length=220)
     slug: Optional[str] = Field(None, max_length=250)
     description: Optional[str] = None
-    video_url: Optional[str] = None
+    video: Optional[str] = None
     content: Optional[str] = None
     duration: Optional[int] = Field(None, ge=0)
     order_index: Optional[int] = Field(None, ge=0)
@@ -35,3 +35,6 @@ class LessonRead(LessonBase):
     updated_at: Optional[datetime] = None
     
     model_config = ConfigDict(from_attributes=True)
+
+class LessonListResponse(BaseSchema):
+    data: list[LessonRead]

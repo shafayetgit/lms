@@ -1,5 +1,5 @@
+from sqlalchemy import Select, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from typing import List, Optional
 from app.models.quiz import Quiz
@@ -12,11 +12,12 @@ async def create_quiz(db: AsyncSession, quiz: Quiz) -> Quiz:
     await db.refresh(quiz)
     return quiz
 
-async def get_quiz(db: AsyncSession, quiz_id: int) -> Optional[Quiz]:
+async def get_quiz_by_id(db: AsyncSession, quiz_id: int) -> Optional[Quiz]:
     result = await db.execute(
         select(Quiz)
         .where(Quiz.id == quiz_id)
         .options(selectinload(Quiz.questions).selectinload(Question.choices))
+        .execution_options(populate_existing=True)
     )
     return result.scalars().first()
 
@@ -25,6 +26,22 @@ async def get_quizzes_by_course(db: AsyncSession, course_id: int) -> List[Quiz]:
         select(Quiz).where(Quiz.course_id == course_id)
     )
     return result.scalars().all()
+
+async def get_quizzes(
+    db: AsyncSession, query: Select | None = None, skip: int = 0, limit: int = 10
+) -> list[Quiz]:
+    q = query if query is not None else select(Quiz)
+    result = await db.execute(q.offset(skip).limit(limit))
+    return result.scalars().all()
+
+async def count_quizzes(db: AsyncSession, query: Select | None = None) -> int:
+    q = query if query is not None else select(Quiz)
+    return await db.scalar(select(func.count()).select_from(q.subquery()))
+
+async def update_quiz(db: AsyncSession, quiz: Quiz) -> Quiz:
+    await db.commit()
+    await db.refresh(quiz)
+    return quiz
 
 async def delete_quiz(db: AsyncSession, quiz: Quiz) -> None:
     await db.delete(quiz)
@@ -54,3 +71,6 @@ async def get_question(db: AsyncSession, question_id: int) -> Optional[Question]
 async def delete_question(db: AsyncSession, question: Question) -> None:
     await db.delete(question)
     await db.commit()
+
+# Functional aliases
+get_quiz = get_quiz_by_id

@@ -1,5 +1,4 @@
 export const CATEGORY_CHOICES = [
-  { label: "Normal", value: "normal" },
+  { label: "None", value: "none" },
   { label: "Featured", value: "featured" },
-  { label: "Draft", value: "draft" },
 ]

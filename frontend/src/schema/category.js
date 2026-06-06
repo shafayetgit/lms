@@ -14,9 +14,9 @@ export const categoryValidationSchema = Yup.object({
     .nullable()
     .max(500, "Description must be at most 500 characters"),
 
-  type: Yup.string()
-    .oneOf(values, "Invalid type")
-    .required("Type is required"),
+  badge: Yup.string()
+    .oneOf(values, "Invalid badge")
+    .required("Badge is required"),
 
-  isActive: Yup.boolean().required("Status is required"),
+  is_active: Yup.boolean().required("Status is required"),
 });

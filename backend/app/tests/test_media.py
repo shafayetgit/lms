@@ -66,19 +66,26 @@ async def test_attach_media_to_category(client: AsyncClient, db_session, unique_
 @pytest.mark.asyncio
 async def test_attach_multiple_media(client: AsyncClient, db_session, unique_category_name):
     """Test attaching multiple media items."""
-    # Create a category
-    cat_response = await client.post(
+    # Create first category
+    cat_response1 = await client.post(
         "/api/v1/categories/",
         json={"name": unique_category_name}
     )
-    category_id = cat_response.json()["id"]
+    category_id1 = cat_response1.json()["id"]
     
+    # Create second category
+    cat_response2 = await client.post(
+        "/api/v1/categories/",
+        json={"name": f"Second-{unique_category_name}"}
+    )
+    category_id2 = cat_response2.json()["id"]
+
     # Attach multiple media
     media_payload = [
         {
             "field": "thumbnail",
             "model": "Category",
-            "model_id": category_id,
+            "model_id": category_id1,
             "meta": {
                 "public_id": "uploads/media1",
                 "secure_url": "https://res.cloudinary.com/media1.jpg",
@@ -87,9 +94,9 @@ async def test_attach_multiple_media(client: AsyncClient, db_session, unique_cat
             }
         },
         {
-            "field": "banner",
+            "field": "thumbnail",
             "model": "Category",
-            "model_id": category_id,
+            "model_id": category_id2,
             "meta": {
                 "public_id": "uploads/media2",
                 "secure_url": "https://res.cloudinary.com/media2.jpg",
@@ -98,12 +105,12 @@ async def test_attach_multiple_media(client: AsyncClient, db_session, unique_cat
             }
         }
     ]
-    
+
     response = await client.post(
         "/api/v1/media/attach",
         json=media_payload
     )
-    assert response.status_code == 201
+    assert response.status_code == 201, response.json()
     data = response.json()
     assert len(data) == 2
     assert data[0]["isUsed"] is True

@@ -18,7 +18,7 @@ const baseQuery = async (args, api, extraOptions) => {
   if (result.error?.status !== 401) return result;
 
   const url = typeof args === "string" ? args : args?.url;
-  if (url && url.includes("auth/sign-in")) return result;
+  if (url && url.includes("auth/token")) return result;
 
   const refreshToken = getCookie("refreshToken");
   if (!refreshToken) {
@@ -29,7 +29,7 @@ const baseQuery = async (args, api, extraOptions) => {
 
   const refreshResult = await rawBaseQuery(
     {
-      url: "/auth/refresh",
+      url: "api/v1/auth/refresh",
       method: "POST",
       body: { refresh: refreshToken },
     },

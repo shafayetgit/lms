@@ -9,7 +9,7 @@ import CategorySkeleton from "./Categories/CategorySkeleton";
 
 // Data
 // import { categories } from "./data";
-import { useListQuery } from "@/features/category/categoryAPI";
+import { useReadCategoriesQuery } from "@/features/category/categoryAPI";
 
 const fadeUp = {
   hidden: { y: 20, opacity: 0 },
@@ -17,8 +17,8 @@ const fadeUp = {
 };
 
 const CategoriesSection = () => {
-  const { data: { items: categories } = {}, isLoading } = useListQuery({
-    type: "featured",
+  const { data: { data: categories } = {}, isLoading } = useReadCategoriesQuery({
+    badge: "featured",
     size: 8,
   });
   return (

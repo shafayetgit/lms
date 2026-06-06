@@ -4,7 +4,7 @@ import { Grid, Card, CardContent, Typography, Button, useTheme } from "@mui/mate
 import { motion } from "framer-motion";
 import SendIcon from "@mui/icons-material/Send";
 
-import CTextField from "@/components/ui/CTextField";
+import CTextField from "@/components/form/CTextField";
 
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },

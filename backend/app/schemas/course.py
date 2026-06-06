@@ -1,20 +1,37 @@
 from pydantic import ConfigDict
 from typing import Optional
 from datetime import datetime
-from app.core.base import BaseSchema
-from app.models.course import CourseLevel, CourseStatus, CourseLanguage
+from app.core.base import BaseSchema, PaginationMeta
+from app.models.course import CourseLevel, CourseBadge, CourseLanguage
+
+class CategorySimple(BaseSchema):
+    id: int
+    name: str
+
+
+class InstructorSimple(BaseSchema):
+    id: int
+    first_name: str
+    last_name: str
+
+
+class CourseSimple(BaseSchema):
+    id: int
+    title: str
+
+
 
 class CourseBase(BaseSchema):
     title: str
     description: Optional[str] = None
     instructor_id: int
     category_id: Optional[int] = None
-    level: CourseLevel = CourseLevel.beginner
-    language: CourseLanguage = CourseLanguage.en
+    level: CourseLevel = CourseLevel.BEGINNER
+    language: CourseLanguage = CourseLanguage.EN
     price: float = 0.0
     is_free: bool = False
     is_active: bool = True
-    status: CourseStatus = CourseStatus.draft
+    badge: CourseBadge = CourseBadge.NONE
     thumbnail: Optional[str] = None
     duration: Optional[int] = None
 
@@ -32,7 +49,7 @@ class CourseUpdate(BaseSchema):
     price: Optional[float] = None
     is_free: Optional[bool] = None
     is_active: Optional[bool] = None
-    status: Optional[CourseStatus] = None
+    badge: Optional[CourseBadge] = None
     thumbnail: Optional[str] = None
     duration: Optional[int] = None
 
@@ -43,5 +60,12 @@ class CourseRead(CourseBase):
     updated_at: datetime
     avg_rating: float = 0.0
     total_reviews: int = 0
+    category: Optional[CategorySimple] = None
+    instructor: Optional[InstructorSimple] = None
     
-    model_config = ConfigDict(from_attributes=True)
+
+
+
+class CourseListResponse(BaseSchema):
+    data: list[CourseRead]
+    meta: PaginationMeta

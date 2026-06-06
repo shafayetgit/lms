@@ -1,9 +1,10 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.api.deps import get_db, get_admin_or_instructor
-from app.schemas.lesson import LessonCreate, LessonUpdate, LessonRead
+from app.core.responses import create_response, read_response, update_response, delete_response
+from app.schemas.lesson import LessonCreate, LessonUpdate, LessonRead, LessonListResponse
 from app.services import lesson as lesson_service
+from app.api.deps import get_db, get_admin_or_instructor
 
 router = APIRouter()
 
@@ -15,17 +16,20 @@ async def create_lesson(
 ):
     """Create a new lesson. Admin/Instructor only."""
     try:
-        return await lesson_service.create_lesson(db, lesson_in)
+        await lesson_service.create_lesson(db, lesson_in)
+        return create_response()
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
-@router.get("/module/{module_id}", response_model=List[LessonRead])
+@router.get("/module/{module_id}", response_model=LessonListResponse)
 async def read_lessons_by_module(
     module_id: int, 
     db: AsyncSession = Depends(get_db)
 ):
     """Retrieve lessons for a module."""
-    return await lesson_service.get_lessons_by_module(db, module_id)
+    data = await lesson_service.get_lessons_by_module(db, module_id)
+    items = [LessonRead.model_validate(item).model_dump(by_alias=False) for item in data]
+    return read_response({"data": items})
 
 @router.get("/{lesson_id}", response_model=LessonRead)
 async def read_lesson(
@@ -36,7 +40,20 @@ async def read_lesson(
     lesson = await lesson_service.get_lesson(db, lesson_id)
     if not lesson:
         raise HTTPException(status_code=404, detail="Lesson not found")
-    return lesson
+    return read_response(LessonRead.model_validate(lesson).model_dump(by_alias=False))
+
+from fastapi import Body
+
+@router.put("/module/{module_id}/reorder", status_code=status.HTTP_200_OK)
+async def reorder_module_lessons(
+    module_id: int,
+    order: List[dict] = Body(...),
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_admin_or_instructor)
+):
+    """Bulk reorder lessons within a module. Expects [{id, order_index}, ...]"""
+    await lesson_service.reorder_lessons(db, module_id, order)
+    return update_response(None, message="Lessons reordered successfully")
 
 @router.put("/{lesson_id}", response_model=LessonRead)
 async def update_lesson(
@@ -47,7 +64,8 @@ async def update_lesson(
 ):
     """Update a lesson. Admin/Instructor only."""
     try:
-        return await lesson_service.update_lesson(db, lesson_id, lesson_in)
+        await lesson_service.update_lesson(db, lesson_id, lesson_in)
+        return update_response()
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
@@ -60,5 +78,6 @@ async def delete_lesson(
     """Delete a lesson. Admin/Instructor only."""
     try:
         await lesson_service.delete_lesson(db, lesson_id)
+        return delete_response()
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

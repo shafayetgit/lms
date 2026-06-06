@@ -1,5 +1,5 @@
 "use client";
-import CTextField from "@/components/ui/CTextField";
+import CTextField from "@/components/form/CTextField";
 import React, { useState } from "react";
 import {
     Box,

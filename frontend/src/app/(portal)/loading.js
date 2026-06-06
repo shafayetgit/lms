@@ -1,8 +1,6 @@
-import React from 'react'
-import CSpinner from '@/components/ui/CSpinner'
+import React from "react"
+import CPageLoader from "@/components/ui/CPageLoader"
 
 export default function Loading() {
-    return (
-        <CSpinner fullPage={true} />
-    )
+  return <CPageLoader />
 }

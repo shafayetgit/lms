@@ -29,20 +29,19 @@ if TYPE_CHECKING:
 
 # ---------------- ENUMS ---------------- #
 class CourseLevel(str, Enum):
-    beginner = "beginner"
-    intermediate = "intermediate"
-    advanced = "advanced"
+    BEGINNER = "beginner"
+    INTERMEDIATE = "intermediate"
+    ADVANCED = "advanced"
 
 
-class CourseStatus(str, Enum):
-    draft = "draft"
-    published = "published"
-    archived = "archived"
+class CourseBadge(str, Enum):
+    NONE = "none"
+    FEATURED = "featured"
 
 
 class CourseLanguage(str, Enum):
-    en = "en"
-    bn = "bn"
+    EN = "en"
+    BN = "bn"
 
 
 # ---------------- MODEL ---------------- #
@@ -52,10 +51,9 @@ class Course(Base):
     __tablename__ = "courses"
 
     __table_args__ = (
-        # Composite index (VERY IMPORTANT for LMS queries)
         Index(
-            "idx_courses_status_active_created",
-            "status",
+            "idx_courses_badge_active_created",
+            "badge",
             "is_active",
             "created_at",
         ),
@@ -63,48 +61,56 @@ class Course(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
-    # Foreign keys (indexed for joins)
     instructor_id: Mapped[int] = mapped_column(ForeignKey("users.id"), index=True)
 
     category_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("categories.id"), index=True
     )
 
-    # Core fields
     title: Mapped[str] = mapped_column(String(200))
 
     slug: Mapped[str] = mapped_column(
         String(220),
         unique=True,
-        index=True,  # critical for URL lookup
+        index=True,
     )
 
     description: Mapped[Optional[str]] = mapped_column(Text)
     thumbnail: Mapped[Optional[str]] = mapped_column(Text)
 
-    # Enums (named for Alembic safety)
     level: Mapped[CourseLevel] = mapped_column(
-        SQLEnum(CourseLevel, name="course_level_enum"), default=CourseLevel.beginner
+        SQLEnum(
+            CourseLevel,
+            name="course_level_enum",
+            values_callable=lambda x: [e.value for e in x],
+        ),
+        default=CourseLevel.BEGINNER,
     )
 
     language: Mapped[CourseLanguage] = mapped_column(
-        SQLEnum(CourseLanguage, name="course_language_enum"), default=CourseLanguage.en
+        SQLEnum(
+            CourseLanguage,
+            name="course_language_enum",
+            values_callable=lambda x: [e.value for e in x],
+        ),
+        default=CourseLanguage.EN,
     )
 
-    status: Mapped[CourseStatus] = mapped_column(
-        SQLEnum(CourseStatus, name="course_status_enum"),
-        default=CourseStatus.draft,
+    badge: Mapped[CourseBadge] = mapped_column(
+        SQLEnum(
+            CourseBadge,
+            name="course_badge_enum",
+            values_callable=lambda x: [e.value for e in x],
+        ),
+        default=CourseBadge.NONE,
         index=True,
     )
 
-    # Pricing
     price: Mapped[float] = mapped_column(Float, default=0.0)
     is_free: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    # Control flags
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
 
-    # Course metadata
     duration: Mapped[Optional[int]] = mapped_column()  # minutes
     total_lessons: Mapped[int] = mapped_column(default=0)
 

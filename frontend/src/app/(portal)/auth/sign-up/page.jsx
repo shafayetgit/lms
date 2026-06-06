@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import CTextField from "@/components/ui/CTextField";
+import CTextField from "@/components/form/CTextField";
 
 import { Box, Typography, Button, Stack, Divider, alpha } from "@mui/material";
 import { Google, Person, PersonAddOutlined } from "@mui/icons-material";
@@ -11,7 +11,7 @@ import { useFormik } from "formik";
 
 import { signUpSchema } from "@/schema/auth";
 import CButton from "@/components/ui/CButton";
-import CPasswordField from "@/components/ui/CPasswordField";
+import CPasswordField from "@/components/form/CPasswordField";
 import { useSignUpMutation } from "@/features/auth/authAPI";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";

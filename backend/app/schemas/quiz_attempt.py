@@ -47,3 +47,7 @@ class QuizAttemptDetail(QuizAttemptRead):
 
 class QuizAttemptSubmit(BaseSchema):
     answers: List[QuizAttemptAnswerCreate]
+
+class QuizAttemptListResponse(BaseSchema):
+    data: List[QuizAttemptRead]
+    meta: dict

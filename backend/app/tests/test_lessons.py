@@ -72,9 +72,8 @@ async def test_create_lesson(client: AsyncClient, test_admin, test_module):
         print(f"Error: {response.json()}")
     assert response.status_code == 201
     data = response.json()
-    assert data["title"] == title
-    assert "slug" in data
-    assert data["slug"].startswith("intro-")
+    assert data["success"] == True
+    assert "slug" not in data # because create_response doesn't return the full object anymore
     
     app.dependency_overrides.clear()
 
@@ -106,8 +105,10 @@ async def test_get_lessons_by_module(client: AsyncClient, test_admin, test_modul
     response = await client.get(f"/api/v1/lessons/module/{test_module.id}")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 2
-    assert data[0]["orderIndex"] == 1
-    assert data[1]["orderIndex"] == 2
+    assert data["success"] == True
+    items = data["items"]
+    assert len(items) == 2
+    assert items[0]["order_index"] == 1
+    assert items[1]["order_index"] == 2
     
     app.dependency_overrides.clear()

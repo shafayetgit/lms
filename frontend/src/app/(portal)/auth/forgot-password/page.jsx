@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import CTextField from "@/components/ui/CTextField";
+import CTextField from "@/components/form/CTextField";
 import CButton from "@/components/ui/CButton";
 
 import { useForgotPasswordMutation } from "@/features/auth/authAPI";

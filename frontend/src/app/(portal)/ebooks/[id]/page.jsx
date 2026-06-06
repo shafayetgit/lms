@@ -5,7 +5,7 @@ import {
     CardContent, Button, Stack, Chip, Divider, IconButton,
     Avatar, Rating, Tab, Tabs, List, ListItem, ListItemIcon, ListItemText,
     Paper, useTheme, Breadcrumbs, Dialog, DialogContent, DialogTitle,
-    AppBar, Toolbar, Slide
+    AppBar, Toolbar, Slide, alpha
 } from "@mui/material";
 import {
     Star, ArrowForward, LocalLibrary,
@@ -135,8 +135,8 @@ export default function EbookDetailPage() {
                                     sx={{
                                         borderRadius: 8,
                                         overflow: "hidden",
-                                        boxShadow: "0 30px 60px rgba(0,0,0,0.12)",
-                                        border: "1px solid rgba(0,0,0,0.05)",
+                                        boxShadow: (theme) => `0 30px 60px ${alpha(theme.palette.common.black, 0.12)}`,
+                                        border: (theme) => `1px solid ${alpha(theme.palette.common.black, 0.05)}`,
                                         position: "relative"
                                     }}
                                 >
@@ -154,7 +154,7 @@ export default function EbookDetailPage() {
                                         position: "absolute",
                                         top: 20,
                                         left: 20,
-                                        bgcolor: "rgba(255,255,255,0.9)",
+                                        bgcolor: (theme) => alpha(theme.palette.background.paper, 0.9),
                                         backdropFilter: "blur(4px)",
                                         px: 2, py: 0.5, borderRadius: "50px",
                                         display: { xs: "none", md: "block" }
@@ -175,7 +175,7 @@ export default function EbookDetailPage() {
                                             py: 2.2,
                                             fontWeight: 900,
                                             fontSize: "1.05rem",
-                                            boxShadow: "0 10px 25px rgba(118, 184, 42, 0.25)",
+                                            boxShadow: (theme) => `0 10px 25px ${alpha(theme.palette.primary.main, 0.25)}`,
                                             "&:hover": {
                                                 bgcolor: "secondary.dark",
                                                 transform: "translateY(-2px)"
@@ -192,10 +192,10 @@ export default function EbookDetailPage() {
                                             height: 60,
                                             borderRadius: 4,
                                             border: "2px solid",
-                                            borderColor: isFavorite ? "#FF2D55" : "rgba(0,0,0,0.08)",
-                                            color: isFavorite ? "#FF2D55" : "text.secondary",
+                                            borderColor: isFavorite ? "error.main" : (theme) => alpha(theme.palette.common.black, 0.08),
+                                            color: isFavorite ? "error.main" : "text.secondary",
                                             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                                            "&:hover": { transform: "scale(1.05)", bgcolor: "rgba(0,0,0,0.02)" }
+                                            "&:hover": { transform: "scale(1.05)", bgcolor: (theme) => alpha(theme.palette.common.black, 0.02) }
                                         }}
                                     >
                                         {isFavorite ? <Favorite fontSize="medium" /> : <FavoriteBorder fontSize="medium" />}
@@ -212,18 +212,18 @@ export default function EbookDetailPage() {
                                         py: 1.8,
                                         borderRadius: 4,
                                         fontWeight: 800,
-                                        borderColor: "rgba(0,0,0,0.1)",
+                                        borderColor: (theme) => alpha(theme.palette.common.black, 0.1),
                                         color: "text.primary",
                                         "&:hover": {
                                             borderColor: "secondary.main",
-                                            bgcolor: "rgba(118, 184, 42, 0.05)"
+                                            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05)
                                         }
                                     }}
                                 >
                                     Read Preview
                                 </Button>
 
-                                <Box sx={{ mt: 4, p: 3, borderRadius: 5, bgcolor: "rgba(118, 184, 42, 0.03)", border: "1px dashed rgba(118, 184, 42, 0.2)" }}>
+                                <Box sx={{ mt: 4, p: 3, borderRadius: 5, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.03), border: (theme) => `1px dashed ${alpha(theme.palette.primary.main, 0.2)}` }}>
                                     <Stack direction="row" spacing={1.5} alignItems="flex-start">
                                         <Download sx={{ color: "secondary.main", mt: 0.3 }} />
                                         <Box>
@@ -425,7 +425,7 @@ export default function EbookDetailPage() {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <DialogContent sx={{ bgcolor: '#F5F5F7', p: { xs: 2, md: 6 } }}>
+                <DialogContent sx={{ bgcolor: 'background.default', p: { xs: 2, md: 6 } }}>
                     <Container maxWidth="md">
                         <Stack spacing={4}>
                             {[1, 2, 3].map((page) => (
@@ -435,7 +435,7 @@ export default function EbookDetailPage() {
                                     sx={{
                                         p: { xs: 4, md: 8 },
                                         borderRadius: 4,
-                                        boxShadow: "0 10px 30px rgba(0,0,0,0.05)",
+                                        boxShadow: (theme) => `0 10px 30px ${alpha(theme.palette.common.black, 0.05)}`,
                                         minHeight: "800px",
                                         position: "relative",
                                         overflow: "hidden"
@@ -462,7 +462,7 @@ export default function EbookDetailPage() {
                                         The key to building a scalable system is to think beyond the immediate requirements. We must design for the unknown. This means creating components that are not just reusable, but extensible. We'll look at how to leverage React's latest features to achieve this at scale without sacrificing performance.
                                     </Typography>
 
-                                    <Box sx={{ my: 6, p: 4, bgcolor: "rgba(0,0,0,0.02)", borderRadius: 3, borderLeft: "4px solid", borderColor: "secondary.main" }}>
+                                    <Box sx={{ my: 6, p: 4, bgcolor: (theme) => alpha(theme.palette.common.black, 0.02), borderRadius: 3, borderLeft: "4px solid", borderColor: "secondary.main" }}>
                                         <Typography variant="h6" sx={{ fontWeight: 900, mb: 2 }}>Architecture Insight</Typography>
                                         <Typography variant="body1" sx={{ fontStyle: "italic", color: "text.primary" }}>
                                             "A well-architected system is one where the cost of change remains low throughout the lifetime of the project."

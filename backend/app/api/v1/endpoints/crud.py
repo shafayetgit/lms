@@ -1,6 +1,8 @@
 import logging
+from app.utils.string import get_model
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 
 from app.api.deps import get_db, get_admin_or_instructor
 from app.schemas.crud import DeleteSchema, DeleteResponse
@@ -63,13 +65,24 @@ async def delete_record(
         message = f"Successfully deleted {deleted} record(s)" if deleted > 0 else "No records matched the criteria"
         
         return DeleteResponse(
-            deleted=deleted,
-            status="success",
+            success=True,
             message=message
         )
         
     except HTTPException:
         raise
+    except ValueError as e:
+        logger.error(f"Value error deleting records from {payload.model}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e)
+        )
+    except IntegrityError as e:
+        logger.error(f"Integrity error deleting records from {payload.model}: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete this record because it is referenced by other items."
+        )
     except Exception as e:
         logger.error(f"Error deleting records from {payload.model}: {str(e)}")
         raise HTTPException(

@@ -6,13 +6,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.user import User, UserRole
 from app.models.course import Course, CourseLevel
 from app.models.category import Category
-from app.models.quiz import QuestionType
+from app.models.question import QuestionType
+import httpx
 
 @pytest_asyncio.fixture
 async def test_admin(db_session: AsyncSession):
     user = User(
-        username=f"admin_{uuid.uuid4().hex[:4]}",
-        email=f"admin_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"admin_{uuid.uuid4().hex[:8]}",
+        email=f"admin_{uuid.uuid4().hex[:8]}@example.com",
         hashed_password="hashed",
         role=UserRole.ADMIN,
         is_active=True,
@@ -26,7 +27,7 @@ async def test_admin(db_session: AsyncSession):
 
 @pytest_asyncio.fixture
 async def test_category(db_session: AsyncSession):
-    category = Category(name=f"Cat_{uuid.uuid4().hex[:4]}", slug=f"cat_{uuid.uuid4().hex[:4]}")
+    category = Category(name=f"Cat_{uuid.uuid4().hex[:8]}", slug=f"cat_{uuid.uuid4().hex[:8]}")
     db_session.add(category)
     await db_session.commit()
     await db_session.refresh(category)
@@ -36,11 +37,11 @@ async def test_category(db_session: AsyncSession):
 async def test_course(db_session: AsyncSession, test_admin, test_category):
     course = Course(
         title="Test Course",
-        slug=f"test-course-{uuid.uuid4().hex[:4]}",
+        slug=f"test-course-{uuid.uuid4().hex[:8]}",
         description="Description",
         instructor_id=test_admin.id,
         category_id=test_category.id,
-        level=CourseLevel.beginner,
+        level=CourseLevel.BEGINNER,
         price=10.0
     )
     db_session.add(course)
@@ -65,6 +66,8 @@ async def test_quiz_lifecycle(client: AsyncClient, test_admin, test_course):
             "passingScore": 80.0
         }
         res_q = await client.post("/api/v1/quizzes/", json=quiz_payload)
+        if res_q.status_code != 201:
+            print("DEBUG RES:", res_q.json())
         assert res_q.status_code == 201
         quiz_id = res_q.json()["id"]
 
@@ -84,20 +87,21 @@ async def test_quiz_lifecycle(client: AsyncClient, test_admin, test_course):
         # 3. Read Quiz Detail
         res_detail = await client.get(f"/api/v1/quizzes/{quiz_id}")
         assert res_detail.status_code == 200
-        data = res_detail.json()
+        data = res_detail.json()["data"]
         assert data["title"] == "Module 1 Quiz"
         assert len(data["questions"]) == 1
         assert len(data["questions"][0]["choices"]) == 2
 
         # 4. Update Quiz
-        res_upd = await client.patch(f"/api/v1/quizzes/{quiz_id}", json={"title": "Updated Quiz"})
+        res_upd = await client.put(f"/api/v1/quizzes/{quiz_id}", json={"title": "Updated Quiz"})
         assert res_upd.status_code == 200
-        assert res_upd.json()["title"] == "Updated Quiz"
+        upd_data = res_upd.json()
+        assert upd_data["title"] == "Updated Quiz"
 
         # 5. List Course Quizzes
         res_list = await client.get(f"/api/v1/quizzes/course/{test_course.id}")
         assert res_list.status_code == 200
-        assert len(res_list.json()) >= 1
+        assert len(res_list.json()["data"]) >= 1
 
         # 6. Delete Quiz
         res_del = await client.delete(f"/api/v1/quizzes/{quiz_id}")

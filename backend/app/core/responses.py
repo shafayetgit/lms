@@ -26,13 +26,22 @@ def create_response(
     message: str = "Resource created successfully",
     status_code: int = 201,
 ):
-    """Response for POST (Create)"""
-    data = jsonable_encoder(data) if data is not None else {}
-    content = {
-        "success": True,
-        **data,
-        "message": message,
-    }
+    """Response for POST (Create). Pass data when it has file uploads"""
+
+    if data:
+        data = jsonable_encoder(data) if data is not None else {}
+
+        content = {
+            "success": True,
+            "data": data,
+            "message": message,
+        }
+    else:
+        content = {
+            "success": True,
+            "message": message,
+        }
+
     return JSONResponse(content=content, status_code=status_code)
 
 
@@ -42,12 +51,20 @@ def update_response(
     status_code: int = 200,
 ):
     """Response for PATCH/PUT (Update)"""
-    data = jsonable_encoder(data) if data is not None else {}
-    content = {
-        "success": True,
-        **data,
-        "message": message,
-    }
+
+    if data:
+        data = jsonable_encoder(data) if data is not None else {}
+        content = {
+            "success": True,
+            "data": data,
+            "message": message,
+        }
+    else:
+        content = {
+            "success": True,
+            "message": message,
+        }
+
     return JSONResponse(content=content, status_code=status_code)
 
 
@@ -81,4 +98,3 @@ def error_response(
         content["error"]["details"] = errors
 
     return JSONResponse(content=content, status_code=status_code)
-

@@ -2,7 +2,7 @@
 import { Box, Breadcrumbs, Typography, alpha } from "@mui/material"
 import Link from "next/link"
 
-export default function ModuleContainer({ children, breadcrumbs, action }) {
+export default function ModuleContainer({ children, breadcrumbs, action, transparentContent = false }) {
   return (
     <Box sx={{ width: "100%" }}>
       {/* Header Section - Separate from content card */}
@@ -56,14 +56,15 @@ export default function ModuleContainer({ children, breadcrumbs, action }) {
       {/* Content Section - The Floating Panel */}
       <Box
         sx={{
-          bgcolor: "rgba(255,255,255,0.8)",
-          backdropFilter: "blur(20px)",
-          borderRadius: "24px",
-          border: "1px solid",
-          borderColor: (theme) => alpha(theme.palette.common.black, 0.05),
-          boxShadow: (theme) =>
-            `0 10px 40px ${alpha(theme.palette.common.black, 0.02)}`,
-
+          ...(transparentContent ? {} : {
+            bgcolor: "rgba(255,255,255,0.8)",
+            backdropFilter: "blur(20px)",
+            borderRadius: "24px",
+            border: "1px solid",
+            borderColor: (theme) => alpha(theme.palette.common.black, 0.05),
+            boxShadow: (theme) =>
+              `0 10px 40px ${alpha(theme.palette.common.black, 0.02)}`,
+          }),
         }}
       >
         {children}

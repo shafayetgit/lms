@@ -1,8 +1,7 @@
-from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 from app.core.base import BaseSchema, PaginationMeta
-from app.models.category import CategoryType
+from app.models.category import CategoryBadge
 
 
 class CategoryBase(BaseSchema):
@@ -10,7 +9,7 @@ class CategoryBase(BaseSchema):
     parent_id: Optional[int] = None
     description: Optional[str] = None
     is_active: bool = True
-    type: CategoryType = CategoryType.NORMAL
+    badge: CategoryBadge = CategoryBadge.NONE
     thumbnail: Optional[str] = None
 
 
@@ -24,20 +23,23 @@ class CategoryUpdate(BaseSchema):
     slug: Optional[str] = None
     description: Optional[str] = None
     is_active: Optional[bool] = None
-    type: Optional[CategoryType] = None
+    badge: Optional[CategoryBadge] = None
     thumbnail: Optional[str] = None
 
 
 class CategoryRead(CategoryBase):
-    id:int
-    slug: str
-    created_at: datetime
-    updated_at: datetime
-
-    model_config = ConfigDict(from_attributes=True)
+    id: int
+    # slug: str
+    # created_at: datetime
+    # updated_at: datetime
 
 
+class CategoryReadResponse(BaseSchema):
+    data: CategoryRead
+    success: bool = True
 
-class CategoryListResponse(BaseModel):
-    items: list[CategoryRead]
+
+class CategoryListResponse(BaseSchema):
+    success: bool = True
+    data: list[CategoryRead]
     meta: PaginationMeta

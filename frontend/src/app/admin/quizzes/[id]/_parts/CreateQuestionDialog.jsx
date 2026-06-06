@@ -1,0 +1,261 @@
+"use client";
+import React, { useState } from "react";
+import { useFormik } from "formik";
+import {
+  Grid,
+  Stack,
+  IconButton,
+  Typography,
+  alpha,
+  useTheme,
+} from "@mui/material";
+import { Add, Close } from "@mui/icons-material";
+import * as yup from "yup";
+import { toast } from "react-toastify";
+
+import CDialog from "@/components/ui/CDialog";
+import CForm from "@/components/ui/CForm";
+import CTextField from "@/components/form/CTextField";
+import CSelect from "@/components/form/CSelect";
+import CCheckbox from "@/components/form/CCheckbox";
+import CButton from "@/components/ui/CButton";
+import { useAddQuestionMutation } from "@/features/quiz/quizAPI";
+import { mapApiErrorsToFormik } from "@/utils/shared";
+import { questionValidationSchema } from "@/schema/question";
+import {
+  QUESTION_TYPE_OPTIONS,
+  DEFAULT_CHOICES,
+  TRUE_FALSE_CHOICES,
+} from "@/choices/question";
+
+export default function CreateQuestionDialog({ quizId }) {
+  const theme = useTheme();
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true);
+
+  const [addQuestion, { isLoading }] = useAddQuestionMutation();
+
+  const formik = useFormik({
+    initialValues: {
+      text: "",
+      question_type: "mcq_single",
+      points: 1,
+      explanation: "",
+      is_active: true,
+      choices: DEFAULT_CHOICES,
+    },
+    validationSchema: questionValidationSchema,
+    onSubmit: async (values, { resetForm, setErrors }) => {
+      try {
+        const res = await addQuestion({ quizId, body: values }).unwrap();
+        toast.success(res?.message || "Question added");
+        resetForm();
+        handleClose();
+      } catch (err) {
+        const errors = mapApiErrorsToFormik(err);
+        setErrors(errors);
+        toast.error(err?.data?.message || "Failed to add question");
+      }
+    },
+  });
+
+  const { values, setFieldValue } = formik;
+  const isChoiceBased = ["mcq_single", "mcq_multiple", "true_false"].includes(
+    values.question_type
+  );
+
+  const handleTypeChange = (e) => {
+    const type = e.target.value;
+    setFieldValue("question_type", type);
+
+    if (type === "true_false") {
+      setFieldValue("choices", TRUE_FALSE_CHOICES);
+    } else if (type === "short_answer") {
+      setFieldValue("choices", []);
+    } else if (!values.choices?.length || values.question_type === "true_false") {
+      setFieldValue("choices", DEFAULT_CHOICES);
+    }
+  };
+
+  const addChoice = () => {
+    setFieldValue("choices", [
+      ...values.choices,
+      { text: "", is_correct: false },
+    ]);
+  };
+
+  const removeChoice = (index) => {
+    if (values.choices.length <= 2) return;
+    setFieldValue(
+      "choices",
+      values.choices.filter((_, i) => i !== index)
+    );
+  };
+
+  const handleCorrectToggle = (index) => {
+    if (values.question_type === "mcq_single") {
+      const updated = values.choices.map((c, i) => ({
+        ...c,
+        is_correct: i === index,
+      }));
+      setFieldValue("choices", updated);
+    } else {
+      setFieldValue(`choices.${index}.is_correct`, !values.choices[index].is_correct);
+    }
+  };
+
+  return (
+    <CDialog
+      title="Add Question"
+      btnProps={{ label: "Add Question", action: "add" }}
+      open={open}
+      handleCDialogOpen={handleOpen}
+      handleCDialogClose={handleClose}
+    >
+      <CForm
+        onSubmit={formik.handleSubmit}
+        width="40rem"
+        btnProps={{ loading: isLoading, label: "Add Question" }}
+        dialog
+      >
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <CTextField
+              label="Question Text"
+              name="text"
+              value={formik.values.text}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.text && Boolean(formik.errors.text)}
+              helperText={formik.touched.text && formik.errors.text}
+              multiline
+              rows={2}
+              required
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <CSelect
+              label="Question Type"
+              name="question_type"
+              value={formik.values.question_type}
+              options={QUESTION_TYPE_OPTIONS}
+              onChange={handleTypeChange}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 6, sm: 3 }}>
+            <CTextField
+              label="Points"
+              name="points"
+              type="number"
+              value={formik.values.points}
+              onChange={formik.handleChange}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 6, sm: 3 }}>
+            <CCheckbox
+              label="Active"
+              checked={formik.values.is_active}
+              onChange={(e) => setFieldValue("is_active", e.target.checked)}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <CTextField
+              label="Explanation (optional)"
+              name="explanation"
+              value={formik.values.explanation}
+              onChange={formik.handleChange}
+              multiline
+              rows={2}
+            />
+          </Grid>
+
+          {isChoiceBased && (
+            <Grid size={{ xs: 12 }}>
+              <Stack spacing={1.5}>
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                  <Typography variant="subtitle2" fontWeight={700}>
+                    Choices
+                  </Typography>
+                  {values.question_type !== "true_false" && (
+                    <CButton
+                      label="Add Choice"
+                      action="add"
+                      size="small"
+                      variant="outlined"
+                      onClick={addChoice}
+                    />
+                  )}
+                </Stack>
+
+                {values.choices.map((choice, index) => (
+                  <Stack
+                    key={index}
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      border: "1px solid",
+                      borderColor: choice.is_correct
+                        ? alpha(theme.palette.success.main, 0.4)
+                        : "divider",
+                      bgcolor: choice.is_correct
+                        ? alpha(theme.palette.success.main, 0.04)
+                        : "transparent",
+                      transition: "all 0.2s",
+                    }}
+                  >
+                    <Typography
+                      variant="body2"
+                      fontWeight={700}
+                      color="text.secondary"
+                      sx={{ minWidth: 24 }}
+                    >
+                      {String.fromCharCode(65 + index)}.
+                    </Typography>
+
+                    <CTextField
+                      label=""
+                      placeholder={`Choice ${String.fromCharCode(65 + index)}`}
+                      value={choice.text}
+                      onChange={(e) =>
+                        setFieldValue(`choices.${index}.text`, e.target.value)
+                      }
+                      size="small"
+                      disabled={values.question_type === "true_false"}
+                      sx={{ flex: 1 }}
+                    />
+
+                    <CCheckbox
+                      label="Correct"
+                      checked={choice.is_correct}
+                      onChange={() => handleCorrectToggle(index)}
+                      disabled={values.question_type === "true_false" && index >= 2}
+                    />
+
+                    {values.question_type !== "true_false" && values.choices.length > 2 && (
+                      <IconButton
+                        size="small"
+                        onClick={() => removeChoice(index)}
+                        sx={{ color: "error.main" }}
+                      >
+                        <Close fontSize="small" />
+                      </IconButton>
+                    )}
+                  </Stack>
+                ))}
+              </Stack>
+            </Grid>
+          )}
+        </Grid>
+      </CForm>
+    </CDialog>
+  );
+}

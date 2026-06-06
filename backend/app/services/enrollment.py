@@ -2,6 +2,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from typing import List, Optional
 from app.models.enrollment import Enrollment, EnrollmentStatus
+import math
+from sqlalchemy import select, desc
 from app.schemas.enrollment import EnrollmentCreate, EnrollmentUpdate
 from app.repositories import enrollment as repo
 from app.repositories import course as course_repo
@@ -38,6 +40,42 @@ async def create_enrollment(
         
     enrollment = Enrollment(**enrollment_in.model_dump())
     return await repo.create_enrollment(db, enrollment)
+
+async def get_enrollments(
+    db: AsyncSession,
+    page: int = 1,
+    size: int = 10,
+    course_id: Optional[int] = None,
+    user_id: Optional[int] = None,
+    status: Optional[EnrollmentStatus] = None,
+) -> dict:
+    query = select(Enrollment).order_by(desc(Enrollment.id))
+
+    if course_id:
+        query = query.where(Enrollment.course_id == course_id)
+    if user_id:
+        query = query.where(Enrollment.user_id == user_id)
+    if status:
+        query = query.where(Enrollment.status == status)
+
+    skip = (page - 1) * size
+    total = await repo.count_enrollments(db, query=query)
+    data = await repo.get_enrollments_with_query(
+        db, query=query, skip=skip, limit=size
+    )
+    total_pages = math.ceil(total / size) if total else 0
+
+    return {
+        "data": data,
+        "meta": {
+            "total": total,
+            "page": page,
+            "size": size,
+            "pages": total_pages,
+            "has_next": page < total_pages,
+            "has_prev": page > 1,
+        },
+    }
 
 async def get_enrollment(db: AsyncSession, enrollment_id: int) -> Enrollment:
     enrollment = await repo.get_enrollment_by_id(db, enrollment_id)

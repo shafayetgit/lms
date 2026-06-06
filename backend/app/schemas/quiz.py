@@ -2,7 +2,7 @@ from datetime import datetime
 from pydantic import ConfigDict, Field
 from typing import List, Optional
 from app.core.base import BaseSchema
-from app.schemas.question import ChoiceRead, QuestionRead, QuestionCreate
+from app.schemas.question import QuestionRead
 
 # Quiz Schemas
 class QuizBase(BaseSchema):
@@ -31,3 +31,7 @@ class QuizRead(QuizBase):
 
 class QuizDetail(QuizRead):
     questions: List[QuestionRead] = []
+
+class QuizListResponse(BaseSchema):
+    data: List[QuizRead]
+    meta: dict

@@ -36,3 +36,8 @@ if __name__ == "__main__":
     
 # Usage:
 #     uv run python -m shell 
+
+# stmt = select(User.id, User.email)
+
+# result = await db.execute(stmt)
+# rows = result.mappings().all()

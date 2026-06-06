@@ -14,7 +14,7 @@ def unique_title():
 @pytest_asyncio.fixture
 async def test_category(db_session):
     """Create a category to use in course tests."""
-    category = Category(name=f"Cat-{uuid.uuid4().hex[:4]}", slug=f"cat-{uuid.uuid4().hex[:4]}")
+    category = Category(name=f"Cat-{uuid.uuid4().hex[:12]}", slug=f"cat-{uuid.uuid4().hex[:12]}")
     db_session.add(category)
     await db_session.commit()
     await db_session.refresh(category)
@@ -24,8 +24,8 @@ async def test_category(db_session):
 async def test_instructor(db_session):
     """Create an instructor user in the DB to satisfy FK constraints."""
     user = User(
-        username=f"instructor_{uuid.uuid4().hex[:4]}",
-        email=f"instructor_{uuid.uuid4().hex[:4]}@example.com",
+        username=f"instructor_{uuid.uuid4().hex[:12]}",
+        email=f"instructor_{uuid.uuid4().hex[:12]}@example.com",
         hashed_password="hashed",
         role=UserRole.INSTRUCTOR,
         is_active=True,
@@ -51,10 +51,10 @@ async def test_create_course(client: AsyncClient, unique_title, test_instructor,
         }
     )
     assert response.status_code == 201
-    data = response.json()
+    data = response.json()["data"]
     assert data["title"] == unique_title
-    assert data["instructorId"] == test_instructor.id
-    assert data["categoryId"] == test_category.id
+    assert data["instructor_id"] == test_instructor.id
+    assert data["category_id"] == test_category.id
     assert "slug" in data
 
 @pytest.mark.asyncio
@@ -68,7 +68,7 @@ async def test_get_courses(client: AsyncClient, unique_title, test_instructor, t
     response = await client.get("/api/v1/courses/")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) >= 1
+    assert len(data["data"]) >= 1
 
 @pytest.mark.asyncio
 async def test_update_course(client: AsyncClient, unique_title, test_instructor, test_category):
@@ -78,7 +78,7 @@ async def test_update_course(client: AsyncClient, unique_title, test_instructor,
         "/api/v1/courses/",
         json={"title": unique_title, "instructorId": test_instructor.id, "categoryId": test_category.id}
     )
-    course_id = resp.json()["id"]
+    course_id = resp.json()["data"]["id"]
     
     # Update
     new_title = f"Updated-{unique_title}"
@@ -87,7 +87,7 @@ async def test_update_course(client: AsyncClient, unique_title, test_instructor,
         json={"title": new_title}
     )
     assert update_resp.status_code == 200
-    assert update_resp.json()["title"] == new_title
+    assert update_resp.json()["data"]["title"] == new_title
 
 @pytest.mark.asyncio
 async def test_delete_course(client: AsyncClient, unique_title, test_instructor, test_category):
@@ -97,7 +97,7 @@ async def test_delete_course(client: AsyncClient, unique_title, test_instructor,
         "/api/v1/courses/",
         json={"title": f"Del-{unique_title}", "instructorId": test_instructor.id, "categoryId": test_category.id}
     )
-    course_id = resp.json()["id"]
+    course_id = resp.json()["data"]["id"]
     
     # Delete
     del_resp = await client.delete(f"/api/v1/courses/{course_id}")

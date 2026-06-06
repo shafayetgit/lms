@@ -95,6 +95,7 @@ class User(Base):
     backup_codes: Mapped[Optional[str]] = mapped_column(String(500))
 
     phone_number: Mapped[Optional[str]] = mapped_column(String(20))
+    avatar: Mapped[Optional[str]] = mapped_column(String(255))
 
     # Security - Sign In
     sign_in_attempts: Mapped[int] = mapped_column(default=0, nullable=False)
@@ -176,8 +177,6 @@ class Student(User):
 
     department: Mapped[Optional[str]] = mapped_column(String(100))
 
-    avatar: Mapped[Optional[str]] = mapped_column(String(255))
-
 
 # ---------------- INSTRUCTOR ---------------- #
 
@@ -204,5 +203,3 @@ class Instructor(User):
     bio: Mapped[Optional[str]] = mapped_column(String(500))
 
     department: Mapped[Optional[str]] = mapped_column(String(100))
-
-    avatar: Mapped[Optional[str]] = mapped_column(String(255))

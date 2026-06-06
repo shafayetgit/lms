@@ -194,7 +194,7 @@ class MediaService:
         total_pages = math.ceil(total / size) if total else 0
 
         return {
-            "items": items,
+            "data": items,
             "meta": {
                 "total": total,
                 "page": page,

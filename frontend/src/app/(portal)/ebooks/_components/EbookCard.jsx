@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Box, Card, CardMedia, CardContent, Typography, Stack, Chip, IconButton, Button } from "@mui/material";
+import { Box, Card, CardMedia, CardContent, Typography, Stack, Chip, IconButton, Button, alpha } from "@mui/material";
 import { Favorite, FavoriteBorder, Star, ArrowForward } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
@@ -23,12 +23,12 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                     borderRadius: 6,
                     overflow: "hidden",
                     cursor: "pointer",
-                    border: "1px solid rgba(0,0,0,0.06)",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
+                    border: (theme) => `1px solid ${alpha(theme.palette.common.black, 0.06)}`,
+                    boxShadow: (theme) => `0 4px 20px ${alpha(theme.palette.common.black, 0.03)}`,
                     transition: "all 0.3s ease",
                     "&:hover": {
                         transform: "translateY(-8px)",
-                        boxShadow: "0 30px 60px rgba(0,0,0,0.1)",
+                        boxShadow: (theme) => `0 30px 60px ${alpha(theme.palette.common.black, 0.1)}`,
                         borderColor: "secondary.main"
                     }
                 }}
@@ -56,14 +56,14 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                             <Chip
                                 label={book.category}
                                 size="small"
-                                sx={{ borderRadius: "50px", fontWeight: 800, fontSize: "0.65rem", bgcolor: "rgba(0,0,0,0.04)" }}
+                                sx={{ borderRadius: "50px", fontWeight: 800, fontSize: "0.65rem", bgcolor: (theme) => alpha(theme.palette.common.black, 0.04) }}
                             />
                             <Stack direction="row" alignItems="center" spacing={1}>
                                 <IconButton
                                     size="small"
                                     onClick={(e) => onToggleFavorite(e, book.id)}
                                     sx={{
-                                        color: isFavorite ? "#FF2D55" : "text.secondary",
+                                        color: isFavorite ? "error.main" : "text.secondary",
                                         transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
                                         "&:hover": { transform: "scale(1.2)" }
                                     }}
@@ -71,7 +71,7 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                                     {isFavorite ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize="small" />}
                                 </IconButton>
                                 <Stack direction="row" alignItems="center" spacing={0.5}>
-                                    <Star sx={{ color: "#FFCE00", fontSize: 16 }} />
+                                    <Star sx={{ color: "warning.main", fontSize: 16 }} />
                                     <Typography variant="caption" sx={{ fontWeight: 800 }}>{book.rating}</Typography>
                                 </Stack>
                             </Stack>

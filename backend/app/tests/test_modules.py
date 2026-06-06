@@ -66,8 +66,7 @@ async def test_create_module(client: AsyncClient, test_admin, test_course):
     )
     assert response.status_code == 201
     data = response.json()
-    assert data["title"] == "Intro to LMS"
-    assert data["orderIndex"] == 1
+    assert data["success"] == True
     
     app.dependency_overrides.clear()
 
@@ -107,9 +106,10 @@ async def test_get_modules_by_course(client: AsyncClient, test_admin, test_cours
     response = await client.get(f"/api/v1/modules/course/{test_course.id}")
     assert response.status_code == 200
     data = response.json()
-    assert len(data) == 2
+    items = data["items"]
+    assert len(items) == 2
     # Check ordering
-    assert data[0]["orderIndex"] == 1
-    assert data[1]["orderIndex"] == 2
+    assert items[0]["order_index"] == 1
+    assert items[1]["order_index"] == 2
     
     app.dependency_overrides.clear()
