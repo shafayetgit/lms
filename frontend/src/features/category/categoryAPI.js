@@ -14,13 +14,14 @@ const categoryAPI = api.injectEndpoints({
     }),
 
     readCategories: builder.query({
-      query: ({ badge = "", size, page, term }) => {
+      query: ({ badge = "", size, page, term, is_portal = false }) => {
         const params = new URLSearchParams()
 
         if (term) params.set("term", term)
         if (badge) params.set("badge", badge)
         if (page !== undefined) params.set("page", page)
         if (size !== undefined) params.set("size", size)
+        if (is_portal) params.set("is_portal", is_portal)
 
         const queryString = params.toString()
         return queryString ? `${PREFIX}/?${queryString}` : PREFIX

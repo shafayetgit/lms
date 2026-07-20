@@ -9,17 +9,17 @@ class WishlistService:
     @staticmethod
     async def add_to_wishlist(db: AsyncSession, user_id: int, wishlist_in: WishlistCreate) -> Wishlist:
         """Add a course to user's wishlist."""
-        # Check if already in wishlist
-        existing = await wishlist_repo.get_wishlist_item(db, user_id, wishlist_in.course_id)
-        if existing:
-            raise ValueError("Course already in wishlist")
-
         # Check if course exists
-        course = await course_repo.get_course_by_id(db, wishlist_in.course_id)
+        course = await course_repo.get_course_by_public_id(db, wishlist_in.course_public_id)
         if not course:
             raise ValueError("Course not found")
 
-        db_item = Wishlist(user_id=user_id, course_id=wishlist_in.course_id)
+        # Check if already in wishlist
+        existing = await wishlist_repo.get_wishlist_item(db, user_id, course.id)
+        if existing:
+            raise ValueError("Course already in wishlist")
+
+        db_item = Wishlist(user_id=user_id, course_id=course.id)
         return await wishlist_repo.create_wishlist_item(db, db_item)
 
     @staticmethod
@@ -28,9 +28,14 @@ class WishlistService:
         return await wishlist_repo.get_user_wishlist(db, user_id)
 
     @staticmethod
-    async def remove_from_wishlist(db: AsyncSession, user_id: int, course_id: int):
+    async def remove_from_wishlist(db: AsyncSession, user_id: int, course_public_id: str):
         """Remove a course from user's wishlist."""
-        item = await wishlist_repo.get_wishlist_item(db, user_id, course_id)
+        # Check if course exists
+        course = await course_repo.get_course_by_public_id(db, course_public_id)
+        if not course:
+            raise ValueError("Course not found")
+
+        item = await wishlist_repo.get_wishlist_item(db, user_id, course.id)
         if not item:
             raise ValueError("Item not found in wishlist")
         await wishlist_repo.delete_wishlist_item(db, item)
@@ -42,5 +47,6 @@ async def add_to_wishlist(db: AsyncSession, user_id: int, wishlist_in: WishlistC
 async def get_user_wishlist(db: AsyncSession, user_id: int) -> List[Wishlist]:
     return await WishlistService.get_user_wishlist(db, user_id)
 
-async def remove_from_wishlist(db: AsyncSession, user_id: int, course_id: int):
-    return await WishlistService.remove_from_wishlist(db, user_id, course_id)
+async def remove_from_wishlist(db: AsyncSession, user_id: int, course_public_id: str):
+    return await WishlistService.remove_from_wishlist(db, user_id, course_public_id)
+

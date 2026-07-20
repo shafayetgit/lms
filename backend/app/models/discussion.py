@@ -24,8 +24,6 @@ class Discussion(Base):
         Index("idx_discussion_user", "user_id"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     # 🔗 relations
     course_id: Mapped[int] = mapped_column(
         ForeignKey("courses.id", ondelete="CASCADE"),
@@ -46,6 +44,9 @@ class Discussion(Base):
     # 🧠 content
     title: Mapped[str] = mapped_column(String(255))
     body: Mapped[Optional[str]] = mapped_column(Text)
+    
+    reference_doctype: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    reference_docname: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     # ⚙️ control
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)

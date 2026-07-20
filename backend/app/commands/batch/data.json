@@ -1,0 +1,180 @@
+[
+  {
+    "title": "এসএসসি বিজ্ঞান - ব্যাচ ১",
+    "description": "এসএসসি পরীক্ষার সম্পূর্ণ বিজ্ঞান বিভাগের (পদার্থবিজ্ঞান, রসায়ন, জীববিজ্ঞান) প্রস্তুতি ব্যাচ।",
+    "batch_details": "সপ্তাহে ৩ দিন সন্ধ্যা ৬টা থেকে রাত ৮টা পর্যন্ত লাইভ ক্লাস।",
+    "start_date": "2026-08-01",
+    "end_date": "2027-01-31",
+    "start_time": "18:00:00",
+    "end_time": "20:00:00",
+    "timezone": "Asia/Dhaka",
+    "published": true,
+    "allow_self_enrollment": true,
+    "seat_count": 50,
+    "medium": "Online",
+    "paid_batch": true,
+    "amount": 1500.0,
+    "currency": "BDT",
+    "evaluation": true,
+    "evaluation_end_date": "2027-02-15",
+    "certification": true,
+    "timetables": [
+      {
+        "topic": "পদার্থবিজ্ঞান: গতির প্রথম ক্লাস",
+        "date": "2026-08-03",
+        "start_time": "18:00:00",
+        "end_time": "20:00:00",
+        "description": "গতির প্রাথমিক আলোচনা ও সূত্রসমূহ।",
+        "meeting_link": "https://zoom.us/j/1234567890"
+      },
+      {
+        "topic": "রসায়ন: পদার্থের অবস্থার அறிமுக",
+        "date": "2026-08-05",
+        "start_time": "18:00:00",
+        "end_time": "20:00:00",
+        "description": "কঠিন, তরল ও বায়বীয় পদার্থ নিয়ে আলোচনা।",
+        "meeting_link": "https://zoom.us/j/1234567891"
+      }
+    ],
+    "courses": [
+      "ssc-general-science-complete-preparation",
+      "ssc-higher-math-complete-preparation"
+    ]
+  },
+  {
+    "title": "এইচএসসি উচ্চতর গণিত - ক্র্যাশ ব্যাচ",
+    "description": "এইচএসসি পরীক্ষার্থীদের জন্য উচ্চতর গণিত প্রথম ও দ্বিতীয় পত্রের ক্র্যাশ ব্যাচ।",
+    "batch_details": "প্রতি শনি, সোম ও বুধবার রাত ৮টা থেকে ১০টা।",
+    "start_date": "2026-09-01",
+    "end_date": "2026-11-30",
+    "start_time": "20:00:00",
+    "end_time": "22:00:00",
+    "timezone": "Asia/Dhaka",
+    "published": true,
+    "allow_self_enrollment": true,
+    "seat_count": 30,
+    "medium": "Online",
+    "paid_batch": true,
+    "amount": 2000.0,
+    "currency": "BDT",
+    "evaluation": true,
+    "evaluation_end_date": "2026-12-10",
+    "certification": true,
+    "timetables": [
+      {
+        "topic": "ক্যালকুলাস: লিমিট ও অবিচ্ছিন্নতা",
+        "date": "2026-09-02",
+        "start_time": "20:00:00",
+        "end_time": "22:00:00",
+        "description": "লিমিটের ধারণা ও সমস্যা সমাধান।",
+        "meeting_link": "https://zoom.us/j/0987654321"
+      }
+    ],
+    "courses": [
+      "hsc-higher-math-crash-course",
+      "hsc-physics-crash-course"
+    ]
+  },
+  {
+    "title": "ল অ্যাডমিশন প্রস্তুতি ব্যাচ",
+    "description": "বাংলাদেশ আইন ও সংবিধান নিয়ে বিশ্ববিদ্যালয়ে ভর্তিচ্ছুদের জন্য বিশেষ প্রস্তুতিমূলক ব্যাচ।",
+    "batch_details": "প্রতি শুক্রবার ও শনিবার সকাল ১০টা থেকে দুপুর ১২টা।",
+    "start_date": "2026-07-01",
+    "end_date": "2026-09-30",
+    "start_time": "10:00:00",
+    "end_time": "12:00:00",
+    "timezone": "Asia/Dhaka",
+    "published": true,
+    "allow_self_enrollment": true,
+    "seat_count": 40,
+    "medium": "Online",
+    "paid_batch": true,
+    "amount": 2500.0,
+    "currency": "BDT",
+    "evaluation": true,
+    "evaluation_end_date": "2026-10-15",
+    "certification": true,
+    "timetables": [
+      {
+        "topic": "সংবিধানের ইতিহাস",
+        "date": "2026-07-03",
+        "start_time": "10:00:00",
+        "end_time": "12:00:00",
+        "description": "বাংলাদেশের সংবিধান প্রণয়ন ও ইতিহাস।",
+        "meeting_link": "https://zoom.us/j/1122334455"
+      }
+    ],
+    "courses": [
+      "introduction-to-bangladesh-law",
+      "advanced-bangladesh-law"
+    ]
+  },
+  {
+    "title": "React Frontend Masterclass 2026",
+    "description": "A comprehensive bootcamp on modern frontend development using React, Hooks, and Next.js.",
+    "batch_details": "Tuesdays and Thursdays, 7 PM to 9 PM UTC.",
+    "start_date": "2026-08-15",
+    "end_date": "2026-11-15",
+    "start_time": "19:00:00",
+    "end_time": "21:00:00",
+    "timezone": "UTC",
+    "published": true,
+    "allow_self_enrollment": true,
+    "seat_count": 25,
+    "medium": "Online",
+    "paid_batch": true,
+    "amount": 49.99,
+    "currency": "USD",
+    "evaluation": true,
+    "evaluation_end_date": "2026-12-01",
+    "certification": true,
+    "timetables": [
+      {
+        "topic": "React Hooks Deep Dive",
+        "date": "2026-08-18",
+        "start_time": "19:00:00",
+        "end_time": "21:00:00",
+        "description": "Understanding useState, useEffect, and custom hooks.",
+        "meeting_link": "https://zoom.us/j/9988776655"
+      }
+    ],
+    "courses": [
+      "modern-frontend-web-development-with-react",
+      "advanced-react-performance"
+    ]
+  },
+  {
+    "title": "FastAPI & System Design Cohort",
+    "description": "Backend engineering with Python, FastAPI, SQLAlchemy, and Microservices.",
+    "batch_details": "Weekends only. Saturday and Sunday, 2 PM to 5 PM UTC.",
+    "start_date": "2026-09-05",
+    "end_date": "2026-12-05",
+    "start_time": "14:00:00",
+    "end_time": "17:00:00",
+    "timezone": "UTC",
+    "published": true,
+    "allow_self_enrollment": true,
+    "seat_count": 20,
+    "medium": "Online",
+    "paid_batch": true,
+    "amount": 59.99,
+    "currency": "USD",
+    "evaluation": true,
+    "evaluation_end_date": "2026-12-20",
+    "certification": true,
+    "timetables": [
+      {
+        "topic": "FastAPI Basics & Pydantic Validation",
+        "date": "2026-09-06",
+        "start_time": "14:00:00",
+        "end_time": "17:00:00",
+        "description": "Setting up your first API endpoints and schema validation.",
+        "meeting_link": "https://zoom.us/j/4455667788"
+      }
+    ],
+    "courses": [
+      "backend-engineering-with-python-and-fastapi",
+      "microservices-with-fastapi"
+    ]
+  }
+]

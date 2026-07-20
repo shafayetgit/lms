@@ -9,14 +9,6 @@ export const COURSE_LEVEL_CHOICES = [
 export const COURSE_LANGUAGE_CHOICES = [
   { label: "English", value: "en" },
   { label: "Bengali", value: "bn" },
-  { label: "Hindi", value: "hi" },
-  { label: "French", value: "fr" },
-  { label: "Spanish", value: "es" },
-  { label: "Arabic", value: "ar" },
-  { label: "Chinese", value: "zh" },
-  { label: "Russian", value: "ru" },
-  { label: "Portuguese", value: "pt" },
-  { label: "German", value: "de" },
 ]
 
 export const COURSE_BADGE_CHOICES = [

@@ -1,25 +1,25 @@
 """
 Email Service
-Handles sending emails via SMTP or SendGrid.
+Handles sending emails dynamically using the configured database email accounts.
 """
 
-from typing import Optional, List
+from typing import Optional
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import aiosmtplib
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import init_settings
 
 
 class EmailService:
-    """Service for sending emails via SMTP or SendGrid."""
+    """Service for sending emails via dynamically configured database email accounts."""
 
     def __init__(self):
         """Initialize email service."""
         self.settings = init_settings()
-        self.provider = self.settings.EMAIL_PROVIDER.lower()
 
         # Setup Jinja2 template environment
         template_dir = Path(__file__).parent.parent / "templates" / "emails"
@@ -28,133 +28,116 @@ class EmailService:
             autoescape=True,
         )
 
-        if self.provider == "sendgrid":
-            self._init_sendgrid()
-
-    def _init_sendgrid(self):
-        """Initialize SendGrid client."""
-        try:
-            from sendgrid import SendGridAPIClient
-
-            self.sg_client = SendGridAPIClient(self.settings.SENDGRID_API_KEY)
-        except ImportError:
-            raise ImportError(
-                "sendgrid package is required. Install it with: pip install sendgrid"
-            )
-
     async def send_email(
         self,
         to_email: str,
         subject: str,
         html_content: str,
         plain_text: Optional[str] = None,
+        db: Optional[AsyncSession] = None,
     ) -> bool:
         """
-        Send email.
+        Send email using the default outgoing email account from the database.
 
         Args:
             to_email: Recipient's email address
             subject: Email subject
             html_content: HTML email body
             plain_text: Plain text email body (optional)
+            db: Optional database session
 
         Returns:
             bool: True if sent successfully
         """
-        try:
-            if self.provider == "smtp":
-                return await self._send_smtp_email(
-                    to_email, subject, html_content, plain_text
-                )
-            elif self.provider == "sendgrid":
-                return await self._send_sendgrid_email(
-                    to_email, subject, html_content, plain_text
-                )
-            else:
-                raise ValueError(f"Unsupported email provider: {self.provider}")
-        except Exception as e:
-            print(f"Error sending email: {e}")
-            return False
+        if db is None:
+            from app.db.session import get_session_maker, dispose_current_loop_engine
+            session_maker = get_session_maker()
+            async with session_maker() as session:
+                try:
+                    return await self._send_email_dynamic(
+                        to_email, subject, html_content, plain_text, session
+                    )
+                finally:
+                    await dispose_current_loop_engine()
+        else:
+            return await self._send_email_dynamic(
+                to_email, subject, html_content, plain_text, db
+            )
 
-    async def _send_smtp_email(
+    async def _send_email_dynamic(
         self,
         to_email: str,
         subject: str,
         html_content: str,
-        plain_text: Optional[str] = None,
+        plain_text: Optional[str],
+        db: AsyncSession,
     ) -> bool:
-        """Send email via SMTP."""
+        """Fetch settings from default dynamic outgoing email account and send SMTP email."""
+        from app.services.email_account import EmailAccountService
+        account = await EmailAccountService.get_default_outgoing(db)
+        if not account:
+            print("Error: No default outgoing email account configured in the database.")
+            return False
+
+        service = account.service
+        smtp_server = account.smtp_server
+        smtp_port = account.smtp_port
+        use_ssl = account.use_ssl
+        use_tls = account.use_tls
+        email_id = account.email_id
+        password = account.password
+
+        # Determine correct SMTP username based on the provider
+        srv = service.lower()
+        if srv == "sendgrid":
+            smtp_user = "apikey"
+        elif srv == "sparkpost":
+            smtp_user = "SMTP_Injection"
+        elif srv == "resend":
+            smtp_user = "resend"
+        elif srv == "postmark":
+            smtp_user = password
+        else:
+            smtp_user = email_id
+
         try:
             message = MIMEMultipart("alternative")
             message["Subject"] = subject
-            message["From"] = (
-                f"{self.settings.EMAILS_FROM_NAME} <{self.settings.EMAILS_FROM_EMAIL}>"
-            )
+            # Use the account name or fallback
+            from_name = account.email_account_name or "LMS Notifications"
+            message["From"] = f"{from_name} <{email_id}>"
             message["To"] = to_email
 
-            # Attach plain text version
             if plain_text:
                 message.attach(MIMEText(plain_text, "plain"))
-
-            # Attach HTML version
             message.attach(MIMEText(html_content, "html"))
 
             # Send via SMTP
-            async with aiosmtplib.SMTP(
-                hostname=self.settings.SMTP_HOST,
-                port=self.settings.SMTP_PORT,
-            ) as smtp:
-                await smtp.login(self.settings.SMTP_USER, self.settings.SMTP_PASSWORD)
-                await smtp.sendmail(
-                    self.settings.EMAILS_FROM_EMAIL,
-                    to_email,
-                    message.as_string(),
-                )
-
+            if use_ssl and smtp_port == 465:
+                async with aiosmtplib.SMTP(
+                    hostname=smtp_server,
+                    port=smtp_port,
+                    use_tls=True,
+                ) as smtp:
+                    if password:
+                        await smtp.login(smtp_user, password)
+                    await smtp.sendmail(email_id, to_email, message.as_string())
+            else:
+                async with aiosmtplib.SMTP(
+                    hostname=smtp_server,
+                    port=smtp_port,
+                    use_tls=False,
+                ) as smtp:
+                    if password:
+                        await smtp.login(smtp_user, password)
+                    await smtp.sendmail(email_id, to_email, message.as_string())
             return True
         except Exception as e:
-            print(f"SMTP email error: {e}")
-            return False
-
-    async def _send_sendgrid_email(
-        self,
-        to_email: str,
-        subject: str,
-        html_content: str,
-        plain_text: Optional[str] = None,
-    ) -> bool:
-        """Send email via SendGrid."""
-        try:
-            from sendgrid.helpers.mail import Mail, Email, To, Content
-
-            message = Mail(
-                from_email=Email(
-                    self.settings.EMAILS_FROM_EMAIL,
-                    self.settings.EMAILS_FROM_NAME,
-                ),
-                to_emails=To(to_email),
-                subject=subject,
-                plain_text_content=plain_text or "",
-                html_content=html_content,
-            )
-
-            response = self.sg_client.send(message)
-            return 200 <= response.status_code < 300
-        except Exception as e:
-            print(f"SendGrid email error: {e}")
+            print(f"Error sending email via dynamic account: {e}")
             return False
 
     def _render_template(self, template_name: str, **kwargs) -> str:
-        """
-        Render email template.
-
-        Args:
-            template_name: Name of template file (e.g., 'verify_email.html')
-            **kwargs: Variables to pass to template
-
-        Returns:
-            str: Rendered HTML
-        """
+        """Render email template."""
         template = self.template_env.get_template(template_name)
         return template.render(**kwargs)
 
@@ -163,6 +146,7 @@ class EmailService:
         to_email: str,
         otp: str,
         user_name: str,
+        db: Optional[AsyncSession] = None,
     ) -> bool:
         """Send email verification OTP."""
         html_content = self._render_template(
@@ -190,6 +174,7 @@ LMS Team
             "Email Verification",
             html_content,
             plain_text,
+            db=db,
         )
 
     async def send_password_reset_email(
@@ -197,6 +182,7 @@ LMS Team
         to_email: str,
         otp: str,
         user_name: str,
+        db: Optional[AsyncSession] = None,
     ) -> bool:
         """Send password reset OTP."""
         html_content = self._render_template(
@@ -224,12 +210,14 @@ LMS Team
             "Password Reset Request",
             html_content,
             plain_text,
+            db=db,
         )
 
     async def send_password_changed_email(
         self,
         to_email: str,
         user_name: str,
+        db: Optional[AsyncSession] = None,
     ) -> bool:
         """Send password change confirmation."""
         html_content = self._render_template(
@@ -254,12 +242,14 @@ LMS Team
             "Password Changed",
             html_content,
             plain_text,
+            db=db,
         )
 
     async def send_welcome_email(
         self,
         to_email: str,
         user_name: str,
+        db: Optional[AsyncSession] = None,
     ) -> bool:
         """Send welcome email."""
         html_content = self._render_template(
@@ -285,6 +275,7 @@ LMS Team
             "Welcome to LMS",
             html_content,
             plain_text,
+            db=db,
         )
 
     async def send_2fa_otp_email(
@@ -292,6 +283,7 @@ LMS Team
         to_email: str,
         otp: str,
         user_name: str,
+        db: Optional[AsyncSession] = None,
     ) -> bool:
         """Send 2FA OTP."""
         html_content = self._render_template(
@@ -319,6 +311,7 @@ LMS Team
             "2FA Verification Code",
             html_content,
             plain_text,
+            db=db,
         )
 
 

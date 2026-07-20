@@ -60,15 +60,13 @@ const OtpInput = ({ onChange, error }) => {
             fontWeight: 600,
             border: "1px solid",
             borderColor: error ? "error.main" : "divider",
-            borderRadius: 1.5,
+            borderRadius: 1,
             outline: "none",
             bgcolor: "background.paper",
             color: "text.primary",
             transition: "border-color 0.15s, box-shadow 0.15s",
             "&:focus": {
               borderColor: "primary.main",
-              boxShadow: theme =>
-                `0 0 0 3px ${theme.palette.primary.main}26`,
             },
           }}
         />

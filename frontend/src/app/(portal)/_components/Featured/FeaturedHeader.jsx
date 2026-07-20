@@ -4,6 +4,8 @@ import { Box, Typography, alpha } from "@mui/material";
 import { motion } from "framer-motion";
 import CButton from "@/components/ui/CButton";
 
+import Link from "next/link";
+
 const FeaturedHeader = () => {
     return (
         <Box
@@ -11,9 +13,10 @@ const FeaturedHeader = () => {
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
                 justifyContent: "space-between",
-                alignItems: { xs: "flex-start", md: "flex-end" },
-                gap: 4,
-                mb: 8
+                alignItems: { xs: "center", md: "flex-end" },
+                textAlign: { xs: "center", md: "left" },
+                gap: { xs: 3, md: 4 },
+                mb: { xs: 4, md: 6 }
             }}
         >
             <motion.div
@@ -29,15 +32,14 @@ const FeaturedHeader = () => {
                         mb: 2,
                     }}
                 >
-                    Unlock Your Potential
+                    Featured Courses
                 </Typography>
                 <Typography
                     variant="h6"
                     color="text.secondary"
                     sx={{ maxWidth: 600 }}
                 >
-                    Explore our curated list of featured courses, meticulously designed to
-                    provide you with practical skills and recognized certifications.
+                    Advance your career with our curated selection of premium, expert-led training programs.
                 </Typography>
             </motion.div>
 
@@ -48,11 +50,13 @@ const FeaturedHeader = () => {
                 transition={{ duration: 0.6 }}
             >
                 <CButton
+                    component={Link}
+                    href="/courses"
                     label="Explore All Courses"
                     variant="outlined"
                     size="large"
                     sx={{
-                        borderRadius: "50px",
+                        borderRadius: 1,
                         px: { xs: 3, md: 5 },
                         py: 1.5,
                         fontSize: "1rem",

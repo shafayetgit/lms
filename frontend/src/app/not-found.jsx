@@ -97,7 +97,7 @@ export default function NotFound() {
                             letterSpacing: "-0.02em"
                         }}
                     >
-                        Let's get you <br /> back on track.
+                        Let&apos;s get you <br /> back on track.
                     </Typography>
                     <Typography
                         variant="h6"
@@ -110,7 +110,7 @@ export default function NotFound() {
                             mx: "auto"
                         }}
                     >
-                        We couldn't find the page you were looking for. It might have been moved or doesn't exist anymore, but we can help you find what you need.
+                        We couldn&apos;t find the page you were looking for. It might have been moved or doesn&apos;t exist anymore, but we can help you find what you need.
                     </Typography>
 
                     <Stack

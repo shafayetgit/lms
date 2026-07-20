@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Box, Card, CardMedia, CardContent, Typography, Stack, Chip, IconButton, Button, alpha } from "@mui/material";
-import { Favorite, FavoriteBorder, Star, ArrowForward } from "@mui/icons-material";
+import { FavoriteOutlined, FavoriteBorderOutlined, StarOutlined, ArrowForwardOutlined } from "@mui/icons-material";
 import { motion } from "framer-motion";
 
 import Image from "next/image";
@@ -20,24 +20,18 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                 sx={{
                     display: "flex",
                     flexDirection: { xs: "column", md: "row" },
-                    borderRadius: 6,
+                    borderRadius: 1,
                     overflow: "hidden",
                     cursor: "pointer",
                     border: (theme) => `1px solid ${alpha(theme.palette.common.black, 0.06)}`,
-                    boxShadow: (theme) => `0 4px 20px ${alpha(theme.palette.common.black, 0.03)}`,
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                        transform: "translateY(-8px)",
-                        boxShadow: (theme) => `0 30px 60px ${alpha(theme.palette.common.black, 0.1)}`,
-                        borderColor: "secondary.main"
-                    }
+                    boxShadow: (theme) => `0 4px 20px ${alpha(theme.palette.common.black, 0.03)}`
                 }}
             >
                 <Box
                     sx={{
                         width: { xs: "100%", md: 220 },
                         height: { xs: 280, md: "auto" },
-                        minHeight: { md: 320 },
+                        minHeight: { md: 240 },
                         position: 'relative',
                         overflow: 'hidden'
                     }}
@@ -51,12 +45,12 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                     />
                 </Box>
                 <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-                    <CardContent sx={{ p: 4, flex: "1 0 auto" }}>
+                    <CardContent sx={{ p: 2.5, flex: "1 0 auto" }}>
                         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                             <Chip
                                 label={book.category}
                                 size="small"
-                                sx={{ borderRadius: "50px", fontWeight: 800, fontSize: "0.65rem", bgcolor: (theme) => alpha(theme.palette.common.black, 0.04) }}
+                                sx={{ borderRadius: 1, fontWeight: 800, fontSize: "0.65rem", bgcolor: (theme) => alpha(theme.palette.common.black, 0.04) }}
                             />
                             <Stack direction="row" alignItems="center" spacing={1}>
                                 <IconButton
@@ -68,10 +62,10 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                                         "&:hover": { transform: "scale(1.2)" }
                                     }}
                                 >
-                                    {isFavorite ? <Favorite fontSize="small" /> : <FavoriteBorder fontSize="small" />}
+                                    {isFavorite ? <FavoriteOutlined fontSize="small" /> : <FavoriteBorderOutlined fontSize="small" />}
                                 </IconButton>
                                 <Stack direction="row" alignItems="center" spacing={0.5}>
-                                    <Star sx={{ color: "warning.main", fontSize: 16 }} />
+                                    <StarOutlined sx={{ color: "warning.main", fontSize: 16 }} />
                                     <Typography variant="caption" sx={{ fontWeight: 800 }}>{book.rating}</Typography>
                                 </Stack>
                             </Stack>
@@ -97,7 +91,7 @@ const EbookCard = ({ book, index, isFavorite, onToggleFavorite, onClick }) => {
                             </Box>
                             <Button
                                 variant="text"
-                                endIcon={<ArrowForward />}
+                                endIcon={<ArrowForwardOutlined />}
                                 sx={{
                                     fontWeight: 900,
                                     color: "primary.main",

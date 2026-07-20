@@ -2,10 +2,10 @@ import { DataGrid, gridClasses } from "@mui/x-data-grid"
 import { alpha, styled } from "@mui/material/styles"
 
 
-const ODD_OPACITY = 0.2
+const ODD_OPACITY = 0.08
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
-  [`& .${gridClasses.row}.even`]: {
-    backgroundColor: alpha(theme.palette.common.white, 0.02),
+  "& .MuiDataGrid-row": {
+    transition: "background-color 0.2s ease",
     "&:hover, &.Mui-hovered": {
       backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
       "@media (hover: none)": {

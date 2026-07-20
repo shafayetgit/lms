@@ -6,14 +6,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_db
 from app.schemas.media import MediaAttach, MediaRead
 from app.services.media import MediaService
-from app.models import Category, Course, Lesson, Module, User, Quiz
+from app.models import Category, Course, Lesson, Chapter, User, Quiz
 
 # Map model names to their classes
 MODEL_MAP = {
     "Category": Category,
     "Course": Course,
     "Lesson": Lesson,
-    "Module": Module,
+    "Chapter": Chapter,
     "User": User,
     "Quiz": Quiz,
 }

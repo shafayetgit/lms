@@ -24,8 +24,6 @@ class Wishlist(Base):
         Index("idx_wishlist_course", "course_id"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False
@@ -35,12 +33,14 @@ class Wishlist(Base):
         ForeignKey("courses.id", ondelete="CASCADE"),
         nullable=False
     )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        server_default=func.now()
-    )
-
     # relationships
     user = relationship("User", back_populates="wishlist_items")
     course = relationship("Course", back_populates="wishlisted_by")
+
+    @property
+    def course_public_id(self) -> str:
+        return self.course.public_id if self.course else None
+
+    @property
+    def user_public_id(self) -> str:
+        return self.user.public_id if self.user else None

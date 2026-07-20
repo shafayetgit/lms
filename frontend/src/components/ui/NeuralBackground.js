@@ -3,6 +3,59 @@
 import React, { useEffect, useRef } from 'react';
 import { useTheme } from '@mui/material';
 
+class Particle {
+    constructor(canvas) {
+        this.init(canvas);
+    }
+
+    init(canvas) {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5;
+        const speedMultiplier = this.size * 0.2;
+        this.speedX = (Math.random() - 0.5) * speedMultiplier;
+        this.speedY = (Math.random() - 0.5) * speedMultiplier;
+        this.opacity = Math.random() * 0.5 + 0.2;
+        this.pulseDir = Math.random() > 0.5 ? 1 : -1;
+        this.pulseSpeed = Math.random() * 0.01;
+    }
+
+    draw(ctx, rgb) {
+        ctx.shadowBlur = this.size * 2;
+        ctx.shadowColor = `rgba(${rgb}, 0.5)`;
+        ctx.fillStyle = `rgba(${rgb}, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+
+    update(canvas, mouse) {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.opacity += this.pulseDir * this.pulseSpeed;
+        if (this.opacity > 0.7 || this.opacity < 0.2) this.pulseDir *= -1;
+
+        if (mouse.x !== null && mouse.y !== null) {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < mouse.radius) {
+                const force = (mouse.radius - distance) / mouse.radius;
+                this.x -= (dx / distance) * force * 3;
+                this.y -= (dy / distance) * force * 3;
+            }
+        }
+
+        if (this.x > canvas.width) this.x = 0;
+        else if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        else if (this.y < 0) this.y = canvas.height;
+    }
+}
+
 const NeuralBackground = () => {
     const canvasRef = useRef(null);
     const theme = useTheme();
@@ -44,63 +97,10 @@ const NeuralBackground = () => {
             initParticles();
         };
 
-        class Particle {
-            constructor() {
-                this.init();
-            }
-
-            init() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                const speedMultiplier = this.size * 0.2;
-                this.speedX = (Math.random() - 0.5) * speedMultiplier;
-                this.speedY = (Math.random() - 0.5) * speedMultiplier;
-                this.opacity = Math.random() * 0.5 + 0.2;
-                this.pulseDir = Math.random() > 0.5 ? 1 : -1;
-                this.pulseSpeed = Math.random() * 0.01;
-            }
-
-            draw() {
-                ctx.shadowBlur = this.size * 2;
-                ctx.shadowColor = `rgba(${rgb}, 0.5)`;
-                ctx.fillStyle = `rgba(${rgb}, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fill();
-                ctx.shadowBlur = 0;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.opacity += this.pulseDir * this.pulseSpeed;
-                if (this.opacity > 0.7 || this.opacity < 0.2) this.pulseDir *= -1;
-
-                if (mouse.x !== null && mouse.y !== null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < mouse.radius) {
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        this.x -= (dx / distance) * force * 3;
-                        this.y -= (dy / distance) * force * 3;
-                    }
-                }
-
-                if (this.x > canvas.width) this.x = 0;
-                else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                else if (this.y < 0) this.y = canvas.height;
-            }
-        }
-
         const initParticles = () => {
             particles = [];
             for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
+                particles.push(new Particle(canvas));
             }
         };
 
@@ -135,8 +135,8 @@ const NeuralBackground = () => {
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(particle => {
-                particle.update();
-                particle.draw();
+                particle.update(canvas, mouse);
+                particle.draw(ctx, rgb);
             });
             drawLines();
             animationFrameId = requestAnimationFrame(animate);

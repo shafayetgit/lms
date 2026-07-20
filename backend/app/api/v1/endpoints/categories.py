@@ -1,13 +1,15 @@
 import re
 from typing import List
-from app.core.responses import create_response, read_response, update_response
+from app.core.responses import create_response, update_response
 from app.models.category import CategoryBadge
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.api.deps import get_db, get_admin_or_instructor
+from app.api.deps import get_db
+from app.core.dependencies import PermissionChecker
 from app.schemas.category import (
     CategoryCreate,
     CategoryListResponse,
+    CategoryRead,
     CategoryReadResponse,
     CategoryUpdate,
 )
@@ -20,14 +22,17 @@ router = APIRouter()
     "/",
     response_model=CategoryReadResponse,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(get_admin_or_instructor)],
+    dependencies=[Depends(PermissionChecker("category", "create"))],
 )
 async def create_category(
     category_in: CategoryCreate, db: AsyncSession = Depends(get_db)
 ):
     try:
         data = await CategoryService.create_category(db, category_in)
-        return create_response(data)
+        return {
+            "success": True,
+            "data": data,
+        }
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
@@ -42,43 +47,76 @@ async def read_categories(
     term: str | None = None,
     is_active: bool | None = None,
     badge: CategoryBadge | None = None,
+    is_portal: bool = Query(default=False),
     db: AsyncSession = Depends(get_db),
+    current_user=Depends(PermissionChecker("category", "read")),
 ):
+    if is_portal and is_active is None:
+        is_active = True
+
+    owner_id = (
+        current_user.id
+        if current_user and getattr(current_user, "_requires_creator_check", False)
+        else None
+    )
     data = await CategoryService.get_categories(
-        db, page=page, size=size, term=term, is_active=is_active, badge=badge
+        db, page=page, size=size, term=term, is_active=is_active, badge=badge, owner_id=owner_id
     )
 
     return data
 
 
-@router.get("/{category_id}", response_model=CategoryReadResponse)
-async def read_category(category_id: int, db: AsyncSession = Depends(get_db)):
-    category = await CategoryService.get_category(db, category_id)
+@router.get(
+    "/{public_id}",
+    response_model=CategoryReadResponse,
+    dependencies=[Depends(PermissionChecker("category", "read"))],
+)
+async def read_category(public_id: str, db: AsyncSession = Depends(get_db)):
+    category = await CategoryService.get_category(db, public_id)
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Resource not found"
         )
-    return category
+
+    return {
+        "success": True,
+        "data": category,
+    }
 
 
-@router.put("/{category_id}", response_model=CategoryReadResponse)
+@router.put(
+    "/{public_id}",
+    response_model=CategoryReadResponse,
+    dependencies=[Depends(PermissionChecker("category", "update"))],
+)
 async def update_category(
-    category_id: int, category_in: CategoryUpdate, db: AsyncSession = Depends(get_db)
+    public_id: str, category_in: CategoryUpdate, db: AsyncSession = Depends(get_db)
 ):
     try:
-        return await CategoryService.update_category(db, category_id, category_in)
-        
+        data = await CategoryService.update_category(db, public_id, category_in)
+        return {
+            "success": True,
+            "data": data,
+        }
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
 
-@router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    "/{public_id}",
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(PermissionChecker("category", "delete"))],
+)
 async def delete_category(
-    category_id: int, 
+    public_id: str,
     db: AsyncSession = Depends(get_db),
-    current_user = Depends(get_admin_or_instructor)
 ):
     try:
-        await CategoryService.delete_category(db, category_id)
+        await CategoryService.delete_category(db, public_id)
+        return {
+            "success": True,
+            "message": "Successfully deleted",
+        }
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+

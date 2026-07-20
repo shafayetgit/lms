@@ -47,9 +47,6 @@ features:
 # PROVIDER CONFIGURATION
 # ============================================================================
 providers:
-  email:
-    # Options: 'smtp' | 'sendgrid'
-    type: "smtp"
 
   sms:
     # Options: 'twilio' | 'vonage'
@@ -128,8 +125,13 @@ api:
   # CORS configuration
   cors:
     allow_origins:
+      - "lms.coderiven.com"
+      - "http://localhost"
       - "http://localhost:3000"
+      - "http://localhost:3001/"
       - "http://127.0.0.1:3000"
+      - "http://192.168.0.109:3000"
+      - "http://192.168.0.109:3000/"
     allow_credentials: true
     allow_methods:
       - "GET"
@@ -163,9 +165,7 @@ otp:
 # ============================================================================
 email_templates:
   enabled: true
-  # All emails sent with HTML templates from app/templates/emails/
-  from_name: "LMS Notifications"
-  from_address: "noreply@lms.example.com"
+
 
   templates:
     email_verification: "email_verification.html"

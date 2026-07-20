@@ -25,7 +25,7 @@ async def create_instructor(
     """Create a new instructor. Only admin or existing instructor can create instructors."""
     try:
         instructor = await InstructorService.create_instructor(db, instructor_in)
-        return create_response(InstructorRead.model_validate(instructor).model_dump(by_alias=False))
+        return create_response(InstructorRead.model_validate(instructor).model_dump(by_alias=True))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
@@ -36,7 +36,6 @@ async def read_instructors(
     size: int = Query(default=10, ge=1, le=100),
     term: str | None = None,
     specialization: str | None = None,
-    department: str | None = None,
     is_active: bool | None = None,
     db: AsyncSession = Depends(get_db),
 ):
@@ -47,22 +46,7 @@ async def read_instructors(
         size=size,
         term=term,
         specialization=specialization,
-        department=department,
         is_active=is_active,
-    )
-    return read_response(data)
-
-
-@router.get("/department/{department}", response_model=InstructorListResponse)
-async def read_instructors_by_department(
-    department: str,
-    page: int = Query(default=1, ge=1),
-    size: int = Query(default=10, ge=1, le=100),
-    db: AsyncSession = Depends(get_db),
-):
-    """Get instructors by department."""
-    data = await InstructorService.get_instructors_by_department(
-        db, department=department, page=page, size=size
     )
     return read_response(data)
 
@@ -89,7 +73,7 @@ async def read_instructor(instructor_id: int, db: AsyncSession = Depends(get_db)
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Instructor not found"
         )
-    return read_response({"data": InstructorRead.model_validate(instructor_data["data"]).model_dump(by_alias=False)})
+    return read_response({"data": InstructorRead.model_validate(instructor_data["data"]).model_dump(by_alias=True)})
 
 
 @router.put("/{instructor_id}", response_model=InstructorRead)
@@ -103,7 +87,7 @@ async def update_instructor(
         instructor = await InstructorService.update_instructor(
             db, instructor_id, instructor_in
         )
-        return update_response(InstructorRead.model_validate(instructor).model_dump(by_alias=False))
+        return update_response(InstructorRead.model_validate(instructor).model_dump(by_alias=True))
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 

@@ -14,7 +14,7 @@ const quizAPI = api.injectEndpoints({
     }),
 
     readQuizzes: builder.query({
-      query: ({ courseId, size, page, term }) => {
+      query: ({ courseId, size, page, term } = {}) => {
         const params = new URLSearchParams()
 
         if (term) params.set("term", term)
@@ -29,7 +29,10 @@ const quizAPI = api.injectEndpoints({
     }),
 
     readQuiz: builder.query({
-      query: ({ id } = {}) => `${PREFIX}/${id}`,
+      query: ({ id, is_portal } = {}) => {
+        const url = `${PREFIX}/${id}`
+        return is_portal ? `${url}?is_portal=true` : url
+      },
       providesTags: (result, error, { id }) => [{ type: "QUIZZES", id }],
     }),
 

@@ -10,6 +10,9 @@ class Settings(BaseSettings):
     REDIS_URL: str = Field(
         default="redis://localhost:6379/0", validation_alias="REDIS_URL"
     )
+    CACHE_TTL: int = Field(
+        default=86400, validation_alias="CACHE_TTL"
+    )
 
     # Celery (Background Tasks)
     CELERY_ENABLED: bool = Field(default=False, validation_alias="CELERY_ENABLED")
@@ -44,27 +47,6 @@ class Settings(BaseSettings):
         default="http://localhost:3000", validation_alias="FRONTEND_URL"
     )
 
-    # Email Configuration
-    EMAIL_PROVIDER: str = Field(
-        default="smtp", validation_alias="EMAIL_PROVIDER"
-    )  # 'smtp' or 'sendgrid'
-
-    # SMTP Configuration
-    SMTP_HOST: str = Field(default="smtp.gmail.com", validation_alias="SMTP_HOST")
-    SMTP_PORT: int = Field(default=587, validation_alias="SMTP_PORT")
-    SMTP_USER: str = Field(default="", validation_alias="SMTP_USER")
-    SMTP_PASSWORD: str = Field(default="", validation_alias="SMTP_PASSWORD")
-
-    # SendGrid Configuration
-    SENDGRID_API_KEY: str = Field(default="", validation_alias="SENDGRID_API_KEY")
-
-    # Email Settings
-    EMAILS_FROM_EMAIL: str = Field(
-        default="noreply@lms.example.com", validation_alias="EMAILS_FROM_EMAIL"
-    )
-    EMAILS_FROM_NAME: str = Field(
-        default="LMS Notifications", validation_alias="EMAILS_FROM_NAME"
-    )
 
     # OTP Settings
     OTP_EXPIRE_MINUTES: int = Field(default=10, validation_alias="OTP_EXPIRE_MINUTES")
@@ -215,12 +197,7 @@ def init_settings() -> Settings:
                 project_cfg.otp.resend_cooldown_seconds
             )
 
-            # Email & Providers
-            settings.EMAILS_FROM_NAME = project_cfg.email_templates.from_name
-            settings.EMAILS_FROM_EMAIL = project_cfg.email_templates.from_address
-            settings.EMAIL_PROVIDER = project_cfg.providers.email.get(
-                "type", settings.EMAIL_PROVIDER
-            )
+            # Providers
             settings.SMS_PROVIDER = project_cfg.providers.sms.get(
                 "type", settings.SMS_PROVIDER
             )

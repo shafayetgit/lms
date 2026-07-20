@@ -1,0 +1,82 @@
+[
+  {
+    "title": "এসএসসি বিজ্ঞান পূর্ণাঙ্গ প্রস্তুতি",
+    "description": "এসএসসি বিজ্ঞান বিভাগের সকল গুরুত্বপূর্ণ বিষয় (পদার্থবিজ্ঞান, রসায়ন, জীববিজ্ঞান এবং উচ্চতর গণিত) নিয়ে গঠিত একটি পূর্ণাঙ্গ দিকনির্দেশনামূলক প্রোগ্রাম।",
+    "published": true,
+    "enforce_course_order": false,
+    "courses": [
+      {
+        "course_slug": "ssc-general-science-complete-preparation",
+        "order_index": 1
+      },
+      {
+        "course_slug": "ssc-higher-math-complete-preparation",
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "title": "এইচএসসি বিজ্ঞান ক্র্যাশ কোর্স ট্র্যাক",
+    "description": "এইচএসসি পরীক্ষার আগে দ্রুত সিলেবাস রিভিশন এবং সর্বোচ্চ প্রস্তুতি নিশ্চিত করার জন্য পদার্থবিজ্ঞান ও উচ্চতর গণিতের সমন্বিত প্রোগ্রাম।",
+    "published": true,
+    "enforce_course_order": false,
+    "courses": [
+      {
+        "course_slug": "hsc-physics-crash-course",
+        "order_index": 1
+      },
+      {
+        "course_slug": "hsc-higher-math-crash-course",
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "title": "বাংলাদেশ আইন শিক্ষা ট্র্যাক",
+    "description": "আইন বিষয়ে বিশ্ববিদ্যালয়ে ভর্তিচ্ছু এবং আইনের মৌলিক ও উচ্চতর জ্ঞান অর্জনে আগ্রহীদের জন্য একটি ধারাবাহিক প্রোগ্রাম।",
+    "published": true,
+    "enforce_course_order": true,
+    "courses": [
+      {
+        "course_slug": "introduction-to-bangladesh-law",
+        "order_index": 1
+      },
+      {
+        "course_slug": "advanced-bangladesh-law",
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "title": "Complete Frontend Developer Path",
+    "description": "Master modern web development starting from React fundamentals all the way to advanced performance tuning and state management.",
+    "published": true,
+    "enforce_course_order": true,
+    "courses": [
+      {
+        "course_slug": "modern-frontend-web-development-with-react",
+        "order_index": 1
+      },
+      {
+        "course_slug": "advanced-react-performance",
+        "order_index": 2
+      }
+    ]
+  },
+  {
+    "title": "Python Backend Architect Track",
+    "description": "A comprehensive backend engineering program focusing on modern Python, FastAPI, PostgreSQL, and scalable microservices architectures.",
+    "published": true,
+    "enforce_course_order": true,
+    "courses": [
+      {
+        "course_slug": "backend-engineering-with-python-and-fastapi",
+        "order_index": 1
+      },
+      {
+        "course_slug": "microservices-with-fastapi",
+        "order_index": 2
+      }
+    ]
+  }
+]

@@ -20,6 +20,7 @@ const CategoriesSection = () => {
   const { data: { data: categories } = {}, isLoading } = useReadCategoriesQuery({
     badge: "featured",
     size: 8,
+    is_portal: true,
   });
   return (
     <Box

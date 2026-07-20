@@ -22,8 +22,6 @@ class Comment(Base):
         Index("idx_comment_user", "user_id"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     # 🔗 relations
     discussion_id: Mapped[int] = mapped_column(
         ForeignKey("discussions.id", ondelete="CASCADE"),

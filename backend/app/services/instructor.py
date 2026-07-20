@@ -1,20 +1,17 @@
 import math
 from sqlalchemy import desc, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models.user import Instructor, UserRole
+from app.models.user import User, Role
 from app.repositories import user as user_repo
 from app.schemas.user import InstructorCreate, InstructorUpdate
 from app.core.security import get_password_hash
 
 
 class InstructorService:
-    # async def meta(self, db:AsyncSession) -> dict:
-    #     instructors = 
-    
     @staticmethod
     async def create_instructor(
         db: AsyncSession, instructor_in: InstructorCreate
-    ) -> Instructor:
+    ) -> User:
         """Create a new instructor."""
         # Check username uniqueness
         existing_user = await user_repo.get_user_by_username(db, instructor_in.username)
@@ -29,13 +26,13 @@ class InstructorService:
         # Hash password
         hashed_password = get_password_hash(instructor_in.password)
 
-        db_instructor = Instructor(
+        db_instructor = User(
             username=instructor_in.username,
             email=instructor_in.email,
             first_name=instructor_in.first_name,
             last_name=instructor_in.last_name,
             hashed_password=hashed_password,
-            role=UserRole.INSTRUCTOR,
+            role="instructor",
             is_active=instructor_in.is_active,
             preferred_language=instructor_in.preferred_language,
             timezone=instructor_in.timezone,
@@ -43,13 +40,12 @@ class InstructorService:
             specialization=instructor_in.specialization,
             bio=instructor_in.bio,
             phone_number=instructor_in.phone_number,
-            department=instructor_in.department,
             avatar=instructor_in.avatar,
         )
         return await user_repo.create_user(db, db_instructor)
 
     @staticmethod
-    async def get_instructor(db: AsyncSession, instructor_id: int) -> Instructor | None:
+    async def get_instructor(db: AsyncSession, instructor_id: int) -> dict:
         """Get an instructor by ID."""
         return {"data": await user_repo.get_instructor_by_id(db, instructor_id)}
 
@@ -60,26 +56,23 @@ class InstructorService:
         size: int = 10,
         term: str | None = None,
         specialization: str | None = None,
-        department: str | None = None,
         is_active: bool | None = None,
     ) -> dict:
         """Get paginated list of instructors with optional filters."""
-        query = select(Instructor).order_by(desc(Instructor.id))
+        query = select(User).join(User.roles).where(Role.slug == "instructor").order_by(desc(User.id))
 
         if term:
             query = query.where(
-                Instructor.username.ilike(f"%{term}%")
-                | Instructor.email.ilike(f"%{term}%")
-                | Instructor.first_name.ilike(f"%{term}%")
-                | Instructor.last_name.ilike(f"%{term}%")
-                | Instructor.specialization.ilike(f"%{term}%")
+                User.username.ilike(f"%{term}%")
+                | User.email.ilike(f"%{term}%")
+                | User.first_name.ilike(f"%{term}%")
+                | User.last_name.ilike(f"%{term}%")
+                | User.specialization.ilike(f"%{term}%")
             )
         if specialization:
-            query = query.where(Instructor.specialization.ilike(f"%{specialization}%"))
-        if department:
-            query = query.where(Instructor.department == department)
+            query = query.where(User.specialization.ilike(f"%{specialization}%"))
         if is_active is not None:
-            query = query.where(Instructor.is_active == is_active)
+            query = query.where(User.is_active == is_active)
 
         skip = (page - 1) * size
         total = await user_repo.count_instructors(db, query=query)
@@ -103,7 +96,7 @@ class InstructorService:
     @staticmethod
     async def update_instructor(
         db: AsyncSession, instructor_id: int, instructor_in: InstructorUpdate
-    ) -> Instructor:
+    ) -> User:
         """Update an instructor."""
         instructor = await user_repo.get_instructor_by_id(db, instructor_id)
         if not instructor:
@@ -132,37 +125,12 @@ class InstructorService:
         await user_repo.delete_user(db, instructor)
 
     @staticmethod
-    async def get_instructors_by_department(
-        db: AsyncSession, department: str, page: int = 1, size: int = 10
-    ) -> dict:
-        """Get instructors by department."""
-        query = select(Instructor).where(Instructor.department == department)
-        skip = (page - 1) * size
-        total = await user_repo.count_instructors(db, query=query)
-        data = await user_repo.get_instructors_with_query(
-            db, query=query, skip=skip, limit=size
-        )
-        total_pages = math.ceil(total / size) if total else 0
-
-        return {
-            "data": data,
-            "meta": {
-                "total": total,
-                "page": page,
-                "size": size,
-                "pages": total_pages,
-                "has_next": page < total_pages,
-                "has_prev": page > 1,
-            },
-        }
-
-    @staticmethod
     async def get_instructors_by_specialization(
         db: AsyncSession, specialization: str, page: int = 1, size: int = 10
     ) -> dict:
         """Get instructors by specialization."""
-        query = select(Instructor).where(
-            Instructor.specialization.ilike(f"%{specialization}%")
+        query = select(User).join(User.roles).where(
+            Role.slug == "instructor", User.specialization.ilike(f"%{specialization}%")
         )
         skip = (page - 1) * size
         total = await user_repo.count_instructors(db, query=query)

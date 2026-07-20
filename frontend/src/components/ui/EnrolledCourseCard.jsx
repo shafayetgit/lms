@@ -30,30 +30,18 @@ const EnrolledCourseCard = ({ course }) => {
   const theme = useTheme();
 
   return (
-    <motion.div
-      whileHover="hover"
-      initial="rest"
-      animate="rest"
-      variants={cardHoverVariants}
-      style={{ height: "100%" }}
+    <Card
+      variant="outlined"
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: '28px',
+        overflow: "hidden",
+        bgcolor: "background.paper",
+        position: "relative",
+      }}
     >
-      <Card
-        sx={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          borderRadius: '28px',
-          overflow: "hidden",
-          border: "1px solid rgba(0,0,0,0.06)",
-          bgcolor: "rgba(255, 255, 255, 0.6) !important",
-          backdropFilter: "blur(10px)",
-          position: "relative",
-          transition: "box-shadow 0.4s ease",
-          "&:hover": {
-            boxShadow: "0 30px 60px -20px rgba(0,0,0,0.12)",
-          }
-        }}
-      >
         <NeuralPanel particleCount={15} opacity={0.05} />
 
         {/* Hero Image Section */}
@@ -62,13 +50,11 @@ const EnrolledCourseCard = ({ course }) => {
             sx={{
               width: "100%",
               height: "100%",
-              transition: 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)',
-              '.hover &': { transform: 'scale(1.1)' },
               position: 'relative'
             }}
           >
             <Image
-              src={course.image.startsWith('http') ? course.image : `/${course.image}`}
+              src={course.thumbnail?.startsWith('http') ? course.thumbnail : `/${course.thumbnail || 'default.jpg'}`}
               alt={course.title}
               fill
               style={{ objectFit: "cover" }}
@@ -182,7 +168,6 @@ const EnrolledCourseCard = ({ course }) => {
           </Box>
         </CardContent>
       </Card>
-    </motion.div>
   );
 };
 

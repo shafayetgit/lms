@@ -27,8 +27,9 @@ class MediaAttach(BaseSchema):
     """
     field: str
     model: str
-    model_id: int
+    model_id: str | int
     meta: Dict[str, Any]
+
 
     # @field_validator("meta", mode="before")
     # @classmethod

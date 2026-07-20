@@ -10,7 +10,7 @@ const mediaAPI = api.injectEndpoints({
         method: "POST",
         body: body,
       }),
-      invalidatesTags: ["MEDIA"],
+      invalidatesTags: ["MEDIA", "ME"],
     }),
   }),
   overrideExisting: false,

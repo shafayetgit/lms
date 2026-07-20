@@ -15,6 +15,7 @@ import { motion } from "framer-motion";
 
 import CTextField from "@/components/form/CTextField";
 import CPasswordField from "@/components/form/CPasswordField";
+import AuthLogo from "@/components/ui/AuthLogo";
 
 import { useFormik } from "formik";
 import { useSignInMutation } from "@/features/auth/authAPI";
@@ -62,8 +63,7 @@ export default function SignInPage() {
                 variant="outlined"
                 component={Link}
                 href={"/auth/verify-email?email=" + values.username}
-                sx={{ mt: 1 }}
-
+                sx={{ mt: 1, borderRadius: 1 }}
               />
             </div>,
           );
@@ -84,47 +84,33 @@ export default function SignInPage() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       sx={{
         bgcolor: "background.paper",
-        p: { xs: 4, md: 6 },
-        borderRadius: 6,
-        boxShadow: (theme) => `0 12px 40px ${alpha(theme.palette.text.primary, 0.08)}`,
-        border: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.04)}`,
+        p: { xs: 3, md: 4 },
+        borderRadius: 1,
+        border: "1px solid",
+        borderColor: "divider",
+        maxWidth: 420,
+        mx: "auto",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-        <Box
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "50%",
-            backgroundColor: "secondary.main",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: (theme) =>
-              `0 8px 24px ${alpha(theme.palette.secondary.main, 0.3)}`,
-          }}
-        >
-          <Person sx={{ fontSize: 32, color: "white" }} />
-        </Box>
-      </Box>
+      <AuthLogo />
 
       <Typography
-        variant="h3"
-        sx={{ fontWeight: 800, textAlign: "center", mb: 1 }}
+        variant="h4"
+        sx={{ fontWeight: 800, textAlign: "center", mb: 0.5 }}
       >
         Welcome Back
       </Typography>
 
       <Typography
-        variant="body1"
+        variant="body2"
         color="text.secondary"
-        sx={{ textAlign: "center", mb: 4 }}
+        sx={{ textAlign: "center", mb: 3 }}
       >
         Enter your credentials to access your account.
       </Typography>
 
       <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-        <Stack spacing={3} sx={{ mb: 4 }}>
+        <Stack spacing={2.5} sx={{ mb: 3 }}>
           <CTextField
             name="username"
             label="Username or Email"
@@ -166,34 +152,39 @@ export default function SignInPage() {
           </Box>
         </Stack>
 
-        <Button
+        <CButton
           type="submit"
           fullWidth
-          variant="contained"
           size="large"
+          loading={isLoading}
           disabled={isLoading}
           color="secondary"
+          action="sign-in"
+          label={isLoading ? "Signing in..." : "Sign In"}
           sx={{
-            py: 1.5,
-            borderRadius: "50px",
+            py: 1.2,
+            borderRadius: 1,
             fontWeight: 700,
-            mb: 3,
+            mb: 2.5,
           }}
-        >
-          {isLoading ? "Signing in..." : "Sign In"}
-        </Button>
+        />
       </form>
 
-      <Divider sx={{ mb: 3 }}>OR CONTINUE WITH</Divider>
+      <Divider sx={{ mb: 2.5 }}>OR CONTINUE WITH</Divider>
 
-      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
-        <Button fullWidth variant="outlined" startIcon={<Google />}>
+      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+        <Button
+          fullWidth
+          variant="outlined"
+          startIcon={<Google />}
+          sx={{ borderRadius: 1, py: 1 }}
+        >
           Google
         </Button>
       </Stack>
 
       <Typography variant="body2" align="center">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Typography
           component={Link}
           href="/auth/sign-up"

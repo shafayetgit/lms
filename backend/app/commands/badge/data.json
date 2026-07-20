@@ -1,0 +1,50 @@
+[
+  {
+    "title": "LMS Explorer",
+    "description": "Awarded to members who actively explore the LMS platform.",
+    "image": "https://res.cloudinary.com/deu2mmdzj/image/upload/v1784323014/badge_lms_explorer_nemcur.png",
+    "is_active": true,
+    "reference_table": null,
+    "event": null,
+    "user_field": null,
+    "field_to_check": null,
+    "condition": null,
+    "grant_only_once": true
+  },
+  {
+    "title": "Course Finisher",
+    "description": "Awarded automatically upon completing any course progress.",
+    "image": "https://res.cloudinary.com/deu2mmdzj/image/upload/v1784241104/badge_course_finisher_evf9ab.png",
+    "is_active": true,
+    "reference_table": "course_progress",
+    "event": "Value Change",
+    "user_field": "user_id",
+    "field_to_check": "is_completed",
+    "condition": "resource.is_completed == True",
+    "grant_only_once": true
+  },
+  {
+    "title": "Quiz Champion",
+    "description": "Awarded for completing a quiz attempt with a score of 90% or higher.",
+    "image": "https://res.cloudinary.com/deu2mmdzj/image/upload/v1784323014/badge_quiz_champion_lhoeow.png",
+    "is_active": true,
+    "reference_table": "quiz_submissions",
+    "event": "Value Change",
+    "user_field": "user_id",
+    "field_to_check": "status",
+    "condition": "resource.score >= 90.0",
+    "grant_only_once": false
+  },
+  {
+    "title": "Certified Graduate",
+    "description": "Awarded automatically when a course certificate is issued.",
+    "image": "https://res.cloudinary.com/deu2mmdzj/image/upload/v1784241104/badge_certified_graduate_kp2svl.png",
+    "is_active": true,
+    "reference_table": "certificates",
+    "event": "New",
+    "user_field": "member_id",
+    "field_to_check": null,
+    "condition": null,
+    "grant_only_once": true
+  }
+]

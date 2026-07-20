@@ -155,3 +155,7 @@ class SignInSchema(BaseModel):
     """Sign-in request schema."""
     username: str
     password: str
+
+class RefreshTokenRequest(BaseModel):
+    """Request schema for token refresh."""
+    refresh_token: str

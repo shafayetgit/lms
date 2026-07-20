@@ -12,13 +12,17 @@ async def create_quiz(db: AsyncSession, quiz: Quiz) -> Quiz:
     await db.refresh(quiz)
     return quiz
 
-async def get_quiz_by_id(db: AsyncSession, quiz_id: int) -> Optional[Quiz]:
-    result = await db.execute(
+async def get_quiz_by_id(db: AsyncSession, quiz_id: int | str) -> Optional[Quiz]:
+    stmt = (
         select(Quiz)
-        .where(Quiz.id == quiz_id)
         .options(selectinload(Quiz.questions).selectinload(Question.choices))
         .execution_options(populate_existing=True)
     )
+    if isinstance(quiz_id, int) or (isinstance(quiz_id, str) and quiz_id.isdigit()):
+        stmt = stmt.where(Quiz.id == int(quiz_id))
+    else:
+        stmt = stmt.where(Quiz.public_id == str(quiz_id))
+    result = await db.execute(stmt)
     return result.scalars().first()
 
 async def get_quizzes_by_course(db: AsyncSession, course_id: int) -> List[Quiz]:

@@ -78,7 +78,7 @@ export default function FAQPage() {
                             sx={{
                                 mb: 4,
                                 fontWeight: 800,
-                                borderRadius: "50px",
+                                borderRadius: 1,
                                 textTransform: "uppercase",
                                 fontSize: "0.75rem",
                                 letterSpacing: "1px",
@@ -88,11 +88,13 @@ export default function FAQPage() {
                             }}
                         />
                         <Typography
-                            variant="h1"
+                            variant="h2"
                             gutterBottom
                             sx={{
-                                mb: 3,
-                                fontSize: { xs: "2.5rem", md: "4.5rem" },
+                                fontWeight: 900,
+                                mb: 1.5,
+                                letterSpacing: "-0.02em",
+                                fontSize: { xs: "2.2rem", md: "3.2rem" },
                                 lineHeight: 1.1
                             }}
                         >

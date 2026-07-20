@@ -6,7 +6,7 @@ export const ebooks = [
         price: 49.99,
         rating: 4.9,
         reviews: 128,
-        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=40&w=400",
         category: "Architecture",
         description: "Master the art of building scalable, premium React applications with advanced design patterns."
     },
@@ -17,7 +17,7 @@ export const ebooks = [
         price: 39.99,
         rating: 4.8,
         reviews: 256,
-        image: "https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1589998059171-988d887df646?auto=format&fit=crop&q=40&w=400",
         category: "Development",
         description: "A comprehensive guide to the latest App Router features, Server Components, and more."
     },
@@ -28,7 +28,7 @@ export const ebooks = [
         price: 29.00,
         rating: 5.0,
         reviews: 64,
-        image: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?auto=format&fit=crop&q=40&w=400",
         category: "Design",
         description: "Learn how to create emotional connections through minimal design and elite typography."
     },
@@ -39,7 +39,7 @@ export const ebooks = [
         price: 59.99,
         rating: 4.7,
         reviews: 192,
-        image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=40&w=400",
         category: "Business",
         description: "An end-to-end walkthrough on integrating OpenAI and Anthropic into your modern SaaS products."
     },
@@ -50,7 +50,7 @@ export const ebooks = [
         price: 34.00,
         rating: 4.6,
         reviews: 89,
-        image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=40&w=400",
         category: "Development",
         description: "Write maintainable, readable, and robust JavaScript for large-scale enterprise projects."
     },
@@ -61,7 +61,7 @@ export const ebooks = [
         price: 45.00,
         rating: 4.9,
         reviews: 312,
-        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=40&w=400",
         category: "Business",
         description: "Build products that solve real problems. A philosophical guide to engineering excellence."
     }

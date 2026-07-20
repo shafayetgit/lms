@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Box, Grid, InputAdornment, Stack, Chip } from "@mui/material";
-import { Search } from "@mui/icons-material";
+import { SearchOutlined } from "@mui/icons-material";
 
 import CTextField from "@/components/form/CTextField";
 
@@ -24,13 +24,12 @@ const EbookFilters = ({
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <Search sx={{ color: "text.secondary" }} />
+                  <SearchOutlined sx={{ color: "text.secondary" }} />
                 </InputAdornment>
               ),
               sx: {
-                borderRadius: "50px",
+                borderRadius: 1,
                 bgcolor: "background.paper",
-                "& fieldset": { borderColor: "rgba(0,0,0,0.1) !important" },
               },
             }}
           />
@@ -55,7 +54,7 @@ const EbookFilters = ({
                 sx={{
                   fontWeight: 800,
                   px: 1,
-                  borderRadius: "12px",
+                  borderRadius: 1,
                   transition: "all 0.2s",
                 }}
               />

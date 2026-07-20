@@ -4,14 +4,14 @@ from app.core.base import BaseSchema
 from app.schemas.course import CourseRead
 
 class WishlistBase(BaseSchema):
-    course_id: int
+    course_public_id: str
 
 class WishlistCreate(WishlistBase):
     pass
 
 class WishlistRead(WishlistBase):
-    id: int
-    user_id: int
+    public_id: str
+    user_public_id: str
     created_at: datetime
     course: CourseRead 
     

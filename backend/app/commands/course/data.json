@@ -1,0 +1,862 @@
+[
+  {
+    "title": "এসএসসি সাধারণ বিজ্ঞান সম্পূর্ণ প্রস্তুতি",
+    "slug": "ssc-general-science-complete-preparation",
+    "category_slug": "ssc",
+    "short_introduction": "এসএসসি পরীক্ষার জন্য পদার্থবিজ্ঞান, রসায়ন এবং জীববিজ্ঞানের উপর বিস্তারিত নোট এবং ভিডিওসহ দক্ষতা অর্জন করুন।",
+    "video": "https://www.youtube.com/watch?v=tiLWuBoxu9Y",
+    "thumbnail": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45",
+    "tags": "ssc,science,physics,chemistry,biology",
+    "published": true,
+    "featured": true,
+    "upcoming": false,
+    "paid_course": true,
+    "course_price": 29.99,
+    "currency": "USD",
+    "enable_certification": true,
+    "card_gradient": "green",
+    "chapters": [
+      {
+        "title": "পদার্থবিজ্ঞান: গতি ও বল",
+        "description": "গতি ও বলের মৌলিক ধারণা বোঝা।",
+        "order_index": 1,
+        "lessons": [
+          {
+            "title": "গতির ভূমিকা",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=8_3ztkpkmh8",
+            "duration": 600,
+            "is_preview": true
+          },
+          {
+            "title": "নিউটনের গতির সূত্রাবলী",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=kYwLh3a9P6k",
+            "duration": 900,
+            "is_preview": false
+          },
+          {
+            "title": "কাজ, ক্ষমতা ও শক্তি",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=tiLWuBoxu9Y",
+            "duration": 1200,
+            "is_preview": false
+          },
+          {
+            "title": "পদার্থবিজ্ঞান: গতি ও বল - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এসএসসি পদার্থবিজ্ঞান: গতি ও বল কুইজ"
+          }
+        ]
+      },
+      {
+        "title": "রসায়ন: পদার্থের অবস্থা",
+        "description": "পদার্থের বিভিন্ন অবস্থা এবং তাদের বৈশিষ্ট্য।",
+        "order_index": 2,
+        "lessons": [
+          {
+            "title": "কঠিন, তরল এবং বায়বীয় অবস্থা",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=u8_m1-a-YtI",
+            "duration": 750,
+            "is_preview": true
+          },
+          {
+            "title": "পরমাণুর গঠন",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=s0_yUuX9b9I",
+            "duration": 1100,
+            "is_preview": false
+          },
+          {
+            "title": "রসায়ন: পদার্থের অবস্থা - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এসএসসি পদার্থবিজ্ঞান: গতি ও বল কুইজ"
+          }
+        ]
+      },
+      {
+        "title": "জীববিজ্ঞান: কোষ বিভাজন",
+        "description": "মাইটোটিক ও মিয়োটিক কোষ বিভাজনের বিস্তারিত আলোচনা।",
+        "order_index": 3,
+        "lessons": [
+          {
+            "title": "কোষ বিভাজনের ভূমিকা",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Z0Hj9kQ5zZk",
+            "duration": 800,
+            "is_preview": true
+          },
+          {
+            "title": "মাইটোটিক কোষ বিভাজন",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=8_3ztkpkmh8",
+            "duration": 1500,
+            "is_preview": false
+          },
+          {
+            "title": "জীববিজ্ঞান: কোষ বিভাজন - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এসএসসি পদার্থবিজ্ঞান: গতি ও বল কুইজ"
+          },
+          {
+            "title": "এসএসসি সাধারণ বিজ্ঞান সম্পূর্ণ প্রস্তুতি - ফাইনাল অ্যাসাইনমেন্ট",
+            "content_type": "assignment",
+            "assignment_title": "এসএসসি পদার্থবিজ্ঞান: গতির সমীকরণ প্রমাণ",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "sadiarahman"
+    ],
+    "overview": "**এসএসসি সাধারণ বিজ্ঞান সম্পূর্ণ প্রস্তুতি** এমনভাবে ডিজাইন করা হয়েছে যাতে শিক্ষার্থীরা পুরো সিলেবাসের গুরুত্বপূর্ণ অধ্যায়গুলো সহজ ও গুছানো উপায়ে আয়ত্ত করতে পারে। এই কোর্সে প্রতিটি অধ্যায়ের মৌলিক ধারণা, গুরুত্বপূর্ণ বৈজ্ঞানিক ব্যাখ্যা, চিত্র, সংকেত এবং পরীক্ষায় আসা গুরুত্বপূর্ণ বিষয়সমূহ ধাপে ধাপে শেখানো হবে।\n\nশুধু তত্ত্ব নয়, প্রতিটি অধ্যায়ের **CQ**, **MCQ**, **চিত্র অঙ্কনের কৌশল**, **অধ্যায়ভিত্তিক কুইজ** এবং **মডেল টেস্ট**-এর মাধ্যমে শিক্ষার্থীরা board পরীক্ষার জন্য পূর্ণাঙ্গ প্রস্তুতি নিতে পারবে। পাশাপাশি সময় ব্যবস্থাপনা এবং উত্তর লেখার কার্যকর কৌশলও শেখানো হবে।\n\nএই কোর্সটি বিশেষভাবে তাদের জন্য উপযোগী যারা—\n- বিজ্ঞানের মৌলিক ধারণাগুলো সহজভাবে বুঝতে চায়।\n- বোর্ড পরীক্ষায় বিজ্ঞান বিভাগে এ+ অর্জন করতে চায়।\n- চিত্রভিত্তিক ও সৃজনশীল প্রশ্নের উত্তর সুন্দরভাবে লিখতে চায়।\n- অল্প সময়ে সম্পূর্ণ সিলেবাস রিভিশন করতে চায়।\n\n### এই কোর্সে যা থাকছে\n\n- সম্পূর্ণ সিলেবাসের টপিকভিত্তিক ক্লাস ও সহজ ব্যাখ্যা\n- গুরুত্বপূর্ণ সংজ্ঞা, সূত্র ও সংকেতের শর্ট নোট\n- বিগত বছরের সৃজনশীল (CQ) ও বহুনির্বাচনি (MCQ) প্রশ্নের সমাধান\n- চিত্র অঙ্কনের সহজ টেকনিক ও দিকনির্দেশনা\n- অধ্যায়ভিত্তিক পরীক্ষা ও কুইজ\n- বিগত বছরের বোর্ড প্রশ্ন বিশ্লেষণ\n- মডেল টেস্ট ও সমাধান আলোচনা\n- ফাইনাল রিভিশন ও বিশেষ এক্সাম স্ট্র্যাটেজি\n- ডাউট ক্লিয়ারিং ও প্রশ্নোত্তর সেশন\n\n### কোর্স শেষে আপনি যা শিখবেন\n\n- বিজ্ঞানের জটিল বিষয়গুলো সহজ ও বাস্তব উদাহরণ দিয়ে বুঝতে পারবেন।\n- আত্মবিশ্বাসের সাথে সৃজনশীল প্রশ্নের উত্তর দিতে পারবেন।\n- বোর্ড পরীক্ষার প্রশ্নের প্যাটার্ন ও লেখার সঠিক কৌশল আয়ত্ত করবেন।\n- বিজ্ঞান বিভাগে কাঙ্ক্ষিত ফলাফল অর্জনে সক্ষম হবেন।\n- কম সময়ে কার্যকর রিভিশনের মাধ্যমে সর্বোচ্চ প্রস্তুতি নিতে পারবেন।"
+  },
+  {
+    "title": "এইচএসসি উচ্চতর গণিত ক্র্যাশ কোর্স",
+    "slug": "hsc-higher-math-crash-course",
+    "category_slug": "hsc",
+    "short_introduction": "এইচএসসি উচ্চতর গণিত প্রথম ও দ্বিতীয় পত্রের জন্য নিবিড় ক্র্যাশ কোর্স।",
+    "video": "https://www.youtube.com/watch?v=sU_U_n4o7G4",
+    "thumbnail": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb",
+    "tags": "hsc,math,higher-math,calculus",
+    "published": true,
+    "featured": true,
+    "upcoming": false,
+    "paid_course": true,
+    "course_price": 39.99,
+    "currency": "USD",
+    "enable_certification": true,
+    "card_gradient": "orange",
+    "chapters": [
+      {
+        "title": "ক্যালকুলাসের মৌলিক বিষয়াবলি",
+        "description": "অন্তরীকরণ ও যোগজীকরণের প্রাথমিক ধারণা।",
+        "order_index": 1,
+        "lessons": [
+          {
+            "title": "সীমা ও অবিচ্ছিন্নতা",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=sU_U_n4o7G4",
+            "duration": 1200,
+            "is_preview": true
+          },
+          {
+            "title": "অন্তরীকরণ (Differentiation)",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=L2G355-6r0I",
+            "duration": 1800,
+            "is_preview": false
+          },
+          {
+            "title": "যোগজীকরণ (Integration)",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Fj7Z5u1x_tQ",
+            "duration": 1500,
+            "is_preview": false
+          },
+          {
+            "title": "ক্যালকুলাসের মৌলিক বিষয়াবলি - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এইচএসসি উচ্চতর গণিত: ক্যালকুলাস কুইজ"
+          }
+        ]
+      },
+      {
+        "title": "জ্যামিতি এবং স্থানাঙ্ক",
+        "description": "সরলরেখা এবং বৃত্তের সমীকরণ।",
+        "order_index": 2,
+        "lessons": [
+          {
+            "title": "সরলরেখার সমীকরণ",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=sU_U_n4o7G4",
+            "duration": 1000,
+            "is_preview": true
+          },
+          {
+            "title": "বৃত্তের সমীকরণ ও বৈশিষ্ট্য",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=L2G355-6r0I",
+            "duration": 1600,
+            "is_preview": false
+          },
+          {
+            "title": "জ্যামিতি এবং স্থানাঙ্ক - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এইচএসসি উচ্চতর গণিত: ক্যালকুলাস কুইজ"
+          }
+        ]
+      },
+      {
+        "title": "ত্রিকোণমিতি",
+        "description": "উচ্চতর ত্রিকোণমিতিক সমীকরণ ও অনুপাত।",
+        "order_index": 3,
+        "lessons": [
+          {
+            "title": "যৌগিক কোণের ত্রিকোণমিতিক অনুপাত",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Fj7Z5u1x_tQ",
+            "duration": 1100,
+            "is_preview": true
+          },
+          {
+            "title": "ত্রিকোণমিতিক সমীকরণ সমাধান",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=sU_U_n4o7G4",
+            "duration": 1400,
+            "is_preview": false
+          },
+          {
+            "title": "ত্রিকোণমিতি - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এইচএসসি উচ্চতর গণিত: ক্যালকুলাস কুইজ"
+          },
+          {
+            "title": "এইচএসসি উচ্চতর গণিত ক্র্যাশ কোর্স - ফাইনাল অ্যাসাইনমেন্ট",
+            "content_type": "assignment",
+            "assignment_title": "এইচএসসি উচ্চতর গণিত: যোগজীকরণ অ্যাসাইনমেন্ট",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "sadiarahman"
+    ],
+    "overview": "**এইচএসসি উচ্চতর গণিত ক্র্যাশ কোর্স** এমনভাবে ডিজাইন করা হয়েছে যাতে অল্প সময়ে সম্পূর্ণ সিলেবাসের গুরুত্বপূর্ণ গাণিতিক টপিকগুলো সহজ, গুছানো এবং পরীক্ষাকেন্দ্রিকভাবে শেষ করা যায়। এই কোর্সে প্রতিটি অধ্যায়ের মৌলিক ধারণা, গুরুত্বপূর্ণ সূত্রাবলি, ক্যালকুলাস, জ্যামিতি ও ত্রিকোণমিতির জটিল গাণিতিক সমস্যাগুলো ধাপে ধাপে সমাধান করা হবে।\n\nশুধু সূত্র মুখস্থ করা নয়, প্রতিটি অধ্যায়ের **MCQ**, **CQ**, **টাইপভিত্তিক গাণিতিক সমস্যা সমাধান**, **শর্টকাট ক্যালকুলেটর টেকনিক**, এবং **মডেল টেস্ট**-এর মাধ্যমে শিক্ষার্থীরা পরীক্ষার জন্য আত্মবিশ্বাসের সাথে প্রস্তুতি নিতে পারবে। পাশাপাশি সময় ব্যবস্থাপনা, প্রশ্ন বিশ্লেষণ এবং উত্তর লেখার কার্যকর কৌশলও শেখানো হবে।\n\nএই কোর্সটি বিশেষভাবে তাদের জন্য উপযোগী যারা—\n- উচ্চতর গণিতে এ+ নিশ্চিত করতে চায়।\n- অল্প সময়ে পুরো সিলেবাসের রিভিশন সম্পন্ন করতে চায়।\n- জটিল গাণিতিক সমস্যার সহজ ও শর্টকাট সমাধান শিখতে চায়।\n- ভর্তি পরীক্ষার জন্যও একটি শক্ত ভিত্তি তৈরি করতে চায়।\n\n### এই কোর্সে যা থাকছে\n\n- ক্যালকুলাস, জ্যামিতি ও ত্রিকোণমিতির বিশেষ ক্লাস\n- গাণিতিক সূত্রাবলি ও বিশেষ রিভিশন শিট\n- টাইপভিত্তিক গাণিতিক সমস্যার সহজ সমাধান\n- বিগত বছরের বোর্ড প্রশ্ন বিশ্লেষণ ও সমাধান\n- ক্যালকুলেটর ব্যবহারের বিশেষ শর্টকাট ট্রিকস\n- অধ্যায়ভিত্তিক MCQ ও CQ মক টেস্ট\n- মডেল টেস্ট ও সমাধান আলোচনা\n- ফাইনাল রিভিশন ও বিশেষ এক্সাম স্ট্র্যাটেজি\n- প্রশ্নোত্তর ও ডাউট ক্লিয়ারিং সেশন\n\n### কোর্স শেষে আপনি যা শিখবেন\n\n- উচ্চতর গণিতের সব জটিল টপিকের মৌলিক ধারণা পরিষ্কার হবে।\n- সূত্রগুলোর সঠিক প্রয়োগে দক্ষতা অর্জন করবেন।\n- যেকোনো নতুন গাণিতিক সমস্যা নির্ভুল ও দ্রুত সমাধান করতে পারবেন।\n- বোর্ড পরীক্ষায় সর্বোচ্চ নম্বর নিশ্চিত করতে সক্ষম হবেন।\n- কম সময়ে কার্যকর রিভিশনের মাধ্যমে সর্বোচ্চ প্রস্তুতি নিতে পারবেন।"
+  },
+  {
+    "title": "বাংলাদেশের আইনের পরিচিতি",
+    "slug": "introduction-to-bangladesh-law",
+    "category_slug": "law",
+    "short_introduction": "বাংলাদেশের আইনি ব্যবস্থা এবং সাংবিধানিক আইনের মৌলিক ধারণা।",
+    "video": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+    "thumbnail": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73",
+    "tags": "law,legal-studies,constitution",
+    "published": true,
+    "featured": false,
+    "upcoming": false,
+    "paid_course": true,
+    "course_price": 49.99,
+    "currency": "USD",
+    "enable_certification": true,
+    "card_gradient": "teal",
+    "chapters": [
+      {
+        "title": "সাংবিধানিক আইন",
+        "description": "বাংলাদেশের সংবিধান।",
+        "order_index": 1,
+        "lessons": [
+          {
+            "title": "সংবিধানের ইতিহাস",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 1800,
+            "is_preview": true
+          },
+          {
+            "title": "মৌলিক অধিকারসমূহ",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=UrsmFxE_Cw8",
+            "duration": 1500,
+            "is_preview": false
+          },
+          {
+            "title": "রাষ্ট্র পরিচালনার মূলনীতি",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 1200,
+            "is_preview": false
+          },
+          {
+            "title": "সাংবিধানিক আইন - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "সাংবিধানিক আইন মূল্যায়ন"
+          }
+        ]
+      },
+      {
+        "title": "ফৌজদারি আইন",
+        "description": "বাংলাদেশের ফৌজদারি আইন ও বিচার ব্যবস্থা।",
+        "order_index": 2,
+        "lessons": [
+          {
+            "title": "দণ্ডবিধি (Penal Code) পরিচিতি",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=UrsmFxE_Cw8",
+            "duration": 1400,
+            "is_preview": true
+          },
+          {
+            "title": "ফৌজদারি কার্যবিধি (CrPC)",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 1700,
+            "is_preview": false
+          },
+          {
+            "title": "ফৌজদারি আইন - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "সাংবিধানিক আইন মূল্যায়ন"
+          }
+        ]
+      },
+      {
+        "title": "দেওয়ানি আইন",
+        "description": "বাংলাদেশের দেওয়ানি আইন ব্যবস্থা।",
+        "order_index": 3,
+        "lessons": [
+          {
+            "title": "দেওয়ানি কার্যবিধি (CPC)",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=UrsmFxE_Cw8",
+            "duration": 1600,
+            "is_preview": true
+          },
+          {
+            "title": "চুক্তি আইন ও সম্পত্তি হস্তান্তর",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 1800,
+            "is_preview": false
+          },
+          {
+            "title": "দেওয়ানি আইন - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "সাংবিধানিক আইন মূল্যায়ন"
+          },
+          {
+            "title": "বাংলাদেশের আইনের পরিচিতি - ফাইনাল অ্যাসাইনমেন্ট",
+            "content_type": "assignment",
+            "assignment_title": "সাংবিধানিক আইন: মৌলিক অধিকার প্রতিবেদন",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "javedkarim"
+    ],
+    "overview": "**বাংলাদেশের আইনের পরিচিতি** কোর্সটি বাংলাদেশের সংবিধান, বিচার ব্যবস্থা, দেওয়ানি ও ফৌজদারি আইনের মৌলিক ধারণাসমূহ সহজ ও গভীরভাবে বোঝার জন্য ডিজাইন করা হয়েছে। এই কোর্সে আইনের উৎস, মৌলিক অধিকার, এবং আইনি কাঠামোর বিভিন্ন দিক ধাপে ধাপে আলোচনা করা হবে।\n\nশুধু আইনি ধারা নয়, গুরুত্বপূর্ণ **কেস স্টাডি**, **বাস্তব জীবনের উদাহরণ**, **আইনি সমস্যার ব্যবহারিক সমাধান** এবং **প্রশ্নোত্তর সেশন**-এর মাধ্যমে আইনের বাস্তব প্রয়োগ ও কাঠামো সম্পর্কে স্পষ্ট ধারণা প্রদান করা হবে। পাশাপাশি মামলা পরিচালনা এবং আইনি ব্যবস্থার সাধারণ নিয়মসমূহ শেখানো হবে।\n\nএই কোর্সটি বিশেষভাবে তাদের জন্য উপযোগী যারা—\n- আইন বিভাগে পড়াশোনা করছেন বা করতে আগ্রহী।\n- বাংলাদেশের আইন ব্যবস্থা ও বিচার প্রক্রিয়া সম্পর্কে জানতে চান।\n- দৈনন্দিন জীবনে নাগরিক অধিকার ও আইনি সচেতনতা বৃদ্ধি করতে চান।\n- আইন পেশায় ক্যারিয়ার গড়ার প্রাথমিক প্রস্তুতি নিতে চান।\n\n### এই কোর্সে যা থাকছে\n\n- বাংলাদেশের সংবিধানের মৌলিক কাঠামোর ব্যাখ্যা\n- ফৌজদারি (Criminal Law) ও দেওয়ানি (Civil Law) আইনের প্রাথমিক ধারণা\n- বাংলাদেশের আদালত ব্যবস্থা ও বিচারিক প্রক্রিয়ার পরিচিতি\n- গুরুত্বপূর্ণ ঐতিহাসিক মামলার রায় বিশ্লেষণ\n- আইনি পরামর্শ ও সচেতনতা বিষয়ক আলোচনা\n- কুইজ ও ব্যবহারিক আইনি সমস্যা সমাধান\n- আদালত পরিচালনা ও বিচার প্রক্রিয়া আলোচনা\n- নাগরিক অধিকার ও কর্তব্য বিষয়ক গাইডলাইন\n- ডাউট ক্লিয়ারিং ও সরাসরি প্রশ্নোত্তর সেশন\n\n### কোর্স শেষে আপনি যা শিখবেন\n\n- বাংলাদেশের আইন ব্যবস্থার ভিত্তি ও কাঠামো বুঝতে পারবেন।\n- নাগরিক হিসেবে আপনার আইনি অধিকার ও কর্তব্য সম্পর্কে সচেতন হবেন।\n- সাধারণ দেওয়ানি ও ফৌজদারি মামলার প্রক্রিয়া ব্যাখ্যা করতে পারবেন।\n- আইন সংক্রান্ত যেকোনো মৌলিক আলোচনা বা বিতর্কে অংশ নেওয়ার সক্ষমতা অর্জন করবেন।\n- আইনি সমস্যাগুলোর সমাধান খুঁজতে কোন কোন উৎসের সাহায্য নিতে হবে তা জানবেন।"
+  },
+  {
+    "title": "Modern Frontend Web Development with React",
+    "slug": "modern-frontend-web-development-with-react",
+    "category_slug": "web-development",
+    "short_introduction": "Become a Frontend Master using HTML, CSS, JavaScript, React, and Next.js.",
+    "video": "https://www.youtube.com/watch?v=Ke90Tje7VS0",
+    "thumbnail": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
+    "tags": "frontend,web,react,javascript",
+    "published": true,
+    "featured": true,
+    "upcoming": false,
+    "paid_course": true,
+    "course_price": 59.99,
+    "currency": "USD",
+    "enable_certification": true,
+    "card_gradient": "blue",
+    "chapters": [
+      {
+        "title": "JavaScript Mastery",
+        "description": "ES6+ and modern JavaScript concepts.",
+        "order_index": 1,
+        "lessons": [
+          {
+            "title": "Variables, Scopes, and Closures",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+            "duration": 1200,
+            "is_preview": true
+          },
+          {
+            "title": "Promises and Async/Await",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=4UZrsTqKCw4",
+            "duration": 1500,
+            "is_preview": false
+          },
+          {
+            "title": "DOM Manipulation",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Ke90Tje7VS0",
+            "duration": 1300,
+            "is_preview": false
+          },
+          {
+            "title": "JavaScript Mastery - Quiz",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "JavaScript & React Fundamentals"
+          }
+        ]
+      },
+      {
+        "title": "React Fundamentals",
+        "description": "Getting started with React components and state.",
+        "order_index": 2,
+        "lessons": [
+          {
+            "title": "Introduction to JSX & Components",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+            "duration": 1400,
+            "is_preview": true
+          },
+          {
+            "title": "State and Props",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=4UZrsTqKCw4",
+            "duration": 1600,
+            "is_preview": false
+          },
+          {
+            "title": "Handling Events in React",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Ke90Tje7VS0",
+            "duration": 900,
+            "is_preview": false
+          },
+          {
+            "title": "React Fundamentals - Quiz",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "JavaScript & React Fundamentals"
+          }
+        ]
+      },
+      {
+        "title": "Advanced React Hooks",
+        "description": "Mastering React hooks for state and side effects.",
+        "order_index": 3,
+        "lessons": [
+          {
+            "title": "useEffect and Data Fetching",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+            "duration": 1800,
+            "is_preview": true
+          },
+          {
+            "title": "useContext and Custom Hooks",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=4UZrsTqKCw4",
+            "duration": 2000,
+            "is_preview": false
+          },
+          {
+            "title": "Advanced React Hooks - Quiz",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "JavaScript & React Fundamentals"
+          },
+          {
+            "title": "Modern Frontend Web Development with React - Final Assignment",
+            "content_type": "assignment",
+            "assignment_title": "Build a Responsive CSS Grid Layout",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "fahimahmed"
+    ],
+    "overview": "**Modern Frontend Web Development with React** is designed to take you from web basics to building complex, high-performance web applications. In this course, you will learn to structure modern components, manage application state, handle routing, and style interfaces with contemporary design systems.\n\nBeyond just writing code, you will master **React Hooks**, **State Management (Redux/Context API)**, **API Integration**, **Performance Optimization**, and **Deployment**. Through hands-on projects and coding challenges, you will build a solid professional portfolio.\n\nThis course is specifically designed for—\n- Aspiring frontend developers who want to learn industry-standard skills.\n- Developers transitioning from vanilla JS to modern frontend frameworks.\n- Software engineers wanting to build highly interactive UI/UX experiences.\n- Anyone preparing for modern frontend engineer interviews.\n\n### What is Included in this Course\n\n- Comprehensive lessons covering React fundamentals to advanced topics\n- Hands-on projects building real-world web applications\n- Deep dive into state management with Redux Toolkit and Context API\n- Form handling, validation, and API integrations\n- Modern styling solutions (TailwindCSS, CSS Modules)\n- Deploying React apps to platforms like Vercel and Netlify\n- Code reviews and best practices for writing clean React code\n- Interview preparation tips and frontend engineer roadmap\n- Q&A and community support sessions\n\n### What You Will Learn\n\n- Understand the Virtual DOM and component lifecycle of React.\n- Create reusable, stateful component architectures.\n- Manage complex application state predictably.\n- Integrate external REST and GraphQL APIs seamlessly.\n- Build responsive, fast, and production-ready web interfaces."
+  },
+  {
+    "title": "Backend Engineering with Python and FastAPI",
+    "slug": "backend-engineering-with-python-and-fastapi",
+    "category_slug": "web-development",
+    "short_introduction": "Build highly scalable APIs and microservices using Python, FastAPI, and PostgreSQL.",
+    "video": "https://www.youtube.com/watch?v=t8pPdKYqpzI",
+    "thumbnail": "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
+    "tags": "backend,python,fastapi,database",
+    "published": true,
+    "featured": true,
+    "upcoming": false,
+    "paid_course": true,
+    "course_price": 59.99,
+    "currency": "USD",
+    "enable_certification": true,
+    "card_gradient": "purple",
+    "chapters": [
+      {
+        "title": "FastAPI Crash Course",
+        "description": "Building your first API with FastAPI.",
+        "order_index": 1,
+        "lessons": [
+          {
+            "title": "Introduction to FastAPI & Pydantic",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 1500,
+            "is_preview": true
+          },
+          {
+            "title": "Path and Query Parameters",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=UrsmFxE_Cw8",
+            "duration": 1200,
+            "is_preview": false
+          },
+          {
+            "title": "Handling Requests & Responses",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=XKHEtdqhLK8",
+            "duration": 1400,
+            "is_preview": false
+          },
+          {
+            "title": "FastAPI Crash Course - Quiz",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "FastAPI & PostgreSQL Backend Assessment"
+          }
+        ]
+      },
+      {
+        "title": "Database Design & ORMs",
+        "description": "Learn to use SQLAlchemy and PostgreSQL.",
+        "order_index": 2,
+        "lessons": [
+          {
+            "title": "Relational Database Concepts",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 2000,
+            "is_preview": true
+          },
+          {
+            "title": "SQLAlchemy Setup & Models",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=UrsmFxE_Cw8",
+            "duration": 2200,
+            "is_preview": false
+          },
+          {
+            "title": "CRUD Operations",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=XKHEtdqhLK8",
+            "duration": 1800,
+            "is_preview": false
+          },
+          {
+            "title": "Database Design & ORMs - Quiz",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "FastAPI & PostgreSQL Backend Assessment"
+          }
+        ]
+      },
+      {
+        "title": "Authentication & Security",
+        "description": "Securing your API endpoints.",
+        "order_index": 3,
+        "lessons": [
+          {
+            "title": "JWT Authentication Basics",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 1600,
+            "is_preview": true
+          },
+          {
+            "title": "Implementing OAuth2 with FastAPI",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=UrsmFxE_Cw8",
+            "duration": 2400,
+            "is_preview": false
+          },
+          {
+            "title": "Authentication & Security - Quiz",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "FastAPI & PostgreSQL Backend Assessment"
+          },
+          {
+            "title": "Backend Engineering with Python and FastAPI - Final Assignment",
+            "content_type": "assignment",
+            "assignment_title": "FastAPI REST API Implementation",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "javedkarim"
+    ],
+    "overview": "**Backend Engineering with Python and FastAPI** is a masterclass designed to teach you how to build fast, robust, and scalable backend APIs using Python. In this course, you will dive deep into RESTful API design, database modeling, asynchronous programming, and backend security patterns.\n\nThis is not just a tutorial; you will cover **Pydantic Validation**, **SQLAlchemy ORM**, **Relational Databases (PostgreSQL)**, **JWT Authentication**, and **Docker Containerization**. Through practical backend architectures, you will learn how to prepare APIs for production environments.\n\nThis course is specifically designed for—\n- Python developers wanting to specialize in modern backend development.\n- Frontend developers looking to transition into full-stack engineers.\n- Backend engineers wanting to adopt FastAPI for high-performance applications.\n- Software architects planning scalable web systems.\n\n### What is Included in this Course\n\n- Asynchronous programming concepts in Python\n- Designing RESTful APIs with FastAPI and Pydantic validation\n- Relational database design and integration with SQLAlchemy ORM\n- Advanced querying, joins, and database migrations with Alembic\n- Secure user authentication and authorization using JWT and OAuth2\n- Error handling, middleware design, and background tasks\n- Containerization using Docker for local and cloud environments\n- Building automated test suites with Pytest\n- API performance benchmarking and optimization guidelines\n\n### What You Will Learn\n\n- Design and develop robust, self-documenting APIs with OpenAPI standards.\n- Handle complex relational databases and optimize queries.\n- Implement secure user sign-up, login, and authorization.\n- Deploy containerized FastAPI applications to cloud providers.\n- Build scalable and maintainable backend architectures."
+  },
+  {
+    "title": "এসএসসি উচ্চতর গণিত সম্পূর্ণ প্রস্তুতি",
+    "slug": "ssc-higher-math-complete-preparation",
+    "category_slug": "ssc",
+    "short_introduction": "এসএসসি উচ্চতর গণিত প্রস্তুতি",
+    "video": "https://www.youtube.com/watch?v=_XepgOtNv-U",
+    "tags": "SSC,Math,Bangla",
+    "course_price": 500,
+    "currency": "BDT",
+    "card_gradient": "indigo",
+    "chapters": [
+      {
+        "title": "অধ্যায় ১: সেট ও ফাংশন",
+        "description": "সেট, উপসেট, ফাংশন, এক-এক ফাংশন এবং বিপরীত ফাংশনের বিস্তারিত আলোচনা।",
+        "order_index": 1,
+        "lessons": [
+          {
+            "title": "সেট এর ধারণা",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Uaev5kTKxus",
+            "duration": 600,
+            "is_preview": true
+          },
+          {
+            "title": "ফাংশন ও তার প্রকারভেদ",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=_XepgOtNv-U",
+            "duration": 900,
+            "is_preview": false
+          },
+          {
+            "title": "বিপরীত ফাংশন নির্ণয়",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Uaev5kTKxus",
+            "duration": 1200,
+            "is_preview": false
+          },
+          {
+            "title": "সেট ও ফাংশন - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এসএসসি উচ্চতর গণিত: সেট ও ফাংশন কুইজ"
+          },
+          {
+            "title": "সেট ও ফাংশন - অ্যাসাইনমেন্ট",
+            "content_type": "assignment",
+            "assignment_title": "এসএসসি উচ্চতর গণিত: ফাংশন ও লেখচিত্র অ্যাসাইনমেন্ট",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      },
+      {
+        "title": "অধ্যায় ২: বীজগণিতীয় রাশি",
+        "description": "বহুপদী, আংশিক ভগ্নাংশ, চক্রক্রমিক ও প্রতিসম রাশির আলোচনা।",
+        "order_index": 2,
+        "lessons": [
+          {
+            "title": "বহুপদী ও ভাগশেষ উপপাদ্য",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=TCMp2lQhjYU",
+            "duration": 900,
+            "is_preview": true
+          },
+          {
+            "title": "চক্রক্রমিক ও প্রতিসম রাশি",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=YI4jQNtaiJE",
+            "duration": 1000,
+            "is_preview": false
+          },
+          {
+            "title": "আংশিক ভগ্নাংশে প্রকাশ",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=8jxaqj2_KG0",
+            "duration": 1200,
+            "is_preview": false
+          },
+          {
+            "title": "বীজগণিতীয় রাশি - কুইজ",
+            "content_type": "quiz",
+            "duration": 600,
+            "is_preview": false,
+            "quiz_title": "এসএসসি উচ্চতর গণিত: বীজগণিতীয় রাশি কুইজ"
+          },
+          {
+            "title": "বীজগণিতীয় রাশি - অ্যাসাইনমেন্ট",
+            "content_type": "assignment",
+            "assignment_title": "এসএসসি উচ্চতর গণিত: বীজগণিতীয় রাশি ও আংশিক ভগ্নাংশ অ্যাসাইনমেন্ট",
+            "duration": 3600,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "sadiarahman"
+    ],
+    "overview": "**এসএসসি উচ্চতর গণিত সম্পূর্ণ প্রস্তুতি** কোর্সটি এসএসসি পরীক্ষার্থীদের জন্য সম্পূর্ণ সিলেবাস কভার করে জিপিএ-৫ পাওয়ার লক্ষ্যে প্রস্তুত করা হয়েছে। এখানে বীজগণিতীয় রাশি, জ্যামিতি, ত্রিকোণমিতি, অসীম ধারা এবং স্থানাঙ্ক জ্যামিতির প্রতিটি টপিক অত্যন্ত সহজ ও প্রাঞ্জল ভাষায় শেখানো হবে।\n\nগাণিতিক সূত্র মুখস্থ করার চেয়ে সেগুলোর প্রয়োগ শেখার ওপর জোর দেওয়া হবে। অধ্যায়ভিত্তিক **সৃজনশীল প্রশ্ন (CQ)**, **বহুনির্বাচনি প্রশ্ন (MCQ)**, **বোর্ড প্রশ্ন সমাধান**, এবং **নিয়মিত কুইজ**-এর মাধ্যমে শিক্ষার্থীদের বোর্ড পরীক্ষার ভয় দূর করা হবে।\n\nএই কোর্সটি বিশেষভাবে তাদের জন্য উপযোগী যারা—\n- এসএসসি উচ্চতর গণিতে দুর্বলতা কাটিয়ে উঠতে চায়।\n- বোর্ড পরীক্ষায় জিপিএ-৫ নিশ্চিত করতে চায়।\n- ভবিষ্যৎ বিজ্ঞান বিভাগের পড়াশোনার জন্য গণিতের ভিত মজবুত করতে চায়।\n- অল্প সময়ে কার্যকর রিভিশন শিট ও সমস্যা সমাধান করতে চায়।\n\n### এই কোর্সে যা থাকছে\n\n- সম্পূর্ণ সিলেবাসের অধ্যায়ভিত্তিক বিস্তারিত ক্লাস ও ব্যাখ্যা\n- প্রতিটি অধ্যায়ের গুরুত্বপূর্ণ সূত্রের সহজ নোট\n- সৃজনশীল (CQ) প্রশ্ন সমাধানের শর্টকাট কৌশল\n- বহুনির্বাচনি (MCQ) প্রশ্নের দ্রুত সমাধানের ট্রিকস\n- বিগত ১০ বছরের বোর্ড প্রশ্নের পুঙ্খানুপুঙ্খ সমাধান\n- অধ্যায়ভিত্তিক মক টেস্ট ও মূল্যায়ন\n- এক্সাম হল ম্যানেজমেন্ট ও বিশেষ গাইডলাইন\n- মেন্টরশিপ ও নিয়মিত ডাউট সলভিং ক্লাস\n- ফাইনাল সাজেশন ও পরীক্ষার শেষ মুহূর্তের টিপস\n\n### কোর্স শেষে আপনি যা শিখবেন\n\n- উচ্চতর গণিতের মৌলিক কনসেপ্টগুলো পরিষ্কারভাবে বুঝতে পারবেন।\n- দ্রুততার সাথে গাণিতিক সমস্যাসমূহ নির্ভুলভাবে সমাধান করতে পারবেন।\n- বোর্ড পরীক্ষার প্রশ্নের ধরন বুঝে সহজে সঠিক উত্তর করতে পারবেন।\n- গণিত নিয়ে যেকোনো জড়তা কাটিয়ে আত্মবিশ্বাসী হয়ে উঠবেন।\n- কম সময়ে কার্যকর রিভিশনের মাধ্যমে সর্বোচ্চ প্রস্তুতি নিতে পারবেন।"
+  },
+  {
+    "title": "এইচএসসি পদার্থবিজ্ঞান ক্র্যাশ কোর্স",
+    "slug": "hsc-physics-crash-course",
+    "category_slug": "hsc",
+    "short_introduction": "এইচএসসি পদার্থবিজ্ঞান প্রস্তুতি",
+    "video": "https://www.youtube.com/watch?v=wX-y0M-Y8_o",
+    "tags": "HSC,Physics,Bangla",
+    "course_price": 600,
+    "currency": "BDT",
+    "card_gradient": "cyan",
+    "chapters": [
+      {
+        "title": "অধ্যায় ১: ভেক্টর",
+        "lessons": [
+          {
+            "title": "ভেক্টর ও স্কেলার রাশি",
+            "content_type": "video",
+            "video_url": "https://youtu.be/3ni_W2TChRg?si=vhWncB0oSNfMQm2-",
+            "duration": 600,
+            "is_preview": true
+          },
+          {
+            "title": "ভেক্টর যোগের সামান্তরিক সূত্র",
+            "content_type": "video",
+            "video_url": "https://youtu.be/yLcleRByE1s?si=AvGudyJcl42H842A",
+            "duration": 720,
+            "is_preview": false
+          }
+        ]
+      },
+      {
+        "title": "অধ্যায় ২: নিউটনীয় বলবিদ্যা",
+        "lessons": [
+          {
+            "title": "নিউটনীয় বলবিদ্যা ও জড়তার ভ্রামক",
+            "content_type": "video",
+            "video_url": "https://youtu.be/4ehFlOaDSAs?si=VVDeAjND__pApU8k",
+            "duration": 850,
+            "is_preview": true
+          },
+          {
+            "title": "রাস্তার ব্যাংকিং ও কেন্দ্রমুখী বল",
+            "content_type": "video",
+            "video_url": "https://youtu.be/kFr9I9whUsU?si=d2UHgicPAvRqtYXO",
+            "duration": 500,
+            "is_preview": false
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "kamrulhasan"
+    ],
+    "overview": "**এইচএসসি পদার্থবিজ্ঞান ক্র্যাশ কোর্স** এমনভাবে ডিজাইন করা হয়েছে যাতে অল্প সময়ে সম্পূর্ণ সিলেবাসের গুরুত্বপূর্ণ টপিকগুলো সহজ, গুছানো এবং পরীক্ষাকেন্দ্রিকভাবে শেষ করা যায়। এই কোর্সে প্রতিটি অধ্যায়ের মৌলিক ধারণা, গুরুত্বপূর্ণ সূত্র, গাণিতিক সমস্যা, বোর্ড প্রশ্ন বিশ্লেষণ এবং পরীক্ষায় বেশি আসা বিষয়গুলো ধাপে ধাপে শেখানো হবে।\n\nশুধু তত্ত্ব নয়, প্রতিটি অধ্যায়ের **MCQ**, **CQ**, **গাণিতিক সমস্যা সমাধান**, **শর্টকাট টেকনিক**, **রিভিশন ক্লাস** এবং **মডেল টেস্ট**-এর মাধ্যমে শিক্ষার্থীরা পরীক্ষার জন্য আত্মবিশ্বাসের সাথে প্রস্তুতি নিতে পারবে। পাশাপাশি সময় ব্যবস্থাপনা, প্রশ্ন বিশ্লেষণ এবং উত্তর লেখার কার্যকর কৌশলও শেখানো হবে।\n\nএই কোর্সটি বিশেষভাবে তাদের জন্য উপযোগী যারা—\n- অল্প সময়ে পুরো সিলেবাস রিভিশন করতে চায়।\n- পদার্থবিজ্ঞানের মৌলিক ধারণা আরও শক্তিশালী করতে চায়।\n- বোর্ড পরীক্ষায় উচ্চ নম্বর অর্জনের জন্য পরীক্ষামুখী প্রস্তুতি নিতে চায়।\n- ভর্তি পরীক্ষার জন্যও একটি শক্ত ভিত্তি তৈরি করতে চায়।\n\n### এই কোর্সে যা থাকছে\n\n- সম্পূর্ণ সিলেবাসের গুরুত্বপূর্ণ টপিকভিত্তিক ক্লাস\n- প্রতিটি অধ্যায়ের সহজ ব্যাখ্যা ও কনসেপ্ট বিল্ডিং\n- গুরুত্বপূর্ণ সূত্র ও শর্ট নোট\n- টাইপভিত্তিক গাণিতিক সমস্যা সমাধান\n- অধ্যায়ভিত্তিক MCQ ও CQ অনুশীলন\n- বিগত বছরের বোর্ড প্রশ্ন বিশ্লেষণ\n- মডেল টেস্ট ও সমাধান আলোচনা\n- ফাইনাল রিভিশন ও এক্সাম স্ট্র্যাটেজি\n- প্রশ্নোত্তর ও ডাউট ক্লিয়ারিং সেশন\n\n### কোর্স শেষে আপনি যা শিখবেন\n\n- পদার্থবিজ্ঞানের মৌলিক ধারণা পরিষ্কারভাবে বুঝতে পারবেন।\n- গুরুত্বপূর্ণ সূত্র ও তাদের প্রয়োগে দক্ষতা অর্জন করবেন।\n- আত্মবিশ্বাসের সাথে গাণিতিক সমস্যা সমাধান করতে পারবেন।\n- বোর্ড পরীক্ষার প্রশ্নের ধরন ও উত্তর লেখার কৌশল আয়ত্ত করবেন।\n- কম সময়ে কার্যকর রিভিশনের মাধ্যমে সর্বোচ্চ প্রস্তুতি নিতে পারবেন।"
+  },
+  {
+    "title": "উচ্চতর বাংলাদেশ আইন",
+    "slug": "advanced-bangladesh-law",
+    "category_slug": "law",
+    "short_introduction": "উচ্চতর আইন শিক্ষা",
+    "video": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+    "tags": "Law,Advanced,Bangla",
+    "course_price": 700,
+    "currency": "BDT",
+    "card_gradient": "yellow",
+    "chapters": [
+      {
+        "title": "অধ্যায় ১: দেওয়ানি কার্যবিধি",
+        "lessons": [
+          {
+            "title": "ভূমিকা",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 600
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "javedkarim"
+    ],
+    "overview": "**উচ্চতর বাংলাদেশ আইন** কোর্সটি দেওয়ানি কার্যবিধি, দণ্ডবিধি, সাক্ষ্য আইন এবং চুক্তি আইনের মতো জটিল ও গভীর আইনি বিষয়াবলির ওপর বিশেষ জ্ঞান অর্জনের জন্য ডিজাইন করা হয়েছে। এই কোর্সে তাত্ত্বিক আলোচনার পাশাপাশি আইনি ধারাগুলোর গভীর বিশ্লেষণ ও প্রয়োগ শেখানো হবে।\n\nএতে থাকছে উচ্চ আদালতের গুরুত্বপূর্ণ **নজির বা রায় (Precedents)**, **ব্যবহারিক ড্রাফটিং (Drafting)**, **প্লিডিংস (Pleadings)** এবং **আইনি যুক্তি উপস্থাপনের কৌশল**। এটি আইনের ছাত্র, শিক্ষানবিশ আইনজীবী ও আইনি জ্ঞানপিপাসুদের পেশাদার জীবনে দক্ষতা বৃদ্ধিতে সহায়তা করবে।\n\nএই কোর্সটি বিশেষভাবে তাদের জন্য উপযোগী যারা—\n- বার কাউন্সিল বা জুডিশিয়ারি পরীক্ষার জন্য নিজেকে প্রস্তুত করছেন।\n- আদালতে ওকালতি পেশায় নিজের দক্ষতা বৃদ্ধি করতে চান।\n- বাংলাদেশের জটিল আইনি প্রক্রিয়াসমূহ প্র্যাক্টিক্যালি বুঝতে চান।\n- উচ্চ আদালতের রায়সমূহ ও তাদের ব্যবহারিক প্রভাব জানতে চান।\n\n### এই কোর্সে যা থাকছে\n\n- দণ্ডবিধি ও দেওয়ানি কার্যবিধির জটিল ধারাসমূহের সহজ বিশ্লেষণ\n- সাক্ষ্য আইনের প্রয়োগ ও আদালতে প্রমাণ পেশ করার নিয়মাবলি\n- উচ্চ আদালতের গুরুত্বপূর্ণ ঐতিহাসিক রায়গুলোর ওপর বিষদ আলোচনা\n- মামলার আরজি (Plaint) ও লিখিত জবাব (Written Statement) ড্রাফটিং\n- আইনি গবেষণার পদ্ধতি ও মেথডলজি পরিচিতি\n- কুইজ ও ব্যবহারিক মামলা সমাধানের মক টেস্ট\n- দেওয়ানি ও ফৌজদারি মামলার ব্যবহারিক ড্রাফটিং শিট\n- সিনিয়র আইনজীবীদের অভিজ্ঞতা শেয়ারিং সেশন\n- প্রশ্নোত্তর ও আইনি সমাধান ডাউট সলভিং ক্লাস\n\n### কোর্স শেষে আপনি যা শিখবেন\n\n- আইনের জটিল ধারাগুলোর ব্যবহারিক অর্থ ও আদালতের প্রয়োগ বুঝতে পারবেন।\n- পেশাদার আইনি ড্রাফটিং নির্ভুলভাবে করার সক্ষমতা অর্জন করবেন।\n- যেকোনো আইনি যুক্তির পক্ষে ও বিপক্ষে প্রামাণিক উপাদান সাজাতে পারবেন।\n- বার কাউন্সিল ও জুডিশিয়ারি পরীক্ষার জন্য একটি মজবুত প্রিপারেশন পাবেন।\n- জটিল মামলার ক্ষেত্রে আইনের ব্যাখ্যামূলক সমাধান প্রস্তুত করতে পারবেন।"
+  },
+  {
+    "title": "Advanced React Performance",
+    "slug": "advanced-react-performance",
+    "category_slug": "web-development",
+    "short_introduction": "React Performance Tuning",
+    "video": "https://www.youtube.com/watch?v=w7ejDZ8SWv8",
+    "tags": "React,Advanced,Frontend",
+    "course_price": 49.99,
+    "currency": "USD",
+    "card_gradient": "pink",
+    "chapters": [
+      {
+        "title": "Chapter 1: Memoization",
+        "lessons": [
+          {
+            "title": "useMemo & useCallback",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=Ke90Tje7VS0",
+            "duration": 600
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "fahimahmed"
+    ],
+    "overview": "**Advanced React Performance** is a specialized course designed for seasoned developers who want to build incredibly fast React applications. In this course, you will learn how to measure render cycles, prevent unnecessary rendering, split Javascript bundles, and optimize state layouts.\n\nWe dive straight into the engine room of React, exploring **Profiler Tooling**, **Memoization Strategies**, **Context Optimization**, **Virtualization**, and **Concurrent Rendering (useTransition, useDeferredValue)**. Through realistic optimization projects, you will learn to dramatically improve Web Vitals.\n\nThis course is specifically designed for—\n- Frontend developers experiencing rendering bottlenecks in large applications.\n- React engineers looking to improve core web vitals and SEO performance.\n- Tech leads aiming to set high performance standards across teams.\n- JavaScript developers looking to master advanced React internals.\n\n### What is Included in this Course\n\n- Detailed breakdown of the React render-and-commit phase\n- Masterclass on profiling tools (React DevTools, Chrome Performance Tab)\n- Avoiding rendering pitfalls with React.memo, useMemo, and useCallback\n- Optimizing context consumers and state colocation techniques\n- Implementing windowing/virtualization for long lists (react-window)\n- Concurrent features and non-blocking state updates\n- Code-splitting, dynamic imports, and bundle optimization\n- Real-world performance auditing and debugging sessions\n- Q&A and React engine architecture discussions\n\n### What You Will Learn\n\n- Analyze and profile components to identify rendering lags.\n- Implement precise memoization without over-engineering.\n- Keep application state decoupled to avoid unnecessary global re-renders.\n- Optimize bundle loading for faster initial page loads.\n- Leverage concurrent React capabilities to deliver smooth user experiences."
+  },
+  {
+    "title": "Microservices with FastAPI",
+    "slug": "microservices-with-fastapi",
+    "category_slug": "web-development",
+    "short_introduction": "Building Microservices",
+    "video": "https://www.youtube.com/watch?v=XKHEtdqhLK8",
+    "tags": "FastAPI,Microservices,Backend",
+    "course_price": 59.99,
+    "currency": "USD",
+    "card_gradient": "red",
+    "chapters": [
+      {
+        "title": "Chapter 1: Architecture",
+        "lessons": [
+          {
+            "title": "Intro to Microservices",
+            "content_type": "video",
+            "video_url": "https://www.youtube.com/watch?v=rfscVS0vtbw",
+            "duration": 600
+          }
+        ]
+      }
+    ],
+    "instructors": [
+      "javedkarim",
+      "nadiasultana"
+    ],
+    "overview": "**Microservices with FastAPI** is a comprehensive backend engineering course focused on designing, developing, and deploying distributed systems. In this course, you will learn to transition from monolithic applications to independent, domain-driven microservices.\n\nYou will gain hands-on experience in **Dockerizing services**, orchestrating with **Docker Compose**, establishing **asynchronous communication (RabbitMQ/Kafka)**, securing interfaces via **API Gateways**, and logging centrally. You will design a production-scale distributed commerce architecture.\n\nThis course is specifically designed for—\n- Software engineers wanting to learn scalable backend system designs.\n- FastAPI developers aiming to architect distributed cloud services.\n- Architects seeking practical implementations of messaging queues and event-driven patterns.\n- Backend teams moving from monoliths to microservices.\n\n### What is Included in this Course\n\n- Principles of microservices and domain-driven design (DDD)\n- Creating and containerizing FastAPI services with Docker\n- Asynchronous message passing using RabbitMQ/Kafka\n- Synchronous communication and service-to-service REST calls\n- Centralized API Gateway configuration (Kong/Traefik) and routing\n- Distributed database designs and handling schema migrations\n- Centralized logging, tracing (Jaeger/OpenTelemetry), and monitoring\n- Production deployment and service orchestration guidelines\n- Production readiness and microservice pattern checksheets\n\n### What You Will Learn\n\n- Architect a resilient and independent microservices system.\n- Orchestrate multiple services in local development and production.\n- Implement robust event-driven workflows using message queues.\n- Solve distributed data consistency challenges.\n- Trace request flows across multiple servers to debug issues quickly."
+  }
+]

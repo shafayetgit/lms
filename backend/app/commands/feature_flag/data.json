@@ -1,0 +1,22 @@
+[
+  {
+    "name": "LMS",
+    "slug": "lms",
+    "description": "Enable LMS."
+  },
+  {
+    "name": "Settings",
+    "slug": "settings",
+    "description": "Enable Settings."
+  },
+  {
+    "name": "Academy",
+    "slug": "academy",
+    "description": "Enable Academy."
+  },
+  {
+    "name": "Core",
+    "slug": "core",
+    "description": "Enable Core."
+  }
+]

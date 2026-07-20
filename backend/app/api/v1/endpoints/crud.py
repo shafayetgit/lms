@@ -1,10 +1,12 @@
 import logging
+import re
 from app.utils.string import get_model
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 
 from app.api.deps import get_db, get_admin_or_instructor
+from app.core.dependencies import has_permission
 from app.schemas.crud import DeleteSchema, DeleteResponse
 from app.services.crud import CrudService
 
@@ -22,18 +24,6 @@ async def delete_record(
 ) -> DeleteResponse:
     """
     Delete a record from the database.
-    
-    Args:
-        model_name: Name of the model to delete from (e.g., 'Course', 'Lesson')
-        payload: DeleteSchema containing model name and filter rules
-        db: Database session
-        current_user: Current authenticated user (admin or instructor)
-        
-    Returns:
-        DeleteResponse with number of deleted records
-        
-    Raises:
-        HTTPException: If model is invalid or deletion fails
     """
     try:
         # Get the model class
@@ -46,13 +36,14 @@ async def delete_record(
                 detail=f"Invalid model: {payload.model}"
             )
         
-        # Validate that model matches the payload
-        if payload.model != payload.model:
+        # Check permissions for the target model
+        resource_name = payload.model.lower()
+        if not await has_permission(current_user, db, resource_name, "delete"):
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Model name mismatch"
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="The user doesn't have enough privileges"
             )
-        
+
         # Execute deletion
         deleted = await CrudService.delete(
             db,
@@ -78,10 +69,22 @@ async def delete_record(
             detail=str(e)
         )
     except IntegrityError as e:
-        logger.error(f"Integrity error deleting records from {payload.model}: {str(e)}")
+        error_msg = str(e)
+        logger.error(f"Integrity error deleting records from {payload.model}: {error_msg}")
+        
+        # Try to extract the referencing table name from the PostgreSQL error message
+        match = re.search(r'referenced from table "([^"]+)"', error_msg)
+        if not match:
+            # Fallback if the first regex doesn't match
+            match2 = re.search(r'violates foreign key constraint.*?on table "([^"]+)"', error_msg)
+            if match2:
+                match = match2
+
+        referenced_item = match.group(1).title() if match else "other"
+        
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot delete this record because it is referenced by other items."
+            detail=f"Cannot delete this {payload.model} because it is referenced by {referenced_item} items."
         )
     except Exception as e:
         logger.error(f"Error deleting records from {payload.model}: {str(e)}")

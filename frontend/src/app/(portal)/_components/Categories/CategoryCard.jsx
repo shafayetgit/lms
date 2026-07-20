@@ -18,6 +18,14 @@ const imageHover = {
   hover: { scale: 1.05, transition: { duration: 0.4 } },
 };
 
+const isCloudinary = (url) => {
+  if (!url) return true;
+  if (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("/")) {
+    return true;
+  }
+  return url.includes("cloudinary.com");
+};
+
 const CategoryCard = ({ category, index }) => {
   return (
     <motion.div
@@ -54,37 +62,6 @@ const CategoryCard = ({ category, index }) => {
               },
             }}
           >
-            {/* Image */}
-            {/* <Box
-              sx={{
-                aspectRatio: "1 / 1",
-                overflow: "hidden",
-                position: "relative",
-              }}
-            >
-              <motion.img
-                src={category.thumbnail || CATEGORY_DEFAULT_IMAGE}
-                alt={category.name}
-                variants={imageHover}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  background: (theme) =>
-                    `linear-gradient(to bottom, transparent 60%, ${alpha(theme.palette.common.black, 0.4)} 100%)`,
-                }}
-              />
-            </Box> */}
-
             <Box
               sx={{
                 aspectRatio: "1 / 1",
@@ -92,17 +69,29 @@ const CategoryCard = ({ category, index }) => {
                 position: "relative",
               }}
             >
-              <CldImage
-                src={category.thumbnail || "start-up-business-meeting_bbw3sj"}
-                alt={category.name}
-                fill
-                aspectRatio="1:1"
-                // crop="fill"
-                // gravity="auto"
-                // style={{
-                //   objectFit: "cover",
-                // }}
-              />
+              {isCloudinary(category.thumbnail) ? (
+                <CldImage
+                  src={category.thumbnail || "start-up-business-meeting_bbw3sj"}
+                  alt={category.name}
+                  fill
+                  aspectRatio="1:1"
+                  style={{
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <Box
+                  component={motion.img}
+                  src={category.thumbnail || CATEGORY_DEFAULT_IMAGE}
+                  alt={category.name}
+                  variants={imageHover}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
 
               <Box
                 sx={{

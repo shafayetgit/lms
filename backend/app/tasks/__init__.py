@@ -1,7 +1,7 @@
 """
 Celery tasks package.
 
-Celery autodiscovery imports this package. Keep task modules imported here so
+Celery autodiscovery imports this package. Keep task chapters imported here so
 they get registered with the Celery app.
 """
 

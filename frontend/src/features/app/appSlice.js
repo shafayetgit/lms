@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   mode: "dark",
+  breadcrumbLabels: {},
 }
 
 const appSlice = createSlice({
@@ -14,8 +15,15 @@ const appSlice = createSlice({
     setTheme: (state, action) => {
       state.mode = action.payload
     },
+    // Store custom breadcrumb labels keyed by route path or identifier
+    setBreadcrumbLabel: (state, action) => {
+      const { key, label } = action.payload || {}
+      if (key && label) {
+        state.breadcrumbLabels[key] = label
+      }
+    },
   },
 })
 
-export const { toggleTheme, setTheme } = appSlice.actions
+export const { toggleTheme, setTheme, setBreadcrumbLabel } = appSlice.actions
 export default appSlice.reducer

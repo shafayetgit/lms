@@ -1,10 +1,11 @@
 "use client";
 import React from "react";
-import { Grid, Card, CardContent, Typography, Button, useTheme } from "@mui/material";
+import { Grid, Card, CardContent, Typography, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
-import SendIcon from "@mui/icons-material/Send";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
 import CTextField from "@/components/form/CTextField";
+import CButton from "@/components/ui/CButton";
 
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -29,11 +30,14 @@ const ContactForm = () => {
             variants={itemVariants}
         >
             <Card
-                raised
+                elevation={0}
                 sx={{
                     p: { xs: 2, md: 4 },
-                    borderRadius: 4,
+                    borderRadius: 1,
                     height: "100%",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    boxShadow: "none"
                 }}
             >
                 <CardContent>
@@ -41,7 +45,7 @@ const ContactForm = () => {
                         Send a Message
                     </Typography>
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                        Fill out the form below and we'll get back to you as soon as possible.
+                        Fill out the form below and we&apos;ll get back to you as soon as possible.
                     </Typography>
 
                     <form noValidate autoComplete="off">
@@ -52,7 +56,7 @@ const ContactForm = () => {
                                     label="First Name"
                                     variant="outlined"
                                     required
-                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12, sm: 6 }}>
@@ -61,7 +65,7 @@ const ContactForm = () => {
                                     label="Last Name"
                                     variant="outlined"
                                     required
-                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
@@ -71,7 +75,7 @@ const ContactForm = () => {
                                     variant="outlined"
                                     type="email"
                                     required
-                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
@@ -80,7 +84,7 @@ const ContactForm = () => {
                                     label="Subject"
                                     variant="outlined"
                                     required
-                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
@@ -91,26 +95,24 @@ const ContactForm = () => {
                                     multiline
                                     rows={5}
                                     required
-                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+                                    sx={{ "& .MuiOutlinedInput-root": { borderRadius: 1 } }}
                                 />
                             </Grid>
                             <Grid size={{ xs: 12 }}>
-                                <Button
+                                <CButton
+                                    label="Send Message"
                                     variant="contained"
-                                    color="primary"
+                                    color="secondary"
                                     size="large"
                                     fullWidth
-                                    endIcon={<SendIcon />}
+                                    endIcon={<SendOutlinedIcon />}
                                     sx={{
                                         py: 1.5,
-                                        fontSize: "1.1rem",
-                                        fontWeight: 600,
-                                        borderRadius: 2,
-                                        textTransform: "none",
+                                        fontSize: "1rem",
+                                        fontWeight: 800,
+                                        borderRadius: 1,
                                     }}
-                                >
-                                    Send Message
-                                </Button>
+                                />
                             </Grid>
                         </Grid>
                     </form>

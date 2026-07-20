@@ -23,7 +23,7 @@ export default function PrivacyPage() {
                             sx={{
                                 mb: 2,
                                 fontWeight: 800,
-                                borderRadius: "50px",
+                                borderRadius: 1,
                                 textTransform: "uppercase",
                                 fontSize: "0.75rem",
                                 letterSpacing: "1px",

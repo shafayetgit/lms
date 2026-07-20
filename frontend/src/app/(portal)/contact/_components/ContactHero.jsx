@@ -28,19 +28,20 @@ const ContactHero = () => {
         >
             <Box
                 sx={{
-                    py: { xs: 8, md: 14 },
+                    py: { xs: 10, md: 16 },
                     textAlign: "center",
+                    mb: 8,
                 }}
             >
                 {/* Top Pill */}
                 <Chip
-                    label="📞 Contact ecofin Institute"
+                    label="📞 Contact us"
                     color="secondary"
                     variant="outlined"
                     sx={{
                         mb: 4,
                         fontWeight: 800,
-                        borderRadius: "50px",
+                        borderRadius: 1,
                         textTransform: "uppercase",
                         fontSize: "0.75rem",
                         letterSpacing: "1px",
@@ -51,9 +52,9 @@ const ContactHero = () => {
                 />
 
                 <Typography
-                    variant="h1"
+                    variant="h2"
                     gutterBottom
-                    sx={{ fontWeight: 900, mb: 3, letterSpacing: "-0.03em", fontSize: { xs: "3rem", md: "5rem" } }}
+                    sx={{ fontWeight: 900, mb: 1.5, letterSpacing: "-0.02em", fontSize: { xs: "2.2rem", md: "3.2rem" } }}
                 >
                     Get In Touch
                 </Typography>
@@ -62,7 +63,7 @@ const ContactHero = () => {
                     color="text.secondary"
                     sx={{ maxWidth: 800, mx: "auto", fontWeight: 400, lineHeight: 1.6 }}
                 >
-                    Have questions about our courses or need assistance? Our team is here to help you every step of the way.
+                    Have questions about our courses or need assistance?
                 </Typography>
             </Box>
         </motion.div>

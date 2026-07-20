@@ -47,8 +47,6 @@ class Question(Base):
         Index("idx_question_category", "category_id"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     quiz_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("quizzes.id", ondelete="CASCADE"),
         index=True,
@@ -82,7 +80,7 @@ class Question(Base):
         index=True
     )
 
-    points: Mapped[float] = mapped_column(Float, default=1.0) 
+    marks: Mapped[float] = mapped_column(Float, default=1.0) 
 
     order_index: Mapped[int] = mapped_column(Integer, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
@@ -103,8 +101,6 @@ class Question(Base):
 
 class Choice(Base):
     __tablename__ = "choices"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
 
     question_id: Mapped[int] = mapped_column(
         ForeignKey("questions.id", ondelete="CASCADE"),

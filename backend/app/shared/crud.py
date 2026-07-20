@@ -3,6 +3,7 @@
 # Common filterable fields across most models
 ALLOWED_FILTERS = {
     "id",
+    "public_id",
     "model",
     "model_id",
     "is_used",
@@ -22,26 +23,28 @@ def build_expression(column, operator, value):
         if not isinstance(value, (list, tuple)):
             value = [value]
         return column.in_(value)
-    
+
     # Handle boolean/None comparisons in SQLAlchemy 2.0
     if value in (True, False, None) and operator in ("eq", "ne"):
         return column.is_(value) if operator == "eq" else column.is_not(value)
 
     # Handle other operators
-    operators = {
-        "eq": column == value,
-        "ne": column != value,
-        "gt": column > value,
-        "gte": column >= value,
-        "lt": column < value,
-        "lte": column <= value,
-        "like": column.ilike(f"%{value}%"),
-    }
-
-    if operator not in operators:
+    if operator == "eq":
+        return column == value
+    elif operator == "ne":
+        return column != value
+    elif operator == "gt":
+        return column > value
+    elif operator == "gte":
+        return column >= value
+    elif operator == "lt":
+        return column < value
+    elif operator == "lte":
+        return column <= value
+    elif operator == "like":
+        return column.ilike(f"%{value}%")
+    else:
         raise ValueError(f"Unsupported operator: {operator}")
-
-    return operators[operator]
 
 
 def build_conditions(model, filters):
@@ -49,13 +52,14 @@ def build_conditions(model, filters):
     conditions = []
 
     for item in filters:
-        if item.field not in ALLOWED_FILTERS:
-            raise ValueError(f"Invalid filter field: {item.field}")
+        field_name = item.field
+        if field_name not in ALLOWED_FILTERS:
+            raise ValueError(f"Invalid filter field: {field_name}")
 
-        if not hasattr(model, item.field):
-            raise ValueError(f"Model does not have field: {item.field}")
+        if not hasattr(model, field_name):
+            raise ValueError(f"Model does not have field: {field_name}")
 
-        column = getattr(model, item.field)
+        column = getattr(model, field_name)
 
         expression = build_expression(
             column,

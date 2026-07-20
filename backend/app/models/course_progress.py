@@ -1,72 +1,65 @@
-# from datetime import datetime
-# from typing import Optional
+from datetime import datetime
+from typing import Optional
 
-# from sqlalchemy import (
-#     ForeignKey,
-#     DateTime,
-#     func,
-#     Float,
-#     Boolean,
-#     UniqueConstraint,
-#     Index,
-# )
-# from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import (
+    ForeignKey,
+    DateTime,
+    func,
+    Boolean,
+    Integer,
+    UniqueConstraint,
+    Index,
+    String,
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-# from app.db.base import Base
+from app.db.base import Base
 
 
-# class CourseProgress(Base):
-#     __tablename__ = "course_progress"
+class CourseProgress(Base):
+    __tablename__ = "course_progress"
 
-#     __table_args__ = (
-#         # one progress row per user per course
-#         UniqueConstraint(
-#             "user_id",
-#             "course_id",
-#             name="uq_user_course_progress"
-#         ),
+    __table_args__ = (
+        # one progress per user per lesson
+        UniqueConstraint("user_id", "lesson_id", name="uq_user_course_progress"),
 
-#         Index("idx_course_progress_user", "user_id"),
-#         Index("idx_course_progress_course", "course_id"),
-#         Index("idx_course_progress_updated", "updated_at"),
-#         Index("idx_course_progress_user_course", "user_id", "course_id"),
-#     )
+        # optimized queries
+        Index("idx_course_progress_user", "user_id"),
+        Index("idx_course_progress_lesson", "lesson_id"),
+        Index("idx_course_progress_user_updated", "user_id", "updated_at"),
+        Index("idx_course_progress_updated_at", "updated_at"),
+    )
 
-#     id: Mapped[int] = mapped_column(primary_key=True)
+    # 🔗 relationships
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        index=True
+    )
 
-#     # 🔗 relationships
-#     user_id: Mapped[int] = mapped_column(
-#         ForeignKey("users.id", ondelete="CASCADE"),
-#         index=True
-#     )
+    lesson_id: Mapped[int] = mapped_column(
+        ForeignKey("lessons.id", ondelete="CASCADE"),
+        index=True
+    )
 
-#     course_id: Mapped[int] = mapped_column(
-#         ForeignKey("courses.id", ondelete="CASCADE"),
-#         index=True
-#     )
+    course_id: Mapped[int] = mapped_column(
+        ForeignKey("courses.id", ondelete="CASCADE"),
+        index=True
+    )
 
-#     # 📊 PROGRESS (cached value)
-#     progress_percentage: Mapped[float] = mapped_column(
-#         Float,
-#         default=0.0
-#     )
+    # ⏱️ progress tracking
+    current_time: Mapped[int] = mapped_column(default=0)
+    # seconds watched (important for resume playback)
 
-#     completed_lessons: Mapped[int] = mapped_column(
-#         default=0
-#     )
+    is_completed: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        index=True
+    )
+    status: Mapped[str] = mapped_column(String(50), default="Incomplete")
 
-#     total_lessons: Mapped[int] = mapped_column(
-#         default=0
-#     )
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
-#     is_completed: Mapped[bool] = mapped_column(
-#         Boolean,
-#         default=False,
-#         index=True
-#     )
 
-#     completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
-
-#     # 🔗 relationships
-#     user = relationship("User", backref="course_progress")
-#     course = relationship("Course", backref="progress_records")
+    # 🔗 ORM relationships
+    user = relationship("User", back_populates="course_progress")
+    lesson = relationship("Lesson", back_populates="progress_records")

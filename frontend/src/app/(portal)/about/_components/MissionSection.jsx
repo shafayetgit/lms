@@ -20,23 +20,59 @@ const MissionSection = () => {
         <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={itemVariants}
         >
-            <Box sx={{ my: { xs: 6, md: 8 }, pb: 7, textAlign: "center" }}>
+            <Box
+                sx={{
+                    my: { xs: 6, md: 8 },
+                    p: { xs: 4, md: 6 },
+                    textAlign: "center",
+                    position: "relative",
+                    borderRadius: 1,
+                    border: "1px solid",
+                    borderColor: "divider",
+                    overflow: "hidden"
+                }}
+            >
                 <Typography
-                    variant="h3"
-                    gutterBottom
-                    sx={{ fontWeight: 800, color: "text.primary" }}
+                    variant="h1"
+                    sx={{
+                        position: "absolute",
+                        top: -20,
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        fontSize: "12rem",
+                        fontWeight: 900,
+                        opacity: 0.03,
+                        lineHeight: 1,
+                        color: "text.primary",
+                        userSelect: "none"
+                    }}
                 >
-                    Our Mission & Vision
+                    &ldquo;
                 </Typography>
                 <Typography
-                    variant="body1"
-                    sx={{ maxWidth: 900, mx: "auto", mt: 3, lineHeight: 1.7 }}
+                    variant="h4"
+                    gutterBottom
+                    sx={{ fontWeight: 900, color: "secondary.main", letterSpacing: "-0.02em", mb: 2 }}
+                >
+                    Our Mission
+                </Typography>
+                <Typography
+                    variant="h5"
+                    sx={{
+                        maxWidth: 900,
+                        mx: "auto",
+                        lineHeight: 1.6,
+                        fontWeight: 500,
+                        color: "text.primary",
+                        position: "relative",
+                        zIndex: 1
+                    }}
                 >
                     At <b>E-Courses</b>, our mission is to democratize high-quality,
-                    industry-relevant education.
+                    industry-relevant education and empower professionals to reach their full potential.
                 </Typography>
             </Box>
         </motion.div>

@@ -1,6 +1,6 @@
 import { toast } from "react-toastify"
 import CButton from "@/components/ui/CButton"
-import { Delete } from "@mui/icons-material"
+import { Delete, DeleteOutline } from "@mui/icons-material"
 import { useDeleteMutation } from "@/features/shared/crudAPI"
 
 /**
@@ -14,8 +14,8 @@ import { useDeleteMutation } from "@/features/shared/crudAPI"
  * // From courses page
  * <CDelete 
  *   values={{ 
- *     model: "courses",
- *     filters: [{ field: "id", operator: "eq", value: "123" }]
+ *     model: "Course",
+ *     filters: [{ field: "id", operator: "eq", value: [123] }]
  *   }}
  *   invalidateTag="COURSES"
  * />
@@ -24,8 +24,8 @@ import { useDeleteMutation } from "@/features/shared/crudAPI"
  * // From ebooks page
  * <CDelete 
  *   values={{ 
- *     model: "ebooks",
- *     filters: [{ field: "id", operator: "eq", value: "456" }]
+ *     model: "Ebook",
+ *     filters: [{ field: "id", operator: "eq", value: [456] }]
  *   }}
  *   invalidateTag="EBOOKS"
  *   label="Remove"
@@ -35,6 +35,7 @@ export default function CDelete({
   values,
   invalidateTag,
   label = "Delete",
+  onSuccess,
 }) {
   const [destroy, { isLoading }] = useDeleteMutation()
 
@@ -46,8 +47,8 @@ export default function CDelete({
       }
       const response = await destroy(payload).unwrap()
       toast.success(response?.message)
+      if (onSuccess) onSuccess()
     } catch (error) {
-      console.error("Error while deleting:", error)
       toast.error(error?.data?.message || "Something went wrong")
     }
   }
@@ -58,7 +59,7 @@ export default function CDelete({
       label={label}
       yesNo
       iconButton
-      icon={<Delete color="error" />}
+      icon={<DeleteOutline color="error" />}
       onClick={handleDelete}
       loading={isLoading}
     />

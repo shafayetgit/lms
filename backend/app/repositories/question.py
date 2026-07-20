@@ -45,7 +45,7 @@ async def update_question(db: AsyncSession, db_question: Question, update_data: 
     
     if choices_data is not None:
         # Simplest way: delete old choices and add new ones (or more complex sync)
-        # For simplicity in this module, we'll replace them if provided
+        # For simplicity in this chapter, we'll replace them if provided
         db_question.choices = [Choice(**choice_data) for choice_data in choices_data]
     
     await db.commit()

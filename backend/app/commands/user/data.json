@@ -1,0 +1,172 @@
+[
+  {
+    "username": "hasanali",
+    "email": "hasanali@yopmail.com",
+    "first_name": "Hasan",
+    "last_name": "Ali",
+    "password": "Testing@321",
+    "role": "admin",
+    "headline": "LMS Administrator",
+    "bio": "System administrator responsible for managing settings, users, and platform policies."
+  },
+  {
+    "username": "javedkarim",
+    "email": "javedkarim@yopmail.com",
+    "first_name": "Javed",
+    "last_name": "Karim",
+    "password": "Testing@321",
+    "role": "instructor",
+    "headline": "Lead Backend Instructor",
+    "bio": "Software engineer with 10+ years of experience teaching Python, Django, and FastAPI."
+  },
+  {
+    "username": "fahimahmed",
+    "email": "fahimahmed@yopmail.com",
+    "first_name": "Fahim",
+    "last_name": "Ahmed",
+    "password": "Testing@321",
+    "role": "instructor",
+    "headline": "Senior Frontend Developer & Mentor",
+    "bio": "Specialist in React, Vue, CSS animations, and modern web application workflows."
+  },
+  {
+    "username": "sadiarahman",
+    "email": "sadiarahman@yopmail.com",
+    "first_name": "Sadia",
+    "last_name": "Rahman",
+    "password": "Testing@321",
+    "role": "instructor",
+    "headline": "Data Science Specialist",
+    "bio": "Instructor focusing on machine learning, statistical modeling, and Pandas."
+  },
+  {
+    "username": "kamrulhasan",
+    "email": "kamrulhasan@yopmail.com",
+    "first_name": "Kamrul",
+    "last_name": "Hasan",
+    "password": "Testing@321",
+    "role": "instructor",
+    "headline": "Cybersecurity Expert & Educator",
+    "bio": "Teaching network administration, ethical hacking, and secure microservices."
+  },
+  {
+    "username": "nadiasultana",
+    "email": "nadiasultana@yopmail.com",
+    "first_name": "Nadia",
+    "last_name": "Sultana",
+    "password": "Testing@321",
+    "role": "instructor",
+    "headline": "Mobile Engineering Lead",
+    "bio": "Focused on React Native and Flutter multi-platform application design."
+  },
+  {
+    "username": "tariqulislam",
+    "email": "tariqulislam@yopmail.com",
+    "first_name": "Tariqul",
+    "last_name": "Islam",
+    "password": "Testing@321",
+    "role": "student",
+    "headline": "Full-Stack Web Development Student",
+    "bio": "Passionate software student learning React, Python, and modern cloud technologies."
+  },
+  {
+    "username": "nusratjahan",
+    "email": "nusratjahan@yopmail.com",
+    "first_name": "Nusrat",
+    "last_name": "Jahan",
+    "password": "Testing@321",
+    "role": "student",
+    "headline": "Data Science & AI Aspirant",
+    "bio": "Enthusiastic student exploring data analytics, machine learning algorithms, and statistics."
+  },
+  {
+    "username": "tanvirahmed",
+    "email": "tanvirahmed@yopmail.com",
+    "first_name": "Tanvir",
+    "last_name": "Ahmed",
+    "password": "Testing@321",
+    "role": "student",
+    "headline": "UI/UX & Frontend Design Student",
+    "bio": "Focusing on user interface architecture, accessibility, and modern frontend frameworks."
+  },
+  {
+    "username": "sabrinahossain",
+    "email": "sabrinahossain@yopmail.com",
+    "first_name": "Sabrina",
+    "last_name": "Hossain",
+    "password": "Testing@321",
+    "role": "student",
+    "headline": "Cybersecurity & Cloud Computing Learner",
+    "bio": "Studying cloud security, networking, and system administration."
+  },
+  {
+    "username": "mehedihasan",
+    "email": "mehedihasan@yopmail.com",
+    "first_name": "Mehedi",
+    "last_name": "Hasan",
+    "password": "Testing@321",
+    "role": "student",
+    "headline": "Mobile App Development Student",
+    "bio": "Building cross-platform mobile applications using Flutter and native Android tools."
+  },
+  {
+    "username": "zahidhasan",
+    "email": "zahidhasan@yopmail.com",
+    "first_name": "Zahid",
+    "last_name": "Hasan",
+    "password": "Testing@321",
+    "role": "evaluator",
+    "headline": "LMS Technical Evaluator",
+    "bio": "Evaluating coding submissions, logic complexity, and software quality."
+  },
+  {
+    "username": "mariambegum",
+    "email": "mariambegum@yopmail.com",
+    "first_name": "Mariam",
+    "last_name": "Begum",
+    "password": "Testing@321",
+    "role": "evaluator",
+    "headline": "Academic Evaluator & Reviewer",
+    "bio": "Focusing on course structure quality, feedback precision, and learning outcomes."
+  },
+  {
+    "username": "imrankhan",
+    "email": "imrankhan@yopmail.com",
+    "first_name": "Imran",
+    "last_name": "Khan",
+    "password": "Testing@321",
+    "role": "evaluator",
+    "headline": "Senior Evaluator",
+    "bio": "Reviewing data science projects and advanced analytics submissions."
+  },
+  {
+    "username": "farhanayasmin",
+    "email": "farhanayasmin@yopmail.com",
+    "first_name": "Farhana",
+    "last_name": "Yasmin",
+    "password": "Testing@321",
+    "role": "evaluator",
+    "headline": "Project Evaluator",
+    "bio": "Specialized in grading mobile and frontend application architectures."
+  },
+  {
+    "username": "rafiquddin",
+    "email": "rafiquddin@yopmail.com",
+    "first_name": "Rafiq",
+    "last_name": "Uddin",
+    "password": "Testing@321",
+    "role": "evaluator",
+    "headline": "System Evaluator",
+    "bio": "Assessing security and server configurations in DevOps submissions."
+  },
+  {
+    "username": "afnanhaydar",
+    "email": "afnanbs@yopmail.com",
+    "first_name": "Afnan",
+    "last_name": "Haydar",
+    "password": "Testing@321",
+    "role": "student",
+    "headline": "Student",
+    "bio": "System generated student user."
+  }
+]

@@ -25,7 +25,7 @@ import {
 const CPasswordField = ({
   value = "",
   fullWidth = true,
-  size = "large",
+  size = "small",
   showStrengthIndicator = false,
   showRequirements = false,
   requirementsTitle = "Password must contain:",
@@ -72,7 +72,7 @@ const CPasswordField = ({
             },
           },
         }}
-        sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 }, ...sx }}
+        sx={{ ...sx }}
         {...rest}
       />
 

@@ -1,4 +1,5 @@
-"use client";
+"use client"
+import React, { useState, useRef } from "react"
 import {
   Box,
   Stack,
@@ -10,211 +11,208 @@ import {
   TextField,
   InputAdornment,
   alpha,
-} from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CToolbar from "./parts/CToolbar";
-import CPagination from "./parts/CPagination";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
-import StripedDataGrid from "./parts/StripedDataGrid";
-
-const RowCard = ({ row, columns }) => {
-  const theme = useTheme();
-  const gridParams = {
-    row,
-    id: row.id,
-    rowId: row.id,
-    columns,
-  };
-
-  return (
-    <Card
-      sx={{
-        p: 2,
-        borderRadius: 3,
-        background: alpha(theme.palette.common.white, 0.03),
-        backdropFilter: "blur(12px)",
-        border: "1px solid",
-        borderColor: theme.palette.divider,
-        boxShadow: "none",
-        mb: 1.5,
-      }}
-    >
-      <Stack spacing={1.2}>
-        {columns.map((col, index) => {
-          const field = col.field;
-          let value = row[field];
-
-          const cellParams = {
-            ...gridParams,
-            value,
-            field,
-            formattedValue: value,
-          };
-
-          if (col.valueGetter) {
-            try {
-              value = col.valueGetter(cellParams);
-              cellParams.value = value;
-              cellParams.formattedValue = value;
-            } catch (e) {
-              console.warn(`Error in valueGetter for ${field}:`, e);
-            }
-          }
-
-          const cellValue = col.renderCell
-            ? col.renderCell(cellParams)
-            : value?.toString() || "-";
-
-          return (
-            <Stack
-              key={`${field || "col"}-${index}`}
-              direction="column"
-              // sx={{
-              //   display: "flex",
-              //   justifyContent: "space-between",
-              //   alignItems: "flex-start",
-              //   gap: 2,
-              // }}
-            >
-              <Typography
-                variant="caption"
-                sx={{
-                  color: "text.secondary",
-                  fontWeight: 800,
-                  textTransform: "uppercase",
-                  fontSize: 9,
-                  minWidth: 90,
-                  pt: 0.5,
-                  letterSpacing: 0.5,
-                }}
-              >
-                {col.headerName || field || "---"}
-              </Typography>
-              <Box
-                sx={{
-                  flex: 1,
-                  textAlign: "right",
-                  color: "text.primary",
-                  overflow: "hidden",
-                }}
-              >
-                {typeof cellValue === "string" ||
-                typeof cellValue === "number" ? (
-                  <Typography
-                    variant="body2"
-                    sx={{ fontWeight: 600, wordBreak: "break-word" }}
-                  >
-                    {cellValue}
-                  </Typography>
-                ) : (
-                  <Box sx={{ display: "inline-block", maxWidth: "100%" }}>
-                    {cellValue}
-                  </Box>
-                )}
-              </Box>
-            </Stack>
-          );
-        })}
-      </Stack>
-    </Card>
-  );
-};
-
+} from "@mui/material"
+import SearchIcon from "@mui/icons-material/Search"
+import CToolbar from "./parts/CToolbar"
+import CPagination from "./parts/CPagination"
+import RowCard from "./parts/RowCard"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useDebouncedCallback } from "use-debounce"
+import { DataGrid, useGridApiRef } from "@mui/x-data-grid"
+import StripedDataGrid from "./parts/StripedDataGrid"
 export default function CDataTable(props) {
   const {
     rows = [],
     meta,
     columns,
-    isLoading,
+    loading: isLoading,
     filterMode = "server",
     CustomToolbar,
     hideFooter,
-    getRowId,
+    getRowId = (row) => row?.public_id || row?.id,
     getRowHeight,
     hasFilter = true,
     tableHeight = 820,
-  } = props;
+    action,
+    deleteInfo = null,
+    checkboxSelection = true,
+    onRowSelectionModelChange,
+    deleteData = props.deleteData || props.bulkDelete || null,
+    additionalFilters,
+  } = props
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
-  const theme = useTheme();
-  const isLgScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const handleFilterModelChange = useDebouncedCallback((filterModel) => {
-    const quickFilterValue = filterModel.quickFilterValues?.join(" ") || "";
+  const [selectedRows, setSelectedRows] = useState([])
 
-    params.set("term", quickFilterValue);
-    params.set("page", 1);
+  const handleSelectionChange = newSelection => {
+    let finalIds = []
+    if (newSelection?.type === "include") {
+      finalIds = [...newSelection.ids]
+    } else if (newSelection?.type === "exclude") {
+      const allRowIds = rows.map((row, idx) => (getRowId ? getRowId(row) : (row?.public_id ?? idx)))
+      finalIds = allRowIds.filter(id => !newSelection.ids.has(id))
+    } else if (Array.isArray(newSelection)) {
+      finalIds = newSelection
+    }
 
-    router.push(`?${params.toString()}`);
-  }, 500);
+    setSelectedRows(finalIds)
+    if (onRowSelectionModelChange) onRowSelectionModelChange(finalIds)
+  }
+
+  const params = new URLSearchParams(searchParams)
+  const theme = useTheme()
+  const isLgScreen = useMediaQuery(theme.breakpoints.down("lg"))
+
+  const handleFilterModelChange = useDebouncedCallback(filterModel => {
+    const quickFilterValue = filterModel.quickFilterValues?.join(" ") || ""
+
+    params.set("term", quickFilterValue)
+    params.set("page", 1)
+
+    router.push(`?${params.toString()}`)
+  }, 500)
 
   const handlePageChange = (_, value) => {
-    params.set("page", value);
-    router.push(`?${params.toString()}`);
-  };
+    params.set("page", value)
+    router.push(`?${params.toString()}`)
+  }
 
   return (
     <Box
       sx={{
         height: "auto",
-
         width: "100%",
-        borderRadius: isLgScreen ? 0 : 4,
-        // backgroundColor: "background.paper",
-        border: (theme) =>
-          `1px solid ${theme.palette.patient?.generic?.border || "rgba(255,255,255,0.06)"}`,
-        boxShadow: (theme) => theme.palette.patient?.generic?.shadow || "none",
+        borderRadius: 1,
+        bgcolor: "transparent",
+        border: "none",
+        boxShadow: "none",
         overflow: "hidden",
         "& .MuiDataGrid-root": {
           border: "none",
+          backgroundColor: "transparent",
+          borderRadius: 1,
+          overflow: "hidden",
+          "--DataGrid-rowBorderColor": alpha(theme.palette.divider, 0.06),
         },
         "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: (theme) =>
-            theme.palette.patient?.generic?.tableHeadBg ||
-            "rgba(255,255,255,0.03)",
+          backgroundColor: `${theme.palette.mode === "light" ? "#F8F9FA" : (theme.palette.custom?.table?.headBg || "transparent")} !important`,
+          borderBottom: "none !important",
+          borderTop: "none !important",
+          borderRadius: "8px !important",
+          overflow: "hidden !important",
+        },
+        "& .MuiDataGrid-columnHeader": {
+          backgroundColor: `${theme.palette.mode === "light" ? "#F8F9FA" : (theme.palette.custom?.table?.headBg || "transparent")} !important`,
+        },
+        "& .MuiDataGrid-columnHeader:first-of-type": {
+          borderTopLeftRadius: "8px !important",
+          borderBottomLeftRadius: "8px !important",
+        },
+        "& .MuiDataGrid-columnHeader:last-of-type": {
+          borderTopRightRadius: "8px !important",
+          borderBottomRightRadius: "8px !important",
+        },
+        "& .MuiDataGrid-toolbarContainer, & .MuiDataGrid-toolbar": {
+          border: "none !important",
+          borderBottom: "none !important",
+          borderTop: "none !important",
+          boxShadow: "none !important",
+          outline: "none !important",
+        },
+        "& .MuiDataGrid-main": {
+          border: "none !important",
+          borderTop: "none !important",
+          outline: "none !important",
+        },
+        "& .MuiDataGrid-withBorderColor": {
+          borderColor: "transparent !important",
+        },
+        "& .MuiDataGrid-columnHeaderTitle": {
+          color: "text.secondary",
+          textTransform: "capitalize",
+          fontSize: "13px",
+          fontWeight: 800,
+          letterSpacing: "0.05em",
+        },
+        "& .MuiDataGrid-cell": {
+          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.04)}`,
+        },
+        "& .MuiDataGrid-cell:last-child, & .MuiDataGrid-columnHeader:last-child, & .MuiDataGrid-filler":
+        {
+          borderRight: "none !important",
+        },
+        "& .MuiDataGrid-columnHeader:last-child .MuiDataGrid-columnSeparator": {
+          display: "none !important",
+        },
+        "& .MuiDataGrid-columnSeparator": {
+          visibility: "hidden", // This hides the header dividers unless hovered (MUI default behavior often leaves them visible)
+        },
+        "& .MuiDataGrid-cell:focus, & .MuiDataGrid-cell:focus-within": {
+          outline: "none !important",
+        },
+        "& .MuiDataGrid-row:focus, & .MuiDataGrid-row:focus-within": {
+          outline: "none !important",
+        },
+        "& .MuiDataGrid-columnHeader:focus, & .MuiDataGrid-columnHeader:focus-within": {
+          outline: "none !important",
         },
       }}
     >
       {isLgScreen ? (
         <Stack spacing={2} sx={{ overflowY: "auto", maxHeight: tableHeight }}>
           {hasFilter && (
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Search..."
-              defaultValue={searchParams.get("term") || ""}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleFilterModelChange({
-                    quickFilterValues: [e.target.value],
-                  });
-                }
-              }}
-              onChange={(e) =>
-                handleFilterModelChange({ quickFilterValues: [e.target.value] })
-              }
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon
-                        fontSize="small"
-                        sx={{ color: "text.secondary" }}
-                      />
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              sx={{
-                "& .MuiInputBase-root": {
-                  borderRadius: 3,
-                  bgcolor: (theme) => alpha(theme.palette.common.white, 0.03),
-                },
-              }}
-            />
+            <Box sx={{ display: "flex", gap: 2, alignItems: "center", width: "100%", flexWrap: "wrap" }}>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="Search..."
+                defaultValue={searchParams.get("term") || ""}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
+                    handleFilterModelChange({
+                      quickFilterValues: [e.target.value],
+                    })
+                  }
+                }}
+                onChange={e => handleFilterModelChange({ quickFilterValues: [e.target.value] })}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon fontSize="small" sx={{ color: "text.secondary" }} />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                sx={{
+                  flex: 1,
+                  minWidth: 150,
+                  "& .MuiInputBase-root": {
+                    bgcolor: theme => alpha(theme.palette.background.paper, 0.4),
+                    transition: "all 0.2s ease-in-out",
+                    "&:hover": {
+                      bgcolor: theme => alpha(theme.palette.background.paper, 0.8),
+                    },
+                    "&.Mui-focused": {
+                      bgcolor: "background.paper",
+                      boxShadow: theme => `0 4px 12px ${alpha(theme.palette.common.black, 0.05)}`,
+                    },
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: theme => alpha(theme.palette.divider, 0.15),
+                  },
+                  "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "primary.main",
+                    borderWidth: "1px",
+                  },
+                }}
+              />
+
+              {additionalFilters && <Box sx={{ display: "flex", alignItems: "center" }}>{additionalFilters}</Box>}
+              {action && <Box>{action}</Box>}
+            </Box>
           )}
 
           {isLoading && rows.length === 0 ? (
@@ -235,22 +233,28 @@ export default function CDataTable(props) {
           ) : rows.length > 0 ? (
             <Stack>
               {rows.map((row, rIdx) => {
-                const key = getRowId ? getRowId(row) : (row.id ?? rIdx);
+                const key = getRowId ? getRowId(row) : (row?.public_id ?? rIdx)
 
-                return <RowCard key={key} row={row} columns={columns} />;
+                return <RowCard key={key} row={row} columns={columns} />
               })}
             </Stack>
           ) : (
-            <Box sx={{ p: 6, textAlign: "center" }}>
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ fontWeight: 500 }}
-              >
-                No records found.
+            <Box
+              sx={{
+                p: 8,
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <SearchIcon sx={{ fontSize: 48, color: "text.disabled", mb: 1, opacity: 0.5 }} />
+              <Typography variant="h6" color="text.primary" sx={{ fontWeight: 600 }}>
+                No records found
               </Typography>
-              <Typography variant="caption" color="text.disabled">
-                Check your filters or try a different search term.
+              <Typography variant="body2" color="text.secondary">
+                We couldn&apos;t find any data matching your current filters or search term.
               </Typography>
             </Box>
           )}
@@ -262,6 +266,7 @@ export default function CDataTable(props) {
       ) : (
         <StripedDataGrid
           autoHeight
+          columnHeaderHeight={40}
           density="standard"
           rows={rows}
           columns={columns}
@@ -271,32 +276,32 @@ export default function CDataTable(props) {
           disableColumnSelector
           disableDensitySelector
           disableColumnMenu
-          checkboxSelection={false}
+          checkboxSelection={checkboxSelection}
+          onRowSelectionModelChange={handleSelectionChange}
           disableRowSelectionOnClick
           disableExporting={true}
           // hideFooterPagination={true}
           hideFooter={hideFooter || false}
           slots={{
             pagination: () =>
-              hasFilter && (
-                <CPagination meta={meta} onPageChange={handlePageChange} />
-              ),
+              hasFilter && <CPagination meta={meta} onPageChange={handlePageChange} />,
             toolbar: CustomToolbar || CToolbar,
+          }}
+          slotProps={{
+            toolbar: { action, selectedRows, deleteData, additionalFilters },
           }}
           showToolbar={hasFilter}
           filterMode={filterMode || "client"}
           onFilterModelChange={handleFilterModelChange}
           getRowId={getRowId}
-          getRowHeight={(params) => {
-            return getRowHeight;
+          getRowHeight={params => {
+            return getRowHeight
           }}
-          getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
-          }
+        // getRowClassName={params => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
         />
       )}
     </Box>
-  );
+  )
 }
 
 // {

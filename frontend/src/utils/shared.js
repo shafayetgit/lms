@@ -237,11 +237,73 @@ export const mapApiErrorsToFormik = (error) => {
   apiErrors.forEach((err) => {
     if (err.field) {
       formattedErrors[err.field] = err.message;
+      const snakeField = err.field.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+      if (snakeField !== err.field) {
+        formattedErrors[snakeField] = err.message;
+      }
     }
   });
 
   return formattedErrors;
 };
+
+export function getYouTubeEmbedUrl(url) {
+  if (!url) return null;
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2].length === 11) {
+    return `https://www.youtube.com/embed/${match[2]}?autoplay=1&modestbranding=1&rel=0`;
+  }
+  return null;
+}
+
+export function seededShuffle(array, seed) {
+  let m = array.length, t, i;
+  let rand = seed;
+  const nextRand = () => {
+    rand = (rand * 9301 + 49297) % 233280;
+    return rand / 233280;
+  };
+  const copy = [...array];
+  while (m) {
+    i = Math.floor(nextRand() * m--);
+    t = copy[m];
+    copy[m] = copy[i];
+    copy[i] = t;
+  }
+  return copy;
+}
+
+export function formatTimeRemaining(seconds) {
+  if (seconds === null) return "";
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
+export function getGradient(cardGradient) {
+  if (cardGradient && cardGradient.startsWith("linear-gradient")) return cardGradient;
+  const key = (cardGradient || "blue").toLowerCase().trim();
+
+  // Hardcoded vibrant gradients since theme primary/secondary are overridden to grayscale
+  const gradients = {
+    blue: ["#1E3A8A", "#3B82F6"],     // blue-900 to blue-500
+    green: ["#14532D", "#22C55E"],    // green-900 to green-500
+    purple: ["#581C87", "#A855F7"],   // purple-900 to purple-500
+    red: ["#7F1D1D", "#EF4444"],      // red-900 to red-500
+    orange: ["#7C2D12", "#F97316"],   // orange-900 to orange-500
+    yellow: ["#713F12", "#EAB308"],   // yellow-900 to yellow-500
+    pink: ["#831843", "#EC4899"],     // pink-900 to pink-500
+    teal: ["#134E4A", "#14B8A6"],     // teal-900 to teal-500
+    indigo: ["#312E81", "#6366F1"],   // indigo-900 to indigo-500
+    cyan: ["#164E63", "#06B6D4"],     // cyan-900 to cyan-500
+  };
+
+  const [from, to] = gradients[key] || gradients.blue;
+  return `linear-gradient(135deg, ${from} 0%, ${to} 100%)`;
+}
+
+
 
 /*
 Example usage:

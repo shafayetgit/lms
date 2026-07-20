@@ -1,0 +1,38 @@
+[
+  {
+    "name": "SSC",
+    "slug": "ssc",
+    "parent_id": null,
+    "description": "Courses covering the SSC General Science curriculum.",
+    "badge": "featured",
+    "thumbnail": "",
+    "is_active": true
+  },
+  {
+    "name": "HSC",
+    "slug": "hsc",
+    "parent_id": null,
+    "description": "Courses covering the HSC General Science curriculum.",
+    "badge": "featured",
+    "thumbnail": "",
+    "is_active": true
+  },
+  {
+    "name": "Law",
+    "slug": "law",
+    "parent_id": null,
+    "description": "Legal studies and law degree preparation courses.",
+    "badge": "none",
+    "thumbnail": "",
+    "is_active": true
+  },
+  {
+    "name": "Web Development",
+    "slug": "web-development",
+    "parent_id": null,
+    "description": "Full stack, frontend, and backend web development courses.",
+    "badge": "none",
+    "thumbnail": "",
+    "is_active": true
+  }
+]

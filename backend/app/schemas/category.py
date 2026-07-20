@@ -6,7 +6,7 @@ from app.models.category import CategoryBadge
 
 class CategoryBase(BaseSchema):
     name: str
-    parent_id: Optional[int] = None
+    parent_public_id: Optional[str] = None
     description: Optional[str] = None
     is_active: bool = True
     badge: CategoryBadge = CategoryBadge.NONE
@@ -19,7 +19,7 @@ class CategoryCreate(CategoryBase):
 
 class CategoryUpdate(BaseSchema):
     name: Optional[str] = None
-    parent_id: Optional[int] = None
+    parent_public_id: Optional[str] = None
     slug: Optional[str] = None
     description: Optional[str] = None
     is_active: Optional[bool] = None
@@ -28,7 +28,8 @@ class CategoryUpdate(BaseSchema):
 
 
 class CategoryRead(CategoryBase):
-    id: int
+    public_id: str
+
     # slug: str
     # created_at: datetime
     # updated_at: datetime

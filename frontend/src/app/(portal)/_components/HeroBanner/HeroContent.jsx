@@ -24,7 +24,7 @@ const HeroContent = () => {
                     variant="outlined"
                     sx={{
                         fontWeight: 800,
-                        borderRadius: "50px",
+                        borderRadius: 1,
                         textTransform: "uppercase",
                         fontSize: "0.75rem",
                         letterSpacing: "1.2px",
@@ -83,21 +83,23 @@ const HeroContent = () => {
                 </Stack>
 
                 <Stack
-                    direction={{ xs: "column", sm: "row" }}
-                    spacing={2}
-                    alignItems={{ xs: "stretch", sm: "center" }}
-                    sx={{ pt: { xs: 1, md: 2 }, width: { xs: "100%", sm: "auto" } }}
+                    direction="row"
+                    spacing={{ xs: 1.5, md: 2 }}
+                    justifyContent={{ xs: "center", md: "flex-start" }}
+                    alignItems="center"
+                    sx={{ pt: { xs: 1, md: 2 }, width: "100%" }}
                 >
                     <CButton
                         label="Get Started"
+                        href="/courses"
                         size="large"
                         color="secondary"
                         endIcon={<ArrowForward />}
                         sx={{
-                            px: { xs: 2, md: 4 },
-                            py: { xs: 1.5, md: 1.8 },
-                            fontSize: { xs: "1rem", md: "1.05rem" },
-                            borderRadius: "50px",
+                            px: { xs: 1.5, md: 4 },
+                            py: { xs: 1, md: 1.8 },
+                            fontSize: { xs: "0.85rem", md: "1.05rem" },
+                            borderRadius: 1,
                             textTransform: "none",
                             fontWeight: 700,
                             boxShadow: (theme) => `0 10px 20px ${alpha(theme.palette.text.primary, 0.1)}`,
@@ -109,14 +111,15 @@ const HeroContent = () => {
                     />
                     <CButton
                         label="Watch Video"
+                        href="/about"
                         variant="outlined"
                         size="large"
                         startIcon={<PlayCircleOutline />}
                         sx={{
-                            px: { xs: 2, md: 4 },
-                            py: { xs: 1.5, md: 1.8 },
-                            fontSize: { xs: "1rem", md: "1.05rem" },
-                            borderRadius: "50px",
+                            px: { xs: 1.5, md: 4 },
+                            py: { xs: 1, md: 1.8 },
+                            fontSize: { xs: "0.85rem", md: "1.05rem" },
+                            borderRadius: 1,
                             textTransform: "none",
                             fontWeight: 700,
                             borderColor: (theme) => alpha(theme.palette.text.primary, 0.15),

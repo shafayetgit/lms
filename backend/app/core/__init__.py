@@ -1,1 +1,1 @@
-"""Core configuration and security modules."""
+"""Core configuration and security chapters."""

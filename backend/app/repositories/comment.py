@@ -5,14 +5,25 @@ from app.models.comment import Comment
 from sqlalchemy import and_
 
 
+from sqlalchemy.orm import selectinload
+
 async def create_comment(db: AsyncSession, comment: Comment) -> Comment:
     db.add(comment)
     await db.commit()
     await db.refresh(comment)
-    return comment
+    result = await db.execute(
+        select(Comment)
+        .options(selectinload(Comment.user))
+        .where(Comment.id == comment.id)
+    )
+    return result.scalars().first()
 
 async def get_comment_by_id(db: AsyncSession, comment_id: int) -> Optional[Comment]:
-    result = await db.execute(select(Comment).where(Comment.id == comment_id))
+    result = await db.execute(
+        select(Comment)
+        .options(selectinload(Comment.user))
+        .where(Comment.id == comment_id)
+    )
     return result.scalars().first()
 
 async def get_comments_by_discussion(

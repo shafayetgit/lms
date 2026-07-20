@@ -29,13 +29,19 @@ const useScrollBackgroundColor = () => {
   const colors = themeMode === "dark" ? dark : light;
 
   const [bgColor, setBgColor] = useState(colors[0]);
+  const [prevThemeMode, setPrevThemeMode] = useState(themeMode);
+
+  if (themeMode !== prevThemeMode) {
+    setPrevThemeMode(themeMode);
+    setBgColor(colors[0]);
+  }
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const scrollHeight =
         document.documentElement.scrollHeight - window.innerHeight;
-      const scrollFraction = scrollTop / scrollHeight;
+      const scrollFraction = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
       const colorIndex = Math.min(
         Math.floor(scrollFraction * colors.length),
         colors.length - 1
@@ -52,11 +58,7 @@ const useScrollBackgroundColor = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [bgColor, colors, themeMode]); // Re-run whenever bgColor or colors change
-
-  useEffect(() => {
-    setBgColor(colors[0]);
-  }, [themeMode]);
+  }, [bgColor, colors]);
 
   return bgColor;
 };

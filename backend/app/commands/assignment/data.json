@@ -1,0 +1,58 @@
+[
+  {
+    "title": "এসএসসি পদার্থবিজ্ঞান: গতির সমীকরণ প্রমাণ",
+    "type": "PDF",
+    "question": "নিউটনের গতির দ্বিতীয় সূত্র থেকে F = ma সমীকরণটি প্রমাণ করুন এবং এর ব্যবহারিক প্রয়োগ সম্পর্কে একটি পিডিএফ রিপোর্ট জমা দিন।",
+    "show_answer": true,
+    "answer": "আপনার প্রমাণটি স্পষ্ট হওয়া উচিত এবং ত্বরণ ও ভরবেগের সম্পর্ক বিস্তারিতভাবে ব্যাখ্যা করা উচিত।",
+    "grade_assignment": true
+  },
+  {
+    "title": "এইচএসসি উচ্চতর গণিত: যোগজীকরণ অ্যাসাইনমেন্ট",
+    "type": "PDF",
+    "question": "অন্তত পাঁচটি জটিল ফাংশনের যোগজীকরণ (Integration) করে এর সমাধান একটি পিডিএফ ফাইলে আপলোড করুন।",
+    "show_answer": false,
+    "answer": "সমাধান ধাপে ধাপে দেখাতে হবে এবং শেষে ধ্রুবক (C) যোগ করতে ভুলবেন না।",
+    "grade_assignment": true
+  },
+  {
+    "title": "সাংবিধানিক আইন: মৌলিক অধিকার প্রতিবেদন",
+    "type": "Text",
+    "question": "বাংলাদেশের সংবিধানের তৃতীয় ভাগে উল্লেখিত মৌলিক অধিকারগুলোর একটি সংক্ষিপ্ত সারসংক্ষেপ লিখুন।",
+    "show_answer": true,
+    "answer": "সংবিধানের তৃতীয় ভাগে মোট ১৮টি মৌলিক অধিকারের উল্লেখ রয়েছে, যার মধ্যে বাকস্বাধীনতা, চলাফেরার স্বাধীনতা ইত্যাদি অন্তর্ভুক্ত।",
+    "grade_assignment": true
+  },
+  {
+    "title": "Build a Responsive CSS Grid Layout",
+    "type": "URL",
+    "question": "Create a fully responsive dashboard layout using CSS Grid and Flexbox. Submit your GitHub repository URL.",
+    "show_answer": true,
+    "answer": "Ensure your layout uses `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` for responsiveness.",
+    "grade_assignment": true
+  },
+  {
+    "title": "FastAPI REST API Implementation",
+    "type": "Text",
+    "question": "Implement a CRUD endpoint structure for a Blog Post resource with Pydantic validation schemas. Paste your Python code here.",
+    "show_answer": true,
+    "answer": "Code should include APIRouter, Pydantic BaseModel schemas, async DB session handling, and HTTP status codes.",
+    "grade_assignment": true
+  },
+  {
+    "title": "এসএসসি উচ্চতর গণিত: ফাংশন ও লেখচিত্র অ্যাসাইনমেন্ট",
+    "type": "PDF",
+    "question": "f(x) = (2x + 2) / (x - 1) ফাংশনটির ডোমেন ও রেঞ্জ নির্ণয় করুন এবং এর বিপরীত ফাংশন f⁻¹(x) বের করে একটি পিডিএফ ফাইল আপলোড করুন।",
+    "show_answer": true,
+    "answer": "ডোমেন হবে R - {1} এবং রেঞ্জ হবে R - {2}। বিপরীত ফাংশন f⁻¹(x) = (x + 2) / (x - 2)।",
+    "grade_assignment": true
+  },
+  {
+    "title": "এসএসসি উচ্চতর গণিত: বীজগণিতীয় রাশি ও আংশিক ভগ্নাংশ অ্যাসাইনমেন্ট",
+    "type": "PDF",
+    "question": "1 / ((x - 1)(x - 2)(x - 3)) কে আংশিক ভগ্নাংশে প্রকাশ করে পূর্ণ সমাধান সহ পিডিএফ আপলোড করুন।",
+    "show_answer": true,
+    "answer": "আংশিক ভগ্নাংশ আকারে প্রকাশ করলে ধ্রুবকগুলোর মান হবে A = 1/2, B = -1, C = 1/2।",
+    "grade_assignment": true
+  }
+]

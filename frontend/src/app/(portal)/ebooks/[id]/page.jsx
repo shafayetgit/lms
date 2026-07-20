@@ -27,7 +27,7 @@ const ebooks = [
         price: 49.99,
         rating: 4.9,
         reviews: 128,
-        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=800",
+        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=40&w=400",
         category: "Architecture",
         languages: ["English", "Spanish"],
         pages: 342,
@@ -74,24 +74,7 @@ export default function EbookDetailPage() {
     return (
         <Box sx={{ py: { xs: 4, md: 8 }, minHeight: "100vh" }}>
             <Container maxWidth="lg">
-                {/* Breadcrumbs */}
-                <Breadcrumbs
-                    separator={<NavigateNext fontSize="small" />}
-                    sx={{
-                        mb: 4,
-                        color: "text.secondary",
-                        fontWeight: 600,
-                        "& a": {
-                            textDecoration: 'none',
-                            color: 'inherit',
-                            "&:hover": { color: "secondary.main" }
-                        }
-                    }}
-                >
-                    <Link href="/">Home</Link>
-                    <Link href="/ebooks">E-Books</Link>
-                    <Typography color="text.primary" sx={{ fontWeight: 800 }}>{book.title}</Typography>
-                </Breadcrumbs>
+
 
                 {/* Mobile Title Section (Visible only on XS/SM) */}
                 <Box sx={{ display: { xs: "block", md: "none" }, mb: 4 }}>
@@ -99,7 +82,7 @@ export default function EbookDetailPage() {
                         label={book.category}
                         color="secondary"
                         variant="outlined"
-                        sx={{ mb: 2, fontWeight: 800, borderRadius: "50px", textTransform: "uppercase", fontSize: "0.7rem" }}
+                        sx={{ mb: 2, fontWeight: 800, borderRadius: 1, textTransform: "uppercase", fontSize: "0.7rem" }}
                     />
                     <Typography
                         variant="h1"
@@ -129,11 +112,12 @@ export default function EbookDetailPage() {
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.6 }}
+                            style={{ height: "100%" }}
                         >
                             <Box sx={{ position: { md: "sticky" }, top: 100 }}>
                                 <Card
                                     sx={{
-                                        borderRadius: 8,
+                                        borderRadius: 1,
                                         overflow: "hidden",
                                         boxShadow: (theme) => `0 30px 60px ${alpha(theme.palette.common.black, 0.12)}`,
                                         border: (theme) => `1px solid ${alpha(theme.palette.common.black, 0.05)}`,
@@ -156,7 +140,7 @@ export default function EbookDetailPage() {
                                         left: 20,
                                         bgcolor: (theme) => alpha(theme.palette.background.paper, 0.9),
                                         backdropFilter: "blur(4px)",
-                                        px: 2, py: 0.5, borderRadius: "50px",
+                                        px: 2, py: 0.5, borderRadius: 1,
                                         display: { xs: "none", md: "block" }
                                     }}>
                                         <Typography variant="caption" sx={{ fontWeight: 900, color: "primary.main" }}>{book.category}</Typography>
@@ -170,9 +154,9 @@ export default function EbookDetailPage() {
                                         startIcon={<ShoppingBag />}
                                         sx={{
                                             bgcolor: "secondary.main",
-                                            color: "white",
-                                            borderRadius: 4,
-                                            py: 2.2,
+                                            color: "secondary.contrastText",
+                                            borderRadius: 1,
+                                            py: 1.2,
                                             fontWeight: 900,
                                             fontSize: "1.05rem",
                                             boxShadow: (theme) => `0 10px 25px ${alpha(theme.palette.primary.main, 0.25)}`,
@@ -188,9 +172,9 @@ export default function EbookDetailPage() {
                                     <IconButton
                                         onClick={() => setIsFavorite(!isFavorite)}
                                         sx={{
-                                            width: 60,
-                                            height: 60,
-                                            borderRadius: 4,
+                                            width: 48,
+                                            height: 48,
+                                            borderRadius: 1,
                                             border: "2px solid",
                                             borderColor: isFavorite ? "error.main" : (theme) => alpha(theme.palette.common.black, 0.08),
                                             color: isFavorite ? "error.main" : "text.secondary",
@@ -209,8 +193,8 @@ export default function EbookDetailPage() {
                                     onClick={() => setIsPreviewOpen(true)}
                                     sx={{
                                         mt: 2,
-                                        py: 1.8,
-                                        borderRadius: 4,
+                                        py: 1,
+                                        borderRadius: 1,
                                         fontWeight: 800,
                                         borderColor: (theme) => alpha(theme.palette.common.black, 0.1),
                                         color: "text.primary",
@@ -223,7 +207,7 @@ export default function EbookDetailPage() {
                                     Read Preview
                                 </Button>
 
-                                <Box sx={{ mt: 4, p: 3, borderRadius: 5, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.03), border: (theme) => `1px dashed ${alpha(theme.palette.primary.main, 0.2)}` }}>
+                                <Box sx={{ mt: 4, p: 3, borderRadius: 1, bgcolor: (theme) => alpha(theme.palette.primary.main, 0.03), border: (theme) => `1px dashed ${alpha(theme.palette.primary.main, 0.2)}` }}>
                                     <Stack direction="row" spacing={1.5} alignItems="flex-start">
                                         <Download sx={{ color: "secondary.main", mt: 0.3 }} />
                                         <Box>
@@ -355,7 +339,7 @@ export default function EbookDetailPage() {
                                                             elevation={0}
                                                             sx={{
                                                                 p: 2.5,
-                                                                borderRadius: 4,
+                                                                borderRadius: 1,
                                                                 border: "1px solid",
                                                                 borderColor: "divider",
                                                                 display: "flex",
@@ -407,7 +391,7 @@ export default function EbookDetailPage() {
                 onClose={() => setIsPreviewOpen(false)}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: 'relative', bgcolor: 'primary.main', color: 'white' }}>
+                <AppBar sx={{ position: 'relative', bgcolor: 'primary.main', color: 'primary.contrastText' }}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -434,7 +418,7 @@ export default function EbookDetailPage() {
                                     elevation={0}
                                     sx={{
                                         p: { xs: 4, md: 8 },
-                                        borderRadius: 4,
+                                        borderRadius: 1,
                                         boxShadow: (theme) => `0 10px 30px ${alpha(theme.palette.common.black, 0.05)}`,
                                         minHeight: "800px",
                                         position: "relative",
@@ -456,16 +440,16 @@ export default function EbookDetailPage() {
                                     </Box>
 
                                     <Typography sx={{ lineHeight: 2, fontSize: "1.1rem", color: "text.secondary", mb: 4 }}>
-                                        Experience the future of web development. In this chapter, we explore the foundational principles that separate average frontend engineers from elite architects. We'll dive deep into modularity, state management, and the emotional resonance of modern UI design.
+                                        Experience the future of web development. In this chapter, we explore the foundational principles that separate average frontend engineers from elite architects. We&apos;ll dive deep into modularity, state management, and the emotional resonance of modern UI design.
                                     </Typography>
                                     <Typography sx={{ lineHeight: 2, fontSize: "1.1rem", color: "text.secondary", mb: 4 }}>
-                                        The key to building a scalable system is to think beyond the immediate requirements. We must design for the unknown. This means creating components that are not just reusable, but extensible. We'll look at how to leverage React's latest features to achieve this at scale without sacrificing performance.
+                                        The key to building a scalable system is to think beyond the immediate requirements. We must design for the unknown. This means creating components that are not just reusable, but extensible. We&apos;ll look at how to leverage React&apos;s latest features to achieve this at scale without sacrificing performance.
                                     </Typography>
 
-                                    <Box sx={{ my: 6, p: 4, bgcolor: (theme) => alpha(theme.palette.common.black, 0.02), borderRadius: 3, borderLeft: "4px solid", borderColor: "secondary.main" }}>
+                                    <Box sx={{ my: 6, p: 4, bgcolor: (theme) => alpha(theme.palette.common.black, 0.02), borderRadius: 1, borderLeft: "4px solid", borderColor: "secondary.main" }}>
                                         <Typography variant="h6" sx={{ fontWeight: 900, mb: 2 }}>Architecture Insight</Typography>
                                         <Typography variant="body1" sx={{ fontStyle: "italic", color: "text.primary" }}>
-                                            "A well-architected system is one where the cost of change remains low throughout the lifetime of the project."
+                                            &quot;A well-architected system is one where the cost of change remains low throughout the lifetime of the project.&quot;
                                         </Typography>
                                     </Box>
 
@@ -491,7 +475,7 @@ export default function EbookDetailPage() {
                                     variant="contained"
                                     color="secondary"
                                     size="large"
-                                    sx={{ borderRadius: "50px", px: 6, fontWeight: 800 }}
+                                    sx={{ borderRadius: 1, px: 6, fontWeight: 800 }}
                                     onClick={() => setIsPreviewOpen(false)}
                                 >
                                     Get Full Lifetime Access - ${book.price}

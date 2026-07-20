@@ -1,188 +1,200 @@
 import React from "react"
-import { NumberField } from "@base-ui/react"
-import { Box, Typography, alpha, styled } from "@mui/material"
+import { NumberField } from "@base-ui/react/number-field"
+import { TextField, InputAdornment, IconButton } from "@mui/material"
 import { Add, Remove, Height } from "@mui/icons-material"
 
-const StyledRoot = styled(NumberField.Root, {
-  shouldForwardProp: (prop) => prop !== 'fullWidth',
-})(({ fullWidth }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  width: fullWidth ? '100%' : 'auto',
-}));
+const CustomInput = React.forwardRef(function CustomInput(props, ref) {
+  // Discard value and onChange to let Base UI's NumberField.Root manage state via context
+  const { ownerState, value, onChange, ...other } = props
+  return <NumberField.Input {...other} ref={ref} />
+})
 
-const StyledGroup = styled(NumberField.Group)(({ theme, ...props }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  borderRadius: '12px',
-  border: `1px solid ${props['data-invalid'] !== undefined ? theme.palette.error.main : alpha(theme.palette.divider, 0.4)}`,
-  backgroundColor: alpha(theme.palette.background.paper, 0.5),
-  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-  '&:focus-within': {
-    borderColor: props['data-invalid'] !== undefined ? theme.palette.error.main : theme.palette.primary.main,
-    boxShadow: `0 0 0 4px ${alpha(props['data-invalid'] !== undefined ? theme.palette.error.main : theme.palette.primary.main, 0.1)}`,
-  },
-  '&:hover': {
-    borderColor: props['data-invalid'] !== undefined ? theme.palette.error.dark : theme.palette.primary.main,
-  },
-}));
-
-const StyledInput = styled(NumberField.Input)(({ theme }) => ({
-  flex: 1,
-  border: 'none',
-  background: 'transparent',
-  padding: '12px 0',
-  fontSize: '0.95rem',
-  fontWeight: 700,
-  textAlign: 'center',
-  color: theme.palette.text.primary,
-  '&:focus': {
-    outline: 'none',
-  },
-  '&::placeholder': {
-    color: theme.palette.text.disabled,
-  },
-  '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': {
-    WebkitAppearance: 'none',
-    margin: 0,
-  },
-  '&[type=number]': {
-    MozAppearance: 'textfield',
-  },
-}));
-
-const StepperButton = styled('button')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '42px',
-  height: '42px',
-  border: 'none',
-  background: 'transparent',
-  color: theme.palette.text.secondary,
-  cursor: 'pointer',
-  transition: 'all 0.2s ease',
-  '&:hover': {
-    color: theme.palette.primary.main,
-    backgroundColor: alpha(theme.palette.primary.main, 0.08),
-  },
-  '&:disabled': {
-    opacity: 0.2,
-    cursor: 'not-allowed',
-  },
-}));
-
-const CNumberField = React.forwardRef(function CNumberField({ 
-  label, 
-  error, 
-  helperText, 
-  value, 
-  onChange, 
-  onBlur, 
-  name,
-  min,
-  max,
-  step = 1,
-  fullWidth = true,
-  ...rest 
-}, ref) {
+function CursorGrowIcon(props) {
   return (
-    <StyledRoot 
-      ref={ref}
-      min={min} 
-      max={max} 
-      step={step}
-      fullWidth={fullWidth}
-      value={value === "" || value === null || isNaN(value) ? null : Number(value)}
-      onValueChange={(val) => {
+    <svg
+      width="26"
+      height="14"
+      viewBox="0 0 24 14"
+      fill="black"
+      stroke="white"
+      {...props}
+      style={{ display: "block", ...props.style }}
+    >
+      <path d="M19.5 5.5L6.49737 5.51844V2L1 6.9999L6.5 12L6.49737 8.5L19.5 8.5V12L25 6.9999L19.5 2V5.5Z" />
+    </svg>
+  )
+}
+
+const CNumberField = React.forwardRef(function CNumberField(
+  {
+    label,
+    error,
+    helperText,
+    value,
+    onChange,
+    onBlur,
+    name,
+    min,
+    max,
+    step = 1,
+    fullWidth = true,
+    size = "small",
+    slotProps = {},
+    InputProps = {},
+    InputLabelProps = {},
+    sx = {},
+    allowOutOfRange = false,
+    format,
+    allowWheelScrub = false,
+    snapOnStep = false,
+    id,
+    disabled = false,
+    readOnly = false,
+    required = false,
+    ...rest
+  },
+  ref
+) {
+  const uniqueId = React.useId()
+  const inputId = id || uniqueId
+
+  const rootValue = value === "" || value === null || isNaN(value) ? null : Number(value)
+
+  return (
+    <NumberField.Root
+      id={inputId}
+      value={rootValue}
+      onValueChange={val => {
         if (onChange) {
           onChange({
             target: {
               name: name,
               value: val,
             },
-          });
+          })
         }
       }}
-      disabled={rest.disabled}
-      readOnly={rest.readOnly}
+      min={min}
+      max={max}
+      step={step}
+      disabled={disabled}
+      readOnly={readOnly}
+      required={required}
+      allowOutOfRange={allowOutOfRange}
+      format={format}
+      allowWheelScrub={allowWheelScrub}
+      snapOnStep={snapOnStep}
     >
-      {label && (
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.8, px: 0.5 }}>
-          <Typography 
-            variant="caption" 
-            fontWeight={800} 
-            sx={{ 
-              color: error ? 'error.main' : 'text.secondary',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              opacity: 0.8
-            }}
-          >
-            {label}
-          </Typography>
-          <NumberField.ScrubArea>
-            <Height sx={{ fontSize: 14, transform: 'rotate(90deg)', opacity: 0.5, cursor: 'ew-resize' }} />
-          </NumberField.ScrubArea>
-        </Box>
-      )}
+      <TextField
+        ref={ref}
+        fullWidth={fullWidth}
+        size={size}
+        error={error}
+        helperText={helperText}
+        label={label}
+        name={name}
+        onBlur={onBlur}
+        required={required}
+        disabled={disabled}
+        value={value ?? ""}
+        sx={{
+          "& .MuiInputBase-input": {
+            textAlign: "center",
+            paddingLeft: "4px !important",
+            paddingRight: "4px !important",
+          },
+          ...sx,
+        }}
+        {...rest}
+        slotProps={{
+          ...slotProps,
+          input: {
+            inputComponent: CustomInput,
+            ...InputProps,
+            ...slotProps.input,
+            startAdornment: (
+              <InputAdornment
+                position="start"
+                sx={{ ml: -0.75, mr: 0, display: "flex", alignItems: "center", gap: 0.25 }}
+              >
+                <NumberField.Decrement
+                  render={
+                    <IconButton
+                      size="small"
+                      edge="start"
+                      disabled={disabled || readOnly}
+                      sx={{
+                        color: "text.secondary",
+                        p: 0.25,
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      <Remove fontSize="small" />
+                    </IconButton>
+                  }
+                />
+                {InputProps?.startAdornment || slotProps.input?.startAdornment}
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment
+                position="end"
+                sx={{ ml: 0, mr: -0.75, display: "flex", alignItems: "center", gap: 0.25 }}
+              >
+                {InputProps?.endAdornment || slotProps.input?.endAdornment}
+                <NumberField.ScrubArea>
+                  <IconButton
+                    size="small"
+                    component="span"
+                    disabled={disabled || readOnly}
+                    sx={{
+                      color: "text.secondary",
+                      cursor: "ew-resize",
+                      opacity: 0.6,
+                      p: 0.25,
+                      "&:hover": { opacity: 1, color: "primary.main" },
+                    }}
+                  >
+                    <Height sx={{ fontSize: 18, transform: "rotate(90deg)" }} />
+                  </IconButton>
+                  <NumberField.ScrubAreaCursor>
+                    <CursorGrowIcon style={{ width: 24, height: 14 }} />
+                  </NumberField.ScrubAreaCursor>
+                </NumberField.ScrubArea>
+                <NumberField.Increment
+                  render={
+                    <IconButton
+                      size="small"
+                      edge="end"
+                      disabled={disabled || readOnly}
+                      sx={{
+                        color: "text.secondary",
+                        p: 0.25,
+                        "&:hover": { color: "primary.main" },
+                      }}
+                    >
+                      <Add fontSize="small" />
+                    </IconButton>
+                  }
+                />
+              </InputAdornment>
+            ),
+          },
+          inputLabel: {
+            ...InputLabelProps,
+            ...slotProps.inputLabel,
+            sx: {
+              "& .MuiInputLabel-asterisk": {
+                color: "error.main",
+              },
+              ...InputLabelProps?.sx,
+              ...slotProps.inputLabel?.sx,
+            },
+          },
+        }}
+      />
+    </NumberField.Root>
+  )
+})
 
-      <StyledGroup data-invalid={error ? '' : undefined}>
-        <NumberField.Decrement render={<StepperButton type="button"><Remove sx={{ fontSize: 18 }} /></StepperButton>} />
-        
-        <StyledInput 
-          name={name}
-          value={value ?? ""}
-          onChange={onChange}
-          onBlur={onBlur}
-          inputMode="decimal"
-          onKeyDown={(e) => {
-            if (["e", "E", "+", "-"].includes(e.key)) {
-              e.preventDefault();
-              return;
-            }
-
-            const isControl = [
-              "Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", 
-              "Enter", "Escape", "Home", "End"
-            ].includes(e.key);
-            
-            const isNumber = /^[0-9]$/.test(e.key);
-            const isDecimal = e.key === "." && !value?.toString().includes(".");
-            const isCommand = (e.ctrlKey || e.metaKey) && ["a", "c", "v", "x"].includes(e.key.toLowerCase());
-
-            if (!isControl && !isNumber && !isDecimal && !isCommand) {
-              e.preventDefault();
-            }
-          }}
-          onPaste={(e) => {
-            const pasteData = e.clipboardData.getData('text');
-            if (!/^[0-9.]*$/.test(pasteData)) {
-              e.preventDefault();
-            }
-          }}
-          {...rest}
-        />
-        
-        <NumberField.Increment render={<StepperButton type="button"><Add sx={{ fontSize: 18 }} /></StepperButton>} />
-      </StyledGroup>
-
-      {(helperText || error) && (
-        <Typography 
-          variant="caption" 
-          sx={{ 
-            mt: 0.6, 
-            ml: 1, 
-            color: error ? 'error.main' : 'text.disabled',
-            fontWeight: 500,
-            display: 'block'
-          }}
-        >
-          {error || helperText}
-        </Typography>
-      )}
-    </StyledRoot>
-  );
-});
-
-export default CNumberField;
+export default CNumberField

@@ -16,9 +16,12 @@ class CommentUpdate(BaseSchema):
     body: Optional[str] = None
     is_active: Optional[bool] = None
 
+from app.schemas.user import UserMinimal
+
 class CommentRead(CommentBase):
     id: int
     user_id: int
+    user: Optional[UserMinimal] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
     

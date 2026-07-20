@@ -7,7 +7,6 @@ export const studentCreateSchema = Yup.object({
   last_name: Yup.string().required("Last name is required"),
   password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
   phone_number: Yup.string().nullable(),
-  department: Yup.string().nullable(),
   is_active: Yup.boolean(),
 });
 
@@ -15,6 +14,5 @@ export const studentUpdateSchema = Yup.object({
   first_name: Yup.string().required("First name is required"),
   last_name: Yup.string().required("Last name is required"),
   phone_number: Yup.string().nullable(),
-  department: Yup.string().nullable(),
   is_active: Yup.boolean(),
 });

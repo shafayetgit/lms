@@ -10,6 +10,7 @@ from sqlalchemy import (
     func,
     Boolean,
     SmallInteger,
+    Float,
     Index,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -31,8 +32,6 @@ class Review(Base):
         Index("idx_reviews_course_active_created", "course_id", "is_active", "created_at"),
     )
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     # Foreign keys (indexed)
     course_id: Mapped[int] = mapped_column(
         ForeignKey("courses.id", ondelete="CASCADE"),
@@ -45,7 +44,7 @@ class Review(Base):
     )
 
     # Rating (1–5)
-    rating: Mapped[int] = mapped_column(SmallInteger)
+    rating: Mapped[float] = mapped_column(Float)
 
     # Review text
     body: Mapped[Optional[str]] = mapped_column(Text)
@@ -60,3 +59,11 @@ class Review(Base):
     # Relationships
     course = relationship("Course", back_populates="reviews")
     student = relationship("User", back_populates="reviews")
+
+    @property
+    def course_public_id(self) -> str:
+        return self.course.public_id if self.course else None
+
+    @property
+    def student_public_id(self) -> str:
+        return self.student.public_id if self.student else None

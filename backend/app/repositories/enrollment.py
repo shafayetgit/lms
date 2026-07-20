@@ -4,6 +4,8 @@ from sqlalchemy import and_, func
 from typing import List, Optional
 from app.models.enrollment import Enrollment
 
+from sqlalchemy.orm import selectinload
+
 async def count_enrollments(db: AsyncSession, query) -> int:
     count_query = select(func.count()).select_from(query.subquery())
     result = await db.execute(count_query)
@@ -22,8 +24,25 @@ async def create_enrollment(db: AsyncSession, enrollment: Enrollment) -> Enrollm
     return enrollment
 
 async def get_enrollment_by_id(db: AsyncSession, enrollment_id: int) -> Optional[Enrollment]:
-    result = await db.execute(select(Enrollment).where(Enrollment.id == enrollment_id))
+    result = await db.execute(
+        select(Enrollment)
+        .options(selectinload(Enrollment.user), selectinload(Enrollment.course))
+        .where(Enrollment.id == enrollment_id)
+    )
     return result.scalars().first()
+
+async def get_enrollment_by_public_id(db: AsyncSession, public_id: str) -> Optional[Enrollment]:
+    result = await db.execute(
+        select(Enrollment)
+        .options(selectinload(Enrollment.user), selectinload(Enrollment.course))
+        .where(Enrollment.public_id == public_id)
+    )
+    return result.scalars().first()
+
+async def get_enrollment_by_id_or_public_id(db: AsyncSession, identifier: int | str) -> Optional[Enrollment]:
+    if isinstance(identifier, int) or (isinstance(identifier, str) and identifier.isdigit()):
+        return await get_enrollment_by_id(db, int(identifier))
+    return await get_enrollment_by_public_id(db, str(identifier))
 
 async def get_enrollment_by_user_and_course(
     db: AsyncSession, user_id: int, course_id: int

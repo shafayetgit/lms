@@ -2,18 +2,13 @@ from fastapi import Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
-FIELD_MAP = {
-    "first_name": "firstName",
-    "last_name": "lastName",
-    "confirm_password": "confirmPassword",
-}
+FIELD_MAP = {}
 
-
-def to_camel_case(s):
-    if not isinstance(s, str):
-        return str(s)
-    parts = s.split("_")
-    return parts[0] + "".join(word.capitalize() for word in parts[1:])
+def to_camel_case(snake_str: str) -> str:
+    if not isinstance(snake_str, str):
+        return snake_str
+    components = snake_str.split('_')
+    return components[0] + ''.join(x.title() for x in components[1:])
 
 
 def register_exception_handlers(app):

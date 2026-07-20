@@ -66,7 +66,6 @@ class Features(BaseModel):
 
 
 class Providers(BaseModel):
-    email: Dict[str, str] = Field(default={"type": "smtp"})
     sms: Dict[str, str] = Field(default={"type": "twilio"})
     database: Dict[str, str] = Field(default={"type": "postgresql"})
     cache: Dict[str, str] = Field(default={"type": "redis"})
@@ -158,8 +157,6 @@ class OTPConfig(BaseModel):
 
 class EmailTemplates(BaseModel):
     enabled: bool = True
-    from_name: str = "LMS Notifications"
-    from_address: str = "noreply@lms.example.com"
     templates: Dict[str, str] = Field(default={
         "email_verification": "email_verification.html",
         "password_reset": "password_reset.html",
@@ -180,7 +177,7 @@ class Logging(BaseModel):
 class Roles(BaseModel):
     enabled: bool = True
     default_role: str = "student"
-    available_roles: list[str] = Field(default=["admin", "instructor", "student"])
+    available_roles: list[str] = Field(default=["admin", "instructor", "student", "evaluator"])
 
 
 class DatabaseConfig(BaseModel):

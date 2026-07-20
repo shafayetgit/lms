@@ -1,0 +1,1351 @@
+{
+    "admin": {
+        "category": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "course": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "chapter": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "lesson": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "quiz": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "question": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "quiz_submission": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "assignment": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "certificate": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "certificate_request": {
+            "read": true,
+            "create": false,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "evaluation": {
+            "read": true,
+            "create": false,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "batch": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "program": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "lms_badge": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge_assignment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "comment": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "course_instructor": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "course_progress": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "discussion": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "email_account": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "email_template": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "enrollment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "feature_flag": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "invitation": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "live_class": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "media": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "notification": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "payment": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "payment_gateway": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "permission": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "review": {
+            "read": true,
+            "create": true,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role_profile": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "settings": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "tracking": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        },
+        "user": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "wishlist": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": true,
+            "import": true,
+            "only_if_creator": false
+        }
+    },
+    "instructor": {
+        "category": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "chapter": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "lesson": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "quiz": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "question": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "quiz_submission": {
+            "read": true,
+            "create": false,
+            "update": true,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "assignment": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": true,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "certificate": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "certificate_request": {
+            "read": true,
+            "create": false,
+            "update": true,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "evaluation": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "batch": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "program": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "comment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course_instructor": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course_progress": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "discussion": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "email_account": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "email_template": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "enrollment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "feature_flag": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "invitation": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "live_class": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "media": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "notification": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "payment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "payment_gateway": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "permission": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "review": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role_profile": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "settings": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "tracking": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "user": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "wishlist": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge_assignment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        }
+    },
+    "student": {
+        "category": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "chapter": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "lesson": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "quiz": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "question": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "quiz_submission": {
+            "read": true,
+            "create": true,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "assignment": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "certificate": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "certificate_request": {
+            "read": true,
+            "create": true,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "evaluation": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "batch": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "program": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "comment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course_instructor": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course_progress": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "discussion": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "email_account": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "email_template": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "enrollment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "feature_flag": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "invitation": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "live_class": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "media": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "notification": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "payment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "payment_gateway": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "permission": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "review": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role_profile": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "settings": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "tracking": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "user": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "wishlist": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge_assignment": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        }
+    },
+    "evaluator": {
+        "category": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "chapter": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "lesson": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "quiz": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "question": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "quiz_submission": {
+            "read": true,
+            "create": false,
+            "update": true,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "assignment": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "certificate": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "certificate_request": {
+            "read": true,
+            "create": false,
+            "update": true,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "evaluation": {
+            "read": true,
+            "create": true,
+            "update": true,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": true
+        },
+        "batch": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "program": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge": {
+            "read": true,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "comment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course_instructor": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "course_progress": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "discussion": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "email_account": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "email_template": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "enrollment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "feature_flag": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "invitation": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "live_class": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "media": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "notification": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "payment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "payment_gateway": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "permission": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "review": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "role_profile": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "settings": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "tracking": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "user": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "wishlist": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        },
+        "badge_assignment": {
+            "read": false,
+            "create": false,
+            "update": false,
+            "delete": false,
+            "export": false,
+            "import": false,
+            "only_if_creator": false
+        }
+    }
+}

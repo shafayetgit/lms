@@ -23,24 +23,25 @@ const AboutHero = () => {
         <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={itemVariants}
         >
             <Box
                 sx={{
-                    py: { xs: 8, md: 14 },
+                    py: { xs: 10, md: 16 },
                     textAlign: "center",
+                    mb: 8,
                 }}
             >
                 {/* Top Pill */}
                 <Chip
-                    label="📖 About ecofin Institute"
+                    label="📖 About Us"
                     color="secondary"
                     variant="outlined"
                     sx={{
                         mb: 4,
                         fontWeight: 800,
-                        borderRadius: "50px",
+                        borderRadius: 1,
                         textTransform: "uppercase",
                         fontSize: "0.75rem",
                         letterSpacing: "1px",
@@ -51,9 +52,9 @@ const AboutHero = () => {
                 />
 
                 <Typography
-                    variant="h1"
+                    variant="h2"
                     gutterBottom
-                    sx={{ fontWeight: 900, mb: 3, letterSpacing: "-0.03em", fontSize: { xs: "3rem", md: "5rem" } }}
+                    sx={{ fontWeight: 900, mb: 1.5, letterSpacing: "-0.02em", fontSize: { xs: "2.2rem", md: "3.2rem" } }}
                 >
                     Empowering Your Future in Finance
                 </Typography>

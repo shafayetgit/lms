@@ -8,10 +8,21 @@ async def create_discussion(db: AsyncSession, discussion: Discussion) -> Discuss
     db.add(discussion)
     await db.commit()
     await db.refresh(discussion)
-    return discussion
+    result = await db.execute(
+        select(Discussion)
+        .options(selectinload(Discussion.user))
+        .where(Discussion.id == discussion.id)
+    )
+    return result.scalars().first()
+
+from sqlalchemy.orm import selectinload
 
 async def get_discussion_by_id(db: AsyncSession, discussion_id: int) -> Optional[Discussion]:
-    result = await db.execute(select(Discussion).where(Discussion.id == discussion_id))
+    result = await db.execute(
+        select(Discussion)
+        .options(selectinload(Discussion.user))
+        .where(Discussion.id == discussion_id)
+    )
     return result.scalars().first()
 
 async def get_discussions_by_course(
@@ -19,6 +30,7 @@ async def get_discussions_by_course(
 ) -> List[Discussion]:
     result = await db.execute(
         select(Discussion)
+        .options(selectinload(Discussion.user))
         .where(Discussion.course_id == course_id)
         .offset(skip)
         .limit(limit)
@@ -30,6 +42,7 @@ async def get_discussions_by_lesson(
 ) -> List[Discussion]:
     result = await db.execute(
         select(Discussion)
+        .options(selectinload(Discussion.user))
         .where(Discussion.lesson_id == lesson_id)
         .offset(skip)
         .limit(limit)

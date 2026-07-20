@@ -26,7 +26,7 @@ class ChoiceRead(ChoiceBase):
 class QuestionBase(BaseSchema):
     text: str
     question_type: QuestionType = QuestionType.MCQ_SINGLE
-    points: float = 1.0
+    marks: float = 1.0
     order_index: int = 0
     explanation: Optional[str] = None
     is_active: bool = True
@@ -40,7 +40,7 @@ class QuestionCreate(QuestionBase):
 class QuestionUpdate(BaseSchema):
     text: Optional[str] = None
     question_type: Optional[QuestionType] = None
-    points: Optional[float] = None
+    marks: Optional[float] = None
     order_index: Optional[int] = None
     explanation: Optional[str] = None
     is_active: Optional[bool] = None

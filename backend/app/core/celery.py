@@ -10,7 +10,7 @@ def _build_celery_app() -> Celery:
         "app",
         broker=settings.CELERY_BROKER_URL or settings.REDIS_URL,
         backend=settings.CELERY_RESULT_BACKEND or settings.REDIS_URL,
-        include=["app.tasks"],  # explicit task module list
+        include=["app.tasks"],  # explicit task chapter list
     )
 
     celery_app.conf.update(

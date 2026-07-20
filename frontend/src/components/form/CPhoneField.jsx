@@ -86,8 +86,8 @@ const CPhoneField = forwardRef(
     const [localPhoneNumber, setLocalPhoneNumber] = useState("")
     const [isInitialized, setIsInitialized] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
+    const [anchorEl, setAnchorEl] = useState(null)
 
-    const dropdownAnchorRef = useRef(null)
     const searchInputRef = useRef(null)
     const inputRef = useRef(null)
 
@@ -122,52 +122,74 @@ const CPhoneField = forwardRef(
     // Initialize from value prop
     useEffect(() => {
       if (value && !isInitialized) {
+        let active = true
         try {
           const parsed = parsePhoneNumberFromString(value)
 
           if (parsed?.country) {
             const foundCountry = findCountryByCode(parsed.country)
             if (foundCountry) {
-              setSelectedCountry(foundCountry)
-              setLocalPhoneNumber(parsed.nationalNumber)
-              onCountryChange(foundCountry)
+              setTimeout(() => {
+                if (active) {
+                  setSelectedCountry(foundCountry)
+                  setLocalPhoneNumber(parsed.nationalNumber)
+                  onCountryChange(foundCountry)
+                }
+              }, 0)
             } else {
-              setLocalPhoneNumber(value)
+              setTimeout(() => {
+                if (active) setLocalPhoneNumber(value)
+              }, 0)
             }
           } else {
             // Try to detect country from partial number
             const detectedCountry = findCountryByPhoneNumber(value)
             if (detectedCountry) {
-              setSelectedCountry(detectedCountry)
-              onCountryChange(detectedCountry)
+              setTimeout(() => {
+                if (active) {
+                  setSelectedCountry(detectedCountry)
+                  onCountryChange(detectedCountry)
+                }
+              }, 0)
             }
-            setLocalPhoneNumber(value)
+            setTimeout(() => {
+              if (active) setLocalPhoneNumber(value)
+            }, 0)
           }
         } catch (e) {
-          setLocalPhoneNumber(value)
+          setTimeout(() => {
+            if (active) setLocalPhoneNumber(value)
+          }, 0)
         }
-        setIsInitialized(true)
+        setTimeout(() => {
+          if (active) setIsInitialized(true)
+        }, 0)
+        return () => {
+          active = false
+        }
       }
     }, [value, isInitialized, onCountryChange, findCountryByCode, findCountryByPhoneNumber])
 
     // Set default country if provided and no value
     useEffect(() => {
-      
       if (!isInitialized && defaultCountry && !value) {
+        let active = true
         const country = findCountryByCode(defaultCountry)
         if (country) {
-          setSelectedCountry(country)
-          onCountryChange(country)
+          setTimeout(() => {
+            if (active) {
+              setSelectedCountry(country)
+              onCountryChange(country)
+            }
+          }, 0)
         }
-        setIsInitialized(true)
+        setTimeout(() => {
+          if (active) setIsInitialized(true)
+        }, 0)
+        return () => {
+          active = false
+        }
       }
-
-      // const country = findCountryByCode(defaultCountry)
-
-      // if (country) {
-      //   setSelectedCountry(country)
-      // }
-
     }, [defaultCountry, value, isInitialized, onCountryChange, findCountryByCode])
 
     // Validation function
@@ -240,7 +262,7 @@ const CPhoneField = forwardRef(
           onValidation(validation.isValid, validation.message)
         }
       },
-      [localPhoneNumber, onChange, validateOnChange, validatePhoneNumber, onCountryChange]
+      [localPhoneNumber, onChange, validateOnChange, validatePhoneNumber, onCountryChange, onValidation]
     )
 
     // Handle phone number input changes with auto country detection
@@ -412,10 +434,10 @@ const CPhoneField = forwardRef(
     }, [isDropdownOpen])
 
     const closeDropdown = useCallback(event => {
-      if (dropdownAnchorRef.current?.contains(event.target)) return
+      if (anchorEl?.contains(event.target)) return
       setIsDropdownOpen(false)
       setSearchTerm("")
-    }, [])
+    }, [anchorEl])
 
 
     // Display error (prop error takes precedence over internal error)
@@ -483,7 +505,7 @@ const CPhoneField = forwardRef(
               startAdornment: (
                 <InputAdornment position="start">
                   <Button
-                    ref={dropdownAnchorRef}
+                    ref={setAnchorEl}
                     onClick={toggleDropdown}
                     endIcon={<KeyboardArrowDown />}
                     disabled={disabled}
@@ -502,7 +524,7 @@ const CPhoneField = forwardRef(
 
                   <Popper
                     open={isDropdownOpen}
-                    anchorEl={dropdownAnchorRef.current}
+                    anchorEl={anchorEl}
                     placement="bottom-start"
                     sx={{ zIndex: 1300 }}
                     modifiers={[

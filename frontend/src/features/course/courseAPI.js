@@ -14,15 +14,18 @@ const courseAPI = api.injectEndpoints({
     }),
 
     readCourses: builder.query({
-      query: ({ size, page, term, badge, level, is_active }) => {
+      query: ({ size, page, term, badge, level, is_active, published, upcoming, is_portal } = {}) => {
         const params = new URLSearchParams()
 
         if (term) params.set("term", term)
         if (badge) params.set("badge", badge)
         if (level) params.set("level", level)
         if (is_active !== undefined) params.set("is_active", is_active)
+        if (published !== undefined) params.set("published", published)
+        if (upcoming !== undefined) params.set("upcoming", upcoming)
         if (page !== undefined) params.set("page", page)
         if (size !== undefined) params.set("size", size)
+        if (is_portal !== undefined) params.set("is_portal", is_portal)
 
         const queryString = params.toString()
         return queryString ? `${PREFIX}/?${queryString}` : PREFIX
@@ -31,7 +34,12 @@ const courseAPI = api.injectEndpoints({
     }),
 
     readCourse: builder.query({
-      query: ({ id } = {}) => `${PREFIX}/${id}`,
+      query: ({ id, is_portal } = {}) => {
+        const params = new URLSearchParams()
+        if (is_portal !== undefined) params.set("is_portal", is_portal)
+        const queryString = params.toString()
+        return queryString ? `${PREFIX}/${id}?${queryString}` : `${PREFIX}/${id}`
+      },
     }),
 
     readCourseMeta: builder.query({
@@ -54,6 +62,11 @@ const courseAPI = api.injectEndpoints({
       }),
       invalidatesTags: ["COURSES"],
     }),
+
+    readCourseDashboard: builder.query({
+      query: ({ id } = {}) => `${PREFIX}/${id}/dashboard`,
+      providesTags: ["COURSE_DASHBOARD"],
+    }),
   }),
   overrideExisting: false,
 })
@@ -66,5 +79,6 @@ export const {
   useReadCourseMetaQuery,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
+  useReadCourseDashboardQuery,
 } = courseAPI
 export default courseAPI

@@ -48,7 +48,7 @@ export default function CourseFilter() {
           onDelete={filter.onDelete}
           size="small"
           sx={{
-            borderRadius: "50px",
+            borderRadius: 1,
             fontWeight: 600,
             bgcolor: "primary.main",
             color: "primary.contrastText",

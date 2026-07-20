@@ -14,17 +14,6 @@ from app.repositories import lesson as lesson_repo
 class QuizService:
     @staticmethod
     async def create_quiz(db: AsyncSession, quiz_in: QuizCreate) -> Quiz:
-        # Validate course exists
-        course = await course_repo.get_course_by_id(db, quiz_in.course_id)
-        if not course:
-            raise ValueError("Course not found")
-        
-        # Validate lesson exists if provided
-        if quiz_in.lesson_id:
-            lesson = await lesson_repo.get_lesson_by_id(db, quiz_in.lesson_id)
-            if not lesson:
-                raise ValueError("Lesson not found")
-
         db_quiz = Quiz(**quiz_in.model_dump())
         return await quiz_repo.create_quiz(db, db_quiz)
 
@@ -42,7 +31,8 @@ class QuizService:
         size: int = 10,
         term: str | None = None,
         is_active: bool | None = None,
-        course_id: int | None = None,
+        course_id: str | int | None = None,
+        owner_id: int | None = None,
     ) -> dict:
         query = select(Quiz).order_by(desc(Quiz.id))
 
@@ -50,8 +40,8 @@ class QuizService:
             query = query.where(Quiz.title.ilike(f"%{term}%"))
         if is_active is not None:
             query = query.where(Quiz.is_active == is_active)
-        if course_id is not None:
-            query = query.where(Quiz.course_id == course_id)
+        if owner_id is not None:
+            query = query.where(Quiz.owner_id == owner_id)
 
         skip = (page - 1) * size
         total = await quiz_repo.count_quizzes(db, query=query)

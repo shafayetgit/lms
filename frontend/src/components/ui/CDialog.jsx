@@ -11,41 +11,42 @@ import {
 import { useTheme } from "@mui/material/styles"
 import CloseIcon from "@mui/icons-material/Close"
 import CButton from "./CButton"
+import { usePermissions } from "@/hooks/usePermissions"
 
 export default function CDialog({
   children,
   btnProps,
   title,
   dialogSx = {},
+  maxWidth = "sm",
   open,
   handleCDialogClose,
   handleCDialogOpen,
+  resource,
+  action = "create",
 }) {
+  const { can } = usePermissions()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(theme.breakpoints.down("md"))
 
+  if (resource && !can(resource, action)) return null
+
   return (
     <>
-      <CButton onClick={handleCDialogOpen} {...btnProps} />
+      {btnProps && <CButton onClick={handleCDialogOpen} {...btnProps} />}
 
       <Dialog
         fullScreen={isMobile}
-        // maxWidth="lg"
+        maxWidth={maxWidth}
         fullWidth
         open={open}
         onClose={handleCDialogClose}
         sx={{
-          // "& .MuiDialog-container": {
-          //   alignItems: isMobile ? "flex-end" : "center",
-          // },
-          // "& .MuiPaper-root": {
-          //   borderRadius: isMobile ? "20px 20px 0 0" : 3,
-          //   margin: isMobile ? 0 : 2,
-          //   maxHeight: isMobile ? "90vh" : "calc(100% - 64px)",
-          //   transition: "all 0.3s ease-in-out",
-          // },
           ...dialogSx,
+        }}
+        PaperProps={{
+          sx: { borderRadius: 1 }
         }}
       >
         <Box
@@ -54,7 +55,7 @@ export default function CDialog({
             alignItems: "center",
             justifyContent: "space-between",
             px: { xs: 2, sm: 3 },
-            py: { xs: 1, sm: 1.5 },
+            py: 1,
             borderBottom: "1px solid",
             borderColor: "divider",
             bgcolor: "background.paper",

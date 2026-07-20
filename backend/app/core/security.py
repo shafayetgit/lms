@@ -34,12 +34,14 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return password_hash.verify(plain_password, hashed_password)
 
 
+from sqlalchemy.orm import joinedload
+
 # -----------------------
 # User utilities
 # -----------------------
 async def get_user_by_username(db: AsyncSession, username: str) -> Optional[User]:
-    result = await db.execute(select(User).where(User.username == username))
-    return result.scalars().first()
+    result = await db.execute(select(User).options(joinedload(User.roles)).where(User.username == username))
+    return result.unique().scalars().first()
 
 
 async def authenticate_user(db: AsyncSession, username: str, password: str) -> Optional[User]:
@@ -111,6 +113,10 @@ async def get_current_user(
     user = await get_user_by_username(db, username)
     if user is None:
         raise credentials_exception
+    
+    from app.core.context import current_user_id
+    current_user_id.set(user.id)
+    
     return user
 
 

@@ -13,6 +13,7 @@ import OtpInput, { OTP_LENGTH } from "./_components/OtpInput"
 import ResendButton from "./_components/ResendButton"
 import { useResendOTPMutation, useVerifyEmailMutation } from "@/features/auth/authAPI"
 import CButton from "@/components/ui/CButton"
+import AuthLogo from "@/components/ui/AuthLogo"
 
 const VerifyEmail = () => {
   const router = useRouter()
@@ -72,38 +73,25 @@ const VerifyEmail = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       sx={{
         bgcolor: "background.paper",
-        p: { xs: 4, md: 6 },
-        borderRadius: 6,
-        boxShadow: (theme) => `0 12px 40px ${alpha(theme.palette.text.primary, 0.08)}`,
-        border: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.04)}`,
+        p: { xs: 3, md: 4 },
+        borderRadius: 1,
+        border: "1px solid",
+        borderColor: "divider",
+        maxWidth: 420,
+        mx: "auto",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-        <Box
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "50%",
-            backgroundColor: "secondary.main",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: (theme) =>
-              `0 8px 24px ${alpha(theme.palette.secondary.main, 0.3)}`,
-          }}
-        >
-          <MarkEmailRead sx={{ fontSize: 32, color: "white" }} />
-        </Box>
-      </Box>
+      <AuthLogo />
 
       <Typography
         fontWeight={800}
         textAlign="center"
         gutterBottom
         sx={{
-          fontSize: "clamp(1.25rem, 5vw, 1.75rem)",
+          fontSize: "1.5rem",
           letterSpacing: "-0.5px",
           color: "text.primary",
+          mb: 0.5,
         }}
       >
         Verify your email
@@ -112,8 +100,8 @@ const VerifyEmail = () => {
       <Typography
         color="text.secondary"
         textAlign="center"
-        mb={4}
-        sx={{ fontSize: "clamp(0.8125rem, 3vw, 0.875rem)" }}
+        mb={3}
+        sx={{ fontSize: "0.875rem" }}
       >
         We sent a {OTP_LENGTH}-digit code to{" "}
         <Typography
@@ -121,7 +109,7 @@ const VerifyEmail = () => {
           fontWeight={700}
           color="text.primary"
           sx={{
-            fontSize: "clamp(0.8125rem, 3vw, 0.875rem)",
+            fontSize: "0.875rem",
             wordBreak: "break-all",
           }}
         >
@@ -149,19 +137,16 @@ const VerifyEmail = () => {
           color="secondary"
           loading={isLoading}
           disabled={isLoading || formik.values.otp.length < OTP_LENGTH}
+          action="confirm"
           sx={{
             mb: 2,
-            py: 1.8,
-            borderRadius: 3.5,
+            py: 1.2,
+            borderRadius: 1,
             fontSize: "1rem",
             fontWeight: 700,
-            boxShadow: (theme) =>
-              `0 6px 20px ${alpha(theme.palette.secondary.main, 0.35)}`,
             transition: "all 0.3s ease",
             "&:hover": {
               transform: "translateY(-2px)",
-              boxShadow: (theme) =>
-                `0 8px 25px ${alpha(theme.palette.secondary.main, 0.4)}`,
             },
           }}
         />
@@ -169,7 +154,7 @@ const VerifyEmail = () => {
         <ResendButton onResend={handleResendOtp} isLoading={isLoadingResendOTP} />
       </Box>
 
-      <Divider sx={{ my: 3 }} />
+      <Divider sx={{ my: 2.5 }} />
 
       <Typography textAlign="center" variant="body2">
         Back to{" "}

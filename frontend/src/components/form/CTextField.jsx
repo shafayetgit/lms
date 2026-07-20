@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 
 export default function CTextField({
   fullWidth = true,
-  size = "large",
+  size = "small",
   slotProps = {},
   InputProps = {},
   InputLabelProps = {},
@@ -13,7 +13,7 @@ export default function CTextField({
     <TextField
       fullWidth={fullWidth}
       size={size}
-      sx={{ "& .MuiOutlinedInput-root": { borderRadius: 3 }, ...sx }}
+      sx={{  ...sx }}
       {...rest}
       slotProps={{
         input: {

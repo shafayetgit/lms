@@ -1,5 +1,5 @@
-import Footer from "@/components/layout/Footer";
-import Topbar from "@/components/layout/header/Topbar";
+import Footer from "@/components/layout/portal/Footer";
+import Topbar from "@/components/layout/portal/header/Topbar";
 import { Box } from "@mui/material";
 
 export default function RootLayout({ children }) {
@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
       <Topbar />
 
       {/* Main Content */}
-      <Box component="main" mt={4}>
+      <Box component="main" sx={{ mt: 4, minHeight: "100vh" }}>
         {children}
       </Box>
 
@@ -21,12 +21,3 @@ export default function RootLayout({ children }) {
     </>
   );
 }
-
-
-
-// "use client";
-// import RootLayout from "@/components/layout/RootLayout";
-
-// export default function PortalLayout({ children }) {
-//     return <RootLayout>{children}</RootLayout>;
-// }

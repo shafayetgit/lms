@@ -13,8 +13,8 @@ const lessonAPI = api.injectEndpoints({
       invalidatesTags: ["LESSONS"],
     }),
 
-    readLessonsByModule: builder.query({
-      query: ({ moduleId }) => `${PREFIX}/module/${moduleId}`,
+    readLessonsByChapter: builder.query({
+      query: ({ chapterId }) => `${PREFIX}/chapter/${chapterId}`,
       providesTags: ["LESSONS"],
     }),
 
@@ -40,8 +40,8 @@ const lessonAPI = api.injectEndpoints({
     }),
 
     reorderLessons: builder.mutation({
-      query: ({ moduleId, body } = {}) => ({
-        url: `${PREFIX}/module/${moduleId}/reorder`,
+      query: ({ chapterId, body } = {}) => ({
+        url: `${PREFIX}/chapter/${chapterId}/reorder`,
         method: "PUT",
         body: body,
       }),
@@ -53,8 +53,8 @@ const lessonAPI = api.injectEndpoints({
 
 export const {
   useCreateLessonMutation,
-  useReadLessonsByModuleQuery,
-  useLazyReadLessonsByModuleQuery,
+  useReadLessonsByChapterQuery,
+  useLazyReadLessonsByChapterQuery,
   useReadLessonQuery,
   useUpdateLessonMutation,
   useDeleteLessonMutation,

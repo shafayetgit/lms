@@ -1,0 +1,1503 @@
+[
+  {
+    "title": "এসএসসি পদার্থবিজ্ঞান: গতি ও বল কুইজ",
+    "description": "গতি, ত্বরণ, এবং নিউটনের গতির সূত্রগুলোর উপর আপনার বোঝাপড়া যাচাই করুন।",
+    "duration": 15,
+    "passing_percentage": 60.0,
+    "max_attempts": 3,
+    "shuffle_questions": true,
+    "enable_negative_marking": true,
+    "marks_to_cut": 0.25,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "নিউটনের গতির দ্বিতীয় সূত্র কোনটি?",
+        "explanation": "বস্তুর ভরবেগের পরিবর্তনের হার তার উপর প্রযুক্ত বলের সমানুপাতিক।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "F = ma",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "v = u + at",
+            "is_correct": false
+          },
+          {
+            "text": "E = mc²",
+            "is_correct": false
+          },
+          {
+            "text": "P = mv",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "ত্বরণের একক কী?",
+        "explanation": "ত্বরণ হলো বেগের পরিবর্তনের হার, তাই এর একক m/s²।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "m/s²",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "m/s",
+            "is_correct": false
+          },
+          {
+            "text": "N",
+            "is_correct": false
+          },
+          {
+            "text": "J",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "বস্তুর জড়তা কিসের উপর নির্ভর করে?",
+        "explanation": "ভরের উপর।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 3,
+        "choices": [
+          {
+            "text": "ভর",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "বেগ",
+            "is_correct": false
+          },
+          {
+            "text": "ত্বরণ",
+            "is_correct": false
+          },
+          {
+            "text": "বল",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "সমবেগে চলমান বস্তুর ত্বরণ কত?",
+        "explanation": "সমবেগে চললে বেগের পরিবর্তন হয় না, তাই ত্বরণ শূন্য।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 4,
+        "choices": [
+          {
+            "text": "শূন্য",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "অসীম",
+            "is_correct": false
+          },
+          {
+            "text": "১",
+            "is_correct": false
+          },
+          {
+            "text": "৯.৮",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "বলের একক কী?",
+        "explanation": "বলের আন্তর্জাতিক একক নিউটন।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 5,
+        "choices": [
+          {
+            "text": "নিউটন",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "জুল",
+            "is_correct": false
+          },
+          {
+            "text": "প্যাসকেল",
+            "is_correct": false
+          },
+          {
+            "text": "ওয়াট",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "কোনটি স্কেলার রাশি?",
+        "explanation": "কাজের নির্দিষ্ট দিক নেই।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 6,
+        "choices": [
+          {
+            "text": "কাজ",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "বল",
+            "is_correct": false
+          },
+          {
+            "text": "বেগ",
+            "is_correct": false
+          },
+          {
+            "text": "ত্বরণ",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "কাজ করার সামর্থ্যকে কী বলে?",
+        "explanation": "কাজ করার সামর্থ্যই শক্তি।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 7,
+        "choices": [
+          {
+            "text": "শক্তি",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "ক্ষমতা",
+            "is_correct": false
+          },
+          {
+            "text": "বল",
+            "is_correct": false
+          },
+          {
+            "text": "চাপ",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "মাধ্যাকর্ষণ জনিত ত্বরণের মান কত?",
+        "explanation": "পৃথিবীর পৃষ্ঠে এর মান ৯.৮ m/s²।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 8,
+        "choices": [
+          {
+            "text": "৯.৮ m/s²",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "৯.৮ m/s",
+            "is_correct": false
+          },
+          {
+            "text": "৯.৮ N",
+            "is_correct": false
+          },
+          {
+            "text": "৯.৮ J",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "ক্ষমতার একক কোনটি?",
+        "explanation": "ক্ষমতার একক ওয়াট।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 9,
+        "choices": [
+          {
+            "text": "ওয়াট",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "জুল",
+            "is_correct": false
+          },
+          {
+            "text": "নিউটন",
+            "is_correct": false
+          },
+          {
+            "text": "অ্যাম্পিয়ার",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "নিউটনের তৃতীয় সূত্র কী?",
+        "explanation": "প্রত্যেক ক্রিয়ার একটি সমান ও বিপরীত প্রতিক্রিয়া আছে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 10,
+        "choices": [
+          {
+            "text": "ক্রিয়া = প্রতিক্রিয়া",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "F = ma",
+            "is_correct": false
+          },
+          {
+            "text": "v = u + at",
+            "is_correct": false
+          },
+          {
+            "text": "p = mv",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "এইচএসসি উচ্চতর গণিত: ক্যালকুলাস কুইজ",
+    "description": "অন্তরীকরণ (Differentiation) এবং যোগজীকরণের (Integration) মৌলিক ধারণার উপর মূল্যায়ন।",
+    "duration": 20,
+    "passing_percentage": 70.0,
+    "max_attempts": 2,
+    "shuffle_questions": true,
+    "enable_negative_marking": false,
+    "marks_to_cut": 0.0,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "d/dx(sin x) এর মান কত?",
+        "explanation": "sin x এর অন্তরক সহগ হলো cos x।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "cos x",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "-cos x",
+            "is_correct": false
+          },
+          {
+            "text": "sin x",
+            "is_correct": false
+          },
+          {
+            "text": "-sin x",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "d/dx(e^x) এর মান কত?",
+        "explanation": "e^x এর অন্তরীকরণ e^x ই থাকে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "e^x",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "xe^(x-1)",
+            "is_correct": false
+          },
+          {
+            "text": "1/x",
+            "is_correct": false
+          },
+          {
+            "text": "ln(x)",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "∫cos x dx এর মান কত?",
+        "explanation": "cos x এর যোগজীকরণ sin x + C।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 3,
+        "choices": [
+          {
+            "text": "sin x + C",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "-sin x + C",
+            "is_correct": false
+          },
+          {
+            "text": "cos x + C",
+            "is_correct": false
+          },
+          {
+            "text": "-cos x + C",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "d/dx(ln x) এর মান কত?",
+        "explanation": "ln x এর অন্তরীকরণ 1/x।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 4,
+        "choices": [
+          {
+            "text": "1/x",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "e^x",
+            "is_correct": false
+          },
+          {
+            "text": "x",
+            "is_correct": false
+          },
+          {
+            "text": "1/(x^2)",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "d/dx(x^n) এর মান কত?",
+        "explanation": "এটি অন্তরীকরণের ঘাতের নিয়ম।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 5,
+        "choices": [
+          {
+            "text": "nx^(n-1)",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "x^(n+1)/(n+1)",
+            "is_correct": false
+          },
+          {
+            "text": "nx^n",
+            "is_correct": false
+          },
+          {
+            "text": "n/x",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "অবিচ্ছিন্নতার জন্য লিমিটের কোন শর্ত পূরণ করতে হয়?",
+        "explanation": "বাম, ডান লিমিট এবং ফাংশনের মান সমান হতে হয়।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 6,
+        "choices": [
+          {
+            "text": "বাম ও ডান লিমিট এবং ফাংশনের মান সমান হতে হবে",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "শুধু লিমিট বিদ্যমান থাকতে হবে",
+            "is_correct": false
+          },
+          {
+            "text": "ফাংশন শূন্য হতে হবে",
+            "is_correct": false
+          },
+          {
+            "text": "অসীম হতে হবে",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "∫(1/x) dx এর মান কত?",
+        "explanation": "1/x এর যোগজীকরণ ln|x| + C।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 7,
+        "choices": [
+          {
+            "text": "ln|x| + C",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "x^2/2 + C",
+            "is_correct": false
+          },
+          {
+            "text": "e^x + C",
+            "is_correct": false
+          },
+          {
+            "text": "-1/x^2 + C",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "d/dx(tan x) এর মান কত?",
+        "explanation": "tan x এর অন্তরীকরণ sec^2 x।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 8,
+        "choices": [
+          {
+            "text": "sec^2 x",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "cot^2 x",
+            "is_correct": false
+          },
+          {
+            "text": "-sec^2 x",
+            "is_correct": false
+          },
+          {
+            "text": "sec x tan x",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "∫e^x dx এর মান কত?",
+        "explanation": "e^x এর যোগজীকরণ e^x + C।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 9,
+        "choices": [
+          {
+            "text": "e^x + C",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "e^x - C",
+            "is_correct": false
+          },
+          {
+            "text": "xe^x",
+            "is_correct": false
+          },
+          {
+            "text": "e^x / x",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "লিমিট x->0 (sin x)/x এর মান কত?",
+        "explanation": "এটি একটি মৌলিক লিমিট যার মান ১।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 10,
+        "choices": [
+          {
+            "text": "1",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "0",
+            "is_correct": false
+          },
+          {
+            "text": "অসীম",
+            "is_correct": false
+          },
+          {
+            "text": "-1",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "সাংবিধানিক আইন মূল্যায়ন",
+    "description": "বাংলাদেশের সংবিধানের ইতিহাস এবং মৌলিক অধিকার সম্পর্কে আপনার জ্ঞান পরীক্ষা করুন।",
+    "duration": 15,
+    "passing_percentage": 60.0,
+    "max_attempts": 3,
+    "shuffle_questions": true,
+    "enable_negative_marking": false,
+    "marks_to_cut": 0.0,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "বাংলাদেশের সংবিধান কত তারিখে কার্যকর হয়?",
+        "explanation": "১৬ই ডিসেম্বর, ১৯৭২।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "১৬ই ডিসেম্বর, ১৯৭২",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "৪ঠা নভেম্বর, ১৯৭২",
+            "is_correct": false
+          },
+          {
+            "text": "২৬শে মার্চ, ১৯৭১",
+            "is_correct": false
+          },
+          {
+            "text": "১৬ই ডিসেম্বর, ১৯৭১",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "মৌলিক অধিকারসমূহ সংবিধানের কোন ভাগে বর্ণিত?",
+        "explanation": "তৃতীয় ভাগে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "তৃতীয় ভাগ",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "দ্বিতীয় ভাগ",
+            "is_correct": false
+          },
+          {
+            "text": "চতুর্থ ভাগ",
+            "is_correct": false
+          },
+          {
+            "text": "প্রথম ভাগ",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "বাংলাদেশের সংবিধানের অনুচ্ছেদ সংখ্যা কতটি?",
+        "explanation": "সংবিধানে ১৫৩টি অনুচ্ছেদ রয়েছে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 3,
+        "choices": [
+          {
+            "text": "১৫৩টি",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "১৪৩টি",
+            "is_correct": false
+          },
+          {
+            "text": "১১টি",
+            "is_correct": false
+          },
+          {
+            "text": "৭টি",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "রাষ্ট্র পরিচালনার মূলনীতিসমূহ কোন ভাগে বর্ণিত?",
+        "explanation": "দ্বিতীয় ভাগে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 4,
+        "choices": [
+          {
+            "text": "দ্বিতীয় ভাগ",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "প্রথম ভাগ",
+            "is_correct": false
+          },
+          {
+            "text": "তৃতীয় ভাগ",
+            "is_correct": false
+          },
+          {
+            "text": "চতুর্থ ভাগ",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "সংবিধানের খসড়া কমিটির প্রধান কে ছিলেন?",
+        "explanation": "ড. কামাল হোসেন।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 5,
+        "choices": [
+          {
+            "text": "ড. কামাল হোসেন",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "তাজউদ্দীন আহমদ",
+            "is_correct": false
+          },
+          {
+            "text": "বঙ্গবন্ধু শেখ মুজিবুর রহমান",
+            "is_correct": false
+          },
+          {
+            "text": "সৈয়দ নজরুল ইসলাম",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "সংবিধানের কত নম্বর অনুচ্ছেদে আইনের দৃষ্টিতে সমতা বলা হয়েছে?",
+        "explanation": "অনুচ্ছেদ ২৭ এ।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 6,
+        "choices": [
+          {
+            "text": "২৭",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "২৮",
+            "is_correct": false
+          },
+          {
+            "text": "২৬",
+            "is_correct": false
+          },
+          {
+            "text": "২৯",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "বাংলাদেশের সংবিধান কি লিখিত না অলিখিত?",
+        "explanation": "বাংলাদেশের সংবিধান লিখিত।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 7,
+        "choices": [
+          {
+            "text": "লিখিত",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "অলিখিত",
+            "is_correct": false
+          },
+          {
+            "text": "আংশিক লিখিত",
+            "is_correct": false
+          },
+          {
+            "text": "কোনোটিই নয়",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "বাংলাদেশের আইনসভার নাম কী?",
+        "explanation": "জাতীয় সংসদ।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 8,
+        "choices": [
+          {
+            "text": "জাতীয় সংসদ",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "লোকসভা",
+            "is_correct": false
+          },
+          {
+            "text": "বিধানসভা",
+            "is_correct": false
+          },
+          {
+            "text": "সিনেট",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "সংবিধান সংশোধনের জন্য কত ভোটের প্রয়োজন?",
+        "explanation": "সংসদ সদস্যদের দুই-তৃতীয়াংশ ভোটের প্রয়োজন।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 9,
+        "choices": [
+          {
+            "text": "দুই-তৃতীয়াংশ",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "অর্ধেক",
+            "is_correct": false
+          },
+          {
+            "text": "এক-তৃতীয়াংশ",
+            "is_correct": false
+          },
+          {
+            "text": "সব সদস্যের সম্মতি",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "সংবিধানে কতগুলো তফসিল আছে?",
+        "explanation": "৭টি তফসিল আছে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 10,
+        "choices": [
+          {
+            "text": "৭টি",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "১১টি",
+            "is_correct": false
+          },
+          {
+            "text": "১৫টি",
+            "is_correct": false
+          },
+          {
+            "text": "৪টি",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "JavaScript & React Fundamentals",
+    "description": "Test your knowledge on modern JavaScript concepts and React components.",
+    "duration": 25,
+    "passing_percentage": 70.0,
+    "max_attempts": 3,
+    "shuffle_questions": true,
+    "enable_negative_marking": true,
+    "marks_to_cut": 0.5,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "Which method is used to update state in a React functional component?",
+        "explanation": "The useState hook updater function.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "useState updater function",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "this.setState()",
+            "is_correct": false
+          },
+          {
+            "text": "forceUpdate()",
+            "is_correct": false
+          },
+          {
+            "text": "setState()",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What does JSX stand for?",
+        "explanation": "JavaScript XML.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "JavaScript XML",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Java Syntax Extension",
+            "is_correct": false
+          },
+          {
+            "text": "JSON X",
+            "is_correct": false
+          },
+          {
+            "text": "JavaScript Extension",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "Which hook is used for side effects in React?",
+        "explanation": "useEffect is used for side effects.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 3,
+        "choices": [
+          {
+            "text": "useEffect",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "useState",
+            "is_correct": false
+          },
+          {
+            "text": "useReducer",
+            "is_correct": false
+          },
+          {
+            "text": "useContext",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "In JavaScript, what does '===' do?",
+        "explanation": "Strict equality comparison.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 4,
+        "choices": [
+          {
+            "text": "Strict equality (value and type)",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Loose equality (value only)",
+            "is_correct": false
+          },
+          {
+            "text": "Assignment",
+            "is_correct": false
+          },
+          {
+            "text": "Inequality",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "How do you declare a constant in ES6?",
+        "explanation": "Using the 'const' keyword.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 5,
+        "choices": [
+          {
+            "text": "const",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "let",
+            "is_correct": false
+          },
+          {
+            "text": "var",
+            "is_correct": false
+          },
+          {
+            "text": "constant",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What is the virtual DOM?",
+        "explanation": "An in-memory representation of the real DOM.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 6,
+        "choices": [
+          {
+            "text": "An in-memory representation of the real DOM",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "The actual DOM in the browser",
+            "is_correct": false
+          },
+          {
+            "text": "A new HTML tag",
+            "is_correct": false
+          },
+          {
+            "text": "A CSS styling approach",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "Which array method creates a new array by transforming every element?",
+        "explanation": "The map() method.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 7,
+        "choices": [
+          {
+            "text": "map()",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "filter()",
+            "is_correct": false
+          },
+          {
+            "text": "reduce()",
+            "is_correct": false
+          },
+          {
+            "text": "forEach()",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What is a Promise in JavaScript?",
+        "explanation": "An object representing the eventual completion or failure of an async operation.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 8,
+        "choices": [
+          {
+            "text": "An object representing async operation completion",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "A synchronous loop",
+            "is_correct": false
+          },
+          {
+            "text": "A way to define classes",
+            "is_correct": false
+          },
+          {
+            "text": "A CSS animation",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "How do you pass data from a parent to a child component in React?",
+        "explanation": "Using props.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 9,
+        "choices": [
+          {
+            "text": "Through props",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Through state",
+            "is_correct": false
+          },
+          {
+            "text": "Through context",
+            "is_correct": false
+          },
+          {
+            "text": "Through local storage",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What keyword is used to handle exceptions in JavaScript?",
+        "explanation": "try...catch block.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 10,
+        "choices": [
+          {
+            "text": "try...catch",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "if...else",
+            "is_correct": false
+          },
+          {
+            "text": "switch...case",
+            "is_correct": false
+          },
+          {
+            "text": "for...while",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "FastAPI & PostgreSQL Backend Assessment",
+    "description": "Evaluate your understanding of FastAPI concepts, Pydantic models, and database integrations.",
+    "duration": 30,
+    "passing_percentage": 75.0,
+    "max_attempts": 2,
+    "shuffle_questions": true,
+    "enable_negative_marking": false,
+    "marks_to_cut": 0.0,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "FastAPI uses Pydantic primarily for what purpose?",
+        "explanation": "Data validation and parsing.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "Data Validation",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Template Rendering",
+            "is_correct": false
+          },
+          {
+            "text": "Database Migration",
+            "is_correct": false
+          },
+          {
+            "text": "Routing",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What server is commonly used to run FastAPI applications?",
+        "explanation": "Uvicorn is an ASGI server.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "Uvicorn",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Gunicorn only",
+            "is_correct": false
+          },
+          {
+            "text": "Nginx",
+            "is_correct": false
+          },
+          {
+            "text": "Apache",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "Which keyword makes a function asynchronous in Python?",
+        "explanation": "async def.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 3,
+        "choices": [
+          {
+            "text": "async",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "await",
+            "is_correct": false
+          },
+          {
+            "text": "def_async",
+            "is_correct": false
+          },
+          {
+            "text": "yield",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "How does FastAPI automatically generate documentation?",
+        "explanation": "Using OpenAPI (Swagger UI).",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 4,
+        "choices": [
+          {
+            "text": "OpenAPI / Swagger UI",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "GraphQL",
+            "is_correct": false
+          },
+          {
+            "text": "Postman",
+            "is_correct": false
+          },
+          {
+            "text": "Markdown",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What is SQLAlchemy?",
+        "explanation": "An SQL toolkit and ORM for Python.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 5,
+        "choices": [
+          {
+            "text": "An ORM",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "A web framework",
+            "is_correct": false
+          },
+          {
+            "text": "A database server",
+            "is_correct": false
+          },
+          {
+            "text": "A CSS library",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "Which of the following is a way to pass data in a URL path in FastAPI?",
+        "explanation": "Path parameters.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 6,
+        "choices": [
+          {
+            "text": "Path Parameters",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Query Parameters only",
+            "is_correct": false
+          },
+          {
+            "text": "Headers only",
+            "is_correct": false
+          },
+          {
+            "text": "Body only",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What tool is used for database migrations in SQLAlchemy?",
+        "explanation": "Alembic is the migration tool for SQLAlchemy.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 7,
+        "choices": [
+          {
+            "text": "Alembic",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Django Migrations",
+            "is_correct": false
+          },
+          {
+            "text": "Flyway",
+            "is_correct": false
+          },
+          {
+            "text": "Liquibase",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "How do you declare a request body in FastAPI?",
+        "explanation": "By passing a Pydantic model as a function parameter.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 8,
+        "choices": [
+          {
+            "text": "Using a Pydantic model parameter",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "Using a string parameter",
+            "is_correct": false
+          },
+          {
+            "text": "Using the Request object manually",
+            "is_correct": false
+          },
+          {
+            "text": "Using query parameters",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "Which port does Uvicorn run on by default?",
+        "explanation": "Port 8000.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 9,
+        "choices": [
+          {
+            "text": "8000",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "8080",
+            "is_correct": false
+          },
+          {
+            "text": "5000",
+            "is_correct": false
+          },
+          {
+            "text": "3000",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "What is dependency injection in FastAPI?",
+        "explanation": "A way to declare and resolve shared logic/resources.",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 10,
+        "choices": [
+          {
+            "text": "A system to provide shared dependencies to routes",
+            "is_correct": true,
+            "explanation": "This is the correct answer."
+          },
+          {
+            "text": "A way to inject SQL queries",
+            "is_correct": false
+          },
+          {
+            "text": "A method for hacking",
+            "is_correct": false
+          },
+          {
+            "text": "A CSS framework",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "এসএসসি উচ্চতর গণিত: সেট ও ফাংশন কুইজ",
+    "description": "সেট ও ফাংশন অধ্যায়ের মৌলিক ধারণাসমূহ পরীক্ষা করুন।",
+    "duration": 10,
+    "passing_percentage": 60.0,
+    "max_attempts": 3,
+    "shuffle_questions": true,
+    "enable_negative_marking": false,
+    "marks_to_cut": 0.0,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "যদি A = {1, 2} এবং B = {2, 3} হয়, তবে A ∩ B কত?",
+        "explanation": "সাধারণ উপাদান হলো {2}।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "{2}",
+            "is_correct": true,
+            "explanation": "সঠিক উত্তর।"
+          },
+          {
+            "text": "{1, 2, 3}",
+            "is_correct": false
+          },
+          {
+            "text": "{1, 3}",
+            "is_correct": false
+          },
+          {
+            "text": "∅",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "কোনো সেটের উপাদান সংখ্যা n হলে তার উপসেট সংখ্যা কত?",
+        "explanation": "উপসেটের সংখ্যা নির্ণয়ের সূত্র ২^n।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "2^n",
+            "is_correct": true,
+            "explanation": "সঠিক উত্তর।"
+          },
+          {
+            "text": "n^2",
+            "is_correct": false
+          },
+          {
+            "text": "2n",
+            "is_correct": false
+          },
+          {
+            "text": "2^(n-1)",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "title": "এসএসসি উচ্চতর গণিত: বীজগণিতীয় রাশি কুইজ",
+    "description": "বীজগণিতীয় রাশির মান এবং উৎপাদক নির্ণয় পরীক্ষা করুন।",
+    "duration": 10,
+    "passing_percentage": 60.0,
+    "max_attempts": 3,
+    "shuffle_questions": true,
+    "enable_negative_marking": false,
+    "marks_to_cut": 0.0,
+    "show_answers": true,
+    "show_submission_history": true,
+    "is_active": true,
+    "questions": [
+      {
+        "text": "চক্রক্রমিক রাশির ক্ষেত্রে নিচের কোনটি সত্য?",
+        "explanation": "চলকগুলো চক্রাকারে পরিবর্তিত হলে রাশি অপরিবর্তিত থাকে।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 1,
+        "choices": [
+          {
+            "text": "x, y, z এর চক্রাকার পরিবর্তনে রাশি অপরিবর্তিত থাকে",
+            "is_correct": true,
+            "explanation": "সঠিক উত্তর।"
+          },
+          {
+            "text": "x ও y এর স্থান পরিবর্তনে রাশি অপরিবর্তিত থাকে",
+            "is_correct": false
+          },
+          {
+            "text": "চিহ্ন পরিবর্তন হলে রাশি একই থাকে",
+            "is_correct": false
+          }
+        ]
+      },
+      {
+        "text": "x³ - 6x² + 11x - 6 রাশিটির একটি উৎপাদক কোনটি?",
+        "explanation": "x = 1 বসালে রাশির মান ০ হয়, তাই (x - 1) একটি উৎপাদক।",
+        "question_type": "mcq_single",
+        "marks": 1.0,
+        "order_index": 2,
+        "choices": [
+          {
+            "text": "x - 1",
+            "is_correct": true,
+            "explanation": "সঠিক উত্তর।"
+          },
+          {
+            "text": "x + 1",
+            "is_correct": false
+          },
+          {
+            "text": "x + 2",
+            "is_correct": false
+          }
+        ]
+      }
+    ]
+  }
+]

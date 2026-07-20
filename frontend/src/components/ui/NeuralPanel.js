@@ -3,6 +3,44 @@
 import React, { useEffect, useRef } from 'react';
 import { useTheme } from '@mui/material';
 
+class Particle {
+    constructor(canvas) {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.3;
+        this.speedY = (Math.random() - 0.5) * 0.3;
+    }
+
+    draw(ctx, rgb) {
+        ctx.fillStyle = `rgba(${rgb}, 0.3)`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    update(canvas, interactive, mouse) {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (interactive && mouse.x !== null) {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < mouse.radius) {
+                const force = (mouse.radius - distance) / mouse.radius;
+                this.x -= (dx / distance) * force * 2;
+                this.y -= (dy / distance) * force * 2;
+            }
+        }
+
+        if (this.x > canvas.width) this.x = 0;
+        else if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        else if (this.y < 0) this.y = canvas.height;
+    }
+}
+
 const NeuralPanel = ({
     particleCount = 30,
     connectionDistance = 100,
@@ -50,48 +88,10 @@ const NeuralPanel = ({
             initParticles();
         };
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 1.5 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 0.3;
-                this.speedY = (Math.random() - 0.5) * 0.3;
-            }
-
-            draw() {
-                ctx.fillStyle = `rgba(${rgb}, 0.3)`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (interactive && mouse.x !== null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius) {
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        this.x -= (dx / distance) * force * 2;
-                        this.y -= (dy / distance) * force * 2;
-                    }
-                }
-
-                if (this.x > canvas.width) this.x = 0;
-                else if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                else if (this.y < 0) this.y = canvas.height;
-            }
-        }
-
         const initParticles = () => {
             particles = [];
             for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
+                particles.push(new Particle(canvas));
             }
         };
 
@@ -118,8 +118,8 @@ const NeuralPanel = ({
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
-                p.update();
-                p.draw();
+                p.update(canvas, interactive, mouse);
+                p.draw(ctx, rgb);
             });
             drawLines();
             animationFrameId = requestAnimationFrame(animate);

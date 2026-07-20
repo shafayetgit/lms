@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Super Admin",
+        "slug": "super-admin",
+        "description": "God mode. Ultimate power over the system."
+    },
+    {
+        "name": "Admin",
+        "slug": "admin",
+        "description": "Full system access minus super admin CRUD. but cannot do super admin actions like delete user, delete admin, etc."
+    },
+    {
+        "name": "Instructor",
+        "slug": "instructor",
+        "description": "Can create and manage courses, lessons, quizzes, assignments, and view enrolled students."
+    },
+    {
+        "name": "Student",
+        "slug": "student",
+        "description": "Can enroll in courses, access learning materials, submit assignments, take quizzes, and track learning progress."
+    },
+    {
+        "name": "Evaluator",
+        "slug": "evaluator",
+        "description": "Can enroll in courses, access learning materials, submit assignments, take quizzes, and track learning progress."
+    }
+]

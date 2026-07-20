@@ -1,0 +1,105 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    restart: always
+    env_file: ./backend/.env.prod
+    volumes:
+      - ./backend/media:/backend/media
+    ports:
+      - "8001:8001"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - coderiven-lms-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+    env_file: ./frontend/.env.production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - coderiven-lms-network
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    env_file: ./backend/.env.prod
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - coderiven-lms-network
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    env_file: ./backend/.env.prod
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata_prod:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - coderiven-lms-network
+
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    command: celery -A app.core.celery worker -l info
+    restart: always
+    env_file: ./backend/.env.prod
+    volumes:
+      - ./backend/media:/backend/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - coderiven-lms-network
+
+  # celery-beat:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile.prod
+  #   command: celery -A app.core.celery beat -l info
+  #   restart: always
+  #   env_file: ./backend/.env.prod
+  #   volumes:
+  #     - ./backend/media:/backend/media
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - coderiven-lms-network
+
+volumes:
+  pgdata_prod:
+  redisdata_prod:
+
+networks:
+  coderiven-lms-network:
+    driver: bridge

@@ -34,44 +34,40 @@ export default function CForm({
       onSubmit={onSubmit}
       sx={{
         width: isSmallScreen ? "100%" : dialog ? "100%": width,
-        // maxWidth: "100%",
+        maxWidth: "100%",
+        overflowX: "hidden",
         ...(!dialog && {
-          p: { xs: 2, sm: 3, md: 4 },
-          borderRadius: { xs: 0, sm: 3 },
-          boxShadow: isSmallScreen
-            ? 0
-            : theme.palette.patient?.generic?.shadow ||
-              "0 8px 32px rgba(0,0,0,0.1)",
-          bgcolor: "background.paper",
-          mx: "auto",
-          border: isSmallScreen ? "none" : "1px solid",
-          borderColor: "divider",
+          borderRadius: 0,
+          boxShadow: "none",
+          bgcolor: alpha(theme.palette.background.paper, 0.6),
+          backdropFilter: "blur(20px)",
+          borderColor: alpha(theme.palette.divider, 0.08),
         }),
+        pt: 1,
         ...sx,
       }}
       encType="multipart/form-data"
     >
-      <Stack spacing={isSmallScreen ? 2.5 : 4}>
+      <Stack spacing={isSmallScreen ? 3 : 5}>
         {title && (
-          <Box textAlign="center" mb={{ xs: 2, sm: 4 }}>
+          <Box textAlign="center" mb={{ xs: 2, md: 3 }}>
             <Typography
               variant={isSmallScreen ? "h6" : "h5"}
-              color="primary"
+              color="text.primary"
               sx={{
                 fontWeight: 800,
-                textTransform: "uppercase",
-                letterSpacing: 2,
+                letterSpacing: 1,
                 position: "relative",
                 display: "inline-block",
                 "&::after": {
                   content: '""',
                   position: "absolute",
                   bottom: -8,
-                  left: "20%",
-                  right: "20%",
-                  height: "3px",
+                  left: 0,
+                  right: 0,
+                  height: "4px",
                   bgcolor: "primary.main",
-                  borderRadius: "2px",
+                  borderRadius: "4px",
                 },
               }}
             >

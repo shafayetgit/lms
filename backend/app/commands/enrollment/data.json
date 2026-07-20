@@ -1,0 +1,36 @@
+[
+  {
+    "student_username": "tariqulislam",
+    "course_slug": "modern-frontend-web-development-with-react",
+    "batch_title": "Full-Stack Web Development Cohort 2026",
+    "status": "active",
+    "progress": 25.0
+  },
+  {
+    "student_username": "nusratjahan",
+    "course_slug": "modern-frontend-web-development-with-react",
+    "batch_title": "Full-Stack Web Development Cohort 2026",
+    "status": "active",
+    "progress": 40.0
+  },
+  {
+    "student_username": "tanvirahmed",
+    "course_slug": "backend-engineering-with-python-and-fastapi",
+    "batch_title": "Python for Data Science & ML Cohort 1",
+    "status": "active",
+    "progress": 15.0
+  },
+  {
+    "student_username": "sabrinahossain",
+    "course_slug": "microservices-with-fastapi",
+    "batch_title": "FastAPI Microservices Mastery Batch 2026",
+    "status": "active",
+    "progress": 60.0
+  },
+  {
+    "student_username": "mehedihasan",
+    "course_slug": "modern-frontend-web-development-with-react",
+    "status": "active",
+    "progress": 10.0
+  }
+]

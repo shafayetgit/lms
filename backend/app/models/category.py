@@ -13,7 +13,6 @@ class CategoryBadge(str, Enum):
 class Category(Base):
     __tablename__ = "categories"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("categories.id"))
     name: Mapped[str] = mapped_column(String(100), unique=True)
     slug: Mapped[str] = mapped_column(String(120), unique=True)
@@ -26,4 +25,11 @@ class Category(Base):
     thumbnail: Mapped[Optional[str]] = mapped_column(String(255), index=True)
 
     # Relationships
+    parent: Mapped[Optional["Category"]] = relationship("Category", remote_side="Category.id")
     courses: Mapped[List["Course"]] = relationship("Course", back_populates="category")
+    batches = relationship("Batch", back_populates="category")
+
+    @property
+    def parent_public_id(self) -> Optional[str]:
+        return self.parent.public_id if self.parent else None
+

@@ -2,10 +2,10 @@
 import React from "react";
 import { Box, Typography, Grid, Card, CardContent, Icon } from "@mui/material";
 import { motion } from "framer-motion";
-import SchoolIcon from "@mui/icons-material/School";
-import PeopleIcon from "@mui/icons-material/People";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
+import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
+import AssignmentTurnedInOutlinedIcon from "@mui/icons-material/AssignmentTurnedInOutlined";
 
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -21,22 +21,22 @@ const itemVariants = {
 
 const items = [
     {
-        icon: PeopleIcon,
+        icon: PeopleOutlinedIcon,
         title: "Expert-Led Content",
         text: "Learn from seasoned professionals.",
     },
     {
-        icon: SchoolIcon,
+        icon: SchoolOutlinedIcon,
         title: "Flexible Learning",
         text: "Access self-paced modules anytime.",
     },
     {
-        icon: AssignmentTurnedInIcon,
+        icon: AssignmentTurnedInOutlinedIcon,
         title: "Diverse Catalog",
         text: "Courses in finance, tech, and more.",
     },
     {
-        icon: EmojiEventsIcon,
+        icon: EmojiEventsOutlinedIcon,
         title: "Certified & Recognized",
         text: "Earn credentials employers trust.",
     },
@@ -47,7 +47,7 @@ const WhyChooseUs = () => {
         <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={itemVariants}
         >
             <Box sx={{ my: { xs: 6, md: 8 }, pb: 7 }}>
@@ -57,7 +57,7 @@ const WhyChooseUs = () => {
                     gutterBottom
                     sx={{ fontWeight: 800, color: "text.primary" }}
                 >
-                    Why Choose E-Courses?
+                    Why Choose Us?
                 </Typography>
 
                 <Grid container spacing={{ xs: 3, md: 4 }} sx={{ mt: 4 }}>
@@ -68,16 +68,11 @@ const WhyChooseUs = () => {
                                     height: "100%",
                                     p: 3,
                                     textAlign: "center",
-                                    borderRadius: 4,
+                                    borderRadius: 1,
                                     bgcolor: "background.paper",
-                                    border: "1px solid rgba(0,0,0,0.08)",
-                                    boxShadow: "0 4px 12px rgba(0,0,0,0.02)",
-                                    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                                    "&:hover": {
-                                        transform: "translateY(-6px)",
-                                        borderColor: "rgba(0,0,0,0.2)",
-                                        boxShadow: "0 15px 35px rgba(0,0,0,0.08)",
-                                    },
+                                    border: "1px solid",
+                                    borderColor: "divider",
+                                    boxShadow: "none",
                                 }}
                             >
                                 <Icon

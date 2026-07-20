@@ -52,7 +52,7 @@ import {
 
 export default function CButton({
   label,
-  size = "medium",
+  size = "small",
   onClick,
   sx,
   icon,
@@ -196,14 +196,14 @@ export default function CButton({
   const handleClose = () => setOpen(false)
 
   const ButtonContent = iconButton ? (
-    <IconButton size={size} sx={sx} onClick={handleClick} {...other}>
+    <IconButton size={size} sx={{ p: 0.6, ...sx }} onClick={handleClick} {...other}>
       {startIcon}
     </IconButton>
   ) : (
     <Button
       size={size}
       variant={variant}
-      sx={{ fontWeight: "bold", textTransform: "capitalize", ...sx }}
+      sx={sx}
       onClick={handleClick}
       startIcon={startIcon}
       {...other}

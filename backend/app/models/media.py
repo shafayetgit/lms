@@ -42,8 +42,6 @@ settings = init_settings()
 class Media(Base):
     __tablename__ = "media"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-
     provider: Mapped[MediaProvider] = mapped_column(
         Enum(MediaProvider, name="media_provider_enum"),
         default=settings.MEDIA_PROVIDER,

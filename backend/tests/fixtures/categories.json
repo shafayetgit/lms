@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Web Development",
+    "slug": "web-development",
+    "parent_id": null,
+    "description": "Courses covering frontend, backend, and full-stack web development.",
+    "badge": "featured",
+    "thumbnail": "https://cdn.example.com/categories/web-development.png",
+    "is_active": true
+  },
+  {
+    "name": "Mobile Development",
+    "slug": "mobile-development",
+    "parent_id": null,
+    "description": "Android, iOS, Flutter, and React Native development courses.",
+    "badge": "none",
+    "thumbnail": "https://cdn.example.com/categories/mobile-development.png",
+    "is_active": true
+  },
+  {
+    "name": "Python",
+    "slug": "python",
+    "parent_id": 1,
+    "description": "Learn Python programming from beginner to advanced.",
+    "badge": "featured",
+    "thumbnail": "https://cdn.example.com/categories/python.png",
+    "is_active": true
+  },
+  {
+    "name": "JavaScript",
+    "slug": "javascript",
+    "parent_id": 1,
+    "description": "Master modern JavaScript, ES6+, and related frameworks.",
+    "badge": "none",
+    "thumbnail": "https://cdn.example.com/categories/javascript.png",
+    "is_active": true
+  },
+  {
+    "name": "Data Science",
+    "slug": "data-science",
+    "parent_id": null,
+    "description": "Data analysis, visualization, and machine learning courses.",
+    "badge": "featured",
+    "thumbnail": "https://cdn.example.com/categories/data-science.png",
+    "is_active": true
+  },
+  {
+    "name": "Machine Learning",
+    "slug": "machine-learning",
+    "parent_id": 5,
+    "description": "Supervised, unsupervised, and deep learning techniques.",
+    "badge": "featured",
+    "thumbnail": "https://cdn.example.com/categories/machine-learning.png",
+    "is_active": true
+  },
+  {
+    "name": "Cloud Computing",
+    "slug": "cloud-computing",
+    "parent_id": null,
+    "description": "AWS, Azure, Google Cloud, and cloud architecture.",
+    "badge": "none",
+    "thumbnail": "https://cdn.example.com/categories/cloud-computing.png",
+    "is_active": true
+  },
+  {
+    "name": "DevOps",
+    "slug": "devops",
+    "parent_id": 7,
+    "description": "CI/CD, Docker, Kubernetes, and infrastructure automation.",
+    "badge": "featured",
+    "thumbnail": "https://cdn.example.com/categories/devops.png",
+    "is_active": true
+  },
+  {
+    "name": "Cybersecurity",
+    "slug": "cybersecurity",
+    "parent_id": null,
+    "description": "Network security, ethical hacking, and secure coding practices.",
+    "badge": "none",
+    "thumbnail": "https://cdn.example.com/categories/cybersecurity.png",
+    "is_active": false
+  },
+  {
+    "name": "UI UX Design",
+    "slug": "ui-ux-design",
+    "parent_id": null,
+    "description": "User interface and user experience design principles.",
+    "badge": "featured",
+    "thumbnail": "https://cdn.example.com/categories/ui-ux-design.png",
+    "is_active": true
+  }
+]

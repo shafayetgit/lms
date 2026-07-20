@@ -32,7 +32,7 @@ export const featuredCourses = [
         title: "Machine Learning Fundamentals",
         instructor: "David Chen",
         image:
-            "https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+            "https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=40",
         rating: 4.9,
         students: 2876,
         duration: "35h 15m",
@@ -46,7 +46,7 @@ export const featuredCourses = [
         title: "UI/UX Design Masterclass",
         instructor: "Emily Rodriguez",
         image:
-            "https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+            "https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=40",
         rating: 4.7,
         students: 1893,
         duration: "28h 45m",
@@ -62,7 +62,7 @@ export const featuredCourses = [
         title: "Business Analytics Bootcamp",
         instructor: "Michael Thompson",
         image:
-            "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250",
+            "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=40",
         rating: 4.6,
         students: 2156,
         duration: "42h 10m",

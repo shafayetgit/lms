@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 
 import CTextField from "@/components/form/CTextField";
 import CButton from "@/components/ui/CButton";
+import AuthLogo from "@/components/ui/AuthLogo";
 
 import { useForgotPasswordMutation } from "@/features/auth/authAPI";
 
@@ -67,31 +68,18 @@ const ForgotPassword = () => {
       animate="visible"
       sx={{
         bgcolor: "background.paper",
-        p: { xs: 4, md: 6 },
-        borderRadius: 6,
-        boxShadow: (theme) => `0 12px 40px ${alpha(theme.palette.text.primary, 0.08)}`,
-        border: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.04)}`,
+        p: { xs: 3, md: 4 },
+        borderRadius: 1,
+        border: "1px solid",
+        borderColor: "divider",
+        maxWidth: 420,
+        mx: "auto",
       }}
     >
       {/* Header Icon & Title */}
-      <Box textAlign="center" mb={4}>
+      <Box textAlign="center" mb={3}>
         <motion.div variants={itemVariants}>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: "50%",
-              backgroundColor: "secondary.main",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              margin: "0 auto 16px",
-              boxShadow: (theme) =>
-                `0 8px 24px ${alpha(theme.palette.secondary.main, 0.3)}`, // Modern shadow
-            }}
-          >
-            <LockOutlined sx={{ fontSize: 32, color: "white" }} />
-          </Box>
+          <AuthLogo />
         </motion.div>
 
         <motion.div variants={itemVariants}>
@@ -101,7 +89,7 @@ const ForgotPassword = () => {
             sx={{
               letterSpacing: "-0.5px",
               color: "text.primary",
-              mb: 1.5,
+              mb: 0.5,
             }}
           >
             Forgot Password?
@@ -110,12 +98,12 @@ const ForgotPassword = () => {
 
         <motion.div variants={itemVariants}>
           <Typography
-            variant="body1"
+            variant="body2"
             color="text.secondary"
             px={2}
-            lineHeight={1.6}
+            lineHeight={1.5}
           >
-            Enter your registered email address and we're sending you
+            Enter your registered email address and we&apos;re sending you
             instructions to reset your password.
           </Typography>
         </motion.div>
@@ -128,7 +116,7 @@ const ForgotPassword = () => {
         noValidate
         sx={{ px: { xs: 0, sm: 2 } }}
       >
-        <Stack spacing={3.5}>
+        <Stack spacing={2.5}>
           <motion.div variants={itemVariants}>
             <CTextField
               label="Email Address"
@@ -143,7 +131,7 @@ const ForgotPassword = () => {
               required
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: 3.5,
+                  borderRadius: 1,
                   backgroundColor: (theme) =>
                     theme.palette.mode === "dark"
                       ? alpha(theme.palette.common.white, 0.02)
@@ -162,18 +150,15 @@ const ForgotPassword = () => {
               color="secondary"
               loading={isLoading}
               disabled={isLoading || !formik.isValid || !formik.dirty}
+              action="send"
               sx={{
-                py: 1.8,
-                borderRadius: 3.5,
+                py: 1.2,
+                borderRadius: 1,
                 fontSize: "1rem",
                 fontWeight: 700,
-                boxShadow: (theme) =>
-                  `0 6px 20px ${alpha(theme.palette.secondary.main, 0.35)}`,
                 transition: "all 0.3s ease",
                 "&:hover": {
                   transform: "translateY(-2px)",
-                  boxShadow: (theme) =>
-                    `0 8px 25px ${alpha(theme.palette.secondary.main, 0.4)}`,
                 },
               }}
             />
@@ -182,7 +167,7 @@ const ForgotPassword = () => {
       </Box>
 
       <motion.div variants={itemVariants}>
-        <Divider sx={{ my: 4.5, borderColor: "divider", opacity: 0.6 }} />
+        <Divider sx={{ my: 2.5, borderColor: "divider", opacity: 0.6 }} />
       </motion.div>
 
       {/* Footer Actions */}

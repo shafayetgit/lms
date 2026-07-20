@@ -2,36 +2,110 @@
 trigger: always_on
 ---
 
-> **These rules are the authoritative guide for any AI agent working on this codebase.**
-> Read them entirely before writing or modifying any code.
+Core Rules:
+-----------
+- Always use the project's approved design system components.
 
----
+- Prefer existing custom components (e.g., CDialog, CForm, CTextField, CButton, CDatatable) over raw UI library components.
 
-## Project Overview
+- Follow established design patterns, layouts, spacing, typography, and interaction behaviors.
 
-This is a full-stack **Learning Management System (LMS)** codenamed **"Elite LMS"**.
+- Reuse existing shared components whenever possible.
 
-| Layer | Stack |
-|---|---|
-| **Frontend** | Next.js 16 (App Router, Turbopack), React 19, MUI v9, Redux Toolkit / RTK Query, Formik + Yup, Framer Motion |
-| **Backend** | FastAPI (fully async), SQLAlchemy 2 (async), Alembic, Pydantic v2, PostgreSQL 16, Redis 7, Celery
+Project Structure:
+-----------------
+- Follow the existing directory and module structure for frontend and backend.
 
+- Keep pages, components, hooks, services, and utilities in their designated locations.
+- Follow established naming conventions.
+- Avoid duplicating functionality that already exists elsewhere in the project.
+- Do not add agentic comment use developer friendly one line most important comment.
+- use uv and npm to test project, do not use docker for test.
+- Before running rm command to delete any file ask permission.
+- Do not test via browser.
+- Do not run npm build
 
-## Frontend Rules
+API Response Standard Format:
+-----------------------------
 
-### Path Aliases
+- For List Response Format
+{
+  "success": true,
+  "data": [],
+  "meta": {
+    "total": 0,
+    "page": 1,
+    "size": 10,
+    "pages": 1,
+    "has_next": false,
+    "has_prev": false
+  }
+}
 
-- Always use the `@/` alias for imports (maps to `./src/`):
-- Always use reusable components from `src/components`
-- Keep the code consise and readable, follow category and course modules structure in folder and file naming and coding style. and folder and component naming convension
-- Do not use comments excessively. Comment only where necessary. and it will be developer like comments not like ai comments or explanation. such as: `// fixed this bug` or `// TODO: implement this feature`. NOT `// this code is doing this and that`
-- Do not repeat code. Use helper functions and components to avoid code duplication.
-- Always use latest stable version of libraries and syntaxes. such as: react 19, next 16, mui 9, redux toolkit / rtk query, formik + yup, framer motion, tailwind css v4
+- For Detail Response Format
+{
+  "success": true,
+  "data": {}
+}
 
+- For Create / Update Response Format
+{
+  "success": true,
+  "data": {}
+}
 
+- For Delete Response Format
+{
+  "success": true,
+  "message": "Successfully deleted"
+}
 
-## Backend Rules
- - Follow and course module sturcture from the existing codes.
- - remember that the codebase is async first.
- - Always use latest stable version of libraries and syntaxes.
- 
+- For Meta Response Format
+{
+  "success": true,
+  "data": {
+    "sources": [
+      {
+        "label": "Website",
+        "value": "Website"
+      }
+    ],
+    "industries": [
+      {
+        "label": "Technology",
+        "value": "Technology"
+      }
+    ],
+    "territories": [
+      {
+        "label": "North America",
+        "value": "North America"
+      }
+    ],
+    "users": [
+      {
+        "label": "John Doe",
+        "value": 1,
+        "public_id": "019eb84e-1010-70c1-b6d0-d60a5931cf7b",
+        "email": "john@example.com",
+        "avatar": null
+      }
+    ]
+  }
+}
+
+Grid syntax in version 9.x:
+
+import Grid from '@mui/material/Grid';
+
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+        {Array.from(Array(6)).map((_, index) => (
+          <Grid key={index} size={{ xs: 2, sm: 4, md: 4 }}>
+            <Item>{index + 1}</Item>
+          </Grid>
+        ))}
+      </Grid>
+
+Always use CPageLloader, do not use skeleton.
+Always keep helpline sidebar to the right for each module with explanation of improtant things and fields
+- Always remember to delete the temporary helper script

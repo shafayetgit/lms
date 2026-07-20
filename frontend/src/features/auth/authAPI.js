@@ -63,6 +63,12 @@ const authAPI = api.injectEndpoints({
                 body,
             }),
         }),
+
+        getMyPermissions: builder.query({
+            query: () => `${PREFIX}/permissions`,
+            providesTags: ["PERMISSIONS"],
+            keepUnusedDataFor: 86400,
+        }),
     }),
     overrideExisting: false,
 })
@@ -76,5 +82,6 @@ export const {
     useResendOTPMutation,
     useChangePasswordMutation,
     useVerifyEmailMutation,
+    useGetMyPermissionsQuery,
 } = authAPI
 export default authAPI

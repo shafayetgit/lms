@@ -41,6 +41,10 @@ const studentAPI = api.injectEndpoints({
       }),
       invalidatesTags: ["STUDENTS"],
     }),
+
+    readStudentDashboardSummary: builder.query({
+      query: () => `${PREFIX}/dashboard/summary`,
+    }),
   }),
   overrideExisting: false,
 })
@@ -51,5 +55,6 @@ export const {
   useLazyReadStudentsQuery,
   useReadStudentQuery,
   useUpdateStudentMutation,
+  useReadStudentDashboardSummaryQuery,
 } = studentAPI
 export default studentAPI

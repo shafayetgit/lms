@@ -49,6 +49,24 @@ const enrollmentAPI = api.injectEndpoints({
       }),
       invalidatesTags: ["ENROLLMENTS"],
     }),
+    readEnrollmentMeta: builder.query({
+      query: () => `${PREFIX}/meta`,
+    }),
+
+    readEnrolledStudents: builder.query({
+      query: ({ coursePublicId } = {}) => `${PREFIX}/students/${coursePublicId}`,
+      providesTags: ["ENROLLMENTS"],
+    }),
+    readMyEnrollments: builder.query({
+      query: ({ page, size } = {}) => {
+        const params = new URLSearchParams()
+        if (page !== undefined) params.set("page", page)
+        if (size !== undefined) params.set("size", size)
+        const queryString = params.toString()
+        return queryString ? `${PREFIX}/my?${queryString}` : `${PREFIX}/my`
+      },
+      providesTags: ["ENROLLMENTS"],
+    }),
   }),
   overrideExisting: false,
 })
@@ -58,7 +76,10 @@ export const {
   useReadEnrollmentsQuery,
   useLazyReadEnrollmentsQuery,
   useReadEnrollmentQuery,
+  useReadEnrollmentMetaQuery,
   useUpdateEnrollmentMutation,
   useDeleteEnrollmentMutation,
+  useReadEnrolledStudentsQuery,
+  useReadMyEnrollmentsQuery,
 } = enrollmentAPI
 export default enrollmentAPI

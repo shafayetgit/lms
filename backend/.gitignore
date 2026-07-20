@@ -62,3 +62,8 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local uploads and backups
+media/
+env_backup
+.python-version

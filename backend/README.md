@@ -298,3 +298,9 @@ alembic upgrade head
 
 TO run celery:
 celery -A app.core.celery worker --loglevel=info
+
+# Worker (processes tasks)
+celery -A app.core.celery_app worker -l info
+
+# Beat (schedules periodic tasks)
+celery -A app.core.celery_app beat -l info

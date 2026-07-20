@@ -3,14 +3,15 @@ Complete Authentication Endpoints
 Handles registration, sign in, 2FA, password management, etc.
 """
 
+import logging
 from datetime import timedelta, datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status, Query, Request, Body
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-import logging
-from typing import Optional
+from sqlalchemy import select
 
+from app.core.limiter import limiter
 from app.api.deps import get_db
 from app.core.dependencies import get_current_active_user, get_current_user
 from app.core.responses import read_response
@@ -39,6 +40,7 @@ from app.schemas.auth import (
     VerifyTOTPRequest,
     Disable2FARequest,
     PasswordPolicyResponse,
+    RefreshTokenRequest,
 )
 from app.repositories.user import (
     get_user_by_email,
@@ -49,10 +51,36 @@ from app.services.otp import get_otp_service
 from app.services.email import get_email_service
 from app.services.sms import get_sms_service
 from app.services.user import register_user
-from app.tasks.emails import send_verification_email, send_welcome_email
+from app.tasks.emails import (
+    send_verification_email,
+    send_welcome_email,
+    send_password_reset_email,
+    send_password_changed_email,
+    send_2fa_otp_email,
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["Auth"])
+
+
+async def _get_token_data(db: AsyncSession, user: User) -> dict:
+    feature_flags = []
+    if user.role != "superadmin":
+        from app.models.feature_flag import FeatureFlag, UserFeatureFlag
+        from sqlalchemy import select
+        query = (
+            select(FeatureFlag.slug)
+            .join(UserFeatureFlag, UserFeatureFlag.feature_flag_id == FeatureFlag.id)
+            .where(UserFeatureFlag.user_id == user.id)
+        )
+        result = await db.execute(query)
+        feature_flags = list(result.scalars().all())
+    return {
+        "sub": user.username,
+        "emailVerified": user.email_verified,
+        "role": user.role,
+        "feature_flags": feature_flags,
+    }
 
 
 # ============================================================================
@@ -61,14 +89,22 @@ router = APIRouter(tags=["Auth"])
 @router.post(
     "/register", response_model=RegisterResponse, status_code=status.HTTP_201_CREATED
 )
+@limiter.limit("5/minute")
 async def register(
+    request: Request,
     user_in: UserCreate,
     db: AsyncSession = Depends(get_db),
 ):
     try:
         user = await register_user(db, user_in)
 
-        otp = await get_otp_service().send_email_otp(user.email)
+        try:
+            otp = await get_otp_service().send_email_otp(user.email)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=str(e),
+            )
         settings = init_settings()
 
         if settings.CELERY_ENABLED:
@@ -111,8 +147,10 @@ async def register(
 
 
 @router.post("/verify-email", response_model=dict)
+@limiter.limit("5/minute")
 async def verify_email(
-    request: VerifyEmailRequest,
+    request: Request,
+    verify_in: VerifyEmailRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -122,14 +160,14 @@ async def verify_email(
     """
     # Verify OTP
     otp_service = get_otp_service()
-    if not await otp_service.verify_email_otp(request.email, request.otp):
+    if not await otp_service.verify_email_otp(verify_in.email, verify_in.otp):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid or expired OTP",
         )
 
     # Update user email_verified status
-    user = await get_user_by_email(db, request.email)
+    user = await get_user_by_email(db, verify_in.email)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -167,8 +205,10 @@ async def verify_email(
 
 
 @router.post("/resend-otp", response_model=dict)
+@limiter.limit("5/minute")
 async def resend_otp(
-    request: ResendOTPRequest,
+    request: Request,
+    resend_in: ResendOTPRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -180,47 +220,47 @@ async def resend_otp(
     otp_service = get_otp_service()
 
     # Check if on cooldown
-    if request.method == "email":
-        if await otp_service.is_email_otp_on_cooldown(request.email):
+    if resend_in.method == "email":
+        if await otp_service.is_email_otp_on_cooldown(resend_in.email):
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                 detail=f"Please wait {settings.OTP_RESEND_COOLDOWN_SECONDS} seconds before requesting another OTP",
             )
 
-        attempts = await otp_service.get_otp_attempts(request.email)
+        attempts = await otp_service.get_otp_attempts(resend_in.email)
         if attempts >= settings.OTP_RESEND_MAX_ATTEMPTS:
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                 detail=f"Maximum OTP attempts ({settings.OTP_RESEND_MAX_ATTEMPTS}) exceeded",
             )
 
-        otp = await otp_service.send_email_otp(request.email)
+        otp = await otp_service.send_email_otp(resend_in.email)
 
         if settings.CELERY_ENABLED:
             try:
                 send_verification_email.delay(
-                    to_email=request.email,
+                    to_email=resend_in.email,
                     otp=otp,
-                    user_name=request.email,
+                    user_name=resend_in.email,
                 )
             except Exception as e:
                 logger.warning(f"Celery enqueue failed; falling back: {e}")
                 email_service = get_email_service()
                 email_service.send_verification_email(
-                    to_email=request.email,
+                    to_email=resend_in.email,
                     otp=otp,
-                    user_name=request.email,
+                    user_name=resend_in.email,
                 )
         else:
             email_service = get_email_service()
             email_service.send_verification_email(
-                to_email=request.email,
+                to_email=resend_in.email,
                 otp=otp,
-                user_name=request.email,
+                user_name=resend_in.email,
             )
 
-    elif request.method == "sms":
-        user = await get_user_by_email(db, request.email)
+    elif resend_in.method == "sms":
+        user = await get_user_by_email(db, resend_in.email)
         if not user or not user.phone_number:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -238,7 +278,7 @@ async def resend_otp(
         await sms_service.send_otp_sms(user.phone_number, otp)
 
     return {
-        "message": f"OTP sent to {request.method}",
+        "message": f"OTP sent to {resend_in.method}",
         "attempts_remaining": settings.OTP_RESEND_MAX_ATTEMPTS - attempts,
     }
 
@@ -249,6 +289,7 @@ async def resend_otp(
 
 
 @router.post("/token", response_model=TokenResponse)
+@limiter.limit("10/minute")
 async def sign_in(
     request: Request,
     db: AsyncSession = Depends(get_db),
@@ -333,14 +374,34 @@ async def sign_in(
     if user.two_factor_enabled:
         # Generate 2FA OTP and send it
         otp_service = get_otp_service()
-        otp = await otp_service.send_email_otp(user.email)
+        try:
+            otp = await otp_service.send_email_otp(user.email)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=str(e),
+            )
 
-        email_service = get_email_service()
-        await email_service.send_2fa_otp_email(
-            to_email=user.email,
-            otp=otp,
-            user_name=user.first_name,
-        )
+        if settings.CELERY_ENABLED:
+            try:
+                send_2fa_otp_email.delay(user.email, otp, user.first_name)
+            except Exception as e:
+                logger.warning(f"Celery enqueue failed; falling back: {e}")
+                email_service = get_email_service()
+                await email_service.send_2fa_otp_email(
+                    to_email=user.email,
+                    otp=otp,
+                    user_name=user.first_name,
+                    db=db,
+                )
+        else:
+            email_service = get_email_service()
+            await email_service.send_2fa_otp_email(
+                to_email=user.email,
+                otp=otp,
+                user_name=user.first_name,
+                db=db,
+            )
 
         return TokenResponse(
             access_token="",
@@ -351,11 +412,7 @@ async def sign_in(
     # Generate tokens
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={
-            "sub": user.username,
-            "emailVerified": user.email_verified,
-            "role": user.role,
-        },
+        data=await _get_token_data(db, user),
         expires_delta=access_token_expires,
     )
     refresh_token = create_refresh_token(data={"sub": user.username})
@@ -368,18 +425,30 @@ async def sign_in(
 
 
 @router.post("/refresh", response_model=TokenResponse)
-async def refresh_token_endpoint(refresh_token: str):
+@limiter.limit("10/minute")
+async def refresh_token_endpoint(
+    request: Request,
+    body: RefreshTokenRequest,
+    db: AsyncSession = Depends(get_db),
+):
     """
     Get new access token using refresh token.
 
     Refresh tokens have longer expiry than access tokens.
     """
     settings = init_settings()
-    username = verify_refresh_token(refresh_token)
+    username = verify_refresh_token(body.refresh_token)
+
+    user = await get_user_by_username(db, username)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": username},
+        data=await _get_token_data(db, user),
         expires_delta=access_token_expires,
     )
     new_refresh_token = create_refresh_token(data={"sub": username})
@@ -397,8 +466,10 @@ async def refresh_token_endpoint(refresh_token: str):
 
 
 @router.post("/forgot-password", response_model=dict)
+@limiter.limit("5/minute")
 async def forgot_password(
-    request: ForgotPasswordRequest,
+    request: Request,
+    forgot_in: ForgotPasswordRequest,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -413,14 +484,35 @@ async def forgot_password(
         return {"message": "If email exists, password reset code will be sent"}
 
     otp_service = get_otp_service()
-    otp = await otp_service.send_email_otp(user.email)
+    try:
+        otp = await otp_service.send_email_otp(user.email)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(e),
+        )
 
-    email_service = get_email_service()
-    await email_service.send_password_reset_email(
-        to_email=user.email,
-        otp=otp,
-        user_name=user.first_name,
-    )
+    settings = init_settings()
+    if settings.CELERY_ENABLED:
+        try:
+            send_password_reset_email.delay(user.email, otp, user.first_name)
+        except Exception as e:
+            logger.warning(f"Celery enqueue failed; falling back: {e}")
+            email_service = get_email_service()
+            await email_service.send_password_reset_email(
+                to_email=user.email,
+                otp=otp,
+                user_name=user.first_name,
+                db=db,
+            )
+    else:
+        email_service = get_email_service()
+        await email_service.send_password_reset_email(
+            to_email=user.email,
+            otp=otp,
+            user_name=user.first_name,
+            db=db,
+        )
 
     return {"message": "Password reset code sent to email if account exists"}
 
@@ -460,17 +552,31 @@ async def reset_password(
     await update_user(db, user)
 
     # Send confirmation email
-    email_service = get_email_service()
-    await email_service.send_password_changed_email(
-        to_email=user.email,
-        user_name=user.first_name,
-    )
+    settings = init_settings()
+    if settings.CELERY_ENABLED:
+        try:
+            send_password_changed_email.delay(user.email, user.first_name)
+        except Exception as e:
+            logger.warning(f"Celery enqueue failed; falling back: {e}")
+            email_service = get_email_service()
+            await email_service.send_password_changed_email(
+                to_email=user.email,
+                user_name=user.first_name,
+                db=db,
+            )
+    else:
+        email_service = get_email_service()
+        await email_service.send_password_changed_email(
+            to_email=user.email,
+            user_name=user.first_name,
+            db=db,
+        )
 
     # Generate new tokens
     settings = init_settings()
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username},
+        data=await _get_token_data(db, user),
         expires_delta=access_token_expires,
     )
     refresh_token = create_refresh_token(data={"sub": user.username})
@@ -506,11 +612,25 @@ async def change_password(
     await update_user(db, current_user)
 
     # Send confirmation email
-    email_service = get_email_service()
-    await email_service.send_password_changed_email(
-        to_email=current_user.email,
-        user_name=current_user.first_name,
-    )
+    settings = init_settings()
+    if settings.CELERY_ENABLED:
+        try:
+            send_password_changed_email.delay(current_user.email, current_user.first_name)
+        except Exception as e:
+            logger.warning(f"Celery enqueue failed; falling back: {e}")
+            email_service = get_email_service()
+            await email_service.send_password_changed_email(
+                to_email=current_user.email,
+                user_name=current_user.first_name,
+                db=db,
+            )
+    else:
+        email_service = get_email_service()
+        await email_service.send_password_changed_email(
+            to_email=current_user.email,
+            user_name=current_user.first_name,
+            db=db,
+        )
 
     return {"message": "Password changed successfully"}
 
@@ -571,14 +691,34 @@ async def enable_2fa(
     # Send confirmation
     if request.method == "email":
         otp_service = get_otp_service()
-        otp = await otp_service.send_email_otp(current_user.email)
+        try:
+            otp = await otp_service.send_email_otp(current_user.email)
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail=str(e),
+            )
 
-        email_service = get_email_service()
-        await email_service.send_2fa_otp_email(
-            to_email=current_user.email,
-            otp=otp,
-            user_name=current_user.first_name,
-        )
+        if settings.CELERY_ENABLED:
+            try:
+                send_2fa_otp_email.delay(current_user.email, otp, current_user.first_name)
+            except Exception as e:
+                logger.warning(f"Celery enqueue failed; falling back: {e}")
+                email_service = get_email_service()
+                await email_service.send_2fa_otp_email(
+                    to_email=current_user.email,
+                    otp=otp,
+                    user_name=current_user.first_name,
+                    db=db,
+                )
+        else:
+            email_service = get_email_service()
+            await email_service.send_2fa_otp_email(
+                to_email=current_user.email,
+                otp=otp,
+                user_name=current_user.first_name,
+                db=db,
+            )
 
     elif request.method == "sms":
         otp_service = get_otp_service()
@@ -636,7 +776,7 @@ async def verify_2fa(
     settings = init_settings()
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username},
+        data=await _get_token_data(db, user),
         expires_delta=access_token_expires,
     )
     refresh_token = create_refresh_token(data={"sub": user.username})
@@ -706,3 +846,52 @@ async def get_current_user_info(
     Get current authenticated user information.
     """
     return current_user
+
+
+@router.get("/permissions")
+async def get_current_user_permissions(
+    current_user: User = Depends(get_current_active_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Get all permissions for the authenticated user grouped by resource.
+    """
+    # Superadmin gets unrestricted access
+    if current_user.role == "superadmin":
+        return read_response({"data": {}})
+
+    roles = current_user.all_roles
+    role_ids = [r.id for r in roles]
+    
+    permissions_dict = {}
+    if role_ids:
+        from app.models.permission import Permission
+        from sqlalchemy import select
+
+        query = select(Permission).where(Permission.role_id.in_(role_ids))
+        result = await db.execute(query)
+        permissions = result.scalars().all()
+
+        for perm in permissions:
+            res_name = perm.resource
+            if res_name not in permissions_dict:
+                permissions_dict[res_name] = {
+                    "read": False,
+                    "create": False,
+                    "update": False,
+                    "delete": False,
+                    "export": False,
+                    "import": False,
+                    "only_if_creator": False,
+                }
+            
+            # Union of permission flags across all roles
+            permissions_dict[res_name]["read"] = permissions_dict[res_name]["read"] or perm.read
+            permissions_dict[res_name]["create"] = permissions_dict[res_name]["create"] or perm.create
+            permissions_dict[res_name]["update"] = permissions_dict[res_name]["update"] or perm.update
+            permissions_dict[res_name]["delete"] = permissions_dict[res_name]["delete"] or perm.delete
+            permissions_dict[res_name]["export"] = permissions_dict[res_name]["export"] or perm.export
+            permissions_dict[res_name]["import"] = permissions_dict[res_name]["import"] or perm.import_perm
+            permissions_dict[res_name]["only_if_creator"] = permissions_dict[res_name]["only_if_creator"] or perm.only_if_creator
+
+    return read_response({"data": permissions_dict})

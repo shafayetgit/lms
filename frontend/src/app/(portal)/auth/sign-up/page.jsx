@@ -12,6 +12,7 @@ import { useFormik } from "formik";
 import { signUpSchema } from "@/schema/auth";
 import CButton from "@/components/ui/CButton";
 import CPasswordField from "@/components/form/CPasswordField";
+import AuthLogo from "@/components/ui/AuthLogo";
 import { useSignUpMutation } from "@/features/auth/authAPI";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -58,32 +59,18 @@ export default function Page() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       sx={{
         bgcolor: "background.paper",
-        p: { xs: 4, md: 6 },
-        borderRadius: 6,
-        boxShadow: (theme) => `0 12px 40px ${alpha(theme.palette.text.primary, 0.08)}`,
-        border: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.04)}`,
+        p: { xs: 3, md: 4 },
+        borderRadius: 1,
+        border: "1px solid",
+        borderColor: "divider",
+        maxWidth: 450,
+        mx: "auto",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
-        <Box
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "50%",
-            backgroundColor: "secondary.main",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: (theme) =>
-              `0 8px 24px ${alpha(theme.palette.secondary.main, 0.3)}`,
-          }}
-        >
-          <Person sx={{ fontSize: 32, color: "white" }} />
-        </Box>
-      </Box>
+      <AuthLogo />
 
       <Typography
-        variant="h3"
+        variant="h4"
         component="h1"
         gutterBottom
         sx={{
@@ -91,25 +78,25 @@ export default function Page() {
           letterSpacing: "-0.02em",
           color: "text.primary",
           textAlign: "center",
-          mb: 1,
+          mb: 0.5,
         }}
       >
         Create an Account
       </Typography>
       <Typography
-        variant="body1"
+        variant="body2"
         color="text.secondary"
-        sx={{ textAlign: "center", mb: 4 }}
+        sx={{ textAlign: "center", mb: 3 }}
       >
         Join ecoFin Institute and accelerate your career.
       </Typography>
 
       <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-        <Stack spacing={3} sx={{ mb: 4 }}>
+        <Stack spacing={2.5} sx={{ mb: 3 }}>
           <Box
             sx={{
               display: "flex",
-              gap: 2,
+              gap: 1.5,
               flexDirection: { xs: "column", sm: "row" },
             }}
           >
@@ -214,20 +201,21 @@ export default function Page() {
           variant="contained"
           size="large"
           color="secondary"
+          action="sign-up"
           sx={{
-            py: 1.5,
-            borderRadius: "50px",
+            py: 1.2,
+            borderRadius: 1,
             fontWeight: 700,
             fontSize: "1rem",
             transition: "all 0.3s ease",
-            mb: 3,
+            mb: 2.5,
           }}
         />
       </form>
 
       <Divider
         sx={{
-          mb: 3,
+          mb: 2.5,
           color: "text.secondary",
           fontSize: "0.875rem",
           fontWeight: 500,
@@ -236,14 +224,14 @@ export default function Page() {
         OR CONTINUE WITH
       </Divider>
 
-      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
         <Button
           fullWidth
           variant="outlined"
           startIcon={<Google />}
           sx={{
-            py: 1.2,
-            borderRadius: "50px",
+            py: 1,
+            borderRadius: 1,
             fontWeight: 600,
             color: "text.primary",
             borderColor: (theme) => alpha(theme.palette.text.primary, 0.15),

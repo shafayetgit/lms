@@ -1,0 +1,30 @@
+[
+  {
+    "course_slug": "modern-frontend-web-development-with-react",
+    "student_username": "tariqulislam",
+    "rating": 5.0,
+    "body": "This course is absolutely amazing! The explanations are clear and to the point.",
+    "is_active": true
+  },
+  {
+    "course_slug": "modern-frontend-web-development-with-react",
+    "student_username": "nusratjahan",
+    "rating": 4.5,
+    "body": "Good content, well-paced and structured. Highly recommended!",
+    "is_active": true
+  },
+  {
+    "course_slug": "backend-engineering-with-python-and-fastapi",
+    "student_username": "tanvirahmed",
+    "rating": 5.0,
+    "body": "Very helpful introduction. I learned a lot of new techniques.",
+    "is_active": true
+  },
+  {
+    "course_slug": "microservices-with-fastapi",
+    "student_username": "sabrinahossain",
+    "rating": 4.0,
+    "body": "Decent pacing, but could use more deep-dives into advanced aspects.",
+    "is_active": true
+  }
+]

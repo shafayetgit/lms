@@ -1,14 +1,11 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, Text, Boolean, Float, Enum as SQLEnum
+from sqlalchemy import Integer, String, Text, Boolean, Float
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import List, Optional, TYPE_CHECKING
-import enum
 from app.db.base import Base
 
 if TYPE_CHECKING:
-    from app.models.course import Course
-    from app.models.module import Module
-    from app.models.lesson import Lesson
     from app.models.question import Question
+
 
 class Quiz(Base):
     """
@@ -16,21 +13,25 @@ class Quiz(Base):
     """
     __tablename__ = "quizzes"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    course_id: Mapped[int] = mapped_column(ForeignKey("courses.id", ondelete="CASCADE"), index=True)
-    module_id: Mapped[Optional[int]] = mapped_column(ForeignKey("modules.id", ondelete="SET NULL"), nullable=True, index=True)
-    lesson_id: Mapped[Optional[int]] = mapped_column(ForeignKey("lessons.id", ondelete="SET NULL"), nullable=True, index=True)
-
     title: Mapped[str] = mapped_column(String(200))
     description: Mapped[Optional[str]] = mapped_column(Text)
     
-    time_limit: Mapped[Optional[int]] = mapped_column(Integer)  # in minutes
-    passing_score: Mapped[float] = mapped_column(Float, default=70.0)  # percentage
+    max_attempts: Mapped[int] = mapped_column(Integer, default=1)
+    show_answers: Mapped[bool] = mapped_column(Boolean, default=False)
+    show_submission_history: Mapped[bool] = mapped_column(Boolean, default=False)
+    
+    total_marks: Mapped[float] = mapped_column(Float, default=0.0)
+    passing_percentage: Mapped[float] = mapped_column(Float, default=0.0)  # percentage
+    
+    duration: Mapped[int] = mapped_column(Integer, default=0)  # in minutes
+    
+    shuffle_questions: Mapped[bool] = mapped_column(Boolean, default=False)
+    limit_questions_to: Mapped[int] = mapped_column(Integer, default=0)
+    
+    enable_negative_marking: Mapped[bool] = mapped_column(Boolean, default=False)
+    marks_to_cut: Mapped[float] = mapped_column(Float, default=0.0)
     
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     # Relationships
-    course: Mapped["Course"] = relationship("Course", back_populates="quizzes")
-    module: Mapped[Optional["Module"]] = relationship("Module", back_populates="quizzes")
-    lesson: Mapped[Optional["Lesson"]] = relationship("Lesson", back_populates="quizzes")
     questions: Mapped[List["Question"]] = relationship("Question", back_populates="quiz", cascade="all, delete-orphan")

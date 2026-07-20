@@ -51,15 +51,22 @@ class MediaService:
             ValueError: If the model instance doesn't exist
         """
         # Verify the model instance exists
-        result = await db.execute(
-            select(model_class).where(model_class.id == media_payload.model_id)
-        )
+        if isinstance(media_payload.model_id, str):
+            result = await db.execute(
+                select(model_class).where(model_class.public_id == media_payload.model_id)
+            )
+        else:
+            result = await db.execute(
+                select(model_class).where(model_class.id == media_payload.model_id)
+            )
         model_instance = result.scalars().first()
         
         if not model_instance:
             raise ValueError(
-                f"{media_payload.model} with id {media_payload.model_id} not found"
+                f"{media_payload.model} with identifier {media_payload.model_id} not found"
             )
+        
+        internal_model_id = model_instance.id
         
         # Extract key fields from metadata
         meta_dict = media_payload.meta if media_payload.meta else {}
@@ -76,7 +83,7 @@ class MediaService:
             raise ValueError("Meta must contain 'secure_url' or 'url'")
         
         existing_media = await media_repo.get_media_by_model_and_id(
-            db, media_payload.model, media_payload.model_id
+            db, media_payload.model, internal_model_id
         )
         
         # Mark existing media as not used if any
@@ -88,7 +95,7 @@ class MediaService:
         # Create media record
         media = Media(
             model=media_payload.model,
-            model_id=media_payload.model_id,
+            model_id=internal_model_id,
             meta=meta_dict,
             is_used=True,
         )
@@ -97,10 +104,11 @@ class MediaService:
         
         # Update the model's field with the secure_url
         await MediaService._update_model_field(
-            db, model_class, media_payload.model_id, media_payload.field, secure_url
+            db, model_class, internal_model_id, media_payload.field, secure_url
         )
         
         return created_media
+
 
     @staticmethod
     async def _update_model_field(

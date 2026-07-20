@@ -19,16 +19,15 @@ class CategoryService:
         if existing_slug:
             raise ValueError(f"Category with slug '{slug}' already exists")
 
-        parent_id = category_in.parent_id
-        if parent_id is not None:
-            if parent_id <= 0:
-                parent_id = None
-            else:
-                parent = await category_repo.get_category_by_id(db, parent_id)
-                if not parent:
-                    raise ValueError(
-                        f"Parent category with id {parent_id} does not exist"
-                    )
+        parent_public_id = category_in.parent_public_id
+        parent_id = None
+        if parent_public_id is not None:
+            parent = await category_repo.get_category_by_public_id(db, parent_public_id)
+            if not parent:
+                raise ValueError(
+                    f"Parent category with public_id {parent_public_id} does not exist"
+                )
+            parent_id = parent.id
 
         db_category = Category(
             name=category_in.name,
@@ -39,14 +38,14 @@ class CategoryService:
             badge=category_in.badge,
             thumbnail=category_in.thumbnail,
         )
-        return {"data": await category_repo.create_category(db, db_category)}
+        return await category_repo.create_category(db, db_category)
 
     @staticmethod
-    async def get_category(db: AsyncSession, category_id: int) -> dict | None:
-        category = await category_repo.get_category_by_id(db, category_id)
+    async def get_category(db: AsyncSession, public_id: str) -> Category | None:
+        category = await category_repo.get_category_by_public_id(db, public_id)
         if not category:
             return None
-        return {"data": category}
+        return category
 
     @staticmethod
     async def get_categories(
@@ -56,9 +55,12 @@ class CategoryService:
         term: str | None = None,
         is_active: bool | None = None,
         badge: CategoryBadge | None = None,
+        owner_id: int | None = None,
     ) -> dict:
         query = select(Category).order_by(desc(Category.id))
 
+        if owner_id is not None:
+            query = query.where(Category.owner_id == owner_id)
         if term:
             query = query.where(Category.name.ilike(f"%{term}%"))
         if is_active is not None:
@@ -87,9 +89,9 @@ class CategoryService:
 
     @staticmethod
     async def update_category(
-        db: AsyncSession, category_id: int, category_in: CategoryUpdate
+        db: AsyncSession, public_id: str, category_in: CategoryUpdate
     ) -> Category:
-        category = await category_repo.get_category_by_id(db, category_id)
+        category = await category_repo.get_category_by_public_id(db, public_id)
         if not category:
             raise ValueError("Category not found")
 
@@ -107,27 +109,29 @@ class CategoryService:
                     f"Category with slug '{update_data['slug']}' already exists"
                 )
 
-        if "parent_id" in update_data:
-            if update_data["parent_id"] is not None:
-                if update_data["parent_id"] <= 0:
-                    update_data["parent_id"] = None
-                else:
-                    parent = await category_repo.get_category_by_id(
-                        db, update_data["parent_id"]
+        if "parent_public_id" in update_data:
+            parent_public_id = update_data.pop("parent_public_id")
+            if parent_public_id is not None:
+                parent = await category_repo.get_category_by_public_id(
+                    db, parent_public_id
+                )
+                if not parent:
+                    raise ValueError(
+                        f"Parent category with public_id {parent_public_id} does not exist"
                     )
-                    if not parent:
-                        raise ValueError(
-                            f"Parent category with id {update_data['parent_id']} does not exist"
-                        )
+                category.parent_id = parent.id
+            else:
+                category.parent_id = None
 
         for field, value in update_data.items():
             setattr(category, field, value)
 
-        return {"data": await category_repo.update_category(db, category)}
+        return await category_repo.update_category(db, category)
 
     @staticmethod
-    async def delete_category(db: AsyncSession, category_id: int) -> None:
-        category = await category_repo.get_category_by_id(db, category_id)
+    async def delete_category(db: AsyncSession, public_id: str) -> None:
+        category = await category_repo.get_category_by_public_id(db, public_id)
         if not category:
             raise ValueError("Category not found")
         await category_repo.delete_category(db, category)
+

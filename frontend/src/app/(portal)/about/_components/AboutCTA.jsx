@@ -24,7 +24,7 @@ const AboutCTA = () => {
         <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.1 }}
             variants={itemVariants}
         >
             <Box sx={{ my: { xs: 6, md: 8 }, textAlign: "center" }}>
@@ -42,18 +42,15 @@ const AboutCTA = () => {
                         size={isMobile ? "medium" : "large"}
                         href="/courses"
                         fullWidth={isMobile}
+                        color="secondary"
                         sx={{
-                            borderRadius: "50px",
+                            borderRadius: 1,
                             px: { xs: 4, md: 5 },
                             py: { xs: 1.5, md: 2 },
                             fontWeight: 700,
-                            boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-                            color: "white",
-                            bgcolor: "secondary.main",
+                            boxShadow: "none",
                             "&:hover": {
-                                bgcolor: "secondary.dark",
                                 transform: "translateY(-2px)",
-                                boxShadow: "0 12px 24px rgba(0,0,0,0.15)",
                             },
                         }}
                     />
@@ -64,15 +61,15 @@ const AboutCTA = () => {
                         size={isMobile ? "medium" : "large"}
                         fullWidth={isMobile}
                         sx={{
-                            borderRadius: "50px",
+                            borderRadius: 1,
                             px: { xs: 4, md: 5 },
                             py: { xs: 1.5, md: 2 },
                             fontWeight: 700,
-                            borderColor: "rgba(0,0,0,0.15)",
+                            borderColor: "divider",
                             color: "text.primary",
                             "&:hover": {
                                 borderColor: "text.primary",
-                                bgcolor: "rgba(0,0,0,0.03)",
+                                bgcolor: "action.hover",
                                 transform: "translateY(-2px)",
                             },
                         }}

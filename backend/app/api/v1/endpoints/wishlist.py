@@ -27,14 +27,15 @@ async def get_my_wishlist(
     """Retrieve current user's wishlist."""
     return await wishlist_service.get_user_wishlist(db, current_user.id)
 
-@router.delete("/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{course_public_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def remove_from_wishlist(
-    course_id: int, 
+    course_public_id: str, 
     db: AsyncSession = Depends(get_db),
     current_user = Depends(get_current_active_user)
 ):
-    """Remove a course from current user's wishlist by course ID."""
+    """Remove a course from current user's wishlist by course public ID."""
     try:
-        await wishlist_service.remove_from_wishlist(db, current_user.id, course_id)
+        await wishlist_service.remove_from_wishlist(db, current_user.id, course_public_id)
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+
