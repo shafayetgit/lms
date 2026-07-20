@@ -125,6 +125,7 @@ docs/
 tmp/
 temp/
 .cache/
-frappe-lms/
+.agents/
+
 
 
