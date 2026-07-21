@@ -77,6 +77,8 @@ async def create_invitations(
 ):
     """Batch send/create user invitations."""
     count = 0
+    from app.tasks.emails import send_invitation_email
+
     for email in inv_in.emails:
         inv = Invitation(
             email=str(email),
@@ -86,6 +88,18 @@ async def create_invitations(
         )
         db.add(inv)
         count += 1
+        
+        # Fire celery task to send the invitation email
+        try:
+            send_invitation_email.delay(
+                to_email=str(email),
+                role_name=inv_in.role,
+                inviter_name=current_user.full_name,
+            )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Failed to trigger invitation email task: {e}")
+
     await db.commit()
     return create_response({"invited": count})
 

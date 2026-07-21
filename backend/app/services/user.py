@@ -24,6 +24,26 @@ class UserService:
         if existing_email:
             raise ValueError("Email already registered")
         
+        # Check for pending invitation
+        from sqlalchemy import select
+        from app.models.invitation import Invitation
+        stmt = select(Invitation).where(
+            Invitation.email == user_in.email, 
+            Invitation.status == "pending"
+        )
+        result = await db.execute(stmt)
+        invitation = result.scalars().first()
+
+        if invitation:
+            user_in.role = invitation.role
+            if user_in.roles is None:
+                user_in.roles = [invitation.role]
+            elif invitation.role not in user_in.roles:
+                user_in.roles.append(invitation.role)
+            
+            invitation.status = "accepted"
+            db.add(invitation)
+        
         # Create user with role-specific fields using the schema-aware function
         return await create_user_from_schema(db, user_in)
 

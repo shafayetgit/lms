@@ -393,6 +393,47 @@ LMS Team
             db=db,
         )
 
+    async def send_invitation_email(
+        self,
+        to_email: str,
+        role_name: str,
+        inviter_name: str,
+        db: Optional[AsyncSession] = None,
+    ) -> bool:
+        """Send invitation email."""
+        default_plain = f"""
+Hello,
+
+You have been invited to join LMS!
+
+{inviter_name} has invited you to join the platform as a {role_name}.
+
+To accept this invitation and create your account, please click the link below:
+{self.settings.FRONTEND_URL}/auth/sign-up?email={to_email}
+
+Best regards,
+LMS Team
+        """
+        subject, html_content, plain_text = await self._get_compiled_template(
+            template_name="invitation",
+            db=db,
+            default_subject="Invitation to join LMS",
+            default_html_file="invitation.html",
+            default_plain_text=default_plain,
+            role_name=role_name,
+            inviter_name=inviter_name,
+            email=to_email,
+            frontend_url=self.settings.FRONTEND_URL,
+        )
+
+        return await self.send_email(
+            to_email,
+            subject,
+            html_content,
+            plain_text,
+            db=db,
+        )
+
     def run_async_task(self, method_name: str, *args, **kwargs):
         """Run an email service method reusing the event loop to preserve DB connection pools."""
         import asyncio

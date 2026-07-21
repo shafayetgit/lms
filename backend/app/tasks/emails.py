@@ -56,3 +56,14 @@ def send_password_changed_email(to_email: str, user_name: str):
 def send_2fa_otp_email(to_email: str, otp: str, user_name: str):
     service = get_email_service()
     service.run_async_task("send_2fa_otp_email", to_email, otp, user_name)
+
+
+@celery_app.task(
+    name="email.send_invitation",
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+    retry_kwargs={"max_retries": 3},
+)
+def send_invitation_email(to_email: str, role_name: str, inviter_name: str):
+    service = get_email_service()
+    service.run_async_task("send_invitation_email", to_email, role_name, inviter_name)
