@@ -305,8 +305,8 @@ export default function Topbar({ dynamicColor }) {
         logoSrc={logoSrc}
       />
 
-      {/* Notification Drawer */}
-      <NotificationDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />
+      {/* Notification Drawer - only mount when authenticated */}
+      {hasToken && <NotificationDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />}
     </AppBar>
   )
 }
