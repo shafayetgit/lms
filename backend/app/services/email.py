@@ -394,18 +394,25 @@ LMS Team
         )
 
     def run_async_task(self, method_name: str, *args, **kwargs):
-        """Run an email service method in a new event loop with a single shared session."""
+        """Run an email service method reusing the event loop to preserve DB connection pools."""
         import asyncio
+        
+        try:
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                raise RuntimeError("Loop is closed")
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
         async def runner():
-            from app.db.session import get_session_maker, dispose_current_loop_engine
+            from app.db.session import get_session_maker
             session_maker = get_session_maker()
             async with session_maker() as session:
-                try:
-                    method = getattr(self, method_name)
-                    return await method(*args, db=session, **kwargs)
-                finally:
-                    await dispose_current_loop_engine()
-        return asyncio.run(runner())
+                method = getattr(self, method_name)
+                return await method(*args, db=session, **kwargs)
+                
+        return loop.run_until_complete(runner())
 
 
 # Global email service instance
