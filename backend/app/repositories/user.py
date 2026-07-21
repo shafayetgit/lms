@@ -61,27 +61,37 @@ class UserRepository(BaseRepository[User]):
             db_roles.append(role_obj)
         user.roles = db_roles
 
-    async def _enable_student_academy_flag(self, db: AsyncSession, user: User):
+    async def _assign_feature_flags(self, db: AsyncSession, user: User, role_names: list[str]):
         from app.models.feature_flag import FeatureFlag
-        stmt = select(FeatureFlag).where(FeatureFlag.slug == "academy")
-        result = await db.execute(stmt)
-        ff = result.scalars().first()
-        if not ff:
-            ff = FeatureFlag(
-                name="Academy",
-                slug="academy",
-                description="Enable Academy."
-            )
-            db.add(ff)
-            await db.flush()
+        flags_to_assign = set()
+        
+        if "student" in role_names:
+            flags_to_assign.add(("Academy", "academy", "Enable Academy."))
+            
+        if any(r in role_names for r in ["admin", "instructor", "evaluator"]):
+            flags_to_assign.add(("Academy", "academy", "Enable Academy."))
+            flags_to_assign.add(("Settings", "settings", "Enable Settings."))
+            flags_to_assign.add(("LMS", "lms", "Enable LMS."))
+
+        if not flags_to_assign:
+            return
 
         from sqlalchemy.orm import attributes
         state = attributes.instance_state(user)
         if state.key is not None and "feature_flags" in state.unloaded:
             await db.refresh(user, ["feature_flags"])
 
-        if ff not in user.feature_flags:
-            user.feature_flags.append(ff)
+        for name, slug, desc in flags_to_assign:
+            stmt = select(FeatureFlag).where(FeatureFlag.slug == slug)
+            result = await db.execute(stmt)
+            ff = result.scalars().first()
+            if not ff:
+                ff = FeatureFlag(name=name, slug=slug, description=desc)
+                db.add(ff)
+                await db.flush()
+
+            if ff not in user.feature_flags:
+                user.feature_flags.append(ff)
 
     async def _assign_lms_explorer_badge(self, db: AsyncSession, user: User):
         from app.models.badge import Badge, BadgeAssignment
@@ -147,10 +157,10 @@ class UserRepository(BaseRepository[User]):
         if not role_names and user.roles:
             role_names = [r.name.lower() for r in user.roles]
 
+        await self._assign_feature_flags(db, user, role_names)
         if "student" in role_names:
-            await self._enable_student_academy_flag(db, user)
             await self._assign_lms_explorer_badge(db, user)
-            await db.flush()
+        await db.flush()
 
         return user
 
@@ -160,10 +170,10 @@ class UserRepository(BaseRepository[User]):
         await db.commit()
 
         role_names = [r.name.lower() for r in user.roles]
+        await self._assign_feature_flags(db, user, role_names)
         if "student" in role_names:
-            await self._enable_student_academy_flag(db, user)
             await self._assign_lms_explorer_badge(db, user)
-            await db.commit()
+        await db.commit()
 
         return await self.get_by_id(db, user.id)
 
@@ -207,15 +217,18 @@ class UserRepository(BaseRepository[User]):
         db.add(user)
         await db.commit()
 
-        if "student" in [r.lower() for r in roles_list]:
-            await self._enable_student_academy_flag(db, user)
+        roles_lower = [r.lower() for r in roles_list]
+        await self._assign_feature_flags(db, user, roles_lower)
+        if "student" in roles_lower:
             await self._assign_lms_explorer_badge(db, user)
-            await db.commit()
+        await db.commit()
 
         return await self.get_by_id(db, user.id)
 
     async def update_user(self, db: AsyncSession, user: User) -> User:
         await self.sync_roles(db, user)
+        role_names = [r.name.lower() for r in user.roles] if user.roles else []
+        await self._assign_feature_flags(db, user, role_names)
         await db.commit()
         return await self.get_by_id(db, user.id)
 

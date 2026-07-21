@@ -12,6 +12,9 @@ from pathlib import Path
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import init_settings
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class EmailService:
@@ -76,7 +79,7 @@ class EmailService:
         from app.services.email_account import EmailAccountService
         account = await EmailAccountService.get_default_outgoing(db)
         if not account:
-            print("Error: No default outgoing email account configured in the database.")
+            logger.error("Error sending email: No default outgoing email account configured in the database (email_accounts table). Please configure an outgoing email account with default_outgoing=True.")
             return False
 
         service = account.service
@@ -112,28 +115,29 @@ class EmailService:
                 message.attach(MIMEText(plain_text, "plain"))
             message.attach(MIMEText(html_content, "html"))
 
-            # Send via SMTP
-            if use_ssl and smtp_port == 465:
-                async with aiosmtplib.SMTP(
-                    hostname=smtp_server,
-                    port=smtp_port,
-                    use_tls=True,
-                ) as smtp:
-                    if password:
-                        await smtp.login(smtp_user, password)
-                    await smtp.sendmail(email_id, to_email, message.as_string())
+            # Configure SSL / STARTTLS based on port and database settings
+            is_ssl = (smtp_port == 465) or (use_ssl and smtp_port != 587)
+            is_start_tls = (smtp_port == 587) or use_tls
+
+            if is_ssl:
+                smtp_kwargs = {"use_tls": True, "start_tls": False}
+            elif is_start_tls:
+                smtp_kwargs = {"use_tls": False, "start_tls": True}
             else:
-                async with aiosmtplib.SMTP(
-                    hostname=smtp_server,
-                    port=smtp_port,
-                    use_tls=False,
-                ) as smtp:
-                    if password:
-                        await smtp.login(smtp_user, password)
-                    await smtp.sendmail(email_id, to_email, message.as_string())
+                smtp_kwargs = {"use_tls": False, "start_tls": False}
+
+            async with aiosmtplib.SMTP(
+                hostname=smtp_server,
+                port=smtp_port,
+                **smtp_kwargs,
+            ) as smtp:
+                if password:
+                    await smtp.login(smtp_user, password)
+                await smtp.sendmail(email_id, to_email, message.as_string())
+            logger.info(f"Successfully sent email to {to_email} via {from_name} ({smtp_server})")
             return True
         except Exception as e:
-            print(f"Error sending email via dynamic account: {e}")
+            logger.error(f"Error sending email via dynamic account ({smtp_server}:{smtp_port}): {e}", exc_info=True)
             return False
 
     def _render_template(self, template_name: str, **kwargs) -> str:
@@ -398,9 +402,14 @@ LMS Team
         to_email: str,
         role_name: str,
         inviter_name: str,
+        invitation_code: str = None,
         db: Optional[AsyncSession] = None,
     ) -> bool:
         """Send invitation email."""
+        link_url = f"{self.settings.FRONTEND_URL}/auth/sign-up?email={to_email}"
+        if invitation_code:
+            link_url += f"&code={invitation_code}"
+            
         default_plain = f"""
 Hello,
 
@@ -409,7 +418,7 @@ You have been invited to join LMS!
 {inviter_name} has invited you to join the platform as a {role_name}.
 
 To accept this invitation and create your account, please click the link below:
-{self.settings.FRONTEND_URL}/auth/sign-up?email={to_email}
+{link_url}
 
 Best regards,
 LMS Team
@@ -423,6 +432,8 @@ LMS Team
             role_name=role_name,
             inviter_name=inviter_name,
             email=to_email,
+            invitation_code=invitation_code,
+            link_url=link_url,
             frontend_url=self.settings.FRONTEND_URL,
         )
 

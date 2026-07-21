@@ -8,6 +8,8 @@ from app.models.invitation import Invitation
 from app.models.user import User
 from app.schemas.invitation import InvitationCreate, InvitationRead
 from app.core.responses import read_response, create_response, delete_response
+from app.core.config import init_settings
+from app.services.email import get_email_service
 
 router = APIRouter()
 
@@ -78,30 +80,73 @@ async def create_invitations(
     """Batch send/create user invitations."""
     count = 0
     from app.tasks.emails import send_invitation_email
+    import uuid
 
+    settings = init_settings()
     for email in inv_in.emails:
+        inv_code = uuid.uuid4().hex
         inv = Invitation(
             email=str(email),
             role=inv_in.role,
             status="pending",
+            invitation_code=inv_code,
             invited_by_id=current_user.id,
         )
         db.add(inv)
         count += 1
         
-        # Fire celery task to send the invitation email
-        try:
-            send_invitation_email.delay(
+        # Send invitation email via Celery or direct fallback
+        if settings.CELERY_ENABLED:
+            try:
+                send_invitation_email.delay(
+                    to_email=str(email),
+                    role_name=inv_in.role,
+                    inviter_name=current_user.full_name,
+                    invitation_code=inv_code,
+                )
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning(f"Celery enqueue failed; falling back to direct email send: {e}")
+                email_service = get_email_service()
+                await email_service.send_invitation_email(
+                    to_email=str(email),
+                    role_name=inv_in.role,
+                    inviter_name=current_user.full_name,
+                    invitation_code=inv_code,
+                    db=db,
+                )
+        else:
+            email_service = get_email_service()
+            await email_service.send_invitation_email(
                 to_email=str(email),
                 role_name=inv_in.role,
                 inviter_name=current_user.full_name,
+                invitation_code=inv_code,
+                db=db,
             )
-        except Exception as e:
-            import logging
-            logging.getLogger(__name__).error(f"Failed to trigger invitation email task: {e}")
 
     await db.commit()
     return create_response({"invited": count})
+
+
+@router.get("/verify", tags=["Invitations"])
+async def verify_invitation(
+    email: str,
+    code: str,
+    db: AsyncSession = Depends(get_db),
+):
+    """Public endpoint to verify if an invitation code is valid."""
+    result = await db.execute(
+        select(Invitation).where(
+            Invitation.email == email,
+            Invitation.invitation_code == code,
+            Invitation.status == "pending"
+        )
+    )
+    inv = result.scalars().first()
+    if not inv:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired invitation")
+    return read_response({"data": {"valid": True, "role": inv.role}})
 
 
 @router.delete("/{public_id}", tags=["Invitations"])
