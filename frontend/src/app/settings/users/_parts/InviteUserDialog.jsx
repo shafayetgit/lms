@@ -26,8 +26,13 @@ export default function InviteUserDialog({ open, handleClose }) {
     }
 
     try {
+      const emailList = emails
+        .split(",")
+        .map(email => email.trim())
+        .filter(email => email !== "")
+
       await createInvitations({
-        emails: emails,
+        emails: emailList,
         role: activeRole,
       }).unwrap()
       toast.success("Invitations sent successfully")
