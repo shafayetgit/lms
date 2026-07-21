@@ -8,7 +8,6 @@ venv/
 .venv/
 env.bak/
 venv.bak/
-.env
 .git
 .gitignore
 .dockerignore
