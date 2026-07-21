@@ -5,6 +5,7 @@ import { CircularProgress, Stack, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid"
 import { toast } from "react-toastify"
 import { useGetCheckoutLinkMutation, useReadPaymentsQuery } from "@/features/payment/paymentApi"
+import { useGetActiveGatewayQuery } from "@/features/payment/paymentGatewayApi"
 import { getCurrentUser } from "@/lib/auth/client"
 import CButton from "@/components/ui/CButton"
 import CDialog from "@/components/ui/CDialog"
@@ -137,6 +138,10 @@ export default function EnrollButton({
     }
   }
 
+  const { data: activeGatewayData, isLoading: isGatewayLoading } = useGetActiveGatewayQuery(undefined, {
+    skip: !paidItem,
+  })
+
   function handleClick() {
     if (!user) {
       toast.info("Please sign in to continue")
@@ -144,6 +149,14 @@ export default function EnrollButton({
       return
     }
     if (paidItem) {
+      if (isGatewayLoading) {
+        toast.info("Checking payment options...")
+        return
+      }
+      if (!activeGatewayData?.data?.gateway) {
+        toast.error("Purchases are currently disabled as no payment methods are configured.")
+        return
+      }
       setBillingOpen(true)
     } else {
       initiateCheckout()

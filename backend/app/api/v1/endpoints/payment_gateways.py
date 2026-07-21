@@ -23,6 +23,18 @@ from app.integrations import get_active_gateway, get_gateway_by_name, verify_gat
 router = APIRouter()
 
 
+# ─── Public: Get active gateway ───────────────────────────────────────────
+
+@router.get("/active", response_model=dict)
+async def get_active_gateway_endpoint(
+    db: AsyncSession = Depends(get_db),
+) -> Any:
+    """Returns the currently active payment gateway."""
+    active = await gw_repo.get_active(db)
+    if not active:
+        return {"success": True, "data": None}
+    return {"success": True, "data": {"gateway": active.gateway.value}}
+
 # ─── Admin: CRUD for gateway configs ────────────────────────────────────────
 
 @router.get("/", response_model=list[PaymentGatewayConfigResponse])

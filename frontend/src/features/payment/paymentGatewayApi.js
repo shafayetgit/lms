@@ -2,6 +2,10 @@ import api from "@/redux/api"
 
 export const paymentGatewayApi = api.injectEndpoints({
   endpoints: builder => ({
+    getActiveGateway: builder.query({
+      query: () => ({ url: "/api/v1/payment-gateways/active", method: "GET" }),
+      providesTags: ["PAYMENT_GATEWAYS"],
+    }),
     listGatewayConfigs: builder.query({
       query: () => ({ url: "/api/v1/payment-gateways/", method: "GET" }),
       providesTags: ["PAYMENT_GATEWAYS"],
@@ -41,6 +45,7 @@ export const paymentGatewayApi = api.injectEndpoints({
 })
 
 export const {
+  useGetActiveGatewayQuery,
   useListGatewayConfigsQuery,
   useCreateGatewayConfigMutation,
   useUpdateGatewayConfigMutation,
