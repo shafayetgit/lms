@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+"use client"
+import React from "react"
 import {
   Box,
   Stack,
@@ -11,39 +11,39 @@ import {
   Divider,
   alpha,
   useTheme,
-} from "@mui/material";
-import {
-  ExpandMore,
-  ExpandLess,
-  DragIndicator,
-} from "@mui/icons-material";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+} from "@mui/material"
+import { ExpandMore, ExpandLess, DragIndicator } from "@mui/icons-material"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
 
-import CButton from "@/components/ui/CButton";
-import CCheckbox from "@/components/form/CCheckbox";
-import { QUESTION_TYPE_LABELS, QUESTION_TYPE_COLORS } from "@/choices/question";
-import UpdateQuestionDialog from "./UpdateQuestionDialog";
-import PermissionGuard from "@/components/ui/PermissionGuard";
+import CButton from "@/components/ui/CButton"
+import CCheckbox from "@/components/form/CCheckbox"
+import { QUESTION_TYPE_LABELS, QUESTION_TYPE_COLORS } from "@/choices/question"
+import UpdateQuestionDialog from "./UpdateQuestionDialog"
+import PermissionGuard from "@/components/ui/PermissionGuard"
 
-export default function SortableQuestionItem({ q, index, quizId, expandedId, onToggleExpand, onDelete, checked, onToggle }) {
-  const theme = useTheme();
+export default function SortableQuestionItem({
+  q,
+  index,
+  quizId,
+  expandedId,
+  onToggleExpand,
+  onDelete,
+  checked,
+  onToggle,
+}) {
+  const theme = useTheme()
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: q.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: q.id,
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 10 : "auto",
-  };
+  }
 
   return (
     <div ref={setNodeRef} style={style}>
@@ -73,12 +73,7 @@ export default function SortableQuestionItem({ q, index, quizId, expandedId, onT
             "&:hover": { bgcolor: alpha(theme.palette.primary.main, 0.02) },
           }}
         >
-          <CCheckbox
-            label=""
-            checked={checked}
-            onChange={onToggle}
-            sx={{ mr: -1 }}
-          />
+          <CCheckbox label="" checked={checked} onChange={onToggle} sx={{ mr: -1 }} />
 
           <IconButton
             size="small"
@@ -89,7 +84,7 @@ export default function SortableQuestionItem({ q, index, quizId, expandedId, onT
               touchAction: "none",
               p: 0.5,
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <DragIndicator sx={{ color: "text.disabled", fontSize: 20 }} />
           </IconButton>
@@ -217,5 +212,5 @@ export default function SortableQuestionItem({ q, index, quizId, expandedId, onT
         </Collapse>
       </Paper>
     </div>
-  );
+  )
 }

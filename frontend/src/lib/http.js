@@ -7,14 +7,14 @@ export async function http(endpoint, options = {}) {
       ...options.headers,
     },
     cache: "no-store",
-  });
+  })
 
   if (!res.ok) {
     if (res.status === 401) {
-      throw new Error("Unauthorized");
+      throw new Error("Unauthorized")
     }
-    throw new Error(`API error: ${res.status}`);
+    throw new Error(`API error: ${res.status}`)
   }
 
-  return res.json();
+  return res.json()
 }

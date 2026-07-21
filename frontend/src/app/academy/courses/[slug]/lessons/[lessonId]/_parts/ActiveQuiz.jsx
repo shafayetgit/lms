@@ -43,7 +43,9 @@ export default function ActiveQuiz({
   const progressPercent = quiz.duration ? (timeLeft / (quiz.duration * 60)) * 100 : 100
 
   return (
-    <Card sx={{ mt: 2, border: "1px solid", borderColor: "divider", borderRadius: 1, boxShadow: 3 }}>
+    <Card
+      sx={{ mt: 2, border: "1px solid", borderColor: "divider", borderRadius: 1, boxShadow: 3 }}
+    >
       <CardContent sx={{ p: 3 }}>
         {/* Header block with title & timer */}
         <Stack
@@ -58,13 +60,23 @@ export default function ActiveQuiz({
               {quiz.title}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Attempting Question {activeQuestionIdx + 1} of {questions.length} • {answeredCount} answered
+              Attempting Question {activeQuestionIdx + 1} of {questions.length} • {answeredCount}{" "}
+              answered
             </Typography>
           </Box>
           {quiz.duration > 0 && (
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ alignSelf: { xs: "stretch", sm: "auto" } }}>
+            <Stack
+              direction="row"
+              spacing={1.5}
+              alignItems="center"
+              sx={{ alignSelf: { xs: "stretch", sm: "auto" } }}
+            >
               <AccessTime color={timeLeft < 60 ? "error" : "primary"} />
-              <Typography variant="h6" fontWeight="700" color={timeLeft < 60 ? "error.main" : "text.primary"}>
+              <Typography
+                variant="h6"
+                fontWeight="700"
+                color={timeLeft < 60 ? "error.main" : "text.primary"}
+              >
                 {formatTimeRemaining(timeLeft)}
               </Typography>
             </Stack>
@@ -85,13 +97,24 @@ export default function ActiveQuiz({
         {/* Active Question Display */}
         {currentQuestion && (
           <Box sx={{ mb: 4, minHeight: "180px" }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{ mb: 2 }}
+            >
               <Typography variant="subtitle2" color="text.secondary" fontWeight="700">
                 QUESTION {activeQuestionIdx + 1}
               </Typography>
               <Typography
                 variant="caption"
-                sx={{ px: 1.5, py: 0.5, borderRadius: 1, bgcolor: "action.selected", fontWeight: "700" }}
+                sx={{
+                  px: 1.5,
+                  py: 0.5,
+                  borderRadius: 1,
+                  bgcolor: "action.selected",
+                  fontWeight: "700",
+                }}
               >
                 {currentQuestion.marks} {currentQuestion.marks === 1 ? "Mark" : "Marks"}
               </Typography>
@@ -105,15 +128,15 @@ export default function ActiveQuiz({
                 fullWidth
                 placeholder="Type your answer here..."
                 value={selectedAnswers[currentQuestion.id]?.answer_text || ""}
-                onChange={(e) => handleAnswerSelect(currentQuestion.id, null, e.target.value)}
+                onChange={e => handleAnswerSelect(currentQuestion.id, null, e.target.value)}
               />
             ) : (
               <FormControl component="fieldset" sx={{ width: "100%" }}>
                 <RadioGroup
                   value={selectedAnswers[currentQuestion.id]?.selected_option_id || ""}
-                  onChange={(e) => handleAnswerSelect(currentQuestion.id, parseInt(e.target.value))}
+                  onChange={e => handleAnswerSelect(currentQuestion.id, parseInt(e.target.value))}
                 >
-                  {(currentQuestion.choices || []).map((opt) => (
+                  {(currentQuestion.choices || []).map(opt => (
                     <FormControlLabel
                       key={opt.id}
                       value={opt.id}
@@ -152,7 +175,9 @@ export default function ActiveQuiz({
           sx={{ mt: 3, pt: 2, borderTop: "1px solid", borderColor: "divider" }}
         >
           <CButton
-            label={markedForReview.includes(currentQuestion.id) ? "Unmark Review" : "Mark for Review"}
+            label={
+              markedForReview.includes(currentQuestion.id) ? "Unmark Review" : "Mark for Review"
+            }
             variant="text"
             color="warning"
             onClick={() => toggleMarkForReview(currentQuestion.id)}
@@ -162,7 +187,7 @@ export default function ActiveQuiz({
           {/* Pagination Controls */}
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setActiveQuestionIdx((prev) => Math.max(0, prev - 1))}
+              onClick={() => setActiveQuestionIdx(prev => Math.max(0, prev - 1))}
               disabled={activeQuestionIdx === 0}
               sx={{ border: "1px solid", borderColor: "divider" }}
             >
@@ -217,7 +242,7 @@ export default function ActiveQuiz({
             </Stack>
 
             <IconButton
-              onClick={() => setActiveQuestionIdx((prev) => Math.min(questions.length - 1, prev + 1))}
+              onClick={() => setActiveQuestionIdx(prev => Math.min(questions.length - 1, prev + 1))}
               disabled={activeQuestionIdx === questions.length - 1}
               sx={{ border: "1px solid", borderColor: "divider" }}
             >
@@ -247,12 +272,17 @@ export default function ActiveQuiz({
               borderColor: "warning.main",
             }}
           >
-            <Typography variant="caption" color="warning.dark" fontWeight="700" sx={{ display: "block", mb: 1 }}>
+            <Typography
+              variant="caption"
+              color="warning.dark"
+              fontWeight="700"
+              sx={{ display: "block", mb: 1 }}
+            >
               MARKED FOR REVIEW
             </Typography>
             <Stack direction="row" spacing={1}>
-              {markedForReview.map((id) => {
-                const idx = questions.findIndex((q) => q.id === id)
+              {markedForReview.map(id => {
+                const idx = questions.findIndex(q => q.id === id)
                 return (
                   <Chip
                     key={id}
@@ -294,7 +324,12 @@ export default function ActiveQuiz({
         </DialogContent>
         <DialogActions sx={{ p: 2.5 }}>
           <CButton label="Cancel" onClick={() => setShowConfirmDialog(false)} variant="text" />
-          <CButton label="Submit" onClick={handleManualSubmit} variant="contained" action="submit" />
+          <CButton
+            label="Submit"
+            onClick={handleManualSubmit}
+            variant="contained"
+            action="submit"
+          />
         </DialogActions>
       </Dialog>
     </Card>

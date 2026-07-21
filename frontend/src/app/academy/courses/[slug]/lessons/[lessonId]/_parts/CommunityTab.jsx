@@ -24,16 +24,14 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
   const [isCreatingDiscussion, setIsCreatingDiscussion] = useState(false)
   const [isReplying, setIsReplying] = useState(false)
 
-  const { data: discussionsResponse } = useGetCourseDiscussionsQuery(
-    course?.public_id,
-    { skip: !course?.public_id }
-  )
+  const { data: discussionsResponse } = useGetCourseDiscussionsQuery(course?.public_id, {
+    skip: !course?.public_id,
+  })
   const [createDiscussion] = useCreateDiscussionMutation()
 
-  const { data: commentsResponse } = useGetDiscussionCommentsQuery(
-    selectedDiscussionId,
-    { skip: !selectedDiscussionId }
-  )
+  const { data: commentsResponse } = useGetDiscussionCommentsQuery(selectedDiscussionId, {
+    skip: !selectedDiscussionId,
+  })
   const [createComment] = useCreateCommentMutation()
 
   const handlePostNewDiscussion = async () => {
@@ -68,7 +66,7 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
     }
   }
 
-  const formatTimeAgo = (dateString) => {
+  const formatTimeAgo = dateString => {
     if (!dateString) return ""
     const date = new Date(dateString)
     const now = new Date()
@@ -85,7 +83,7 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
 
   const renderCommentTree = (comments, depth = 0) => {
     if (!comments || comments.length === 0) return null
-    return comments.map((comment) => (
+    return comments.map(comment => (
       <Box
         key={comment.id}
         sx={{
@@ -99,36 +97,53 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
         <Stack direction="row" spacing={1.5} alignItems="flex-start">
           <Avatar
             src={comment.user?.avatar}
-            sx={{ width: 28, height: 28, bgcolor: "action.selected", color: "text.primary", fontSize: "0.75rem", fontWeight: 700 }}
+            sx={{
+              width: 28,
+              height: 28,
+              bgcolor: "action.selected",
+              color: "text.primary",
+              fontSize: "0.75rem",
+              fontWeight: 700,
+            }}
           >
             {comment.user?.first_name ? comment.user.first_name[0] : "U"}
           </Avatar>
           <Box sx={{ flexGrow: 1 }}>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="caption" fontWeight="700" color="text.primary">
-                {`${comment.user?.first_name || ""} ${comment.user?.last_name || ""}`.trim() || "Student"}
+                {`${comment.user?.first_name || ""} ${comment.user?.last_name || ""}`.trim() ||
+                  "Student"}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {formatTimeAgo(comment.created_at)}
               </Typography>
             </Stack>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.25, lineHeight: 1.5, whiteSpace: "pre-wrap" }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 0.25, lineHeight: 1.5, whiteSpace: "pre-wrap" }}
+            >
               {comment.body}
             </Typography>
           </Box>
         </Stack>
-        {comment.replies && comment.replies.length > 0 && renderCommentTree(comment.replies, depth + 1)}
+        {comment.replies &&
+          comment.replies.length > 0 &&
+          renderCommentTree(comment.replies, depth + 1)}
       </Box>
     ))
   }
 
-  const renderDiscussionItem = (disc) => {
+  const renderDiscussionItem = disc => {
     const isExpanded = selectedDiscussionId === disc.id
-    const replies = isExpanded ? (commentsResponse || []) : []
+    const replies = isExpanded ? commentsResponse || [] : []
     const totalReplies = replies.reduce((count, r) => {
-      const countNested = (node) => {
+      const countNested = node => {
         let c = 1
-        if (node.replies) node.replies.forEach((child) => { c += countNested(child) })
+        if (node.replies)
+          node.replies.forEach(child => {
+            c += countNested(child)
+          })
         return c
       }
       return count + countNested(r)
@@ -139,7 +154,14 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
         <Stack direction="row" spacing={1.5} alignItems="flex-start">
           <Avatar
             src={disc.user?.avatar}
-            sx={{ width: 36, height: 36, bgcolor: "action.selected", color: "text.primary", fontSize: "0.875rem", fontWeight: 700 }}
+            sx={{
+              width: 36,
+              height: 36,
+              bgcolor: "action.selected",
+              color: "text.primary",
+              fontSize: "0.875rem",
+              fontWeight: 700,
+            }}
           >
             {disc.user?.first_name ? disc.user.first_name[0] : "U"}
           </Avatar>
@@ -147,18 +169,27 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
             <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
               <Stack direction="row" spacing={1} alignItems="center">
                 <Typography variant="caption" fontWeight="700" color="text.primary">
-                  {`${disc.user?.first_name || ""} ${disc.user?.last_name || ""}`.trim() || "Student"}
+                  {`${disc.user?.first_name || ""} ${disc.user?.last_name || ""}`.trim() ||
+                    "Student"}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
                   {formatTimeAgo(disc.created_at)}
                 </Typography>
               </Stack>
             </Stack>
-            <Typography variant="subtitle2" fontWeight="700" sx={{ mt: 0.25, color: "text.primary" }}>
+            <Typography
+              variant="subtitle2"
+              fontWeight="700"
+              sx={{ mt: 0.25, color: "text.primary" }}
+            >
               {disc.title}
             </Typography>
             {disc.body && disc.body !== disc.title && (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, lineHeight: 1.5, whiteSpace: "pre-wrap" }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 0.5, lineHeight: 1.5, whiteSpace: "pre-wrap" }}
+              >
                 {disc.body}
               </Typography>
             )}
@@ -177,18 +208,25 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
                   color: isExpanded ? "primary.main" : "text.secondary",
                 }}
               >
-                💬 {isExpanded ? `Hide replies (${totalReplies})` : disc.comment_count > 0 ? `${disc.comment_count} ${disc.comment_count === 1 ? "reply" : "replies"}` : "Reply"}
+                💬{" "}
+                {isExpanded
+                  ? `Hide replies (${totalReplies})`
+                  : disc.comment_count > 0
+                    ? `${disc.comment_count} ${disc.comment_count === 1 ? "reply" : "replies"}`
+                    : "Reply"}
               </Button>
             </Stack>
 
             {isExpanded && (
               <Box sx={{ mt: 2, ml: 0, pl: 2, borderLeft: "2px solid", borderColor: "divider" }}>
                 {replies.length > 0 ? (
-                  <Box sx={{ mb: 2 }}>
-                    {renderCommentTree(replies)}
-                  </Box>
+                  <Box sx={{ mb: 2 }}>{renderCommentTree(replies)}</Box>
                 ) : (
-                  <Typography variant="body2" color="text.secondary" sx={{ fontStyle: "italic", mb: 2 }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ fontStyle: "italic", mb: 2 }}
+                  >
                     No replies yet. Be the first to respond!
                   </Typography>
                 )}
@@ -207,7 +245,7 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
                       multiline
                       minRows={1}
                       value={newReplyText}
-                      onChange={(e) => setNewReplyText(e.target.value)}
+                      onChange={e => setNewReplyText(e.target.value)}
                       onFocus={() => setIsReplying(true)}
                       size="small"
                     />
@@ -219,7 +257,12 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
                             setNewReplyText("")
                             setIsReplying(false)
                           }}
-                          sx={{ color: "text.secondary", textTransform: "none", fontWeight: 600, fontSize: "0.75rem" }}
+                          sx={{
+                            color: "text.secondary",
+                            textTransform: "none",
+                            fontWeight: 600,
+                            fontSize: "0.75rem",
+                          }}
                         >
                           Cancel
                         </Button>
@@ -227,7 +270,13 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
                           variant="contained"
                           size="small"
                           onClick={handlePostReply}
-                          sx={{ textTransform: "none", fontWeight: 600, borderRadius: 5, px: 2, fontSize: "0.75rem" }}
+                          sx={{
+                            textTransform: "none",
+                            fontWeight: 600,
+                            borderRadius: 5,
+                            px: 2,
+                            fontSize: "0.75rem",
+                          }}
                         >
                           Reply
                         </Button>
@@ -244,7 +293,7 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
   }
 
   const lessonDiscussions = (discussionsResponse || []).filter(
-    (d) => d.lesson_id === activeLesson?.id
+    d => d.lesson_id === activeLesson?.id
   )
 
   if (lessonDiscussions.length === 0 && !isCreatingDiscussion) {
@@ -267,12 +316,13 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
           No discussions yet
         </Typography>
         <Typography variant="caption" color="text.secondary" sx={{ mb: 2, maxWidth: 240 }}>
-          Start a discussion, ask a question, or share interesting details about this lesson with others.
+          Start a discussion, ask a question, or share interesting details about this lesson with
+          others.
         </Typography>
         <Button
           size="small"
           variant="outlined"
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation()
             setIsCreatingDiscussion(true)
           }}
@@ -293,7 +343,7 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
           multiline
           minRows={1}
           value={newDiscussion}
-          onChange={(e) => setNewDiscussion(e.target.value)}
+          onChange={e => setNewDiscussion(e.target.value)}
           autoFocus={isCreatingDiscussion}
           onBlur={() => {
             if (!newDiscussion.trim() && lessonDiscussions.length === 0) {
@@ -336,9 +386,7 @@ export default function CommunityTab({ course, activeLesson, isMobile = false })
       </Box>
 
       <Divider sx={{ mb: 3 }} />
-      <Box>
-        {lessonDiscussions.map((disc) => renderDiscussionItem(disc))}
-      </Box>
+      <Box>{lessonDiscussions.map(disc => renderDiscussionItem(disc))}</Box>
     </Box>
   )
 }

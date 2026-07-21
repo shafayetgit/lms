@@ -1,6 +1,6 @@
-import Footer from "@/components/layout/portal/Footer";
-import Topbar from "@/components/layout/portal/header/Topbar";
-import { Box } from "@mui/material";
+import Footer from "@/components/layout/portal/Footer"
+import Topbar from "@/components/layout/portal/header/Topbar"
+import { Box } from "@mui/material"
 
 export default function RootLayout({ children }) {
   // const dynamicColor = useScrollBackgroundColor();
@@ -19,5 +19,5 @@ export default function RootLayout({ children }) {
       {/* Footer */}
       <Footer />
     </>
-  );
+  )
 }

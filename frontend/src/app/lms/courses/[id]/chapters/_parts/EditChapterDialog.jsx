@@ -43,7 +43,10 @@ export default function EditChapterDialog({ chapter, open, onClose }) {
     <CDialog
       title={`Edit Chapter: ${chapter?.title}`}
       open={open}
-      handleCDialogClose={() => { onClose(); formik.resetForm() }}
+      handleCDialogClose={() => {
+        onClose()
+        formik.resetForm()
+      }}
     >
       <CForm onSubmit={formik.handleSubmit} width="45rem" btnProps={{ loading: isUpdating }} dialog>
         <Grid container spacing={2}>

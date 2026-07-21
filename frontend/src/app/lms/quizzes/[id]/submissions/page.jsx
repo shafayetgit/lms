@@ -22,7 +22,8 @@ export default function Page() {
 
   const { data: quizData } = useReadQuizQuery({ id: quizId }, { skip: !quizId })
   useSetBreadcrumb(quizData?.data?.title, `/lms/quizzes/${quizId}`)
-  const [trigger, { data: { data, meta } = {}, isLoading, isError }] = useLazyReadQuizSubmissionsQuery()
+  const [trigger, { data: { data, meta } = {}, isLoading, isError }] =
+    useLazyReadQuizSubmissionsQuery()
 
   useEffect(() => {
     if (quizId) {
@@ -49,7 +50,9 @@ export default function Page() {
       headerName: "Score",
       flex: 1,
       renderCell: ({ row }) => (
-        <span>{row.score} / {row.total_points}</span>
+        <span>
+          {row.score} / {row.total_points}
+        </span>
       ),
     },
     {
@@ -63,11 +66,7 @@ export default function Page() {
       headerName: "Passed",
       flex: 0.8,
       renderCell: ({ value }) => (
-        <Chip 
-          label={value ? "Yes" : "No"} 
-          color={value ? "success" : "error"} 
-          size="small" 
-        />
+        <Chip label={value ? "Yes" : "No"} color={value ? "success" : "error"} size="small" />
       ),
     },
     {
@@ -75,14 +74,18 @@ export default function Page() {
       headerName: "Status",
       flex: 1,
       renderCell: ({ value }) => {
-        const getStatusColor = (status) => {
+        const getStatusColor = status => {
           switch (status) {
-            case "completed": return "success";
-            case "in_progress": return "warning";
-            case "timed_out": return "error";
-            default: return "default";
+            case "completed":
+              return "success"
+            case "in_progress":
+              return "warning"
+            case "timed_out":
+              return "error"
+            default:
+              return "default"
           }
-        };
+        }
         return (
           <Chip
             label={value.replace("_", " ").toUpperCase()}
@@ -90,8 +93,8 @@ export default function Page() {
             size="small"
             variant="outlined"
           />
-        );
-      }
+        )
+      },
     },
     {
       field: "start_time",
@@ -108,17 +111,32 @@ export default function Page() {
   ]
 
   const navigators = [
-    { label: "Details", href: `/lms/quizzes/${quizId}`, icon: <InfoOutlined />, resource: "quiz", action: "read" },
-    { label: "Questions", href: `/lms/quizzes/${quizId}/questions`, icon: <Quiz />, resource: "question", action: "read" },
-    { label: "Submissions", href: `/lms/quizzes/${quizId}/submissions`, icon: <Assignment />, resource: "quiz_submission", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/quizzes/${quizId}`,
+      icon: <InfoOutlined />,
+      resource: "quiz",
+      action: "read",
+    },
+    {
+      label: "Questions",
+      href: `/lms/quizzes/${quizId}/questions`,
+      icon: <Quiz />,
+      resource: "question",
+      action: "read",
+    },
+    {
+      label: "Submissions",
+      href: `/lms/quizzes/${quizId}/submissions`,
+      icon: <Assignment />,
+      resource: "quiz_submission",
+      action: "read",
+    },
   ]
-  
+
   return (
     <PermissionGuard resource="quiz_submission" action="read">
-      <CModuleLayout
-        navigators={navigators}
-        helpTips={QUIZ_TIPS.details}
-      >
+      <CModuleLayout navigators={navigators} helpTips={QUIZ_TIPS.details}>
         <CDataTable columns={columns} rows={data} meta={meta} loading={isLoading} />
       </CModuleLayout>
     </PermissionGuard>

@@ -1,7 +1,8 @@
 export const ACADEMY_TIPS = {
   list: {
     title: "My Courses Guidelines",
-    description: "Welcome to your learning dashboard. Here you can track your active learning paths and course completions.",
+    description:
+      "Welcome to your learning dashboard. Here you can track your active learning paths and course completions.",
     tips: [
       {
         label: "Track Progress",
@@ -17,6 +18,6 @@ export const ACADEMY_TIPS = {
       },
     ],
   },
-};
+}
 
-export default ACADEMY_TIPS;
+export default ACADEMY_TIPS

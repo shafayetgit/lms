@@ -13,10 +13,7 @@ import {
   CircularProgress,
   Button,
 } from "@mui/material"
-import {
-  MenuBook,
-  FolderOpen,
-} from "@mui/icons-material"
+import { MenuBook, FolderOpen } from "@mui/icons-material"
 import Link from "next/link"
 import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
 import CPageLoader from "@/components/ui/CPageLoader"
@@ -53,10 +50,11 @@ export default function StudentCoursePlayerPage() {
   const [triggerReadLessons] = useLazyReadLessonsByChapterQuery()
 
   // Fetch Course details
-  const { data: courseResponse, isLoading: isCourseLoading, isError: isCourseError } = useReadCourseQuery(
-    { id: slug },
-    { skip: !slug }
-  )
+  const {
+    data: courseResponse,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useReadCourseQuery({ id: slug }, { skip: !slug })
   const course = courseResponse?.data
 
   // Fetch student enrollments
@@ -69,7 +67,11 @@ export default function StudentCoursePlayerPage() {
   const isEnrolled = useMemo(() => {
     if (!course) return false
     const enrollments = enrollmentsResponse?.data || []
-    return enrollments.some((e) => e.course?.public_id === course.public_id && (e.status === "active" || e.status === "completed"))
+    return enrollments.some(
+      e =>
+        e.course?.public_id === course.public_id &&
+        (e.status === "active" || e.status === "completed")
+    )
   }, [enrollmentsResponse, course])
 
   // Fetch chapters
@@ -86,7 +88,7 @@ export default function StudentCoursePlayerPage() {
   // Track loaded lessons to build next/prev flat navigation
   const [lessonsMap, setLessonsMap] = useState({})
   const handleLessonLoaded = useCallback((chapterId, lessonsList) => {
-    setLessonsMap((prev) => {
+    setLessonsMap(prev => {
       if (prev[chapterId] && prev[chapterId].length === lessonsList.length) {
         return prev
       }
@@ -97,7 +99,7 @@ export default function StudentCoursePlayerPage() {
   // Flat lessons list
   const flatLessonsList = useMemo(() => {
     const list = []
-    sortedChapters.forEach((chapter) => {
+    sortedChapters.forEach(chapter => {
       const chapterLessons = lessonsMap[chapter.id] || []
       list.push(...chapterLessons)
     })
@@ -110,7 +112,7 @@ export default function StudentCoursePlayerPage() {
   const completedLessons = useMemo(() => {
     const map = {}
     const myProgressList = myProgressResponse || []
-    myProgressList.forEach((p) => {
+    myProgressList.forEach(p => {
       if (p.is_completed && p.course_id === course?.id) {
         map[p.lesson_id] = true
       }
@@ -121,7 +123,7 @@ export default function StudentCoursePlayerPage() {
   // Calculate course progress percentage
   const courseProgressPercent = useMemo(() => {
     if (flatLessonsList.length === 0) return 0
-    const completedCount = flatLessonsList.filter((l) => completedLessons[l.id]).length
+    const completedCount = flatLessonsList.filter(l => completedLessons[l.id]).length
     return Math.round((completedCount / flatLessonsList.length) * 100)
   }, [flatLessonsList, completedLessons])
 
@@ -144,7 +146,7 @@ export default function StudentCoursePlayerPage() {
   const courseRequest = useMemo(() => {
     if (!course) return null
     const certificateRequests = requestsResponse?.data || []
-    return certificateRequests.find((r) => r.course?.public_id === course.public_id)
+    return certificateRequests.find(r => r.course?.public_id === course.public_id)
   }, [requestsResponse, course])
 
   const handleRequestCertificate = async () => {
@@ -157,12 +159,10 @@ export default function StudentCoursePlayerPage() {
     }
   }
 
-
-
   // Find first incomplete lesson or default to first lesson
   const handleStartLearning = async () => {
     if (flatLessonsList.length > 0) {
-      const firstIncomplete = flatLessonsList.find((l) => !completedLessons[l.id])
+      const firstIncomplete = flatLessonsList.find(l => !completedLessons[l.id])
       const targetLesson = firstIncomplete || flatLessonsList[0]
       router.push(`/academy/courses/${slug}/lessons/${targetLesson.public_id}`)
       return
@@ -189,11 +189,11 @@ export default function StudentCoursePlayerPage() {
   }
 
   const validRelated = useMemo(() => {
-    return (course?.related_courses || []).map((rc) => rc.related_course).filter(Boolean)
+    return (course?.related_courses || []).map(rc => rc.related_course).filter(Boolean)
   }, [course])
 
   // Select lesson helper
-  const handleSelectLesson = (lesson) => {
+  const handleSelectLesson = lesson => {
     router.push(`/academy/courses/${slug}/lessons/${lesson.public_id}`)
   }
 
@@ -234,7 +234,9 @@ export default function StudentCoursePlayerPage() {
                 height: 200,
                 borderRadius: 1,
                 mb: 2.5,
-                backgroundImage: course.thumbnail ? `url('${course.thumbnail}')` : getGradient(course.card_gradient),
+                backgroundImage: course.thumbnail
+                  ? `url('${course.thumbnail}')`
+                  : getGradient(course.card_gradient),
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
@@ -266,18 +268,37 @@ export default function StudentCoursePlayerPage() {
             sx={{ mb: 2 }}
           >
             <Stack direction="row" alignItems="center" spacing={1}>
-              <Rating value={Number(course.avg_rating || 0)} readOnly size="small" precision={0.1} />
-              <Typography variant="body2" sx={{ fontWeight: 700, fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+              <Rating
+                value={Number(course.avg_rating || 0)}
+                readOnly
+                size="small"
+                precision={0.1}
+              />
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: 700, fontSize: { xs: "0.8rem", sm: "0.875rem" } }}
+              >
                 {Number(course.avg_rating || 0).toFixed(1)}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ fontSize: { xs: "0.8rem", sm: "0.875rem" } }}
+              >
                 ({course.total_reviews || 0} reviews)
               </Typography>
             </Stack>
 
             <Stack direction="row" alignItems="center" spacing={1}>
               <MenuBook sx={{ fontSize: 18, color: "text.secondary" }} />
-              <Typography variant="body2" sx={{ fontWeight: 600, color: "text.secondary", fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                }}
+              >
                 {course.total_lessons || 0} Lessons
               </Typography>
             </Stack>
@@ -285,7 +306,14 @@ export default function StudentCoursePlayerPage() {
             {course.category && (
               <Stack direction="row" alignItems="center" spacing={1}>
                 <FolderOpen sx={{ fontSize: 18, color: "text.secondary" }} />
-                <Typography variant="body2" sx={{ fontWeight: 600, color: "text.secondary", fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 600,
+                    color: "text.secondary",
+                    fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                  }}
+                >
                   {course.category.name}
                 </Typography>
               </Stack>
@@ -321,14 +349,20 @@ export default function StudentCoursePlayerPage() {
                   color: "text.secondary",
                   lineHeight: 1.8,
                   fontSize: "1rem",
+                  textAlign: "justify",
                   "& p": { my: 1.5 },
                   "& ul, & ol": { pl: 3, my: 1.5 },
                   "& li": { mb: 0.5 },
-                  "& h1, & h2, & h3": { color: "text.primary", mt: 2, mb: 1, fontWeight: 700 }
+                  "& h1, & h2, & h3": { color: "text.primary", mt: 2, mb: 1, fontWeight: 700 },
                 }}
               />
             ) : (
-              <Typography variant="body1" color="text.secondary" lineHeight={1.8}>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                lineHeight={1.8}
+                textAlign="justify"
+              >
                 {course.short_introduction || "No description available."}
               </Typography>
             )}
@@ -345,7 +379,9 @@ export default function StudentCoursePlayerPage() {
                 <CircularProgress />
               </Box>
             ) : sortedChapters.length === 0 ? (
-              <Typography color="text.secondary">No curriculum available for this course yet.</Typography>
+              <Typography color="text.secondary">
+                No curriculum available for this course yet.
+              </Typography>
             ) : (
               sortedChapters.map((chapter, index) => (
                 <PortalChapterAccordion
@@ -412,7 +448,7 @@ export default function StudentCoursePlayerPage() {
             Related Courses
           </Typography>
           <Grid container spacing={3}>
-            {validRelated.map((relatedCourse) => {
+            {validRelated.map(relatedCourse => {
               return (
                 <Grid key={relatedCourse.public_id} size={{ xs: 12, sm: 6, md: 4 }}>
                   <PortalCourseCard course={relatedCourse} />

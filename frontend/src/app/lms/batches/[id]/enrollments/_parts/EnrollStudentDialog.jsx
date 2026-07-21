@@ -22,15 +22,9 @@ import CAutocomplete from "@/components/form/CAutocomplete"
 import CTextField from "@/components/form/CTextField"
 import CSelect from "@/components/form/CSelect"
 
-import {
-  useCreateBatchEnrollmentMutation,
-  useReadBatchQuery,
-} from "@/features/batch/batchAPI"
+import { useCreateBatchEnrollmentMutation, useReadBatchQuery } from "@/features/batch/batchAPI"
 import { useReadEnrollmentMetaQuery } from "@/features/enrollment/enrollmentAPI"
-import {
-  useCreatePaymentMutation,
-  useLazyReadPaymentsQuery,
-} from "@/features/payment/paymentApi"
+import { useCreatePaymentMutation, useLazyReadPaymentsQuery } from "@/features/payment/paymentApi"
 import { mapApiErrorsToFormik } from "@/utils/shared"
 
 const createCustomPaper = (onClear, onCreateNew) => {
@@ -38,7 +32,7 @@ const createCustomPaper = (onClear, onCreateNew) => {
     return (
       <Paper {...other}>
         <Box
-          onMouseDown={(e) => {
+          onMouseDown={e => {
             e.preventDefault()
             e.stopPropagation()
           }}
@@ -86,7 +80,7 @@ function CreatePaymentDialog({ open, onClose, student, batch, onSuccess }) {
       source: Yup.string().required("Payment method is required"),
       status: Yup.string().required("Status is required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         const payload = {
           member_id: student.value,
@@ -114,7 +108,11 @@ function CreatePaymentDialog({ open, onClose, student, batch, onSuccess }) {
       <DialogTitle sx={{ fontWeight: 700 }}>Create Manual Payment</DialogTitle>
       <Divider />
       <DialogContent sx={{ bgcolor: "background.default", pt: 2 }}>
-        <CForm onSubmit={formik.handleSubmit} btnProps={{ label: "Create Payment", loading: isLoading }} dialog>
+        <CForm
+          onSubmit={formik.handleSubmit}
+          btnProps={{ label: "Create Payment", loading: isLoading }}
+          dialog
+        >
           <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
               <CTextField
@@ -142,7 +140,7 @@ function CreatePaymentDialog({ open, onClose, student, batch, onSuccess }) {
                 name="currency"
                 required
                 value={formik.values.currency}
-                onChange={(e) => formik.setFieldValue("currency", e.target.value)}
+                onChange={e => formik.setFieldValue("currency", e.target.value)}
                 options={[
                   { label: "USD", value: "USD" },
                   { label: "BDT", value: "BDT" },
@@ -167,7 +165,7 @@ function CreatePaymentDialog({ open, onClose, student, batch, onSuccess }) {
                 name="status"
                 required
                 value={formik.values.status}
-                onChange={(e) => formik.setFieldValue("status", e.target.value)}
+                onChange={e => formik.setFieldValue("status", e.target.value)}
                 options={[
                   { label: "Completed", value: "Completed" },
                   { label: "Pending", value: "Pending" },
@@ -193,9 +191,13 @@ export default function EnrollStudentDialog({ batchPublicId }) {
   const handleOpen = () => setOpen(true)
 
   const { data: { data: meta } = {} } = useReadEnrollmentMetaQuery(undefined, { skip: !open })
-  const { data: { data: batch } = {} } = useReadBatchQuery({ id: batchPublicId }, { skip: !open || !batchPublicId })
+  const { data: { data: batch } = {} } = useReadBatchQuery(
+    { id: batchPublicId },
+    { skip: !open || !batchPublicId }
+  )
   const [enrollStudent, { isLoading }] = useCreateBatchEnrollmentMutation()
-  const [fetchPayments, { data: paymentsData, isLoading: paymentsLoading }] = useLazyReadPaymentsQuery()
+  const [fetchPayments, { data: paymentsData, isLoading: paymentsLoading }] =
+    useLazyReadPaymentsQuery()
 
   const payments = paymentsData?.data || []
 
@@ -265,7 +267,7 @@ export default function EnrollStudentDialog({ batchPublicId }) {
                 value={formik.values.temp_user}
                 options={meta?.users || []}
                 isOptionEqualToValue={(option, value) => option.value === value?.value}
-                getOptionLabel={(option) => option?.label || ""}
+                getOptionLabel={option => option?.label || ""}
                 onChange={(e, value) => {
                   formik.setFieldValue("member_public_id", value ? value.public_id : "")
                   formik.setFieldValue("temp_user", value)
@@ -290,7 +292,7 @@ export default function EnrollStudentDialog({ batchPublicId }) {
                 value={formik.values.temp_payment}
                 options={payments}
                 isOptionEqualToValue={(option, value) => option.public_id === value?.public_id}
-                getOptionLabel={(option) => {
+                getOptionLabel={option => {
                   if (!option) return ""
                   const txnId = option.payment_id || option.id
                   return `${txnId} - ${option.amount} ${option.currency} (${option.status})`
@@ -323,7 +325,16 @@ export default function EnrollStudentDialog({ batchPublicId }) {
                     borderColor: "divider",
                   }}
                 >
-                  <Typography variant="body2" sx={{ fontWeight: 600, flexGrow: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 600,
+                      flexGrow: 1,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     {`${window.location.origin}/payments/checkout?payment_public_id=${formik.values.temp_payment.public_id}`}
                   </Typography>
                   <Button
@@ -346,7 +357,7 @@ export default function EnrollStudentDialog({ batchPublicId }) {
               <CCheckbox
                 label="Is Paid (Tuition Fee Cleared)"
                 checked={formik.values.is_paid}
-                onChange={(e) => formik.setFieldValue("is_paid", e.target.checked)}
+                onChange={e => formik.setFieldValue("is_paid", e.target.checked)}
               />
             </Grid>
           </Grid>
@@ -359,7 +370,7 @@ export default function EnrollStudentDialog({ batchPublicId }) {
           onClose={() => setCreatePaymentOpen(false)}
           student={formik.values.temp_user}
           batch={batch}
-          onSuccess={(newPayment) => {
+          onSuccess={newPayment => {
             // Refetch payments for this user so it appears in the select options
             if (formik.values.temp_user) {
               fetchPayments({ member_id: formik.values.temp_user.value, limit: 100 })

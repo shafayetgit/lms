@@ -59,7 +59,7 @@ export default function Page() {
     validationSchema: categoryValidationSchema,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm, setErrors }) => {
-      setUploadProgress(0);
+      setUploadProgress(0)
       try {
         const { thumbnail, ...updatePayload } = values
 
@@ -78,7 +78,7 @@ export default function Page() {
                   field: "thumbnail",
                   model: "Category",
                   model_id: categoryId,
-                  onProgress: (progress) => setUploadProgress(progress),
+                  onProgress: progress => setUploadProgress(progress),
                 },
               ],
             })
@@ -89,8 +89,6 @@ export default function Page() {
               await attach(uploadedFiles).unwrap()
               toast.info("File has been uploaded and saved")
             }
-
-
           } catch (mediaError) {
             console.error("Error uploading/attaching media:", mediaError)
             toast.warning(
@@ -117,15 +115,18 @@ export default function Page() {
   if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/categories/${id}`, icon: <InfoOutlined />, resource: "category", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/categories/${id}`,
+      icon: <InfoOutlined />,
+      resource: "category",
+      action: "read",
+    },
   ]
 
   return (
     <PermissionGuard resource="category" action="read">
-      <CModuleLayout 
-        navigators={navigators}
-        helpTips={CATEGORY_TIPS.details}
-      >
+      <CModuleLayout navigators={navigators} helpTips={CATEGORY_TIPS.details}>
         <CForm
           onSubmit={canUpdate ? formik.handleSubmit : undefined}
           width="30rem"
@@ -197,12 +198,7 @@ export default function Page() {
               {uploadProgress > 0 && uploadProgress <= 100 && (
                 <Box sx={{ width: "100%", mt: 2 }}>
                   <LinearProgress variant="determinate" value={uploadProgress} />
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    align="center"
-                    mt={1}
-                  >
+                  <Typography variant="body2" color="text.secondary" align="center" mt={1}>
                     {uploadProgress < 100 ? `Uploading... ${uploadProgress}%` : "Processing..."}
                   </Typography>
                 </Box>

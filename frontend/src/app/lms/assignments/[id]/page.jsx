@@ -1,45 +1,47 @@
-"use client";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import Grid from "@mui/material/Grid";
-import { Box, Tabs, Tab } from "@mui/material";
-import { toast } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
+"use client"
+import React, { useState } from "react"
+import { useFormik } from "formik"
+import Grid from "@mui/material/Grid"
+import { Box, Tabs, Tab } from "@mui/material"
+import { toast } from "react-toastify"
+import { useParams, useRouter } from "next/navigation"
 
-import { InfoOutlined, Assignment as AssignmentIcon } from "@mui/icons-material";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CSelect from "@/components/form/CSelect";
-import CCheckbox from "@/components/form/CCheckbox";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CAutocomplete from "@/components/form/CAutocomplete";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
-import { ASSIGNMENT_TIPS } from "@/choices/helpTips/assignment";
+import { InfoOutlined, Assignment as AssignmentIcon } from "@mui/icons-material"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CSelect from "@/components/form/CSelect"
+import CCheckbox from "@/components/form/CCheckbox"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CAutocomplete from "@/components/form/CAutocomplete"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
+import { ASSIGNMENT_TIPS } from "@/choices/helpTips/assignment"
 
-import { useReadAssignmentQuery, useUpdateAssignmentMutation } from "@/features/assignment/assignmentApi";
-import { useReadCoursesQuery } from "@/features/course/courseAPI";
-import { assignmentValidationSchema } from "@/schema/assignment";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-
+import {
+  useReadAssignmentQuery,
+  useUpdateAssignmentMutation,
+} from "@/features/assignment/assignmentApi"
+import { useReadCoursesQuery } from "@/features/course/courseAPI"
+import { assignmentValidationSchema } from "@/schema/assignment"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 export default function AssignmentDetailPage() {
-  const router = useRouter();
-  const { id } = useParams();
+  const router = useRouter()
+  const { id } = useParams()
 
   const { data: assignmentRes, isLoading } = useReadAssignmentQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
-  const assignmentData = assignmentRes?.data || assignmentRes;
-  useSetBreadcrumb(assignmentData?.title, `/lms/assignments/${id}`);
+  const assignmentData = assignmentRes?.data || assignmentRes
+  useSetBreadcrumb(assignmentData?.title, `/lms/assignments/${id}`)
 
-  const { data: coursesData } = useReadCoursesQuery();
-  const courses = coursesData?.data || [];
+  const { data: coursesData } = useReadCoursesQuery()
+  const courses = coursesData?.data || []
 
-  const [update, { isLoading: isUpdating }] = useUpdateAssignmentMutation();
+  const [update, { isLoading: isUpdating }] = useUpdateAssignmentMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -55,22 +57,34 @@ export default function AssignmentDetailPage() {
     enableReinitialize: true,
     onSubmit: async (values, { setErrors }) => {
       try {
-        await update({ id, body: values }).unwrap();
-        toast.success("Assignment updated successfully");
+        await update({ id, body: values }).unwrap()
+        toast.success("Assignment updated successfully")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed")
       }
     },
-  });
+  })
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/assignments/${id}`, icon: <InfoOutlined />, resource: "assignment", action: "read" },
-    { label: "Submissions", href: `/lms/assignments/${id}/submissions`, icon: <AssignmentIcon />, resource: "assignment", action: "read" },
-  ];
+    {
+      label: "Details",
+      href: `/lms/assignments/${id}`,
+      icon: <InfoOutlined />,
+      resource: "assignment",
+      action: "read",
+    },
+    {
+      label: "Submissions",
+      href: `/lms/assignments/${id}/submissions`,
+      icon: <AssignmentIcon />,
+      resource: "assignment",
+      action: "read",
+    },
+  ]
 
   return (
     <PermissionGuard resource="assignment" action="read">
@@ -126,10 +140,12 @@ export default function AssignmentDetailPage() {
               <CAutocomplete
                 label="Course"
                 name="course_id"
-                options={courses.map((c) => ({ label: c.title, value: c.id }))}
+                options={courses.map(c => ({ label: c.title, value: c.id }))}
                 value={
                   formik.values.course_id
-                    ? courses.map((c) => ({ label: c.title, value: c.id })).find((c) => c.value === formik.values.course_id) || null
+                    ? courses
+                        .map(c => ({ label: c.title, value: c.id }))
+                        .find(c => c.value === formik.values.course_id) || null
                     : null
                 }
                 onChange={(e, val) => formik.setFieldValue("course_id", val?.value || null)}
@@ -152,19 +168,19 @@ export default function AssignmentDetailPage() {
               <CCheckbox
                 label="Grade Assignment"
                 checked={formik.values.grade_assignment}
-                onChange={(e) => formik.setFieldValue("grade_assignment", e.target.checked)}
+                onChange={e => formik.setFieldValue("grade_assignment", e.target.checked)}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CCheckbox
                 label="Show Answer"
                 checked={formik.values.show_answer}
-                onChange={(e) => formik.setFieldValue("show_answer", e.target.checked)}
+                onChange={e => formik.setFieldValue("show_answer", e.target.checked)}
               />
             </Grid>
           </Grid>
         </CForm>
       </CModuleLayout>
     </PermissionGuard>
-  );
+  )
 }

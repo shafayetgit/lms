@@ -67,7 +67,9 @@ const batchAPI = api.injectEndpoints({
         if (page) params.append("page", page)
         if (size) params.append("size", size)
         const queryString = params.toString()
-        return queryString ? `${PREFIX}/${id}/enrollments?${queryString}` : `${PREFIX}/${id}/enrollments`
+        return queryString
+          ? `${PREFIX}/${id}/enrollments?${queryString}`
+          : `${PREFIX}/${id}/enrollments`
       },
       providesTags: ["BATCH_ENROLLMENTS"],
     }),

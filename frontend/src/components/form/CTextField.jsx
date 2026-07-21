@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { TextField } from "@mui/material"
 
 export default function CTextField({
   fullWidth = true,
@@ -13,7 +13,7 @@ export default function CTextField({
     <TextField
       fullWidth={fullWidth}
       size={size}
-      sx={{  ...sx }}
+      sx={{ ...sx }}
       {...rest}
       slotProps={{
         input: {
@@ -34,5 +34,5 @@ export default function CTextField({
         ...slotProps,
       }}
     />
-  );
+  )
 }

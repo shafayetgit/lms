@@ -12,10 +12,17 @@ import {
 import { CheckCircle, Send, AccessTime, Cancel } from "@mui/icons-material"
 import { toast } from "react-toastify"
 import CTextField from "@/components/form/CTextField"
-import { useSubmitAssignmentMutation, useReadAssignmentQuery } from "@/features/assignment/assignmentApi"
+import {
+  useSubmitAssignmentMutation,
+  useReadAssignmentQuery,
+} from "@/features/assignment/assignmentApi"
 
 export default function AssignmentPlayer({ assignmentId, onCompleted }) {
-  const { data: assignmentResponse, isLoading, isError } = useReadAssignmentQuery(assignmentId, { skip: !assignmentId })
+  const {
+    data: assignmentResponse,
+    isLoading,
+    isError,
+  } = useReadAssignmentQuery(assignmentId, { skip: !assignmentId })
   const assignment = assignmentResponse?.data
 
   const [submitAssignment] = useSubmitAssignmentMutation()
@@ -41,7 +48,8 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
       }
     } catch (err) {
       console.error("Failed to submit assignment", err)
-      const msg = err?.data?.message || err?.data?.detail || err?.message || "Failed to submit assignment"
+      const msg =
+        err?.data?.message || err?.data?.detail || err?.message || "Failed to submit assignment"
       toast.error(msg)
     } finally {
       setIsSubmitting(false)
@@ -49,7 +57,8 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
   }
 
   if (isLoading) return <CircularProgress />
-  if (isError || !assignment) return <Alert severity="error">Failed to load assignment details</Alert>
+  if (isError || !assignment)
+    return <Alert severity="error">Failed to load assignment details</Alert>
 
   const submission = assignment.my_submission || subResult
   const hasSubmitted = submitted || !!assignment.my_submission
@@ -57,7 +66,7 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
   return (
     <Card sx={{ mt: 2, border: "1px solid", borderColor: "divider" }}>
       <CardContent>
-        <Typography variant="h6" fontWeight="700">
+        <Typography variant="subtitle1" fontWeight="700">
           Assignment: {assignment.title}
         </Typography>
         <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 1, mb: 2 }}>
@@ -77,8 +86,8 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
                 submission?.status === "Accepted"
                   ? "success"
                   : submission?.status === "Rejected"
-                  ? "error"
-                  : "info"
+                    ? "error"
+                    : "info"
               }
               icon={
                 submission?.status === "Accepted" ? (
@@ -95,7 +104,10 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
             </Alert>
 
             {submission?.grade !== null && submission?.grade !== undefined && (
-              <Paper variant="outlined" sx={{ p: 2, mb: 2, bgcolor: "success.light", color: "success.contrastText" }}>
+              <Paper
+                variant="outlined"
+                sx={{ p: 2, mb: 2, bgcolor: "success.light", color: "success.contrastText" }}
+              >
                 <Typography variant="subtitle2" fontWeight="700">
                   Grade: {submission.grade} / 100
                 </Typography>
@@ -159,7 +171,7 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
               rows={6}
               placeholder="Write your answer or code here..."
               value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              onChange={e => setAnswer(e.target.value)}
             />
             <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
               <Button
@@ -172,11 +184,7 @@ export default function AssignmentPlayer({ assignmentId, onCompleted }) {
                 {hasSubmitted ? "Resubmit Solution" : "Submit Solution"}
               </Button>
               {isEditing && (
-                <Button
-                  variant="outlined"
-                  color="inherit"
-                  onClick={() => setIsEditing(false)}
-                >
+                <Button variant="outlined" color="inherit" onClick={() => setIsEditing(false)}>
                   Cancel
                 </Button>
               )}

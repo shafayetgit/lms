@@ -1,38 +1,40 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import { Grid } from "@mui/material";
-import { toast } from "react-toastify";
-import { useParams } from "next/navigation";
-import dayjs from "dayjs";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import { Grid } from "@mui/material"
+import { toast } from "react-toastify"
+import { useParams } from "next/navigation"
+import dayjs from "dayjs"
 
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CDatePicker from "@/components/form/CDatePicker";
-import CCheckbox from "@/components/form/CCheckbox";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import { InfoOutlined } from "@mui/icons-material";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CDatePicker from "@/components/form/CDatePicker"
+import CCheckbox from "@/components/form/CCheckbox"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import { InfoOutlined } from "@mui/icons-material"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
 
-import { useReadCertificateQuery, useUpdateCertificateMutation } from "@/features/certificate/certificateApi";
-import { certificateValidationSchema } from "@/schema/certificate";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-
+import {
+  useReadCertificateQuery,
+  useUpdateCertificateMutation,
+} from "@/features/certificate/certificateApi"
+import { certificateValidationSchema } from "@/schema/certificate"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 export default function CertificateDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams()
 
   const { data: certRes, isLoading } = useReadCertificateQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
-  const cert = certRes?.data;
+  const cert = certRes?.data
 
-  const [update, { isLoading: isUpdating }] = useUpdateCertificateMutation();
+  const [update, { isLoading: isUpdating }] = useUpdateCertificateMutation()
 
-  useSetBreadcrumb(cert?.member?.full_name || cert?.member?.email);
+  useSetBreadcrumb(cert?.member?.full_name || cert?.member?.email)
 
   const formik = useFormik({
     initialValues: {
@@ -49,40 +51,40 @@ export default function CertificateDetailPage() {
     onSubmit: async (values, { setErrors }) => {
       try {
         const payload = {
-            issue_date: values.issue_date ? dayjs(values.issue_date).format('YYYY-MM-DD') : null,
-            expiry_date: values.expiry_date ? dayjs(values.expiry_date).format('YYYY-MM-DD') : null,
-            template: values.template,
-            published: values.published
+          issue_date: values.issue_date ? dayjs(values.issue_date).format("YYYY-MM-DD") : null,
+          expiry_date: values.expiry_date ? dayjs(values.expiry_date).format("YYYY-MM-DD") : null,
+          template: values.template,
+          published: values.published,
         }
-        await update({ id, body: payload }).unwrap();
-        toast.success("Certificate updated successfully");
+        await update({ id, body: payload }).unwrap()
+        toast.success("Certificate updated successfully")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed")
       }
     },
-  });
+  })
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
-  const navigators = [
-    { label: "Details", href: `/lms/certificates/${id}`, icon: <InfoOutlined /> },
-  ];
+  const navigators = [{ label: "Details", href: `/lms/certificates/${id}`, icon: <InfoOutlined /> }]
 
   const helpTips = {
     description: "Review metadata and validity ranges for the issued academic credentials.",
     tips: [
       {
         title: "Expiry Date",
-        description: "Set an expiration date for renewal policies. Leave blank for lifetime credentials.",
+        description:
+          "Set an expiration date for renewal policies. Leave blank for lifetime credentials.",
       },
       {
         title: "Verification link",
-        description: "Once published, students and third parties can verify credentials online using the public verification ID.",
+        description:
+          "Once published, students and third parties can verify credentials online using the public verification ID.",
       },
     ],
-  };
+  }
 
   return (
     <CModuleLayout navigators={navigators} helpTips={helpTips}>
@@ -108,11 +110,7 @@ export default function CertificateDetailPage() {
 
           {/* Verification ID */}
           <Grid size={{ xs: 12 }}>
-            <CTextField
-              label="Verification ID"
-              value={cert?.public_id || "N/A"}
-              disabled
-            />
+            <CTextField label="Verification ID" value={cert?.public_id || "N/A"} disabled />
           </Grid>
 
           {/* Issue Date */}
@@ -121,7 +119,7 @@ export default function CertificateDetailPage() {
               label="Issue Date"
               name="issue_date"
               value={formik.values.issue_date}
-              onChange={(val) => formik.setFieldValue("issue_date", val)}
+              onChange={val => formik.setFieldValue("issue_date", val)}
               error={formik.touched.issue_date && Boolean(formik.errors.issue_date)}
               helperText={formik.touched.issue_date && formik.errors.issue_date}
             />
@@ -129,11 +127,11 @@ export default function CertificateDetailPage() {
 
           {/* Expiry Date */}
           <Grid size={{ xs: 12 }}>
-             <CDatePicker
+            <CDatePicker
               label="Expiry Date"
               name="expiry_date"
               value={formik.values.expiry_date}
-              onChange={(val) => formik.setFieldValue("expiry_date", val)}
+              onChange={val => formik.setFieldValue("expiry_date", val)}
               error={formik.touched.expiry_date && Boolean(formik.errors.expiry_date)}
               helperText={formik.touched.expiry_date && formik.errors.expiry_date}
             />
@@ -157,11 +155,11 @@ export default function CertificateDetailPage() {
             <CCheckbox
               label="Published"
               checked={formik.values.published}
-              onChange={(e) => formik.setFieldValue("published", e.target.checked)}
+              onChange={e => formik.setFieldValue("published", e.target.checked)}
             />
           </Grid>
         </Grid>
       </CForm>
     </CModuleLayout>
-  );
+  )
 }

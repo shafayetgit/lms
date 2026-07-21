@@ -52,17 +52,19 @@ export default function StudentCoursePlayerPage() {
   const settings = useMemo(() => settingsResponse || {}, [settingsResponse])
 
   // Fetch Course details
-  const { data: courseResponse, isLoading: isCourseLoading, isError: isCourseError } = useReadCourseQuery(
-    { id: slug },
-    { skip: !slug }
-  )
+  const {
+    data: courseResponse,
+    isLoading: isCourseLoading,
+    isError: isCourseError,
+  } = useReadCourseQuery({ id: slug }, { skip: !slug })
   const course = courseResponse?.data
 
   // Fetch active lesson details
-  const { data: lessonResponse, isLoading: isLessonLoading, isError: isLessonError } = useReadLessonQuery(
-    { id: lessonId },
-    { skip: !lessonId }
-  )
+  const {
+    data: lessonResponse,
+    isLoading: isLessonLoading,
+    isError: isLessonError,
+  } = useReadLessonQuery({ id: lessonId }, { skip: !lessonId })
   const activeLesson = lessonResponse?.data
 
   // Fetch student enrollments
@@ -75,7 +77,11 @@ export default function StudentCoursePlayerPage() {
   const isEnrolled = useMemo(() => {
     if (!course) return false
     const enrollments = enrollmentsResponse?.data || []
-    return enrollments.some((e) => e.course?.public_id === course.public_id && (e.status === "active" || e.status === "completed"))
+    return enrollments.some(
+      e =>
+        e.course?.public_id === course.public_id &&
+        (e.status === "active" || e.status === "completed")
+    )
   }, [enrollmentsResponse, course])
 
   // Fetch chapters
@@ -92,7 +98,7 @@ export default function StudentCoursePlayerPage() {
   // Track loaded lessons to build next/prev flat navigation
   const [lessonsMap, setLessonsMap] = useState({})
   const handleLessonLoaded = useCallback((chapterId, lessonsList) => {
-    setLessonsMap((prev) => {
+    setLessonsMap(prev => {
       if (prev[chapterId] && prev[chapterId].length === lessonsList.length) {
         return prev
       }
@@ -103,7 +109,7 @@ export default function StudentCoursePlayerPage() {
   // Flat lessons list
   const flatLessonsList = useMemo(() => {
     const list = []
-    sortedChapters.forEach((chapter) => {
+    sortedChapters.forEach(chapter => {
       const chapterLessons = lessonsMap[chapter.id] || []
       list.push(...chapterLessons)
     })
@@ -116,7 +122,7 @@ export default function StudentCoursePlayerPage() {
   const completedLessons = useMemo(() => {
     const map = {}
     const myProgressList = myProgressResponse || []
-    myProgressList.forEach((p) => {
+    myProgressList.forEach(p => {
       if (p.is_completed && p.course_id === course?.id) {
         map[p.lesson_id] = true
       }
@@ -127,7 +133,7 @@ export default function StudentCoursePlayerPage() {
   // Calculate course progress percentage
   const courseProgressPercent = useMemo(() => {
     if (flatLessonsList.length === 0) return 0
-    const completedCount = flatLessonsList.filter((l) => completedLessons[l.id]).length
+    const completedCount = flatLessonsList.filter(l => completedLessons[l.id]).length
     return Math.round((completedCount / flatLessonsList.length) * 100)
   }, [flatLessonsList, completedLessons])
 
@@ -165,7 +171,7 @@ export default function StudentCoursePlayerPage() {
 
   const handleToggleCinemaMode = () => {
     setVideoStartTime(videoProgressRef.current)
-    setIsCinemaMode((prev) => {
+    setIsCinemaMode(prev => {
       const nextVal = !prev
       localStorage.setItem("lms_player_cinema_mode", nextVal ? "true" : "false")
       return nextVal
@@ -186,7 +192,7 @@ export default function StudentCoursePlayerPage() {
   }
 
   // Select lesson helper
-  const handleSelectLesson = (lesson) => {
+  const handleSelectLesson = lesson => {
     router.push(`/academy/courses/${slug}/lessons/${lesson.public_id}`)
   }
 
@@ -194,21 +200,21 @@ export default function StudentCoursePlayerPage() {
   const lockedLessons = useMemo(() => {
     const lockedMap = {}
     let hasPendingEnforced = false
-    
+
     for (const lesson of flatLessonsList) {
       if (hasPendingEnforced) {
         lockedMap[lesson.id] = true
       } else {
         lockedMap[lesson.id] = false
       }
-      
+
       const isCompleted = !!completedLessons[lesson.id]
       if (!isCompleted) {
-        const isEnforced = 
+        const isEnforced =
           (lesson.lesson_type === "video" && (settings.enforce_video_completion ?? true)) ||
           (lesson.lesson_type === "quiz" && (settings.enforce_quiz_completion ?? true)) ||
           (lesson.lesson_type === "assignment" && (settings.enforce_assignment_completion ?? true))
-        
+
         if (isEnforced) {
           hasPendingEnforced = true
         }
@@ -220,12 +226,13 @@ export default function StudentCoursePlayerPage() {
   // Next / Prev selection
   const activeIndex = useMemo(() => {
     if (!activeLesson) return -1
-    return flatLessonsList.findIndex((l) => l.public_id === activeLesson.public_id)
+    return flatLessonsList.findIndex(l => l.public_id === activeLesson.public_id)
   }, [activeLesson, flatLessonsList])
 
   const prevLesson = activeIndex > 0 ? flatLessonsList[activeIndex - 1] : null
-  const nextLesson = activeIndex < flatLessonsList.length - 1 ? flatLessonsList[activeIndex + 1] : null
-  const nextLessonFiltered = (nextLesson && !lockedLessons[nextLesson.id]) ? nextLesson : null
+  const nextLesson =
+    activeIndex < flatLessonsList.length - 1 ? flatLessonsList[activeIndex + 1] : null
+  const nextLessonFiltered = nextLesson && !lockedLessons[nextLesson.id] ? nextLesson : null
 
   // Set Breadcrumbs using project helper hook
   useSetBreadcrumb(course?.title || "Course Player", `/academy/courses/${slug}`)
@@ -262,7 +269,7 @@ export default function StudentCoursePlayerPage() {
           settings={settings}
           onVideoEnded={handleMarkComplete}
           startTime={videoStartTime}
-          onTimeUpdate={(time) => {
+          onTimeUpdate={time => {
             videoProgressRef.current = time
           }}
         />
@@ -273,9 +280,10 @@ export default function StudentCoursePlayerPage() {
         <Box
           sx={{
             position: "sticky",
-            top: 56,
+            top: { xs: 56, sm: 64 },
             zIndex: 1100,
             mx: { xs: -2, sm: -3 },
+            mt: -2,
             mb: 2,
             bgcolor: "background.default",
           }}
@@ -286,7 +294,7 @@ export default function StudentCoursePlayerPage() {
             settings={settings}
             onVideoEnded={handleMarkComplete}
             startTime={videoStartTime}
-            onTimeUpdate={(time) => {
+            onTimeUpdate={time => {
               videoProgressRef.current = time
             }}
           />
@@ -312,13 +320,19 @@ export default function StudentCoursePlayerPage() {
               <Typography variant="h6" color="text.primary" fontWeight={700} gutterBottom>
                 Lesson Locked
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 4, maxWidth: 400, mx: "auto" }}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mb: 4, maxWidth: 400, mx: "auto" }}
+              >
                 Please complete the preceding lessons/activities in order to unlock this lesson.
               </Typography>
               <Button
                 variant="contained"
                 onClick={() => {
-                  const firstPending = flatLessonsList.find(l => !completedLessons[l.id] && !lockedLessons[l.id])
+                  const firstPending = flatLessonsList.find(
+                    l => !completedLessons[l.id] && !lockedLessons[l.id]
+                  )
                   if (firstPending) {
                     handleSelectLesson(firstPending)
                   } else if (flatLessonsList.length > 0) {
@@ -340,7 +354,7 @@ export default function StudentCoursePlayerPage() {
                   settings={settings}
                   onVideoEnded={handleMarkComplete}
                   startTime={videoStartTime}
-                  onTimeUpdate={(time) => {
+                  onTimeUpdate={time => {
                     videoProgressRef.current = time
                   }}
                 />
@@ -370,17 +384,16 @@ export default function StudentCoursePlayerPage() {
                         Reading Material
                       </Typography>
                       <Typography variant="body1" sx={{ whiteSpace: "pre-wrap", lineHeight: 1.7 }}>
-                        {activeLesson.content || activeLesson.description || "No reading material available."}
+                        {activeLesson.content ||
+                          activeLesson.description ||
+                          "No reading material available."}
                       </Typography>
                     </CardContent>
                   </Card>
                 )}
 
                 {activeLesson.lesson_type === "quiz" && (
-                  <QuizPlayer
-                    quizId={activeLesson.quiz_id}
-                    onCompleted={handleMarkComplete}
-                  />
+                  <QuizPlayer quizId={activeLesson.quiz_id} onCompleted={handleMarkComplete} />
                 )}
 
                 {activeLesson.lesson_type === "assignment" && (
@@ -392,7 +405,16 @@ export default function StudentCoursePlayerPage() {
 
                 {/* Tabs for Notes & Community */}
                 <Box sx={{ mt: { xs: 1, md: 4 } }}>
-                  <Box sx={{ display: "flex", gap: 1, borderBottom: "1px solid", borderColor: "divider", pb: 1, mb: { xs: 0, md: 2 } }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      borderBottom: "1px solid",
+                      borderColor: "divider",
+                      pb: 1,
+                      mb: { xs: 0, md: 2 },
+                    }}
+                  >
                     <Button
                       variant="text"
                       onClick={() => {
@@ -413,7 +435,7 @@ export default function StudentCoursePlayerPage() {
                         "&:hover": {
                           bgcolor: activePlayerTab === "notes" ? "action.selected" : "action.hover",
                           boxShadow: "none",
-                        }
+                        },
                       }}
                     >
                       Notes
@@ -433,12 +455,14 @@ export default function StudentCoursePlayerPage() {
                         boxShadow: "none",
                         fontWeight: 600,
                         borderRadius: 1,
-                        bgcolor: activePlayerTab === "community" ? "action.selected" : "transparent",
+                        bgcolor:
+                          activePlayerTab === "community" ? "action.selected" : "transparent",
                         color: "text.primary",
                         "&:hover": {
-                          bgcolor: activePlayerTab === "community" ? "action.selected" : "action.hover",
+                          bgcolor:
+                            activePlayerTab === "community" ? "action.selected" : "action.hover",
                           boxShadow: "none",
-                        }
+                        },
                       }}
                     >
                       Community
@@ -476,11 +500,22 @@ export default function StudentCoursePlayerPage() {
                         display: "flex",
                         flexDirection: "column",
                         overflow: "hidden",
-                      }
+                      },
                     }}
                   >
                     {/* Drag handle indicator */}
-                    <Box sx={{ width: 36, height: 4, bgcolor: "divider", borderRadius: 2, mx: "auto", mt: 1, mb: 1, flexShrink: 0 }} />
+                    <Box
+                      sx={{
+                        width: 36,
+                        height: 4,
+                        bgcolor: "divider",
+                        borderRadius: 2,
+                        mx: "auto",
+                        mt: 1,
+                        mb: 1,
+                        flexShrink: 0,
+                      }}
+                    />
 
                     {/* Drawer scrollable content */}
                     <Box sx={{ flexGrow: 1, overflowY: "auto", px: 1.5, py: 2 }}>

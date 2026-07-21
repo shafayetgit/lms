@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
-import React from "react";
-import { Box, IconButton, alpha } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import React from "react"
+import { Box, IconButton, alpha } from "@mui/material"
+import { ChevronLeft, ChevronRight } from "@mui/icons-material"
 
 export default function CollapseButton({ isMini, setIsMini, isMobile, theme }) {
-  if (isMobile) return null;
+  if (isMobile) return null
 
   return (
     <Box
@@ -33,5 +33,5 @@ export default function CollapseButton({ isMini, setIsMini, isMobile, theme }) {
         {isMini ? <ChevronRight fontSize="small" /> : <ChevronLeft fontSize="small" />}
       </IconButton>
     </Box>
-  );
+  )
 }

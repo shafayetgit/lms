@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Box,
   Typography,
@@ -10,17 +10,14 @@ import {
   Stack,
   Grid,
   TextField,
-} from "@mui/material";
-import { alpha } from "@mui/material/styles";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
+} from "@mui/material"
+import { alpha } from "@mui/material/styles"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import CancelIcon from "@mui/icons-material/Cancel"
 
-import {
-  checkPasswordRequirements,
-  checkPasswordStrength,
-} from "@/utils/password";
+import { checkPasswordRequirements, checkPasswordStrength } from "@/utils/password"
 
 const CPasswordField = ({
   value = "",
@@ -33,11 +30,11 @@ const CPasswordField = ({
   sx = {},
   ...rest
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
-  const passwordStrength = checkPasswordStrength(value);
-  const passwordRequirements = checkPasswordRequirements(value);
+  const passwordStrength = checkPasswordStrength(value)
+  const passwordRequirements = checkPasswordRequirements(value)
 
   return (
     <>
@@ -53,8 +50,8 @@ const CPasswordField = ({
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  onClick={() => setShowPassword((prev) => !prev)}
-                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => setShowPassword(prev => !prev)}
+                  onMouseDown={e => e.preventDefault()}
                   edge="end"
                   tabIndex={-1}
                   size="small"
@@ -100,7 +97,7 @@ const CPasswordField = ({
             sx={{
               height: 8,
               borderRadius: 4,
-              bgcolor: (theme) => alpha(theme.palette.text.secondary, 0.1),
+              bgcolor: theme => alpha(theme.palette.text.secondary, 0.1),
               "& .MuiLinearProgress-bar": {
                 borderRadius: 4,
               },
@@ -111,12 +108,7 @@ const CPasswordField = ({
 
       {showRequirements && (isFocused || value) && (
         <Box sx={{ mt: 1, p: 1.5, borderRadius: 1 }}>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            display="block"
-            sx={{ mb: 1 }}
-          >
+          <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
             {requirementsTitle}
           </Typography>
           <Grid container spacing={1}>
@@ -129,11 +121,7 @@ const CPasswordField = ({
                 )}
                 <Typography
                   variant="caption"
-                  color={
-                    passwordRequirements.minLength
-                      ? "success.main"
-                      : "error.main"
-                  }
+                  color={passwordRequirements.minLength ? "success.main" : "error.main"}
                 >
                   At least 8 characters
                 </Typography>
@@ -148,11 +136,7 @@ const CPasswordField = ({
                 )}
                 <Typography
                   variant="caption"
-                  color={
-                    passwordRequirements.hasLowercase
-                      ? "success.main"
-                      : "error.main"
-                  }
+                  color={passwordRequirements.hasLowercase ? "success.main" : "error.main"}
                 >
                   One lowercase letter
                 </Typography>
@@ -167,11 +151,7 @@ const CPasswordField = ({
                 )}
                 <Typography
                   variant="caption"
-                  color={
-                    passwordRequirements.hasUppercase
-                      ? "success.main"
-                      : "error.main"
-                  }
+                  color={passwordRequirements.hasUppercase ? "success.main" : "error.main"}
                 >
                   One uppercase letter
                 </Typography>
@@ -186,11 +166,7 @@ const CPasswordField = ({
                 )}
                 <Typography
                   variant="caption"
-                  color={
-                    passwordRequirements.hasNumber
-                      ? "success.main"
-                      : "error.main"
-                  }
+                  color={passwordRequirements.hasNumber ? "success.main" : "error.main"}
                 >
                   One number
                 </Typography>
@@ -205,11 +181,7 @@ const CPasswordField = ({
                 )}
                 <Typography
                   variant="caption"
-                  color={
-                    passwordRequirements.hasSpecial
-                      ? "success.main"
-                      : "error.main"
-                  }
+                  color={passwordRequirements.hasSpecial ? "success.main" : "error.main"}
                 >
                   One special character (!@#$%^&*)
                 </Typography>
@@ -219,9 +191,9 @@ const CPasswordField = ({
         </Box>
       )}
     </>
-  );
-};
+  )
+}
 
-CPasswordField.displayName = "CPasswordField";
+CPasswordField.displayName = "CPasswordField"
 
-export default CPasswordField;
+export default CPasswordField

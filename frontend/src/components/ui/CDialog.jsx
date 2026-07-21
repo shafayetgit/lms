@@ -46,7 +46,7 @@ export default function CDialog({
           ...dialogSx,
         }}
         PaperProps={{
-          sx: { borderRadius: 1 }
+          sx: { borderRadius: isMobile ? 0 : 1 },
         }}
       >
         <Box
@@ -74,7 +74,7 @@ export default function CDialog({
 
         <DialogContent
           sx={{
-            // p: { xs: 2, sm: 4 },
+            px: { xs: 2, sm: 3 },
             bgcolor: "background.default",
           }}
         >

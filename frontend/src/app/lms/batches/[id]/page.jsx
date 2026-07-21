@@ -70,9 +70,7 @@ export default function BatchDetailPage() {
         ? { label: batch.category.name, value: batch.category.id }
         : null,
       selected_courses: batch?.courses
-        ? batch.courses
-            .map(c => courses.find(opt => opt.value === c.course_id))
-            .filter(Boolean)
+        ? batch.courses.map(c => courses.find(opt => opt.value === c.course_id)).filter(Boolean)
         : [],
     },
     validationSchema: batchValidationSchema,
@@ -89,7 +87,8 @@ export default function BatchDetailPage() {
           category_id: values.category_id ? Number(values.category_id) : null,
           amount: values.paid_batch && values.amount ? Number(values.amount) : null,
           currency: values.paid_batch ? values.currency : null,
-          evaluation_end_date: values.evaluation && values.evaluation_end_date ? values.evaluation_end_date : null,
+          evaluation_end_date:
+            values.evaluation && values.evaluation_end_date ? values.evaluation_end_date : null,
           courses: (values.selected_courses || []).map(c => ({ course_id: c.value })),
         }
         delete payload.temp_category
@@ -108,10 +107,34 @@ export default function BatchDetailPage() {
   if (isLoading || isLoadingMeta) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Dashboard", href: `/lms/batches/${id}/dashboard`, icon: <Dashboard />, resource: "batch", action: "read" },
-    { label: "Details", href: `/lms/batches/${id}`, icon: <InfoOutlined />, resource: "batch", action: "read" },
-    { label: "Timetable", href: `/lms/batches/${id}/timetable`, icon: <CalendarMonth />, resource: "batch", action: "read" },
-    { label: "Enrollments", href: `/lms/batches/${id}/enrollments`, icon: <Group />, resource: "batch", action: "read" },
+    {
+      label: "Dashboard",
+      href: `/lms/batches/${id}/dashboard`,
+      icon: <Dashboard />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Details",
+      href: `/lms/batches/${id}`,
+      icon: <InfoOutlined />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Timetable",
+      href: `/lms/batches/${id}/timetable`,
+      icon: <CalendarMonth />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/batches/${id}/enrollments`,
+      icon: <Group />,
+      resource: "batch",
+      action: "read",
+    },
   ]
 
   return (
@@ -205,7 +228,9 @@ export default function BatchDetailPage() {
                   label="Start Date"
                   name="start_date"
                   value={formik.values.start_date ? dayjs(formik.values.start_date) : null}
-                  onChange={(val) => formik.setFieldValue("start_date", val ? dayjs(val).format("YYYY-MM-DD") : "")}
+                  onChange={val =>
+                    formik.setFieldValue("start_date", val ? dayjs(val).format("YYYY-MM-DD") : "")
+                  }
                   error={formik.touched.start_date && Boolean(formik.errors.start_date)}
                   helperText={formik.touched.start_date && formik.errors.start_date}
                 />
@@ -216,7 +241,9 @@ export default function BatchDetailPage() {
                   label="End Date"
                   name="end_date"
                   value={formik.values.end_date ? dayjs(formik.values.end_date) : null}
-                  onChange={(val) => formik.setFieldValue("end_date", val ? dayjs(val).format("YYYY-MM-DD") : "")}
+                  onChange={val =>
+                    formik.setFieldValue("end_date", val ? dayjs(val).format("YYYY-MM-DD") : "")
+                  }
                   error={formik.touched.end_date && Boolean(formik.errors.end_date)}
                   helperText={formik.touched.end_date && formik.errors.end_date}
                 />
@@ -226,8 +253,14 @@ export default function BatchDetailPage() {
                 <CTimePicker
                   label="Start Time"
                   name="start_time"
-                  value={formik.values.start_time ? dayjs(`2000-01-01T${formik.values.start_time}`) : null}
-                  onChange={(val) => formik.setFieldValue("start_time", val ? dayjs(val).format("HH:mm:ss") : "")}
+                  value={
+                    formik.values.start_time
+                      ? dayjs(`2000-01-01T${formik.values.start_time}`)
+                      : null
+                  }
+                  onChange={val =>
+                    formik.setFieldValue("start_time", val ? dayjs(val).format("HH:mm:ss") : "")
+                  }
                   error={formik.touched.start_time && Boolean(formik.errors.start_time)}
                   helperText={formik.touched.start_time && formik.errors.start_time}
                 />
@@ -237,8 +270,12 @@ export default function BatchDetailPage() {
                 <CTimePicker
                   label="End Time"
                   name="end_time"
-                  value={formik.values.end_time ? dayjs(`2000-01-01T${formik.values.end_time}`) : null}
-                  onChange={(val) => formik.setFieldValue("end_time", val ? dayjs(val).format("HH:mm:ss") : "")}
+                  value={
+                    formik.values.end_time ? dayjs(`2000-01-01T${formik.values.end_time}`) : null
+                  }
+                  onChange={val =>
+                    formik.setFieldValue("end_time", val ? dayjs(val).format("HH:mm:ss") : "")
+                  }
                   error={formik.touched.end_time && Boolean(formik.errors.end_time)}
                   helperText={formik.touched.end_time && formik.errors.end_time}
                 />
@@ -306,10 +343,24 @@ export default function BatchDetailPage() {
                   <CDatePicker
                     label="Evaluation Deadline"
                     name="evaluation_end_date"
-                    value={formik.values.evaluation_end_date ? dayjs(formik.values.evaluation_end_date) : null}
-                    onChange={(val) => formik.setFieldValue("evaluation_end_date", val ? dayjs(val).format("YYYY-MM-DD") : "")}
-                    error={formik.touched.evaluation_end_date && Boolean(formik.errors.evaluation_end_date)}
-                    helperText={formik.touched.evaluation_end_date && formik.errors.evaluation_end_date}
+                    value={
+                      formik.values.evaluation_end_date
+                        ? dayjs(formik.values.evaluation_end_date)
+                        : null
+                    }
+                    onChange={val =>
+                      formik.setFieldValue(
+                        "evaluation_end_date",
+                        val ? dayjs(val).format("YYYY-MM-DD") : ""
+                      )
+                    }
+                    error={
+                      formik.touched.evaluation_end_date &&
+                      Boolean(formik.errors.evaluation_end_date)
+                    }
+                    helperText={
+                      formik.touched.evaluation_end_date && formik.errors.evaluation_end_date
+                    }
                   />
                 </Grid>
               )}

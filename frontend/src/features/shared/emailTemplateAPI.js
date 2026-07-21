@@ -1,16 +1,16 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
-const PREFIX = "api/v1/email-templates";
+const PREFIX = "api/v1/email-templates"
 
 const emailTemplateAPI = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     listEmailTemplates: builder.query({
-      query: (params) => ({ url: `${PREFIX}/`, params }),
+      query: params => ({ url: `${PREFIX}/`, params }),
       providesTags: ["EMAIL_TEMPLATES"],
     }),
 
     createEmailTemplate: builder.mutation({
-      query: (body) => ({ url: `${PREFIX}/`, method: "POST", body }),
+      query: body => ({ url: `${PREFIX}/`, method: "POST", body }),
       invalidatesTags: ["EMAIL_TEMPLATES"],
     }),
 
@@ -37,7 +37,7 @@ const emailTemplateAPI = api.injectEndpoints({
     }),
   }),
   overrideExisting: false,
-});
+})
 
 export const {
   useListEmailTemplatesQuery,
@@ -46,6 +46,6 @@ export const {
   useGetEmailTemplateQuery,
   useUpdateEmailTemplateMutation,
   useDeleteEmailTemplateMutation,
-} = emailTemplateAPI;
+} = emailTemplateAPI
 
-export default emailTemplateAPI;
+export default emailTemplateAPI

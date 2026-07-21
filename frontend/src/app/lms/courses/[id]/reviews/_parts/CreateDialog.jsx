@@ -79,12 +79,7 @@ export default function CreateDialog({ courseId }) {
       handleCDialogOpen={handleOpen}
       handleCDialogClose={handleClose}
     >
-      <CForm
-        onSubmit={formik.handleSubmit}
-        width="30rem"
-        btnProps={{ loading: isCreating }}
-        dialog
-      >
+      <CForm onSubmit={formik.handleSubmit} width="30rem" btnProps={{ loading: isCreating }} dialog>
         <Grid container spacing={2}>
           {/* Student autocomplete — enrolled students only */}
           <Grid size={{ xs: 12 }}>
@@ -94,7 +89,7 @@ export default function CreateDialog({ courseId }) {
               value={formik.values.temp_student}
               options={studentOptions}
               isOptionEqualToValue={(option, value) => option.value === value?.value}
-              getOptionLabel={(option) => option?.label || ""}
+              getOptionLabel={option => option?.label || ""}
               onChange={(e, value) => {
                 formik.setFieldValue("student_public_id", value ? value.value : "")
                 formik.setFieldValue("temp_student", value)

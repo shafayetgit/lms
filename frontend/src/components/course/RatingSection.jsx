@@ -59,13 +59,20 @@ export default function RatingSection({ course, isEnrolled = false }) {
   )
 
   // 2. Fetch paginated list of reviews (increases by 5 on clicking "Load More")
-  const { data: reviewsResponse, isLoading, isFetching } = useReadReviewsQuery(
+  const {
+    data: reviewsResponse,
+    isLoading,
+    isFetching,
+  } = useReadReviewsQuery(
     { course_id: course?.public_id, size: pageSize, page: 1 },
     { skip: !course?.public_id }
   )
 
   const reviews = React.useMemo(() => reviewsResponse?.data || [], [reviewsResponse])
-  const distributionList = React.useMemo(() => distributionResponse?.data || [], [distributionResponse])
+  const distributionList = React.useMemo(
+    () => distributionResponse?.data || [],
+    [distributionResponse]
+  )
 
   const [user, setUser] = useState(null)
   useEffect(() => {
@@ -79,7 +86,7 @@ export default function RatingSection({ course, isEnrolled = false }) {
 
   const myReview = React.useMemo(() => {
     if (!user || !distributionList) return null
-    return distributionList.find((r) => r.student?.username === user.sub)
+    return distributionList.find(r => r.student?.username === user.sub)
   }, [user, distributionList])
 
   if (isLoading || isDistLoading) {
@@ -95,7 +102,7 @@ export default function RatingSection({ course, isEnrolled = false }) {
 
   // Calculate breakdown from distributionList
   const ratingDistribution = [0, 0, 0, 0, 0] // index 0: 5 stars, index 4: 1 star
-  distributionList.forEach((r) => {
+  distributionList.forEach(r => {
     const ratingVal = Math.round(r.rating)
     if (ratingVal >= 1 && ratingVal <= 5) {
       ratingDistribution[5 - ratingVal]++
@@ -103,7 +110,7 @@ export default function RatingSection({ course, isEnrolled = false }) {
   })
 
   const handleLoadMore = () => {
-    setPageSize((prevSize) => prevSize + 5)
+    setPageSize(prevSize => prevSize + 5)
   }
 
   const hasNext = reviewsResponse?.meta?.has_next
@@ -189,13 +196,13 @@ export default function RatingSection({ course, isEnrolled = false }) {
           <Box key={review.public_id || i} sx={{ mb: 2 }}>
             <Box display="flex" alignItems="center" mb={0.75}>
               <Avatar
-                sx={{ 
-                  width: 36, 
-                  height: 36, 
-                  mr: 1.5, 
+                sx={{
+                  width: 36,
+                  height: 36,
+                  mr: 1.5,
                   fontSize: "0.95rem",
                   bgcolor: "text.primary",
-                  color: "background.paper"
+                  color: "background.paper",
                 }}
                 src={review.student?.avatar}
               >
@@ -204,7 +211,12 @@ export default function RatingSection({ course, isEnrolled = false }) {
                   "U"}
               </Avatar>
               <Box sx={{ flexGrow: 1 }}>
-                <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 0.25 }}>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ mb: 0.25 }}
+                >
                   <Typography variant="subtitle2" component="span" fontWeight="bold">
                     {review.student?.full_name ||
                       `${review.student?.first_name || ""} ${review.student?.last_name || ""}`.trim() ||
@@ -224,7 +236,10 @@ export default function RatingSection({ course, isEnrolled = false }) {
               </Box>
             </Box>
             {review.body && (
-              <Typography variant="body2" sx={{ mt: 1, whiteSpace: "pre-line", color: "text.primary" }}>
+              <Typography
+                variant="body2"
+                sx={{ mt: 1, whiteSpace: "pre-line", color: "text.primary" }}
+              >
                 {review.body}
               </Typography>
             )}

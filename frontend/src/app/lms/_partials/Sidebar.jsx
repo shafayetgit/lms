@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+"use client"
+import React from "react"
 import {
   Box,
   Divider,
@@ -10,16 +10,21 @@ import {
   ListSubheader,
   ListItemButton,
   useTheme,
-} from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import PaymentIcon from "@mui/icons-material/Payment";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ReceiptLong, SchoolOutlined, AutoStoriesOutlined, Dashboard as DashboardIcon } from "@mui/icons-material";
+} from "@mui/material"
+import PersonIcon from "@mui/icons-material/Person"
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
+import SupportAgentIcon from "@mui/icons-material/SupportAgent"
+import LocationOnIcon from "@mui/icons-material/LocationOn"
+import PaymentIcon from "@mui/icons-material/Payment"
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import {
+  ReceiptLong,
+  SchoolOutlined,
+  AutoStoriesOutlined,
+  Dashboard as DashboardIcon,
+} from "@mui/icons-material"
 
 const menuSections = [
   {
@@ -52,11 +57,11 @@ const menuSections = [
       },
     ],
   },
-];
+]
 
 export default function Sidebar() {
-  const pathname = usePathname();
-  const theme = useTheme();
+  const pathname = usePathname()
+  const theme = useTheme()
 
   return (
     <Box>
@@ -83,10 +88,9 @@ export default function Sidebar() {
               }
               disablePadding
             >
-              {section.items.map((item) => {
+              {section.items.map(item => {
                 // Ensure active state matches exactly or matches sub-routes (e.g., /courses/1)
-                const isActive =
-                  pathname === item.url || pathname?.startsWith(`${item.url}/`);
+                const isActive = pathname === item.url || pathname?.startsWith(`${item.url}/`)
 
                 return (
                   <ListItem disablePadding key={item.label} sx={{ mb: 0.5 }}>
@@ -130,15 +134,13 @@ export default function Sidebar() {
                       />
                     </ListItemButton>
                   </ListItem>
-                );
+                )
               })}
             </List>
-            {sectionIndex < menuSections.length - 1 && (
-              <Divider sx={{ my: 2, mx: 1 }} />
-            )}
+            {sectionIndex < menuSections.length - 1 && <Divider sx={{ my: 2, mx: 1 }} />}
           </React.Fragment>
         ))}
       </Box>
     </Box>
-  );
+  )
 }

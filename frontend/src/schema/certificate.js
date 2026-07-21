@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from "yup"
 
 export const certificateValidationSchema = Yup.object().shape({
   member_public_id: Yup.string().required("Member is required"),
@@ -8,7 +8,7 @@ export const certificateValidationSchema = Yup.object().shape({
   expiry_date: Yup.date().nullable(),
   template: Yup.string().nullable(),
   published: Yup.boolean().default(false),
-});
+})
 
 export const evaluationValidationSchema = Yup.object().shape({
   status: Yup.string()
@@ -16,13 +16,15 @@ export const evaluationValidationSchema = Yup.object().shape({
     .required("Status is required"),
   rating: Yup.number().min(0).max(5).nullable(),
   summary: Yup.string().nullable(),
-});
+})
 
-export const requestValidationSchema = Yup.object().shape({
-  course_public_id: Yup.string().nullable(),
-  batch_public_id: Yup.string().nullable(),
-}).test(
-  "at-least-one",
-  "Must provide either a course or a batch",
-  (value) => !!value.course_public_id || !!value.batch_public_id
-);
+export const requestValidationSchema = Yup.object()
+  .shape({
+    course_public_id: Yup.string().nullable(),
+    batch_public_id: Yup.string().nullable(),
+  })
+  .test(
+    "at-least-one",
+    "Must provide either a course or a batch",
+    value => !!value.course_public_id || !!value.batch_public_id
+  )

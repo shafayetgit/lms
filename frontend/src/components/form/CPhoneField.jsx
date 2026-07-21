@@ -262,7 +262,14 @@ const CPhoneField = forwardRef(
           onValidation(validation.isValid, validation.message)
         }
       },
-      [localPhoneNumber, onChange, validateOnChange, validatePhoneNumber, onCountryChange, onValidation]
+      [
+        localPhoneNumber,
+        onChange,
+        validateOnChange,
+        validatePhoneNumber,
+        onCountryChange,
+        onValidation,
+      ]
     )
 
     // Handle phone number input changes with auto country detection
@@ -433,12 +440,14 @@ const CPhoneField = forwardRef(
       }
     }, [isDropdownOpen])
 
-    const closeDropdown = useCallback(event => {
-      if (anchorEl?.contains(event.target)) return
-      setIsDropdownOpen(false)
-      setSearchTerm("")
-    }, [anchorEl])
-
+    const closeDropdown = useCallback(
+      event => {
+        if (anchorEl?.contains(event.target)) return
+        setIsDropdownOpen(false)
+        setSearchTerm("")
+      },
+      [anchorEl]
+    )
 
     // Display error (prop error takes precedence over internal error)
     const displayError = error || internalError.isInvalid

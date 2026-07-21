@@ -1,61 +1,63 @@
-"use client";
+"use client"
 
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Box, Typography, Menu, MenuItem, alpha } from "@mui/material";
-import { KeyboardArrowDown as KeyboardArrowDownIcon } from "@mui/icons-material";
-import { usePermissions } from "@/hooks/usePermissions";
-import { getCookie } from "@/utils/shared";
-import { getCurrentUser } from "@/lib/auth/client";
-import { useGetMeQuery } from "@/features/user/userAPI";
-import { useReadSettingsQuery } from "@/features/settings/settingsApi";
+import React, { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { Box, Typography, Menu, MenuItem, alpha } from "@mui/material"
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from "@mui/icons-material"
+import { usePermissions } from "@/hooks/usePermissions"
+import { getCookie } from "@/utils/shared"
+import { getCurrentUser } from "@/lib/auth/client"
+import { useGetMeQuery } from "@/features/user/userAPI"
+import { useReadSettingsQuery } from "@/features/settings/settingsApi"
 
-import Image from "next/image";
+import Image from "next/image"
 
 export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
-  const [mounted, setMounted] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const { can, isSuperAdmin, hasFeatureFlag } = usePermissions();
-  const router = useRouter();
+  const [mounted, setMounted] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
+  const { can, isSuperAdmin, hasFeatureFlag } = usePermissions()
+  const router = useRouter()
 
-  const { data: settingsData } = useReadSettingsQuery();
-  const isDarkMode = theme.palette.mode === "dark";
+  const { data: settingsData } = useReadSettingsQuery()
+  const isDarkMode = theme.palette.mode === "dark"
   const dynamicShortLogo = isDarkMode
     ? settingsData?.site_short_logo_light || settingsData?.site_short_logo_dark
-    : settingsData?.site_short_logo_dark || settingsData?.site_short_logo_light;
+    : settingsData?.site_short_logo_dark || settingsData?.site_short_logo_light
 
   const defaultShortLogo = isDarkMode
     ? "/images/logo/ecofin-logo-light-short.png"
-    : "/images/logo/ecofin-logo-dark-short.png";
+    : "/images/logo/ecofin-logo-dark-short.png"
 
   const shortLogoSrc = dynamicShortLogo
-    ? (dynamicShortLogo.startsWith("http") ? dynamicShortLogo : `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/${dynamicShortLogo.replace(/^\//, "")}`)
-    : defaultShortLogo;
+    ? dynamicShortLogo.startsWith("http")
+      ? dynamicShortLogo
+      : `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/${dynamicShortLogo.replace(/^\//, "")}`
+    : defaultShortLogo
 
-  const hasToken = mounted && !!getCookie("accessToken");
-  const { data: meResponse } = useGetMeQuery(undefined, { skip: !hasToken });
-  const activeUser = meResponse?.data || (mounted ? getCurrentUser() : null);
-  const userUsername = activeUser?.username || activeUser?.sub || activeUser?.email || "";
+  const hasToken = mounted && !!getCookie("accessToken")
+  const { data: meResponse } = useGetMeQuery(undefined, { skip: !hasToken })
+  const activeUser = meResponse?.data || (mounted ? getCurrentUser() : null)
+  const userUsername = activeUser?.username || activeUser?.sub || activeUser?.email || ""
   // gate on mounted to avoid SSR/client hydration mismatch
-  const isStudent = mounted && activeUser?.role?.toLowerCase() === "student";
+  const isStudent = mounted && activeUser?.role?.toLowerCase() === "student"
 
   const currentValue = pathname.startsWith("/settings")
     ? "settings"
     : pathname.startsWith("/academy")
-    ? "academy"
-    : pathname.startsWith("/core")
-    ? "core"
-    : "lms";
+      ? "academy"
+      : pathname.startsWith("/core")
+        ? "core"
+        : "lms"
 
   useEffect(() => {
-    let active = true;
+    let active = true
     setTimeout(() => {
-      if (active) setMounted(true);
-    }, 0);
+      if (active) setMounted(true)
+    }, 0)
     return () => {
-      active = false;
-    };
-  }, []);
+      active = false
+    }
+  }, [])
 
   return (
     <Box
@@ -76,10 +78,10 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
         component="div"
         role="button"
         tabIndex={0}
-        onClick={(e) => !isStudent && setAnchorEl(e.currentTarget)}
-        onKeyDown={(e) => {
+        onClick={e => !isStudent && setAnchorEl(e.currentTarget)}
+        onKeyDown={e => {
           if (!isStudent && (e.key === "Enter" || e.key === " ")) {
-            setAnchorEl(e.currentTarget);
+            setAnchorEl(e.currentTarget)
           }
         }}
         sx={{
@@ -143,7 +145,13 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
                   lineHeight: 1.2,
                 }}
               >
-                {currentValue === "settings" ? "Settings" : currentValue === "academy" ? "Academy" : currentValue === "core" ? "Core" : "LMS"}
+                {currentValue === "settings"
+                  ? "Settings"
+                  : currentValue === "academy"
+                    ? "Academy"
+                    : currentValue === "core"
+                      ? "Core"
+                      : "LMS"}
               </Typography>
               <Typography
                 variant="caption"
@@ -193,7 +201,7 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
         slotProps={{
           paper: {
             sx: {
-              width: isMini && !isMobile ? 150 : (anchorEl?.offsetWidth || "auto"),
+              width: isMini && !isMobile ? 150 : anchorEl?.offsetWidth || "auto",
               mt: 1,
               bgcolor: "background.paper",
               borderRadius: "10px",
@@ -209,8 +217,8 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
           <MenuItem
             selected={currentValue === "lms"}
             onClick={() => {
-              setAnchorEl(null);
-              router.push("/lms/dashboard");
+              setAnchorEl(null)
+              router.push("/lms/dashboard")
             }}
             sx={{
               borderRadius: "6px",
@@ -239,8 +247,8 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
           <MenuItem
             selected={currentValue === "academy"}
             onClick={() => {
-              setAnchorEl(null);
-              router.push("/academy/dashboard");
+              setAnchorEl(null)
+              router.push("/academy/dashboard")
             }}
             sx={{
               borderRadius: "6px",
@@ -269,8 +277,8 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
           <MenuItem
             selected={currentValue === "settings"}
             onClick={() => {
-              setAnchorEl(null);
-              router.push("/settings/general");
+              setAnchorEl(null)
+              router.push("/settings/general")
             }}
             sx={{
               borderRadius: "6px",
@@ -299,8 +307,8 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
           <MenuItem
             selected={currentValue === "core"}
             onClick={() => {
-              setAnchorEl(null);
-              router.push("/core/users");
+              setAnchorEl(null)
+              router.push("/core/users")
             }}
             sx={{
               borderRadius: "6px",
@@ -325,5 +333,5 @@ export default function ModuleSwitcher({ isMini, isMobile, pathname, theme }) {
         )}
       </Menu>
     </Box>
-  );
+  )
 }

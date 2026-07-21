@@ -42,14 +42,18 @@ export default function ChapterAccordionItem({
 
   const [expanded, setExpanded] = React.useState(false)
   const [prevActiveLessonId, setPrevActiveLessonId] = React.useState(null)
-  const [prevSortedLessons, setPrevSortedLessons] = React.useState([])
+  const [prevLessonsLength, setPrevLessonsLength] = React.useState(0)
 
-  if (activeLessonId !== prevActiveLessonId || sortedLessons !== prevSortedLessons) {
+  // Update expanded state during render if active lesson changes or lessons load
+  if (
+    activeLessonId !== prevActiveLessonId ||
+    (sortedLessons.length > 0 && sortedLessons.length !== prevLessonsLength)
+  ) {
     setPrevActiveLessonId(activeLessonId)
-    setPrevSortedLessons(sortedLessons)
-    if (activeLessonId && sortedLessons.length > 0) {
-      const hasActive = sortedLessons.some((l) => l.public_id === activeLessonId)
-      setExpanded(hasActive)
+    setPrevLessonsLength(sortedLessons.length)
+
+    if (activeLessonId && sortedLessons.some(l => l.public_id === activeLessonId)) {
+      setExpanded(true)
     }
   }
 
@@ -106,10 +110,17 @@ export default function ChapterAccordionItem({
           "& .MuiAccordionSummary-expandIconWrapper": {
             marginRight: 1,
             marginLeft: -0.5,
-          }
+          },
         }}
       >
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Typography variant="subtitle2" fontWeight="600">
             {chapter.title}
           </Typography>
@@ -124,12 +135,16 @@ export default function ChapterAccordionItem({
             <CircularProgress size={20} />
           </Box>
         ) : sortedLessons.length === 0 ? (
-          <Typography variant="caption" color="text.secondary" sx={{ p: 2, display: "block", textAlign: "center" }}>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ p: 2, display: "block", textAlign: "center" }}
+          >
             No lessons in this chapter
           </Typography>
         ) : (
           <List dense disablePadding sx={{ px: 1, py: 0.5 }}>
-            {sortedLessons.map((lesson) => {
+            {sortedLessons.map(lesson => {
               const isActive = activeLessonId === lesson.public_id
               const isCompleted = !!completedLessons[lesson.id]
               const isLocked = !!lockedLessons[lesson.id]
@@ -153,8 +168,8 @@ export default function ChapterAccordionItem({
                       bgcolor: "action.selected",
                       "&:hover": {
                         bgcolor: "action.selected",
-                      }
-                    }
+                      },
+                    },
                   }}
                 >
                   <ListItemIcon sx={{ minWidth: 28 }}>
@@ -165,7 +180,11 @@ export default function ChapterAccordionItem({
                     primaryTypographyProps={{
                       variant: "body2",
                       fontWeight: isActive ? 600 : 500,
-                      color: isLocked ? "text.disabled" : isActive ? "primary.main" : "text.primary",
+                      color: isLocked
+                        ? "text.disabled"
+                        : isActive
+                          ? "primary.main"
+                          : "text.primary",
                     }}
                   />
                   <Box sx={{ ml: 1, display: "flex", alignItems: "center" }}>
@@ -174,7 +193,15 @@ export default function ChapterAccordionItem({
                     ) : isCompleted ? (
                       <CheckCircle sx={{ fontSize: 16, color: "success.main" }} />
                     ) : (
-                      <Box sx={{ width: 14, height: 14, borderRadius: "50%", border: "1.5px solid", borderColor: "text.disabled" }} />
+                      <Box
+                        sx={{
+                          width: 14,
+                          height: 14,
+                          borderRadius: "50%",
+                          border: "1.5px solid",
+                          borderColor: "text.disabled",
+                        }}
+                      />
                     )}
                   </Box>
                 </ListItemButton>

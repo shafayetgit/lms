@@ -1,14 +1,14 @@
-"use client";
-import React, { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Box, Typography, Button, Paper } from "@mui/material";
-import { CancelOutlined } from "@mui/icons-material";
-import CPageLoader from "@/components/ui/CPageLoader";
+"use client"
+import React, { Suspense } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { Box, Typography, Button, Paper } from "@mui/material"
+import { CancelOutlined } from "@mui/icons-material"
+import CPageLoader from "@/components/ui/CPageLoader"
 
 function CancelContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const ref = searchParams.get("ref");
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const ref = searchParams.get("ref")
 
   return (
     <Box
@@ -67,7 +67,7 @@ function CancelContent() {
         </Box>
       </Paper>
     </Box>
-  );
+  )
 }
 
 export default function PaymentCancelPage() {
@@ -75,5 +75,5 @@ export default function PaymentCancelPage() {
     <Suspense fallback={<CPageLoader />}>
       <CancelContent />
     </Suspense>
-  );
+  )
 }

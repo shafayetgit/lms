@@ -1,6 +1,6 @@
-"use client";
-import React, { useEffect, useState, useCallback, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+"use client"
+import React, { useEffect, useState, useCallback, Suspense } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
 import {
   Box,
   Container,
@@ -20,9 +20,9 @@ import {
   useTheme,
   alpha,
   Paper,
-  Stack
-} from "@mui/material";
-import Grid from "@mui/material/Grid";
+  Stack,
+} from "@mui/material"
+import Grid from "@mui/material/Grid"
 import {
   ArrowBack,
   Lock,
@@ -37,61 +37,79 @@ import {
   CheckCircle,
   AccountBox,
   Public,
-  Home
-} from "@mui/icons-material";
-import { motion } from "framer-motion";
-import { toast } from "react-toastify";
+  Home,
+} from "@mui/icons-material"
+import { motion } from "framer-motion"
+import { toast } from "react-toastify"
 
 // RTK Query Hooks
-import { useReadPaymentByPublicIdQuery, useGetCheckoutLinkMutation, useValidateCouponMutation } from "@/features/payment/paymentApi";
-import { useCreatePaymentIntentMutation, useInitiateCheckoutMutation } from "@/features/payment/paymentGatewayApi";
-import CPageLoader from "@/components/ui/CPageLoader";
+import {
+  useReadPaymentByPublicIdQuery,
+  useGetCheckoutLinkMutation,
+  useValidateCouponMutation,
+} from "@/features/payment/paymentApi"
+import {
+  useCreatePaymentIntentMutation,
+  useInitiateCheckoutMutation,
+} from "@/features/payment/paymentGatewayApi"
+import CPageLoader from "@/components/ui/CPageLoader"
 
 // Stripe libraries
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js"
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js"
 
 function CheckoutContent() {
-  const router = useRouter();
-  const theme = useTheme();
-  const searchParams = useSearchParams();
-  const payment_public_id = searchParams.get("payment_public_id");
+  const router = useRouter()
+  const theme = useTheme()
+  const searchParams = useSearchParams()
+  const payment_public_id = searchParams.get("payment_public_id")
 
   // Fetch draft payment details
-  const { data: paymentRes, isLoading: isPaymentLoading, error: paymentError, refetch } = useReadPaymentByPublicIdQuery(payment_public_id, {
+  const {
+    data: paymentRes,
+    isLoading: isPaymentLoading,
+    error: paymentError,
+    refetch,
+  } = useReadPaymentByPublicIdQuery(payment_public_id, {
     skip: !payment_public_id,
-  });
-  const payment = paymentRes?.data;
+  })
+  const payment = paymentRes?.data
 
   // Mutations
-  const [createPaymentIntent, { data: intentRes, isLoading: isIntentLoading }] = useCreatePaymentIntentMutation();
+  const [createPaymentIntent, { data: intentRes, isLoading: isIntentLoading }] =
+    useCreatePaymentIntentMutation()
 
   // State
-  const [stripePromise, setStripePromise] = useState(null);
-  const [intentError, setIntentError] = useState(null);
+  const [stripePromise, setStripePromise] = useState(null)
+  const [intentError, setIntentError] = useState(null)
 
   const handleSetupPaymentIntent = useCallback(async () => {
     try {
-      setIntentError(null);
-      const res = await createPaymentIntent(payment_public_id).unwrap();
+      setIntentError(null)
+      const res = await createPaymentIntent(payment_public_id).unwrap()
       if (res?.data && !res.data.requires_redirect && res.data.publishable_key) {
-        setStripePromise(loadStripe(res.data.publishable_key));
+        setStripePromise(loadStripe(res.data.publishable_key))
       }
     } catch (err) {
-      setIntentError(err?.data?.message || err?.data?.detail || err?.message || "Failed to initialize payment gateway.");
+      setIntentError(
+        err?.data?.message ||
+          err?.data?.detail ||
+          err?.message ||
+          "Failed to initialize payment gateway."
+      )
     }
-  }, [payment_public_id, createPaymentIntent]);
+  }, [payment_public_id, createPaymentIntent])
 
   // Initialize form fields once payment details load
   useEffect(() => {
     if (payment) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      handleSetupPaymentIntent();
+      handleSetupPaymentIntent()
     }
-  }, [payment, handleSetupPaymentIntent]);
+  }, [payment, handleSetupPaymentIntent])
 
   if (isPaymentLoading) {
-    return <CPageLoader />;
+    return <CPageLoader />
   }
 
   if (!payment_public_id) {
@@ -100,28 +118,38 @@ function CheckoutContent() {
         <Alert severity="error" sx={{ mb: 4, borderRadius: 1 }}>
           No payment reference ID was provided in the checkout request.
         </Alert>
-        <Button variant="contained" onClick={() => router.push("/lms/dashboard")} sx={{ textTransform: "none" }}>
+        <Button
+          variant="contained"
+          onClick={() => router.push("/lms/dashboard")}
+          sx={{ textTransform: "none" }}
+        >
           Back to Dashboard
         </Button>
       </Container>
-    );
+    )
   }
 
   if (paymentError) {
     return (
       <Container maxWidth="sm" sx={{ py: 8, textAlign: "center" }}>
         <Alert severity="error" sx={{ mb: 4, borderRadius: 1 }}>
-          {paymentError?.data?.message || paymentError?.data?.detail || "Payment transaction not found or expired."}
+          {paymentError?.data?.message ||
+            paymentError?.data?.detail ||
+            "Payment transaction not found or expired."}
         </Alert>
-        <Button variant="contained" onClick={() => router.push("/lms/dashboard")} sx={{ textTransform: "none" }}>
+        <Button
+          variant="contained"
+          onClick={() => router.push("/lms/dashboard")}
+          sx={{ textTransform: "none" }}
+        >
           Back to Dashboard
         </Button>
       </Container>
-    );
+    )
   }
 
   if (!payment) {
-    return <CPageLoader />;
+    return <CPageLoader />
   }
 
   // Check if payment is already completed
@@ -137,19 +165,21 @@ function CheckoutContent() {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => router.push(payment.payment_for_type === "Course" ? `/lms/enrollments` : `/lms/batches`)}
+          onClick={() =>
+            router.push(payment.payment_for_type === "Course" ? `/lms/enrollments` : `/lms/batches`)
+          }
           sx={{ textTransform: "none" }}
         >
           View My Enrollments
         </Button>
       </Container>
-    );
+    )
   }
 
-  const itemDetails = payment.item_details || payment.itemDetails || {};
-  const requiresRedirect = intentRes?.data?.requires_redirect;
-  const clientSecret = intentRes?.data?.client_secret;
-  const gatewayName = intentRes?.data?.gateway || "Payment Gateway";
+  const itemDetails = payment.item_details || payment.itemDetails || {}
+  const requiresRedirect = intentRes?.data?.requires_redirect
+  const clientSecret = intentRes?.data?.client_secret
+  const gatewayName = intentRes?.data?.gateway || "Payment Gateway"
 
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
@@ -166,7 +196,6 @@ function CheckoutContent() {
               borderColor: "divider",
             }}
           >
-
             {/* Embedded Stripe Flow */}
             {isIntentLoading ? (
               <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
@@ -201,10 +230,7 @@ function CheckoutContent() {
                   },
                 }}
               >
-                <StripeCheckoutForm
-                  payment={payment}
-                  clientSecret={clientSecret}
-                />
+                <StripeCheckoutForm payment={payment} clientSecret={clientSecret} />
               </Elements>
             ) : (
               <Alert severity="info" sx={{ borderRadius: 1 }}>
@@ -224,7 +250,13 @@ function CheckoutContent() {
                   borderColor: "divider",
                 }}
               >
-                <Typography variant="caption" color="text.secondary" display="block" fontWeight={600} sx={{ mb: 0.5, textTransform: "uppercase" }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                  fontWeight={600}
+                  sx={{ mb: 0.5, textTransform: "uppercase" }}
+                >
                   Billing Address
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -235,8 +267,10 @@ function CheckoutContent() {
                     payment.billing_city,
                     payment.billing_state,
                     payment.billing_postal_code,
-                    payment.billing_country
-                  ].filter(Boolean).join(", ")}
+                    payment.billing_country,
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
                 </Typography>
               </Box>
             )}
@@ -286,16 +320,26 @@ function CheckoutContent() {
                 {/* Price Breakdown */}
                 <Stack spacing={1.5}>
                   <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="body2" color="text.secondary">Price</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Price
+                    </Typography>
                     <Typography variant="body2" fontWeight={600}>
                       {payment.currency} {parseFloat(payment.original_amount).toFixed(2)}
                     </Typography>
                   </Box>
 
                   {parseFloat(payment.discount_amount) > 0 && (
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                      }}
+                    >
                       <Box>
-                        <Typography variant="body2" color="success.main">Discount</Typography>
+                        <Typography variant="body2" color="success.main">
+                          Discount
+                        </Typography>
                         {payment.coupon_code && (
                           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.5 }}>
                             <Stars sx={{ fontSize: 14, color: "success.main" }} />
@@ -313,8 +357,12 @@ function CheckoutContent() {
 
                   <Divider sx={{ my: 1 }} />
 
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <Typography variant="subtitle1" fontWeight={700}>Total</Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+                  >
+                    <Typography variant="subtitle1" fontWeight={700}>
+                      Total
+                    </Typography>
                     <Typography variant="h6" fontWeight={800} color="primary.main">
                       {payment.currency} {parseFloat(payment.amount).toFixed(2)}
                     </Typography>
@@ -332,7 +380,7 @@ function CheckoutContent() {
       {/* Helpline / Info Sidebar for Mobile (renders at the very bottom of the page) */}
       <HelplineCard isMobile={true} />
     </Container>
-  );
+  )
 }
 
 /* Sub-component: Helpline Card */
@@ -362,18 +410,21 @@ function HelplineCard({ isMobile }) {
           {
             icon: <OfflinePin sx={{ color: "success.main" }} />,
             primary: "Instant Enrollment",
-            secondary: "Your enrollment is activated immediately after successful payment confirmation."
+            secondary:
+              "Your enrollment is activated immediately after successful payment confirmation.",
           },
           {
             icon: <HelpOutline sx={{ color: "info.main" }} />,
             primary: "Need help with payment?",
-            secondary: "Get in touch with support at support@lms.app or check the FAQs on the course detail page."
+            secondary:
+              "Get in touch with support at support@lms.app or check the FAQs on the course detail page.",
           },
           {
             icon: <Receipt sx={{ color: "secondary.main" }} />,
             primary: "Secure Invoices",
-            secondary: "An email confirmation containing your transaction invoice will be sent automatically."
-          }
+            secondary:
+              "An email confirmation containing your transaction invoice will be sent automatically.",
+          },
         ].map((item, index) => (
           <ListItem key={index} sx={{ px: 0, alignItems: "flex-start", mb: index === 2 ? 0 : 2 }}>
             <ListItemIcon sx={{ minWidth: 32, mt: 0.5 }}>{item.icon}</ListItemIcon>
@@ -388,34 +439,40 @@ function HelplineCard({ isMobile }) {
         ))}
       </List>
     </Card>
-  );
+  )
 }
 
 /* Sub-component: Redirecting gateway form */
 function RedirectPaymentForm({ payment_public_id, amount, currency, gatewayName }) {
-  const [initiateCheckout, { isLoading }] = useInitiateCheckoutMutation();
-  const [error, setError] = useState(null);
+  const [initiateCheckout, { isLoading }] = useInitiateCheckoutMutation()
+  const [error, setError] = useState(null)
 
   const handlePay = async () => {
     try {
-      setError(null);
-      const res = await initiateCheckout(payment_public_id).unwrap();
-      const url = res?.data?.checkout_url;
-      if (!url) throw new Error("No checkout URL returned from payment gateway.");
+      setError(null)
+      const res = await initiateCheckout(payment_public_id).unwrap()
+      const url = res?.data?.checkout_url
+      if (!url) throw new Error("No checkout URL returned from payment gateway.")
       if (url.startsWith("http")) {
-        window.location.href = url;
+        window.location.href = url
       } else {
-        window.location.href = `${window.location.origin}${url}`;
+        window.location.href = `${window.location.origin}${url}`
       }
     } catch (err) {
-      setError(err?.data?.message || err?.data?.detail || err?.message || "Failed to initiate payment gateway.");
+      setError(
+        err?.data?.message ||
+          err?.data?.detail ||
+          err?.message ||
+          "Failed to initiate payment gateway."
+      )
     }
-  };
+  }
 
   return (
     <Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        You will be redirected to the secure <strong>{gatewayName}</strong> portal to complete your transaction.
+        You will be redirected to the secure <strong>{gatewayName}</strong> portal to complete your
+        transaction.
       </Typography>
       {error && (
         <Alert severity="error" sx={{ mb: 2, borderRadius: 1 }}>
@@ -436,45 +493,49 @@ function RedirectPaymentForm({ payment_public_id, amount, currency, gatewayName 
           "&:hover": { boxShadow: 0 },
         }}
       >
-        {isLoading ? <CircularProgress size={20} color="inherit" /> : `Proceed to Payment (${currency} ${parseFloat(amount).toFixed(2)})`}
+        {isLoading ? (
+          <CircularProgress size={20} color="inherit" />
+        ) : (
+          `Proceed to Payment (${currency} ${parseFloat(amount).toFixed(2)})`
+        )}
       </Button>
     </Box>
-  );
+  )
 }
 
 const COUNTRY_CODE_MAP = {
   "united states": "US",
   "united kingdom": "GB",
-  "canada": "CA",
-  "australia": "AU",
-  "bangladesh": "BD",
-  "india": "IN",
-  "germany": "DE",
-  "france": "FR",
+  canada: "CA",
+  australia: "AU",
+  bangladesh: "BD",
+  india: "IN",
+  germany: "DE",
+  france: "FR",
   "saudi arabia": "SA",
   "united arab emirates": "AE",
-};
+}
 
 /* Sub-component: Embedded Stripe Form using Stripe Hooks */
 function StripeCheckoutForm({ payment, clientSecret }) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const theme = useTheme();
-  const router = useRouter();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const stripe = useStripe()
+  const elements = useElements()
+  const theme = useTheme()
+  const router = useRouter()
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
-  const { billing_name, member_email, amount, currency, public_id } = payment;
+  const { billing_name, member_email, amount, currency, public_id } = payment
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async event => {
+    event.preventDefault()
 
     if (!stripe || !elements) {
-      return;
+      return
     }
 
-    setIsProcessing(true);
-    setErrorMessage(null);
+    setIsProcessing(true)
+    setErrorMessage(null)
 
     const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -489,22 +550,25 @@ function StripeCheckoutForm({ payment, clientSecret }) {
             city: payment.billing_city || "",
             state: payment.billing_state || "",
             postal_code: payment.billing_postal_code || "",
-            country: COUNTRY_CODE_MAP[payment.billing_country?.trim().toLowerCase()] || payment.billing_country || "",
-          }
-        }
+            country:
+              COUNTRY_CODE_MAP[payment.billing_country?.trim().toLowerCase()] ||
+              payment.billing_country ||
+              "",
+          },
+        },
       },
       return_url: `${window.location.origin}/payments/success?ref=${public_id}`,
-    });
+    })
 
     if (error) {
-      setErrorMessage(error.message);
-      setIsProcessing(false);
+      setErrorMessage(error.message)
+      setIsProcessing(false)
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
-      router.push(`/payments/success?ref=${public_id}`);
+      router.push(`/payments/success?ref=${public_id}`)
     } else {
-      setIsProcessing(false);
+      setIsProcessing(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -524,7 +588,7 @@ function StripeCheckoutForm({ payment, clientSecret }) {
               "& .MuiOutlinedInput-root": {
                 bgcolor: "action.hover",
                 borderRadius: 1,
-              }
+              },
             }}
           />
         </Box>
@@ -544,7 +608,7 @@ function StripeCheckoutForm({ payment, clientSecret }) {
               "& .MuiOutlinedInput-root": {
                 bgcolor: "action.hover",
                 borderRadius: 1,
-              }
+              },
             }}
           />
         </Box>
@@ -598,10 +662,14 @@ function StripeCheckoutForm({ payment, clientSecret }) {
           "&:hover": { boxShadow: 0 },
         }}
       >
-        {isProcessing ? <CircularProgress size={20} color="inherit" /> : `Pay ${currency} ${parseFloat(amount).toFixed(2)}`}
+        {isProcessing ? (
+          <CircularProgress size={20} color="inherit" />
+        ) : (
+          `Pay ${currency} ${parseFloat(amount).toFixed(2)}`
+        )}
       </Button>
     </form>
-  );
+  )
 }
 
 export default function CheckoutPage() {
@@ -609,5 +677,5 @@ export default function CheckoutPage() {
     <Suspense fallback={<CPageLoader />}>
       <CheckoutContent />
     </Suspense>
-  );
+  )
 }

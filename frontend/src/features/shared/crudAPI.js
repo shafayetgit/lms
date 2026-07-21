@@ -1,26 +1,26 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
-const PREFIX = "api/v1/crud";
+const PREFIX = "api/v1/crud"
 
 const crudAPI = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     delete: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: `${PREFIX}/delete`,
         method: "DELETE",
         body: body,
       }),
       invalidatesTags: (result, error, arg) => {
         // Accept invalidateTag from request body to invalidate tags from other slices
-        return arg.invalidateTag ? [arg.invalidateTag] : [];
+        return arg.invalidateTag ? [arg.invalidateTag] : []
       },
     }),
   }),
   overrideExisting: false,
-});
+})
 
-export const { useDeleteMutation } = crudAPI;
-export default crudAPI;
+export const { useDeleteMutation } = crudAPI
+export default crudAPI
 
 /**
  * Usage:

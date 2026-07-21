@@ -1,9 +1,9 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const programApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     createProgram: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/programs/",
         method: "POST",
         body,
@@ -11,7 +11,7 @@ export const programApi = api.injectEndpoints({
       invalidatesTags: ["PROGRAMS"],
     }),
     readPrograms: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/programs/",
         method: "GET",
         params,
@@ -19,7 +19,7 @@ export const programApi = api.injectEndpoints({
       providesTags: ["PROGRAMS"],
     }),
     readProgram: builder.query({
-      query: (id) => `/api/v1/programs/${id}`,
+      query: id => `/api/v1/programs/${id}`,
       providesTags: ["PROGRAMS"],
     }),
     updateProgram: builder.mutation({
@@ -31,25 +31,25 @@ export const programApi = api.injectEndpoints({
       invalidatesTags: ["PROGRAMS"],
     }),
     deleteProgram: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/programs/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["PROGRAMS"],
     }),
     enrollInProgram: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/programs/${id}/enroll`,
         method: "POST",
       }),
       invalidatesTags: ["PROGRAMS"],
     }),
     readProgramMembers: builder.query({
-      query: (id) => `/api/v1/programs/${id}/members`,
+      query: id => `/api/v1/programs/${id}/members`,
       providesTags: ["PROGRAMS"],
     }),
   }),
-});
+})
 
 export const {
   useCreateProgramMutation,
@@ -61,4 +61,4 @@ export const {
   useEnrollInProgramMutation,
   useReadProgramMembersQuery,
   useLazyReadProgramMembersQuery,
-} = programApi;
+} = programApi

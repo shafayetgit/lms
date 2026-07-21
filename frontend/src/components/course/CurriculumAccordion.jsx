@@ -10,7 +10,7 @@ import {
   CircularProgress,
   List,
 } from "@mui/material"
-import { ExpandMore } from "@mui/icons-material"
+import { ExpandMore, MenuBookOutlined } from "@mui/icons-material"
 import { useReadLessonsByChapterQuery } from "@/features/lesson/lessonAPI"
 import { useRouter } from "next/navigation"
 import LessonItem from "./LessonItem"
@@ -83,13 +83,36 @@ export default function CurriculumAccordion({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            gap: 1,
           }}
         >
-          <Typography fontWeight="bold" sx={{ pr: 2 }}>
+          <Typography
+            fontWeight="bold"
+            sx={{ pr: { sm: 2 }, fontSize: { xs: "0.9rem", sm: "1rem" } }}
+          >
             {index + 1}. {chapter.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ flexShrink: 0 }}>
-            {isLoading ? "..." : `${sortedLessons.length} ${sortedLessons.length === 1 ? "lesson" : "lessons"}`}
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 0.5 }}
+          >
+            {isLoading ? (
+              "..."
+            ) : (
+              <>
+                <Box component="span" sx={{ display: { xs: "none", sm: "inline" } }}>
+                  {sortedLessons.length} {sortedLessons.length === 1 ? "lesson" : "lessons"}
+                </Box>
+                <Box
+                  component="span"
+                  sx={{ display: { xs: "flex", sm: "none" }, alignItems: "center", gap: 0.5 }}
+                >
+                  {sortedLessons.length}
+                  <MenuBookOutlined sx={{ fontSize: 16 }} />
+                </Box>
+              </>
+            )}
           </Typography>
         </Box>
       </AccordionSummary>
@@ -105,7 +128,7 @@ export default function CurriculumAccordion({
           </Typography>
         ) : (
           <List dense disablePadding>
-            {sortedLessons.map((lesson) => {
+            {sortedLessons.map(lesson => {
               const isActive = activeLessonId === lesson.public_id
               const isCompleted = completedLessons && !!completedLessons[lesson.id]
               return (
@@ -126,10 +149,7 @@ export default function CurriculumAccordion({
         )}
       </AccordionDetails>
 
-      <LessonPreviewDialog
-        lesson={previewLesson}
-        onClose={() => setPreviewLesson(null)}
-      />
+      <LessonPreviewDialog lesson={previewLesson} onClose={() => setPreviewLesson(null)} />
     </Accordion>
   )
 }

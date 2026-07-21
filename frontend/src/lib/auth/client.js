@@ -1,29 +1,29 @@
-import { getCookie } from "@/utils/shared";
-import { decodeTokenClient } from "@/utils/shared";
+import { getCookie } from "@/utils/shared"
+import { decodeTokenClient } from "@/utils/shared"
 
 export const getCurrentUser = () => {
-  const accessToken = getCookie("accessToken");
+  const accessToken = getCookie("accessToken")
 
-  if (!accessToken) return null;
-  const decoded = decodeTokenClient(accessToken);
-  if (!decoded) return null;
+  if (!accessToken) return null
+  const decoded = decodeTokenClient(accessToken)
+  if (!decoded) return null
 
-  const now = Math.floor(Date.now() / 1000);
+  const now = Math.floor(Date.now() / 1000)
   if (decoded.exp && decoded.exp < now) {
-    return null;
+    return null
   }
-  return decoded;
-};
+  return decoded
+}
 
 export const getProfileUser = () => {
-  if (typeof window === "undefined") return null;
-  const userCookie = getCookie("user");
-  if (!userCookie) return null;
+  if (typeof window === "undefined") return null
+  const userCookie = getCookie("user")
+  if (!userCookie) return null
   try {
-    return JSON.parse(userCookie);
+    return JSON.parse(userCookie)
   } catch (e) {
-    return null;
+    return null
   }
-};
+}
 
 export const currentUser = getCurrentUser()

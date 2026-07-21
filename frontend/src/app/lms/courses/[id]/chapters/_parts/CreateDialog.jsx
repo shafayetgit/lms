@@ -58,48 +58,53 @@ export default function CreateDialog() {
         handleCDialogOpen={handleOpen}
         handleCDialogClose={handleClose}
       >
-        <CForm onSubmit={formik.handleSubmit} width="45rem" btnProps={{ loading: isCreating }} dialog>
+        <CForm
+          onSubmit={formik.handleSubmit}
+          width="45rem"
+          btnProps={{ loading: isCreating }}
+          dialog
+        >
           <Grid container spacing={2}>
-          {/* Title */}
-          <Grid size={{ xs: 12 }}>
-            <CTextField
-              label="Title"
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.title && Boolean(formik.errors.title)}
-              helperText={formik.touched.title && formik.errors.title}
-              required
-            />
-          </Grid>
+            {/* Title */}
+            <Grid size={{ xs: 12 }}>
+              <CTextField
+                label="Title"
+                name="title"
+                value={formik.values.title}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+                required
+              />
+            </Grid>
 
-          {/* Is Active */}
-          <Grid size={{ xs: 12 }}>
-            <CCheckbox
-              label="Is Active"
-              checked={formik.values.is_active}
-              onChange={e => formik.setFieldValue("is_active", e.target.checked)}
-            />
-          </Grid>
+            {/* Is Active */}
+            <Grid size={{ xs: 12 }}>
+              <CCheckbox
+                label="Is Active"
+                checked={formik.values.is_active}
+                onChange={e => formik.setFieldValue("is_active", e.target.checked)}
+              />
+            </Grid>
 
-          {/* Description */}
-          <Grid size={{ xs: 12 }}>
-            <CTextField
-              label="Description"
-              name="description"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.description && Boolean(formik.errors.description)}
-              helperText={formik.touched.description && formik.errors.description}
-              multiline
-              rows={4}
-            />
+            {/* Description */}
+            <Grid size={{ xs: 12 }}>
+              <CTextField
+                label="Description"
+                name="description"
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.description && Boolean(formik.errors.description)}
+                helperText={formik.touched.description && formik.errors.description}
+                multiline
+                rows={4}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </CForm>
-    </CDialog>
+        </CForm>
+      </CDialog>
     </PermissionGuard>
   )
 }

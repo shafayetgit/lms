@@ -1,53 +1,53 @@
-"use client";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import Grid from "@mui/material/Grid";
-import { toast } from "react-toastify";
-import dayjs from "dayjs";
+"use client"
+import React, { useState } from "react"
+import { useFormik } from "formik"
+import Grid from "@mui/material/Grid"
+import { toast } from "react-toastify"
+import dayjs from "dayjs"
 
-import { IconButton, Button, Stack, Box, Typography } from "@mui/material";
-import { AddCircleOutline, DeleteOutline } from "@mui/icons-material";
+import { IconButton, Button, Stack, Box, Typography } from "@mui/material"
+import { AddCircleOutline, DeleteOutline } from "@mui/icons-material"
 
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CNumberField from "@/components/form/CNumberField";
-import CSelect from "@/components/form/CSelect";
-import CDatePicker from "@/components/form/CDatePicker";
-import CCheckbox from "@/components/form/CCheckbox";
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CNumberField from "@/components/form/CNumberField"
+import CSelect from "@/components/form/CSelect"
+import CDatePicker from "@/components/form/CDatePicker"
+import CCheckbox from "@/components/form/CCheckbox"
 
-import { useCreateCouponMutation } from "@/features/payment/paymentApi";
-import { useReadCoursesQuery } from "@/features/course/courseAPI";
-import { useReadBatchesQuery } from "@/features/batch/batchAPI";
-import { useReadProgramsQuery } from "@/features/program/programApi";
-import { couponValidationSchema } from "@/schema/payment";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import { useCreateCouponMutation } from "@/features/payment/paymentApi"
+import { useReadCoursesQuery } from "@/features/course/courseAPI"
+import { useReadBatchesQuery } from "@/features/batch/batchAPI"
+import { useReadProgramsQuery } from "@/features/program/programApi"
+import { couponValidationSchema } from "@/schema/payment"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 // Create coupon dialog component
 export default function CreateDialog({ onSuccess }) {
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = useState(false)
+  const handleClose = () => setOpen(false)
+  const handleOpen = () => setOpen(true)
 
-  const [create, { isLoading: isCreating }] = useCreateCouponMutation();
-  const { data: coursesData } = useReadCoursesQuery({ size: 100 });
-  const { data: batchesData } = useReadBatchesQuery({ size: 100 });
-  const { data: programsData } = useReadProgramsQuery({ size: 100 });
+  const [create, { isLoading: isCreating }] = useCreateCouponMutation()
+  const { data: coursesData } = useReadCoursesQuery({ size: 100 })
+  const { data: batchesData } = useReadBatchesQuery({ size: 100 })
+  const { data: programsData } = useReadProgramsQuery({ size: 100 })
 
-  const courseOptions = (coursesData?.data ?? []).map((c) => ({
+  const courseOptions = (coursesData?.data ?? []).map(c => ({
     label: c.title,
     value: String(c.id),
-  }));
+  }))
 
-  const batchOptions = (batchesData?.data ?? []).map((b) => ({
+  const batchOptions = (batchesData?.data ?? []).map(b => ({
     label: b.title,
     value: String(b.id),
-  }));
+  }))
 
-  const programOptions = (programsData?.data ?? []).map((p) => ({
+  const programOptions = (programsData?.data ?? []).map(p => ({
     label: p.title,
     value: String(p.id),
-  }));
+  }))
 
   const formik = useFormik({
     initialValues: {
@@ -63,11 +63,11 @@ export default function CreateDialog({ onSuccess }) {
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
         const applicable_items = (values.applicable_items || [])
-          .filter((item) => item.reference_id)
-          .map((item) => ({
+          .filter(item => item.reference_id)
+          .map(item => ({
             reference_type: item.reference_type,
             reference_id: Number(item.reference_id),
-          }));
+          }))
 
         const payload = {
           code: values.code,
@@ -77,20 +77,20 @@ export default function CreateDialog({ onSuccess }) {
           max_uses: values.max_uses === "" ? null : Number(values.max_uses),
           is_active: values.is_active,
           applicable_items: applicable_items.length > 0 ? applicable_items : null,
-        };
+        }
 
-        await create(payload).unwrap();
-        toast.success("Coupon created successfully");
-        resetForm();
-        if (onSuccess) onSuccess();
-        handleClose();
+        await create(payload).unwrap()
+        toast.success("Coupon created successfully")
+        resetForm()
+        if (onSuccess) onSuccess()
+        handleClose()
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Creation failed.");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Creation failed.")
       }
     },
-  });
+  })
 
   return (
     <CDialog
@@ -147,7 +147,7 @@ export default function CreateDialog({ onSuccess }) {
               label="Valid Until"
               name="validity"
               value={formik.values.validity}
-              onChange={(val) => formik.setFieldValue("validity", val)}
+              onChange={val => formik.setFieldValue("validity", val)}
               error={formik.touched.validity && Boolean(formik.errors.validity)}
               helperText={formik.touched.validity && formik.errors.validity}
             />
@@ -166,7 +166,15 @@ export default function CreateDialog({ onSuccess }) {
           </Grid>
 
           <Grid size={{ xs: 4, sm: 8, md: 12 }}>
-            <Box sx={{ mt: 2, mb: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Box
+              sx={{
+                mt: 2,
+                mb: 1,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                 Applicable Items (Optional - Blank for Global)
               </Typography>
@@ -175,11 +183,11 @@ export default function CreateDialog({ onSuccess }) {
                 size="small"
                 startIcon={<AddCircleOutline />}
                 onClick={() => {
-                  const current = formik.values.applicable_items || [];
+                  const current = formik.values.applicable_items || []
                   formik.setFieldValue("applicable_items", [
                     ...current,
-                    { reference_type: "Course", reference_id: "" }
-                  ]);
+                    { reference_type: "Course", reference_id: "" },
+                  ])
                 }}
               >
                 Add Restriction
@@ -192,8 +200,8 @@ export default function CreateDialog({ onSuccess }) {
                   item.reference_type === "Course"
                     ? courseOptions
                     : item.reference_type === "Batch"
-                    ? batchOptions
-                    : programOptions;
+                      ? batchOptions
+                      : programOptions
 
                 return (
                   <Box
@@ -219,9 +227,12 @@ export default function CreateDialog({ onSuccess }) {
                           { label: "Batch", value: "Batch" },
                           { label: "Program", value: "Program" },
                         ]}
-                        onChange={(e) => {
-                          formik.setFieldValue(`applicable_items[${index}].reference_type`, e.target.value);
-                          formik.setFieldValue(`applicable_items[${index}].reference_id`, "");
+                        onChange={e => {
+                          formik.setFieldValue(
+                            `applicable_items[${index}].reference_type`,
+                            e.target.value
+                          )
+                          formik.setFieldValue(`applicable_items[${index}].reference_id`, "")
                         }}
                       />
                     </Box>
@@ -237,15 +248,15 @@ export default function CreateDialog({ onSuccess }) {
                     <IconButton
                       color="error"
                       onClick={() => {
-                        const current = [...(formik.values.applicable_items || [])];
-                        current.splice(index, 1);
-                        formik.setFieldValue("applicable_items", current);
+                        const current = [...(formik.values.applicable_items || [])]
+                        current.splice(index, 1)
+                        formik.setFieldValue("applicable_items", current)
                       }}
                     >
                       <DeleteOutline />
                     </IconButton>
                   </Box>
-                );
+                )
               })}
             </Stack>
           </Grid>
@@ -254,11 +265,11 @@ export default function CreateDialog({ onSuccess }) {
             <CCheckbox
               label="Active"
               checked={formik.values.is_active}
-              onChange={(e) => formik.setFieldValue("is_active", e.target.checked)}
+              onChange={e => formik.setFieldValue("is_active", e.target.checked)}
             />
           </Grid>
         </Grid>
       </CForm>
     </CDialog>
-  );
+  )
 }

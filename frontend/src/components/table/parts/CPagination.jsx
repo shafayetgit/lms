@@ -17,16 +17,12 @@ export default function CPagination({ meta, onPageChange }) {
               fontWeight: 700,
             },
             "&:hover": {
-              backgroundColor: (theme) =>
-                alpha(theme.palette.primary.main, 0.1),
+              backgroundColor: theme => alpha(theme.palette.primary.main, 0.1),
             },
           },
         }}
-        renderItem={(item) => (
-          <PaginationItem
-            slots={{ previous: ArrowBack, next: ArrowForward }}
-            {...item}
-          />
+        renderItem={item => (
+          <PaginationItem slots={{ previous: ArrowBack, next: ArrowForward }} {...item} />
         )}
         shape="circular"
         variant="text"
@@ -34,4 +30,3 @@ export default function CPagination({ meta, onPageChange }) {
     </Box>
   )
 }
-

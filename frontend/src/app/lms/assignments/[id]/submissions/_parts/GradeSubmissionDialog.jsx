@@ -1,17 +1,17 @@
-"use client";
-import React, { useEffect } from "react";
-import { useFormik } from "formik";
-import Grid from "@mui/material/Grid";
-import { Box, Typography, Stack, Divider, Paper } from "@mui/material";
-import { toast } from "react-toastify";
-import * as Yup from "yup";
+"use client"
+import React, { useEffect } from "react"
+import { useFormik } from "formik"
+import Grid from "@mui/material/Grid"
+import { Box, Typography, Stack, Divider, Paper } from "@mui/material"
+import { toast } from "react-toastify"
+import * as Yup from "yup"
 
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CSelect from "@/components/form/CSelect";
-import CSectionLabel from "@/components/ui/CSectionLabel";
-import { useGradeSubmissionMutation } from "@/features/assignment/assignmentApi";
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CSelect from "@/components/form/CSelect"
+import CSectionLabel from "@/components/ui/CSectionLabel"
+import { useGradeSubmissionMutation } from "@/features/assignment/assignmentApi"
 
 const validationSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
@@ -20,10 +20,10 @@ const validationSchema = Yup.object().shape({
     .max(100, "Grade cannot exceed 100")
     .nullable(),
   comments: Yup.string().nullable(),
-});
+})
 
 export default function GradeSubmissionDialog({ open, handleClose, submission, assignment }) {
-  const [gradeSubmission, { isLoading }] = useGradeSubmissionMutation();
+  const [gradeSubmission, { isLoading }] = useGradeSubmissionMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -32,32 +32,32 @@ export default function GradeSubmissionDialog({ open, handleClose, submission, a
       comments: "",
     },
     validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         const payload = {
           status: values.status,
           comments: values.comments || null,
-        };
+        }
 
         if (assignment?.grade_assignment) {
-          payload.grade = values.grade !== "" ? Number(values.grade) : null;
+          payload.grade = values.grade !== "" ? Number(values.grade) : null
         }
 
         await gradeSubmission({
           id: assignment?.public_id || assignment?.id,
           sub_id: submission.public_id,
           body: payload,
-        }).unwrap();
+        }).unwrap()
 
-        toast.success("Submission graded successfully");
-        handleClose();
+        toast.success("Submission graded successfully")
+        handleClose()
       } catch (error) {
-        toast.error(error?.data?.message || "Failed to grade submission.");
+        toast.error(error?.data?.message || "Failed to grade submission.")
       }
     },
-  });
+  })
 
-  const { setValues } = formik;
+  const { setValues } = formik
 
   useEffect(() => {
     if (submission) {
@@ -65,13 +65,13 @@ export default function GradeSubmissionDialog({ open, handleClose, submission, a
         status: submission.status || "Pending",
         grade: submission.grade !== null && submission.grade !== undefined ? submission.grade : "",
         comments: submission.comments || "",
-      });
+      })
     }
-  }, [submission, setValues]);
+  }, [submission, setValues])
 
-  if (!submission) return null;
+  if (!submission) return null
 
-  const isAttachment = ["Document", "PDF", "Image"].includes(assignment?.type);
+  const isAttachment = ["Document", "PDF", "Image"].includes(assignment?.type)
 
   return (
     <CDialog
@@ -236,5 +236,5 @@ export default function GradeSubmissionDialog({ open, handleClose, submission, a
         </Grid>
       </CForm>
     </CDialog>
-  );
+  )
 }

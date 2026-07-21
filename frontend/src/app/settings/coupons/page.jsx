@@ -1,32 +1,32 @@
-"use client";
-import React, { Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Box, Chip } from "@mui/material";
-import Link from "next/link";
-import dayjs from "dayjs";
-import { toast } from "react-toastify";
+"use client"
+import React, { Suspense, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { Box, Chip } from "@mui/material"
+import Link from "next/link"
+import dayjs from "dayjs"
+import { toast } from "react-toastify"
 
-import CPageLoader from "@/components/ui/CPageLoader";
-import CDataTable from "@/components/table/CDatatable";
-import CDelete from "@/components/actions/CDelete";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import { renderCell } from "@/utils/tableTools";
+import CPageLoader from "@/components/ui/CPageLoader"
+import CDataTable from "@/components/table/CDatatable"
+import CDelete from "@/components/actions/CDelete"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import { renderCell } from "@/utils/tableTools"
 
-import { useLazyReadCouponsQuery } from "@/features/payment/paymentApi";
-import { COUPON_TIPS } from "@/choices/helpTips/coupon";
-import CreateDialog from "./_parts/CreateDialog";
+import { useLazyReadCouponsQuery } from "@/features/payment/paymentApi"
+import { COUPON_TIPS } from "@/choices/helpTips/coupon"
+import CreateDialog from "./_parts/CreateDialog"
 
 // Display list of coupons with pagination and actions
 function CouponList() {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? 1;
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") ?? 1
 
-  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadCouponsQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadCouponsQuery()
 
   useEffect(() => {
-    trigger({ page });
-  }, [page, trigger]);
+    trigger({ page })
+  }, [page, trigger])
 
   const columns = [
     {
@@ -46,25 +46,32 @@ function CouponList() {
       field: "discount",
       headerName: "Discount",
       flex: 1,
-      renderCell: (row) => renderCell(`${row.discount}${row.type === "Percent" ? "%" : ""}`),
+      renderCell: row => renderCell(`${row.discount}${row.type === "Percent" ? "%" : ""}`),
     },
     {
       field: "validity",
       headerName: "Valid Until",
       flex: 1,
-      renderCell: (row) => renderCell(row.value ? dayjs(row.value).format("MMM DD, YYYY") : "Never"),
+      renderCell: row => renderCell(row.value ? dayjs(row.value).format("MMM DD, YYYY") : "Never"),
     },
     {
       field: "uses",
       headerName: "Uses",
       flex: 1,
-      renderCell: (row) => renderCell(`${row.used_count} / ${row.max_uses ?? "∞"}`),
+      renderCell: row => renderCell(`${row.used_count} / ${row.max_uses ?? "∞"}`),
     },
     {
       field: "is_active",
       headerName: "Status",
       flex: 1,
-      renderCell: (row) => renderCell(<Chip label={row.value ? "Active" : "Inactive"} color={row.value ? "success" : "default"} size="small" />),
+      renderCell: row =>
+        renderCell(
+          <Chip
+            label={row.value ? "Active" : "Inactive"}
+            color={row.value ? "success" : "default"}
+            size="small"
+          />
+        ),
     },
     {
       field: "actions",
@@ -82,9 +89,9 @@ function CouponList() {
         />
       ),
     },
-  ];
+  ]
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   return (
     <CDataTable
@@ -99,7 +106,7 @@ function CouponList() {
       }
       deleteData={{ model: "Coupon", invalidateTag: "COUPONS" }}
     />
-  );
+  )
 }
 
 export default function CouponsPage() {
@@ -109,5 +116,5 @@ export default function CouponsPage() {
         <CouponList />
       </Suspense>
     </CModuleLayout>
-  );
+  )
 }

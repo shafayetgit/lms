@@ -1,7 +1,7 @@
-const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1";
-const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
-const FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "uploads";
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1"
+const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+const FOLDER = process.env.NEXT_PUBLIC_CLOUDINARY_FOLDER || "uploads"
 
 // console.log("Cloudinary Config:", {
 //   CLOUD_NAME,
@@ -17,62 +17,62 @@ export async function uploadToCloudinary({
   signal,
   onProgress,
 }) {
-  if (!file) throw new Error("File is required");
+  if (!file) throw new Error("File is required")
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", uploadPreset);
+  const formData = new FormData()
+  formData.append("file", file)
+  formData.append("upload_preset", uploadPreset)
 
   if (folder) {
-    formData.append("folder", folder);
+    formData.append("folder", folder)
   }
 
   return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    const url = `${CLOUDINARY_URL}/${cloudName}/upload`;
+    const xhr = new XMLHttpRequest()
+    const url = `${CLOUDINARY_URL}/${cloudName}/upload`
 
-    xhr.open("POST", url, true);
+    xhr.open("POST", url, true)
 
     if (onProgress && xhr.upload) {
-      xhr.upload.onprogress = (e) => {
+      xhr.upload.onprogress = e => {
         if (e.lengthComputable) {
-          const percentComplete = Math.round((e.loaded * 100) / e.total);
-          onProgress(percentComplete, e.loaded, e.total);
+          const percentComplete = Math.round((e.loaded * 100) / e.total)
+          onProgress(percentComplete, e.loaded, e.total)
         }
-      };
+      }
     }
 
     if (signal) {
       signal.addEventListener("abort", () => {
-        xhr.abort();
-        reject(new DOMException("Aborted", "AbortError"));
-      });
+        xhr.abort()
+        reject(new DOMException("Aborted", "AbortError"))
+      })
     }
 
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 300) {
         try {
-          const response = JSON.parse(xhr.responseText);
-          resolve(response);
+          const response = JSON.parse(xhr.responseText)
+          resolve(response)
         } catch (e) {
-          reject(new Error("Invalid JSON response"));
+          reject(new Error("Invalid JSON response"))
         }
       } else {
         try {
-          const err = JSON.parse(xhr.responseText);
-          reject(new Error(err.error?.message || "Upload failed"));
+          const err = JSON.parse(xhr.responseText)
+          reject(new Error(err.error?.message || "Upload failed"))
         } catch (e) {
-          reject(new Error("Upload failed"));
+          reject(new Error("Upload failed"))
         }
       }
-    };
+    }
 
     xhr.onerror = () => {
-      reject(new Error("Upload failed"));
-    };
+      reject(new Error("Upload failed"))
+    }
 
-    xhr.send(formData);
-  });
+    xhr.send(formData)
+  })
 }
 // Usage;
 // const result = await uploadToCloudinary({
@@ -89,12 +89,12 @@ export async function uploadMultipleToCloudinary({
   folder = FOLDER,
   concurrency = 3,
 }) {
-  const results = [];
-  const queue = [...files];
+  const results = []
+  const queue = [...files]
 
   async function worker() {
     while (queue.length) {
-      const file = queue.shift();
+      const file = queue.shift()
       try {
         const meta = await uploadToCloudinary({
           file: file.file,
@@ -102,25 +102,25 @@ export async function uploadMultipleToCloudinary({
           uploadPreset,
           folder,
           onProgress: file.onProgress,
-        });
+        })
 
-        delete file.file; 
-        delete file.onProgress;
+        delete file.file
+        delete file.onProgress
 
         results.push({
           ...file,
           meta: meta,
-        });
+        })
       } catch (err) {
-        console.error("Upload failed:", file.name, err);
+        console.error("Upload failed:", file.name, err)
       }
     }
   }
 
-  const workers = Array(concurrency).fill(null).map(worker);
-  await Promise.all(workers);
+  const workers = Array(concurrency).fill(null).map(worker)
+  await Promise.all(workers)
 
-  return results;
+  return results
 }
 
 // Usage

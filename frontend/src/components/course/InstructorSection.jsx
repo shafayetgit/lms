@@ -8,7 +8,11 @@ export default function InstructorSection({ course }) {
 
   return (
     <Card variant="outlined" sx={{ p: 3, borderRadius: 1 }}>
-      <Typography variant="h5" component="h2" sx={{ fontWeight: 800, mb: 2, color: "text.primary" }}>
+      <Typography
+        variant="h5"
+        component="h2"
+        sx={{ fontWeight: 800, mb: 2, color: "text.primary" }}
+      >
         Instructor{instructors.length > 1 ? "s" : ""}
       </Typography>
 
@@ -16,7 +20,10 @@ export default function InstructorSection({ course }) {
         instructors.map((inst, idx) => (
           <Box key={inst.public_id}>
             <Box display="flex" alignItems="center" gap={2}>
-              <Avatar src={inst.avatar} sx={{ width: 48, height: 48, bgcolor: "text.primary", color: "background.paper" }}>
+              <Avatar
+                src={inst.avatar}
+                sx={{ width: 48, height: 48, bgcolor: "text.primary", color: "background.paper" }}
+              >
                 {`${inst.first_name?.[0] || ""}${inst.last_name?.[0] || ""}`.toUpperCase()}
               </Avatar>
               <Box>
@@ -33,7 +40,10 @@ export default function InstructorSection({ course }) {
         ))
       ) : (
         <Box display="flex" alignItems="center" gap={2}>
-          <Avatar src="https://randomuser.me/api/portraits/men/32.jpg" sx={{ width: 48, height: 48, bgcolor: "text.primary", color: "background.paper" }} />
+          <Avatar
+            src="https://randomuser.me/api/portraits/men/32.jpg"
+            sx={{ width: 48, height: 48, bgcolor: "text.primary", color: "background.paper" }}
+          />
           <Box>
             <Typography variant="subtitle1" component="span" fontWeight="bold">
               Instructor

@@ -29,7 +29,7 @@ export default function CDataTable(props) {
     filterMode = "server",
     CustomToolbar,
     hideFooter,
-    getRowId = (row) => row?.public_id || row?.id,
+    getRowId = row => row?.public_id || row?.id,
     getRowHeight,
     hasFilter = true,
     tableHeight = 820,
@@ -97,14 +97,14 @@ export default function CDataTable(props) {
           "--DataGrid-rowBorderColor": alpha(theme.palette.divider, 0.06),
         },
         "& .MuiDataGrid-columnHeaders": {
-          backgroundColor: `${theme.palette.mode === "light" ? "#F8F9FA" : (theme.palette.custom?.table?.headBg || "transparent")} !important`,
+          backgroundColor: `${theme.palette.mode === "light" ? "#F8F9FA" : theme.palette.custom?.table?.headBg || "transparent"} !important`,
           borderBottom: "none !important",
           borderTop: "none !important",
           borderRadius: "8px !important",
           overflow: "hidden !important",
         },
         "& .MuiDataGrid-columnHeader": {
-          backgroundColor: `${theme.palette.mode === "light" ? "#F8F9FA" : (theme.palette.custom?.table?.headBg || "transparent")} !important`,
+          backgroundColor: `${theme.palette.mode === "light" ? "#F8F9FA" : theme.palette.custom?.table?.headBg || "transparent"} !important`,
         },
         "& .MuiDataGrid-columnHeader:first-of-type": {
           borderTopLeftRadius: "8px !important",
@@ -140,9 +140,9 @@ export default function CDataTable(props) {
           borderBottom: `1px solid ${alpha(theme.palette.divider, 0.04)}`,
         },
         "& .MuiDataGrid-cell:last-child, & .MuiDataGrid-columnHeader:last-child, & .MuiDataGrid-filler":
-        {
-          borderRight: "none !important",
-        },
+          {
+            borderRight: "none !important",
+          },
         "& .MuiDataGrid-columnHeader:last-child .MuiDataGrid-columnSeparator": {
           display: "none !important",
         },
@@ -163,7 +163,15 @@ export default function CDataTable(props) {
       {isLgScreen ? (
         <Stack spacing={2} sx={{ overflowY: "auto", maxHeight: tableHeight }}>
           {hasFilter && (
-            <Box sx={{ display: "flex", gap: 2, alignItems: "center", width: "100%", flexWrap: "wrap" }}>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+                width: "100%",
+                flexWrap: "wrap",
+              }}
+            >
               <TextField
                 fullWidth
                 size="small"
@@ -210,7 +218,9 @@ export default function CDataTable(props) {
                 }}
               />
 
-              {additionalFilters && <Box sx={{ display: "flex", alignItems: "center" }}>{additionalFilters}</Box>}
+              {additionalFilters && (
+                <Box sx={{ display: "flex", alignItems: "center" }}>{additionalFilters}</Box>
+              )}
               {action && <Box>{action}</Box>}
             </Box>
           )}
@@ -297,7 +307,7 @@ export default function CDataTable(props) {
           getRowHeight={params => {
             return getRowHeight
           }}
-        // getRowClassName={params => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
+          // getRowClassName={params => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
         />
       )}
     </Box>

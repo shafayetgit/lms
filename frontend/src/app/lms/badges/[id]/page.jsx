@@ -1,39 +1,39 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import { Grid, Typography } from "@mui/material";
-import { toast } from "react-toastify";
-import { useParams } from "next/navigation";
-import { InfoOutlined } from "@mui/icons-material";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import { Grid, Typography } from "@mui/material"
+import { toast } from "react-toastify"
+import { useParams } from "next/navigation"
+import { InfoOutlined } from "@mui/icons-material"
 
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CCheckbox from "@/components/form/CCheckbox";
-import CSelect from "@/components/form/CSelect";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import PermissionGuard from "@/components/ui/PermissionGuard";
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CCheckbox from "@/components/form/CCheckbox"
+import CSelect from "@/components/form/CSelect"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import PermissionGuard from "@/components/ui/PermissionGuard"
 
-import { useReadBadgeQuery, useUpdateBadgeMutation } from "@/features/badge/badgeApi";
-import { badgeValidationSchema } from "@/schema/badge";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-import { BADGE_TIPS } from "@/choices/helpTips/badge";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
-import usePermissions from "@/hooks/usePermissions";
+import { useReadBadgeQuery, useUpdateBadgeMutation } from "@/features/badge/badgeApi"
+import { badgeValidationSchema } from "@/schema/badge"
+import { mapApiErrorsToFormik } from "@/utils/shared"
+import { BADGE_TIPS } from "@/choices/helpTips/badge"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
+import usePermissions from "@/hooks/usePermissions"
 
 export default function BadgeDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams()
 
   const { data: badgeData, isLoading } = useReadBadgeQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
-  useSetBreadcrumb(badgeData?.data?.title);
+  useSetBreadcrumb(badgeData?.data?.title)
 
-  const [update, { isLoading: isUpdating }] = useUpdateBadgeMutation();
-  const { can, isSuperAdmin } = usePermissions();
-  const canUpdate = isSuperAdmin || can("badge", "update");
+  const [update, { isLoading: isUpdating }] = useUpdateBadgeMutation()
+  const { can, isSuperAdmin } = usePermissions()
+  const canUpdate = isSuperAdmin || can("badge", "update")
 
   const formik = useFormik({
     initialValues: {
@@ -52,21 +52,27 @@ export default function BadgeDetailPage() {
     enableReinitialize: true,
     onSubmit: async (values, { setErrors }) => {
       try {
-        await update({ id, body: values }).unwrap();
-        toast.success("Badge updated successfully");
+        await update({ id, body: values }).unwrap()
+        toast.success("Badge updated successfully")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed")
       }
     },
-  });
+  })
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/badges/${id}`, icon: <InfoOutlined />, resource: "badge", action: "read" },
-  ];
+    {
+      label: "Details",
+      href: `/lms/badges/${id}`,
+      icon: <InfoOutlined />,
+      resource: "badge",
+      action: "read",
+    },
+  ]
 
   return (
     <PermissionGuard resource="badge" action="read">
@@ -118,7 +124,7 @@ export default function BadgeDetailPage() {
               <CCheckbox
                 label="Active"
                 checked={formik.values.is_active}
-                onChange={(e) => formik.setFieldValue("is_active", e.target.checked)}
+                onChange={e => formik.setFieldValue("is_active", e.target.checked)}
               />
             </Grid>
 
@@ -209,12 +215,12 @@ export default function BadgeDetailPage() {
               <CCheckbox
                 label="Grant Only Once"
                 checked={formik.values.grant_only_once}
-                onChange={(e) => formik.setFieldValue("grant_only_once", e.target.checked)}
+                onChange={e => formik.setFieldValue("grant_only_once", e.target.checked)}
               />
             </Grid>
           </Grid>
         </CForm>
       </CModuleLayout>
     </PermissionGuard>
-  );
+  )
 }

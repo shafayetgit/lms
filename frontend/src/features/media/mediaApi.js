@@ -1,11 +1,11 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
-const PREFIX = "api/v1/media";
+const PREFIX = "api/v1/media"
 
 const mediaAPI = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     attach: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: `${PREFIX}/attach`,
         method: "POST",
         body: body,
@@ -14,7 +14,7 @@ const mediaAPI = api.injectEndpoints({
     }),
   }),
   overrideExisting: false,
-});
+})
 
-export const { useAttachMutation } = mediaAPI;
-export default mediaAPI;
+export const { useAttachMutation } = mediaAPI
+export default mediaAPI

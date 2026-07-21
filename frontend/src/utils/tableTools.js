@@ -1,8 +1,7 @@
+import { Box } from "@mui/material"
+import React from "react"
 
-import { Box } from "@mui/material";
-import React from "react";
-
-export const renderCell = (value) => (
+export const renderCell = value => (
   <Box
     sx={{
       whiteSpace: "normal",
@@ -12,4 +11,4 @@ export const renderCell = (value) => (
   >
     {value}
   </Box>
-);
+)

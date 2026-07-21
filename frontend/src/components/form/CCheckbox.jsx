@@ -1,6 +1,15 @@
 import { Checkbox, FormControlLabel, Typography, Box } from "@mui/material"
 
-export default function CCheckbox({ name, label, checked, onChange, required = false, size = "small", sx = {}, ...other }) {
+export default function CCheckbox({
+  name,
+  label,
+  checked,
+  onChange,
+  required = false,
+  size = "small",
+  sx = {},
+  ...other
+}) {
   return (
     <FormControlLabel
       control={
@@ -22,7 +31,11 @@ export default function CCheckbox({ name, label, checked, onChange, required = f
         />
       }
       label={
-        <Typography component="span" variant="body2" sx={{ fontWeight: 500, color: "text.primary" }}>
+        <Typography
+          component="span"
+          variant="body2"
+          sx={{ fontWeight: 500, color: "text.primary" }}
+        >
           {label}
           {required && (
             <Box component="span" sx={{ color: "error.main", ml: 0.5 }}>

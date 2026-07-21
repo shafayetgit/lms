@@ -137,7 +137,12 @@ export default function CreateDialog() {
       handleCDialogOpen={handleOpen}
       handleCDialogClose={handleClose}
     >
-      <CForm onSubmit={formik.handleSubmit} width="45rem" btnProps={{ action:"", label: "Create", loading: isLoading }} dialog>
+      <CForm
+        onSubmit={formik.handleSubmit}
+        width="45rem"
+        btnProps={{ action: "", label: "Create", loading: isLoading }}
+        dialog
+      >
         <Grid container spacing={{ xs: 2, md: 4 }}>
           <Grid container size={{ xs: 12, md: 6 }} spacing={2}>
             {/* Basic Information */}
@@ -172,7 +177,9 @@ export default function CreateDialog() {
                 }}
                 onBlur={formik.handleBlur}
                 required
-                error={formik.touched.category_public_id && Boolean(formik.errors.category_public_id)}
+                error={
+                  formik.touched.category_public_id && Boolean(formik.errors.category_public_id)
+                }
                 helperText={formik.touched.category_public_id && formik.errors.category_public_id}
               />
             </Grid>
@@ -187,13 +194,21 @@ export default function CreateDialog() {
                 isOptionEqualToValue={(option, value) => option.value === value?.value}
                 getOptionLabel={option => option?.label || ""}
                 onChange={(e, value) => {
-                  formik.setFieldValue("instructor_public_ids", value ? value.map(v => v.value) : [])
+                  formik.setFieldValue(
+                    "instructor_public_ids",
+                    value ? value.map(v => v.value) : []
+                  )
                   formik.setFieldValue("temp_instructors", value || [])
                 }}
                 onBlur={formik.handleBlur}
                 required
-                error={formik.touched.instructor_public_ids && Boolean(formik.errors.instructor_public_ids)}
-                helperText={formik.touched.instructor_public_ids && formik.errors.instructor_public_ids}
+                error={
+                  formik.touched.instructor_public_ids &&
+                  Boolean(formik.errors.instructor_public_ids)
+                }
+                helperText={
+                  formik.touched.instructor_public_ids && formik.errors.instructor_public_ids
+                }
               />
             </Grid>
 
@@ -300,8 +315,12 @@ export default function CreateDialog() {
               <CAutocomplete
                 label="Card Gradient"
                 name="card_gradient"
-                value={GRADIENT_OPTIONS.find((opt) => opt.value === formik.values.card_gradient) || null}
-                onChange={(event, newValue) => formik.setFieldValue("card_gradient", newValue ? newValue.value : "")}
+                value={
+                  GRADIENT_OPTIONS.find(opt => opt.value === formik.values.card_gradient) || null
+                }
+                onChange={(event, newValue) =>
+                  formik.setFieldValue("card_gradient", newValue ? newValue.value : "")
+                }
                 onBlur={() => formik.setFieldTouched("card_gradient", true)}
                 options={GRADIENT_OPTIONS}
                 error={formik.touched.card_gradient && Boolean(formik.errors.card_gradient)}
@@ -317,9 +336,7 @@ export default function CreateDialog() {
                 onChange={e => {
                   formik.setFieldValue("thumbnail", e.target.files[0])
                 }}
-                aspectRatios={[
-                  { label: "16:9", value: 16 / 9 },
-                ]}
+                aspectRatios={[{ label: "16:9", value: 16 / 9 }]}
               />
               {uploadProgress > 0 && uploadProgress <= 100 && (
                 <Box sx={{ width: "100%", mt: 2 }}>
@@ -397,12 +414,20 @@ export default function CreateDialog() {
               isOptionEqualToValue={(option, value) => option.value === value?.value}
               getOptionLabel={option => option?.label || ""}
               onChange={(e, value) => {
-                formik.setFieldValue("related_course_public_ids", value ? value.map(v => v.value) : [])
+                formik.setFieldValue(
+                  "related_course_public_ids",
+                  value ? value.map(v => v.value) : []
+                )
                 formik.setFieldValue("temp_related_courses", value || [])
               }}
               onBlur={formik.handleBlur}
-              error={formik.touched.related_course_public_ids && Boolean(formik.errors.related_course_public_ids)}
-              helperText={formik.touched.related_course_public_ids && formik.errors.related_course_public_ids}
+              error={
+                formik.touched.related_course_public_ids &&
+                Boolean(formik.errors.related_course_public_ids)
+              }
+              helperText={
+                formik.touched.related_course_public_ids && formik.errors.related_course_public_ids
+              }
             />
           </Grid>
         </Grid>

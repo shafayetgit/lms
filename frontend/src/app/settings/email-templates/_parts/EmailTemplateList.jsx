@@ -321,10 +321,7 @@ function getCleanPreviewHTML(content, contentType) {
 function parseMarkdownToHTML(text) {
   if (!text) return ""
 
-  const escaped = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
+  const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
   const lines = escaped.split("\n")
   const processedLines = lines.map(line => {

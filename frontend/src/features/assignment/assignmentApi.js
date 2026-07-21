@@ -1,9 +1,9 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const assignmentApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     createAssignment: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/assignments/",
         method: "POST",
         body,
@@ -11,7 +11,7 @@ export const assignmentApi = api.injectEndpoints({
       invalidatesTags: ["ASSIGNMENTS"],
     }),
     readAssignments: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/assignments/",
         method: "GET",
         params,
@@ -19,7 +19,7 @@ export const assignmentApi = api.injectEndpoints({
       providesTags: ["ASSIGNMENTS"],
     }),
     readAssignment: builder.query({
-      query: (id) => `/api/v1/assignments/${id}`,
+      query: id => `/api/v1/assignments/${id}`,
       providesTags: ["ASSIGNMENTS"],
     }),
     updateAssignment: builder.mutation({
@@ -31,7 +31,7 @@ export const assignmentApi = api.injectEndpoints({
       invalidatesTags: ["ASSIGNMENTS"],
     }),
     deleteAssignment: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/assignments/${id}`,
         method: "DELETE",
       }),
@@ -62,7 +62,7 @@ export const assignmentApi = api.injectEndpoints({
       invalidatesTags: ["ASSIGNMENTS"],
     }),
   }),
-});
+})
 
 export const {
   useCreateAssignmentMutation,
@@ -74,4 +74,4 @@ export const {
   useSubmitAssignmentMutation,
   useGetSubmissionsQuery,
   useGradeSubmissionMutation,
-} = assignmentApi;
+} = assignmentApi

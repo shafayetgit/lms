@@ -14,7 +14,7 @@ export default function InviteUserDialog({ open, handleClose }) {
   const { data: rolesResponse } = useGetUserRolesQuery()
   const roles = rolesResponse?.data || []
 
-  const activeRole = roles.some(r => r.slug === role) ? role : (roles[0]?.slug || "student")
+  const activeRole = roles.some(r => r.slug === role) ? role : roles[0]?.slug || "student"
   const selectedRoleObj = roles.find(r => r.slug === activeRole)
   const roleDescription = selectedRoleObj?.description || ""
 
@@ -53,7 +53,8 @@ export default function InviteUserDialog({ open, handleClose }) {
         >
           <Stack spacing={3}>
             <Typography variant="body2" color="text.secondary">
-              Invite users to access TheBioSport LMS. Specify their roles to control access and permissions.
+              Invite users to access TheBioSport LMS. Specify their roles to control access and
+              permissions.
             </Typography>
 
             <CTextField
@@ -82,7 +83,11 @@ export default function InviteUserDialog({ open, handleClose }) {
                 ))}
               </CTextField>
               {roleDescription && (
-                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 1, display: "block" }}
+                >
                   {roleDescription}
                 </Typography>
               )}

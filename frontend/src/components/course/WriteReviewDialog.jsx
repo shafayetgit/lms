@@ -8,10 +8,7 @@ import { toast } from "react-toastify"
 import CDialog from "@/components/ui/CDialog"
 import CForm from "@/components/ui/CForm"
 import CTextField from "@/components/form/CTextField"
-import {
-  useCreateReviewMutation,
-  useUpdateReviewMutation,
-} from "@/features/review/reviewAPI"
+import { useCreateReviewMutation, useUpdateReviewMutation } from "@/features/review/reviewAPI"
 
 export default function WriteReviewDialog({ open, onClose, course, user, myReview }) {
   const [createReview, { isLoading: isCreating }] = useCreateReviewMutation()
@@ -27,7 +24,7 @@ export default function WriteReviewDialog({ open, onClose, course, user, myRevie
       rating: Yup.number().min(1, "Minimum rating is 1").max(5, "Maximum rating is 5").required(),
       body: Yup.string().nullable(),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
         if (myReview) {
           await updateReview({
@@ -56,12 +53,7 @@ export default function WriteReviewDialog({ open, onClose, course, user, myRevie
   })
 
   return (
-    <CDialog
-      title={"Write a Review"}
-      open={open}
-      handleCDialogClose={onClose}
-      maxWidth="sm"
-    >
+    <CDialog title={"Write a Review"} open={open} handleCDialogClose={onClose} maxWidth="sm">
       <CForm
         onSubmit={formik.handleSubmit}
         btnProps={{ loading: isCreating || isUpdating }}

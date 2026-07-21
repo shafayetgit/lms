@@ -48,14 +48,19 @@ function UsersPageContent() {
           >
             {row.first_name
               ? row.first_name.charAt(0).toUpperCase()
-              : (row.email ? row.email.charAt(0).toUpperCase() : "U")}
+              : row.email
+                ? row.email.charAt(0).toUpperCase()
+                : "U"}
           </Avatar>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography
               variant="subtitle2"
               sx={{ fontWeight: 600, color: "text.primary", lineHeight: 1.2 }}
             >
-              {row.full_name || `${row.first_name || ""} ${row.last_name || ""}`.trim() || row.username || "User"}
+              {row.full_name ||
+                `${row.first_name || ""} ${row.last_name || ""}`.trim() ||
+                row.username ||
+                "User"}
             </Typography>
             <Typography variant="caption" sx={{ color: "text.secondary", mt: 0.25 }}>
               {row.email}

@@ -9,4 +9,4 @@ export const GRADIENT_OPTIONS = [
   { label: "Teal", value: "teal" },
   { label: "Indigo", value: "indigo" },
   { label: "Cyan", value: "cyan" },
-];
+]

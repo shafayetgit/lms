@@ -1,15 +1,10 @@
-"use client";
+"use client"
 
-import {
-  Box,
-  Drawer,
-  useTheme,
-  alpha,
-} from "@mui/material";
+import { Box, Drawer, useTheme, alpha } from "@mui/material"
 
-import React from "react";
-import { usePathname } from "next/navigation";
-import DrawerContent from "./DrawerContent";
+import React from "react"
+import { usePathname } from "next/navigation"
+import DrawerContent from "./DrawerContent"
 
 export default function Sidebar({
   mobileOpen,
@@ -18,8 +13,8 @@ export default function Sidebar({
   isMini,
   setIsMini,
 }) {
-  const theme = useTheme();
-  const pathname = usePathname();
+  const theme = useTheme()
+  const pathname = usePathname()
 
   return (
     <Box
@@ -94,5 +89,5 @@ export default function Sidebar({
         />
       </Drawer>
     </Box>
-  );
+  )
 }

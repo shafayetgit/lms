@@ -71,7 +71,7 @@ export function getDateRange(dateInput) {
  * @param {string|Date} dob - The date of birth.
  * @returns {number|null} Age in years, or null if no dob is provided.
  */
-export const calculateAge = (dob) => {
+export const calculateAge = dob => {
   if (!dob) return null
   const birthDate = dayjs(dob)
   return dayjs().diff(birthDate, "year")

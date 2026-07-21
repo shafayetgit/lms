@@ -59,8 +59,10 @@ export default function UpdateDialog({ item, batchPublicId }) {
     },
   })
 
-  const hasError = (field) => Boolean(formik.errors[field]) && (formik.touched[field] || formik.submitCount > 0)
-  const getHelperText = (field) => (formik.touched[field] || formik.submitCount > 0) ? formik.errors[field] : ""
+  const hasError = field =>
+    Boolean(formik.errors[field]) && (formik.touched[field] || formik.submitCount > 0)
+  const getHelperText = field =>
+    formik.touched[field] || formik.submitCount > 0 ? formik.errors[field] : ""
 
   return (
     <CDialog
@@ -96,7 +98,7 @@ export default function UpdateDialog({ item, batchPublicId }) {
               label="Date"
               name="date"
               value={formik.values.date ? dayjs(formik.values.date) : null}
-              onChange={(val) => {
+              onChange={val => {
                 const formatted = val && dayjs(val).isValid() ? dayjs(val).format("YYYY-MM-DD") : ""
                 formik.setFieldValue("date", formatted)
               }}
@@ -111,8 +113,10 @@ export default function UpdateDialog({ item, batchPublicId }) {
             <CTimePicker
               label="Start Time"
               name="start_time"
-              value={formik.values.start_time ? dayjs(`2000-01-01T${formik.values.start_time}`) : null}
-              onChange={(val) => {
+              value={
+                formik.values.start_time ? dayjs(`2000-01-01T${formik.values.start_time}`) : null
+              }
+              onChange={val => {
                 const formatted = val && dayjs(val).isValid() ? dayjs(val).format("HH:mm:ss") : ""
                 formik.setFieldValue("start_time", formatted)
               }}
@@ -128,7 +132,7 @@ export default function UpdateDialog({ item, batchPublicId }) {
               label="End Time"
               name="end_time"
               value={formik.values.end_time ? dayjs(`2000-01-01T${formik.values.end_time}`) : null}
-              onChange={(val) => {
+              onChange={val => {
                 const formatted = val && dayjs(val).isValid() ? dayjs(val).format("HH:mm:ss") : ""
                 formik.setFieldValue("end_time", formatted)
               }}

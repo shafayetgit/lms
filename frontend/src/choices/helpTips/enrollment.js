@@ -1,7 +1,8 @@
 export const ENROLLMENT_TIPS = {
   list: {
     title: "Enrollment Management Guidelines",
-    description: "Overview of student course enrollments, batch assignments, progress tracking, and certificate access.",
+    description:
+      "Overview of student course enrollments, batch assignments, progress tracking, and certificate access.",
     tips: [
       {
         label: "Enrollment Management",
@@ -31,6 +32,6 @@ export const ENROLLMENT_TIPS = {
       },
     ],
   },
-};
+}
 
-export default ENROLLMENT_TIPS;
+export default ENROLLMENT_TIPS

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"
 import {
   Accordion,
   AccordionSummary,
@@ -6,20 +6,20 @@ import {
   Slider,
   Typography,
   Box,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+} from "@mui/material"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
 export default function PriceRange() {
   // Dummy price range (min, max)
   const productFilterInfo = {
     price_range: [10, 100],
-  };
+  }
 
-  const [value, setValue] = useState(productFilterInfo.price_range);
+  const [value, setValue] = useState(productFilterInfo.price_range)
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   return (
     <Accordion defaultExpanded sx={{ background: "transparent" }}>
@@ -73,5 +73,5 @@ export default function PriceRange() {
         />
       </AccordionDetails>
     </Accordion>
-  );
+  )
 }

@@ -14,7 +14,15 @@ const reviewAPI = api.injectEndpoints({
     }),
 
     readReviews: builder.query({
-      query: ({ size, page, course_id, course_public_id, student_id, student_public_id, is_active } = {}) => {
+      query: ({
+        size,
+        page,
+        course_id,
+        course_public_id,
+        student_id,
+        student_public_id,
+        is_active,
+      } = {}) => {
         const params = new URLSearchParams()
 
         const cId = course_public_id || course_id

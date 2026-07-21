@@ -12,11 +12,7 @@ import {
   Skeleton,
   Stack,
 } from "@mui/material"
-import {
-  SchoolOutlined,
-  SearchOutlined,
-  AutoAwesome,
-} from "@mui/icons-material"
+import { SchoolOutlined, SearchOutlined, AutoAwesome } from "@mui/icons-material"
 import { useReadCoursesQuery } from "@/features/course/courseAPI"
 import { useReadMyEnrollmentsQuery } from "@/features/enrollment/enrollmentAPI"
 import { getCurrentUser } from "@/lib/auth/client"
@@ -26,7 +22,15 @@ import PortalCourseCard from "@/components/course/PortalCourseCard"
 /* ─── Skeleton Card ─── */
 function CourseCardSkeleton() {
   return (
-    <Box sx={{ borderRadius: 1, overflow: "hidden", border: "1px solid", borderColor: "divider", bgcolor: "background.paper" }}>
+    <Box
+      sx={{
+        borderRadius: 1,
+        overflow: "hidden",
+        border: "1px solid",
+        borderColor: "divider",
+        bgcolor: "background.paper",
+      }}
+    >
       <Skeleton variant="rectangular" height={168} />
       <Box sx={{ p: 2.5 }}>
         <Skeleton width="40%" height={14} sx={{ mb: 0.5 }} />
@@ -64,7 +68,7 @@ export default function CoursesPage() {
 
   const enrollmentMap = React.useMemo(() => {
     const map = {}
-    enrollments.forEach((e) => {
+    enrollments.forEach(e => {
       if (e.course?.public_id) {
         map[e.course.public_id] = e
       }
@@ -83,7 +87,7 @@ export default function CoursesPage() {
   // Get unique categories connected to the courses currently loaded
   const activeCategories = React.useMemo(() => {
     const categoryMap = new Map()
-    courses.forEach((course) => {
+    courses.forEach(course => {
       if (course.category?.public_id && course.category?.name) {
         categoryMap.set(course.category.public_id, course.category.name)
       }
@@ -95,7 +99,7 @@ export default function CoursesPage() {
   }, [courses])
 
   // Client-side filtering for category and certification
-  const filteredCourses = courses.filter((course) => {
+  const filteredCourses = courses.filter(course => {
     if (category && course.category?.public_id !== category) {
       return false
     }
@@ -108,26 +112,46 @@ export default function CoursesPage() {
   return (
     <Box sx={{ py: { xs: 6, md: 10 }, minHeight: "100vh" }}>
       <Container maxWidth="lg">
-
         {/* Header */}
         <Box sx={{ mb: { xs: 5, md: 6 }, textAlign: "center" }}>
           <Chip
-            icon={<AutoAwesome sx={{ fontSize: "0.85rem !important", color: "inherit !important" }} />}
+            icon={
+              <AutoAwesome sx={{ fontSize: "0.85rem !important", color: "inherit !important" }} />
+            }
             label="Expert-Led Courses"
             color="primary"
             variant="outlined"
-            sx={{ mb: 2, fontWeight: 800, borderRadius: 1, textTransform: "uppercase", fontSize: "0.7rem", letterSpacing: "1px", px: 1 }}
+            sx={{
+              mb: 2,
+              fontWeight: 800,
+              borderRadius: 1,
+              textTransform: "uppercase",
+              fontSize: "0.7rem",
+              letterSpacing: "1px",
+              px: 1,
+            }}
           />
           <Typography
             variant="h2"
-            sx={{ fontWeight: 900, mb: 1.5, letterSpacing: "-0.02em", fontSize: { xs: "2.2rem", md: "3.2rem" } }}
+            sx={{
+              fontWeight: 900,
+              mb: 1.5,
+              letterSpacing: "-0.02em",
+              fontSize: { xs: "2.2rem", md: "3.2rem" },
+            }}
           >
             Explore Our Courses
           </Typography>
           <Typography
             variant="h6"
             color="text.secondary"
-            sx={{ maxWidth: 600, mx: "auto", fontWeight: 400, lineHeight: 1.6, fontSize: { xs: "1rem", md: "1.1rem" } }}
+            sx={{
+              maxWidth: 600,
+              mx: "auto",
+              fontWeight: 400,
+              lineHeight: 1.6,
+              fontSize: { xs: "1rem", md: "1.1rem" },
+            }}
           >
             Discover expert-led courses designed to elevate your career and expand your knowledge.
           </Typography>
@@ -149,12 +173,12 @@ export default function CoursesPage() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             size="small"
-            sx={{ 
+            sx={{
               width: { xs: "100%", sm: 240 },
               "& .MuiOutlinedInput-root": {
                 borderRadius: 1,
                 bgcolor: "background.paper",
-              }
+              },
             }}
             slotProps={{
               input: {
@@ -163,13 +187,13 @@ export default function CoursesPage() {
                     <SearchOutlined sx={{ color: "text.disabled", fontSize: 20 }} />
                   </InputAdornment>
                 ),
-              }
+              },
             }}
           />
 
           {/* Filters (Status & Category Dropdowns) */}
           <Stack
-            direction={{ xs: "column", sm: "row" }}
+            direction="row"
             spacing={2}
             alignItems="center"
             sx={{ width: { xs: "100%", sm: "auto" } }}
@@ -181,16 +205,17 @@ export default function CoursesPage() {
               onChange={e => setStatus(e.target.value)}
               size="small"
               sx={{
-                width: { xs: "100%", sm: 160 },
+                flex: { xs: 1, sm: "none" },
+                width: { sm: 160 },
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 1,
                   bgcolor: "background.paper",
-                }
+                },
               }}
               slotProps={{
                 select: {
                   native: true,
-                }
+                },
               }}
             >
               <option value="published">Published</option>
@@ -205,20 +230,21 @@ export default function CoursesPage() {
               onChange={e => setCategory(e.target.value)}
               size="small"
               sx={{
-                width: { xs: "100%", sm: 180 },
+                flex: { xs: 1, sm: "none" },
+                width: { sm: 180 },
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 1,
                   bgcolor: "background.paper",
-                }
+                },
               }}
               slotProps={{
                 select: {
                   native: true,
-                }
+                },
               }}
             >
               <option value="">Category</option>
-              {activeCategories.map((cat) => (
+              {activeCategories.map(cat => (
                 <option key={cat.value} value={cat.value}>
                   {cat.label}
                 </option>
@@ -226,8 +252,6 @@ export default function CoursesPage() {
             </TextField>
           </Stack>
         </Stack>
-
-
 
         {/* Grid */}
         <Grid container spacing={{ xs: 3, md: 3 }}>

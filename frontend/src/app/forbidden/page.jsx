@@ -1,30 +1,30 @@
-"use client";
+"use client"
 
-import React, { Suspense } from "react";
-import { Container, Box, Typography, Stack, alpha } from "@mui/material";
-import { LockPerson, Dashboard } from "@mui/icons-material";
-import { motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import CButton from "@/components/ui/CButton";
+import React, { Suspense } from "react"
+import { Container, Box, Typography, Stack, alpha } from "@mui/material"
+import { LockPerson, Dashboard } from "@mui/icons-material"
+import { motion } from "framer-motion"
+import { useRouter, useSearchParams } from "next/navigation"
+import CButton from "@/components/ui/CButton"
 
 function ForbiddenContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const customMessage = searchParams.get("message");
-  const displayMessage = customMessage || "The user doesn't have enough privileges";
+  const customMessage = searchParams.get("message")
+  const displayMessage = customMessage || "The user doesn't have enough privileges"
 
   const handleGoBack = () => {
     if (typeof window !== "undefined" && window.history.length > 2) {
-      router.back();
+      router.back()
     } else {
-      router.push("/lms/dashboard");
+      router.push("/lms/dashboard")
     }
-  };
+  }
 
   const handleGoDashboard = () => {
-    router.push("/lms/dashboard");
-  };
+    router.push("/lms/dashboard")
+  }
 
   return (
     <Box
@@ -90,12 +90,12 @@ function ForbiddenContent() {
                   width: { xs: 90, sm: 110 },
                   height: { xs: 90, sm: 110 },
                   borderRadius: "50%",
-                  bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
-                  border: (theme) => `1px solid ${alpha(theme.palette.error.main, 0.2)}`,
+                  bgcolor: theme => alpha(theme.palette.error.main, 0.1),
+                  border: theme => `1px solid ${alpha(theme.palette.error.main, 0.2)}`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  boxShadow: (theme) => `0 20px 40px ${alpha(theme.palette.error.main, 0.25)}`,
+                  boxShadow: theme => `0 20px 40px ${alpha(theme.palette.error.main, 0.25)}`,
                   backdropFilter: "blur(8px)",
                 }}
               >
@@ -150,12 +150,7 @@ function ForbiddenContent() {
             spacing={2}
             sx={{ justifyContent: "center" }}
           >
-            <CButton
-              label="Go Back"
-              action="back"
-              variant="outlined"
-              onClick={handleGoBack}
-            />
+            <CButton label="Go Back" action="back" variant="outlined" onClick={handleGoBack} />
             <CButton
               label="Dashboard"
               icon={<Dashboard />}
@@ -167,7 +162,7 @@ function ForbiddenContent() {
         </motion.div>
       </Container>
     </Box>
-  );
+  )
 }
 
 export default function ForbiddenPage() {
@@ -175,5 +170,5 @@ export default function ForbiddenPage() {
     <Suspense fallback={null}>
       <ForbiddenContent />
     </Suspense>
-  );
+  )
 }

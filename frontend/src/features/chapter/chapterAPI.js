@@ -13,7 +13,9 @@ const chapterAPI = api.injectEndpoints({
         const params = new URLSearchParams()
         if (is_portal !== undefined) params.set("is_portal", is_portal)
         const queryString = params.toString()
-        return queryString ? `${PREFIX}/course/${courseId}?${queryString}` : `${PREFIX}/course/${courseId}`
+        return queryString
+          ? `${PREFIX}/course/${courseId}?${queryString}`
+          : `${PREFIX}/course/${courseId}`
       },
       providesTags: ["CHAPTERS"],
     }),

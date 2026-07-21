@@ -1,43 +1,42 @@
-"use client";
-import React, { Suspense, useEffect, useState } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import Link from "next/link";
-import { FormControl, Select, MenuItem, Box } from "@mui/material";
+"use client"
+import React, { Suspense, useEffect, useState } from "react"
+import { useSearchParams, useRouter, usePathname } from "next/navigation"
+import Link from "next/link"
+import { FormControl, Select, MenuItem, Box } from "@mui/material"
 
-import CPageLoader from "@/components/ui/CPageLoader";
-import CDataTable from "@/components/table/CDatatable";
-import { renderCell } from "@/utils/tableTools";
-import CModuleLayout from "@/components/ui/CModuleLayout";
+import CPageLoader from "@/components/ui/CPageLoader"
+import CDataTable from "@/components/table/CDatatable"
+import { renderCell } from "@/utils/tableTools"
+import CModuleLayout from "@/components/ui/CModuleLayout"
 
-import { useLazyReadCertificateRequestsQuery } from "@/features/certificate/certificateApi";
-import CreateDialog from "./_parts/CreateDialog";
-
+import { useLazyReadCertificateRequestsQuery } from "@/features/certificate/certificateApi"
+import CreateDialog from "./_parts/CreateDialog"
 
 function RequestsList({ action }) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
-  const page = searchParams.get("page") ?? 1;
-  const [statusFilter, setStatusFilter] = useState("Pending");
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+  const page = searchParams.get("page") ?? 1
+  const [statusFilter, setStatusFilter] = useState("Pending")
 
-  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadCertificateRequestsQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadCertificateRequestsQuery()
 
   useEffect(() => {
-    const params = { page };
+    const params = { page }
     if (statusFilter !== "All") {
-      params.status_filter = statusFilter;
+      params.status_filter = statusFilter
     }
-    trigger(params);
-  }, [page, statusFilter, trigger]);
+    trigger(params)
+  }, [page, statusFilter, trigger])
 
-  const handleDropdownChange = (event) => {
-    setStatusFilter(event.target.value);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", "1");
-    router.push(`${pathname}?${params.toString()}`);
-  };
+  const handleDropdownChange = event => {
+    setStatusFilter(event.target.value)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set("page", "1")
+    router.push(`${pathname}?${params.toString()}`)
+  }
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const columns = [
     {
@@ -66,7 +65,7 @@ function RequestsList({ action }) {
       flex: 1.2,
       renderCell: ({ value }) => renderCell(value?.full_name || "Unassigned"),
     },
-  ];
+  ]
 
   const dropdownFilter = (
     <FormControl size="small" sx={{ minWidth: 150 }}>
@@ -84,13 +83,21 @@ function RequestsList({ action }) {
           },
         }}
       >
-        <MenuItem value="Pending" sx={{ fontWeight: 600 }}>Pending</MenuItem>
-        <MenuItem value="Approved" sx={{ fontWeight: 600 }}>Approved</MenuItem>
-        <MenuItem value="Rejected" sx={{ fontWeight: 600 }}>Rejected</MenuItem>
-        <MenuItem value="All" sx={{ fontWeight: 600 }}>All Statuses</MenuItem>
+        <MenuItem value="Pending" sx={{ fontWeight: 600 }}>
+          Pending
+        </MenuItem>
+        <MenuItem value="Approved" sx={{ fontWeight: 600 }}>
+          Approved
+        </MenuItem>
+        <MenuItem value="Rejected" sx={{ fontWeight: 600 }}>
+          Rejected
+        </MenuItem>
+        <MenuItem value="All" sx={{ fontWeight: 600 }}>
+          All Statuses
+        </MenuItem>
       </Select>
     </FormControl>
-  );
+  )
 
   return (
     <CDataTable
@@ -102,7 +109,7 @@ function RequestsList({ action }) {
       deleteData={{ model: "CertificateRequest", invalidateTag: "CERTIFICATES" }}
       additionalFilters={dropdownFilter}
     />
-  );
+  )
 }
 
 export default function RequestsPage() {
@@ -111,14 +118,16 @@ export default function RequestsPage() {
     tips: [
       {
         title: "Certificate Requests",
-        description: "Students submit certificate requests upon batch/course completion. Click on a student name to process.",
+        description:
+          "Students submit certificate requests upon batch/course completion. Click on a student name to process.",
       },
       {
         title: "Evaluation Assignment",
-        description: "Approving a certificate request schedules an evaluation session and assigns the designated instructor.",
+        description:
+          "Approving a certificate request schedules an evaluation session and assigns the designated instructor.",
       },
     ],
-  };
+  }
 
   return (
     <CModuleLayout helpTips={helpTips}>
@@ -126,5 +135,5 @@ export default function RequestsPage() {
         <RequestsList action={<CreateDialog />} />
       </Suspense>
     </CModuleLayout>
-  );
+  )
 }

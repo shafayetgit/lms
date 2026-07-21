@@ -1,33 +1,33 @@
-"use client";
-import React, { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { useLazyReadQuizzesQuery } from "@/features/quiz/quizAPI";
-import CDataTable from "@/components/table/CDatatable";
-import { formatDate } from "@/utils/cdayjs";
-import { renderCell } from "@/utils/tableTools";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CError from "@/components/ui/CError";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import CreateDialog from "./_parts/CreateDialog";
-import { Chip } from "@mui/material";
-import Link from "next/link";
-import { QUIZ_TIPS } from "@/choices/helpTips/quiz";
+"use client"
+import React, { useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { useLazyReadQuizzesQuery } from "@/features/quiz/quizAPI"
+import CDataTable from "@/components/table/CDatatable"
+import { formatDate } from "@/utils/cdayjs"
+import { renderCell } from "@/utils/tableTools"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CError from "@/components/ui/CError"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import CreateDialog from "./_parts/CreateDialog"
+import { Chip } from "@mui/material"
+import Link from "next/link"
+import { QUIZ_TIPS } from "@/choices/helpTips/quiz"
 
-import PermissionGuard from "@/components/ui/PermissionGuard";
+import PermissionGuard from "@/components/ui/PermissionGuard"
 
 export default function Page() {
-  const searchParams = useSearchParams();
-  const term = searchParams.get("term") ?? "";
-  const page = searchParams.get("page") ?? 1;
+  const searchParams = useSearchParams()
+  const term = searchParams.get("term") ?? ""
+  const page = searchParams.get("page") ?? 1
 
-  const [trigger, { data: { data, meta } = {}, isLoading, isError }] = useLazyReadQuizzesQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading, isError }] = useLazyReadQuizzesQuery()
 
   useEffect(() => {
-    trigger({ page, term });
-  }, [page, term, trigger]);
+    trigger({ page, term })
+  }, [page, term, trigger])
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
-  if (isError) return <CError fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
+  if (isError) return <CError fullPage={false} />
 
   const columns = [
     {
@@ -73,7 +73,7 @@ export default function Page() {
       width: 150,
       renderCell: ({ value }) => value && formatDate(value),
     },
-  ];
+  ]
 
   return (
     <CModuleLayout helpTips={QUIZ_TIPS.list}>
@@ -90,5 +90,5 @@ export default function Page() {
         deleteData={{ model: "Quiz", invalidateTag: "QUIZZES" }}
       />
     </CModuleLayout>
-  );
+  )
 }

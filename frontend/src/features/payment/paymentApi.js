@@ -1,10 +1,10 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const paymentApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // Coupons
     createCoupon: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/payments/coupons",
         method: "POST",
         body,
@@ -12,7 +12,7 @@ export const paymentApi = api.injectEndpoints({
       invalidatesTags: ["COUPONS"],
     }),
     readCoupons: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/payments/coupons",
         method: "GET",
         params,
@@ -20,7 +20,7 @@ export const paymentApi = api.injectEndpoints({
       providesTags: ["COUPONS"],
     }),
     readCoupon: builder.query({
-      query: (id) => `/api/v1/payments/coupons/${id}`,
+      query: id => `/api/v1/payments/coupons/${id}`,
       providesTags: ["COUPONS"],
     }),
     updateCoupon: builder.mutation({
@@ -32,14 +32,14 @@ export const paymentApi = api.injectEndpoints({
       invalidatesTags: ["COUPONS"],
     }),
     deleteCoupon: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/payments/coupons/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["COUPONS"],
     }),
     validateCoupon: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/payments/coupons/validate",
         method: "POST",
         body,
@@ -48,7 +48,7 @@ export const paymentApi = api.injectEndpoints({
 
     // Payments
     createPayment: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/payments/",
         method: "POST",
         body,
@@ -56,7 +56,7 @@ export const paymentApi = api.injectEndpoints({
       invalidatesTags: ["PAYMENTS"],
     }),
     readPayments: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/payments/",
         method: "GET",
         params,
@@ -64,7 +64,7 @@ export const paymentApi = api.injectEndpoints({
       providesTags: ["PAYMENTS"],
     }),
     readPayment: builder.query({
-      query: (id) => `/api/v1/payments/${id}`,
+      query: id => `/api/v1/payments/${id}`,
       providesTags: ["PAYMENTS"],
     }),
     updatePaymentStatus: builder.mutation({
@@ -76,18 +76,18 @@ export const paymentApi = api.injectEndpoints({
       invalidatesTags: ["PAYMENTS"],
     }),
     getCheckoutLink: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/payments/checkout-link",
         method: "POST",
         body,
       }),
     }),
     readPaymentByPublicId: builder.query({
-      query: (public_id) => `/api/v1/payments/public/${public_id}`,
+      query: public_id => `/api/v1/payments/public/${public_id}`,
       providesTags: ["PAYMENTS"],
     }),
   }),
-});
+})
 
 export const {
   useCreateCouponMutation,
@@ -105,5 +105,4 @@ export const {
   useUpdatePaymentStatusMutation,
   useGetCheckoutLinkMutation,
   useReadPaymentByPublicIdQuery,
-} = paymentApi;
-
+} = paymentApi

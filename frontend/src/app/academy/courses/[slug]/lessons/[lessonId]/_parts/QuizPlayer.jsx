@@ -14,9 +14,16 @@ import ActiveQuiz from "./ActiveQuiz"
 import QuizInstructions from "./QuizInstructions"
 
 export default function QuizPlayer({ quizId, onCompleted }) {
-  const { data: quizResponse, isLoading, isError } = useReadQuizQuery({ id: quizId, is_portal: true }, { skip: !quizId })
+  const {
+    data: quizResponse,
+    isLoading,
+    isError,
+  } = useReadQuizQuery({ id: quizId, is_portal: true }, { skip: !quizId })
   const quiz = quizResponse?.data
-  const { data: attemptsResponse, refetch: refetchAttempts } = useReadMySubmissionsQuery({ quiz_id: quizId }, { skip: !quizId })
+  const { data: attemptsResponse, refetch: refetchAttempts } = useReadMySubmissionsQuery(
+    { quiz_id: quizId },
+    { skip: !quizId }
+  )
   const attempts = useMemo(() => attemptsResponse?.data || [], [attemptsResponse])
 
   const [startAttempt] = useStartQuizSubmissionMutation()
@@ -40,55 +47,60 @@ export default function QuizPlayer({ quizId, onCompleted }) {
   const submissionDetail = submissionDetailResponse?.data
 
   // Auto-submit on time limit expiration
-  const handleAutoSubmit = useCallback(async (attemptId) => {
-    const targetAttemptId = attemptId || activeAttempt?.id
-    if (!targetAttemptId) return
-    setIsSubmitting(true)
-    try {
-      const formattedAnswers = Object.entries(selectedAnswers).map(([qId, val]) => ({
-        question_id: parseInt(qId),
-        selected_option_id: val.selected_option_id || null,
-        answer_text: val.answer_text || null,
-      }))
-      const res = await submitQuiz({
-        id: targetAttemptId,
-        body: { answers: formattedAnswers },
-      }).unwrap()
+  const handleAutoSubmit = useCallback(
+    async attemptId => {
+      const targetAttemptId = attemptId || activeAttempt?.id
+      if (!targetAttemptId) return
+      setIsSubmitting(true)
+      try {
+        const formattedAnswers = Object.entries(selectedAnswers).map(([qId, val]) => ({
+          question_id: parseInt(qId),
+          selected_option_id: val.selected_option_id || null,
+          answer_text: val.answer_text || null,
+        }))
+        const res = await submitQuiz({
+          id: targetAttemptId,
+          body: { answers: formattedAnswers },
+        }).unwrap()
 
-      if (res.success) {
-        submittedIdsRef.current.add(targetAttemptId)
-        localStorage.removeItem(`quiz_answers_${targetAttemptId}`)
-        localStorage.removeItem(`quiz_marked_${targetAttemptId}`)
-        localStorage.removeItem(`quiz_active_idx_${targetAttemptId}`)
-        setActiveAttempt(null)
-        refetchAttempts()
-        if (quiz?.show_answers) {
-          setSelectedAttemptId(targetAttemptId)
+        if (res.success) {
+          submittedIdsRef.current.add(targetAttemptId)
+          localStorage.removeItem(`quiz_answers_${targetAttemptId}`)
+          localStorage.removeItem(`quiz_marked_${targetAttemptId}`)
+          localStorage.removeItem(`quiz_active_idx_${targetAttemptId}`)
+          setActiveAttempt(null)
+          refetchAttempts()
+          if (quiz?.show_answers) {
+            setSelectedAttemptId(targetAttemptId)
+          }
+          if (res.data?.passing && onCompleted) {
+            onCompleted()
+          }
         }
-        if (res.data?.passing && onCompleted) {
-          onCompleted()
+      } catch (err) {
+        console.error("Failed to auto-submit quiz", err)
+        toast.error(err?.data?.message || err?.message || "Failed to auto-submit quiz")
+        if (err?.status && err.status >= 400 && err.status < 500) {
+          submittedIdsRef.current.add(targetAttemptId)
+          localStorage.removeItem(`quiz_answers_${targetAttemptId}`)
+          localStorage.removeItem(`quiz_marked_${targetAttemptId}`)
+          localStorage.removeItem(`quiz_active_idx_${targetAttemptId}`)
+          setActiveAttempt(null)
+          refetchAttempts()
         }
+      } finally {
+        setIsSubmitting(false)
       }
-    } catch (err) {
-      console.error("Failed to auto-submit quiz", err)
-      toast.error(err?.data?.message || err?.message || "Failed to auto-submit quiz")
-      if (err?.status && err.status >= 400 && err.status < 500) {
-        submittedIdsRef.current.add(targetAttemptId)
-        localStorage.removeItem(`quiz_answers_${targetAttemptId}`)
-        localStorage.removeItem(`quiz_marked_${targetAttemptId}`)
-        localStorage.removeItem(`quiz_active_idx_${targetAttemptId}`)
-        setActiveAttempt(null)
-        refetchAttempts()
-      }
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [activeAttempt, selectedAnswers, submitQuiz, refetchAttempts, onCompleted, quiz])
+    },
+    [activeAttempt, selectedAnswers, submitQuiz, refetchAttempts, onCompleted, quiz]
+  )
 
   // Restore active attempt from database (if in_progress)
   useEffect(() => {
     if (attempts.length > 0 && !activeAttempt) {
-      const inProgressAttempt = attempts.find(a => a.status === "in_progress" && !submittedIdsRef.current.has(a.id))
+      const inProgressAttempt = attempts.find(
+        a => a.status === "in_progress" && !submittedIdsRef.current.has(a.id)
+      )
       if (inProgressAttempt) {
         setActiveAttempt(inProgressAttempt)
         if (quiz?.duration) {
@@ -223,11 +235,9 @@ export default function QuizPlayer({ quizId, onCompleted }) {
   }
 
   // Toggle mark for review
-  const toggleMarkForReview = (questionId) => {
+  const toggleMarkForReview = questionId => {
     setMarkedForReview(prev =>
-      prev.includes(questionId)
-        ? prev.filter(id => id !== questionId)
-        : [...prev, questionId]
+      prev.includes(questionId) ? prev.filter(id => id !== questionId) : [...prev, questionId]
     )
   }
 

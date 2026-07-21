@@ -1,4 +1,4 @@
-import * as yup from "yup";
+import * as yup from "yup"
 
 export const quizValidationSchema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -12,4 +12,4 @@ export const quizValidationSchema = yup.object().shape({
   show_answers: yup.boolean().default(false),
   show_submission_history: yup.boolean().default(false),
   is_active: yup.boolean().default(true),
-});
+})

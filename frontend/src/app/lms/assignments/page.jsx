@@ -1,30 +1,29 @@
-"use client";
-import React, { Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+"use client"
+import React, { Suspense, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 
-import CPageLoader from "@/components/ui/CPageLoader";
-import CDataTable from "@/components/table/CDatatable";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import { renderCell } from "@/utils/tableTools";
-import { ASSIGNMENT_TIPS } from "@/choices/helpTips/assignment";
+import CPageLoader from "@/components/ui/CPageLoader"
+import CDataTable from "@/components/table/CDatatable"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import { renderCell } from "@/utils/tableTools"
+import { ASSIGNMENT_TIPS } from "@/choices/helpTips/assignment"
 
-import { useLazyReadAssignmentsQuery } from "@/features/assignment/assignmentApi";
-import CreateDialog from "./_parts/CreateDialog";
-
+import { useLazyReadAssignmentsQuery } from "@/features/assignment/assignmentApi"
+import CreateDialog from "./_parts/CreateDialog"
 
 function AssignmentList() {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? 1;
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") ?? 1
 
-  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadAssignmentsQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadAssignmentsQuery()
 
   useEffect(() => {
-    trigger({ page });
-  }, [page, trigger]);
+    trigger({ page })
+  }, [page, trigger])
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const columns = [
     {
@@ -45,9 +44,9 @@ function AssignmentList() {
       field: "grade_assignment",
       headerName: "Graded",
       flex: 1,
-      renderCell: (row) => renderCell(row.value ? "Yes" : "No"),
+      renderCell: row => renderCell(row.value ? "Yes" : "No"),
     },
-  ];
+  ]
 
   return (
     <CDataTable
@@ -62,7 +61,7 @@ function AssignmentList() {
       }
       bulkDelete={{ model: "Assignment", invalidateTag: "ASSIGNMENTS" }}
     />
-  );
+  )
 }
 
 export default function AssignmentsPage() {
@@ -74,5 +73,5 @@ export default function AssignmentsPage() {
         </Suspense>
       </CModuleLayout>
     </PermissionGuard>
-  );
+  )
 }

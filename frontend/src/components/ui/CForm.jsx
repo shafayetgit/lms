@@ -1,17 +1,9 @@
-"use client";
-import { motion } from "framer-motion";
-import { Save } from "@mui/icons-material";
-import { Fab } from "@mui/material";
-import {
-  Box,
-  Stack,
-  Paper,
-  useTheme,
-  useMediaQuery,
-  Typography,
-  alpha,
-} from "@mui/material";
-import CButton from "./CButton";
+"use client"
+import { motion } from "framer-motion"
+import { Save } from "@mui/icons-material"
+import { Fab } from "@mui/material"
+import { Box, Stack, Paper, useTheme, useMediaQuery, Typography, alpha } from "@mui/material"
+import CButton from "./CButton"
 
 export default function CForm({
   children,
@@ -24,16 +16,16 @@ export default function CForm({
   sx = {},
   dialog = false,
 }) {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-  const { loading, ...fabProps } = btnProps || {};
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  const { loading, ...fabProps } = btnProps || {}
 
   return (
     <Box
       component="form"
       onSubmit={onSubmit}
       sx={{
-        width: isSmallScreen ? "100%" : dialog ? "100%": width,
+        width: isSmallScreen ? "100%" : dialog ? "100%" : width,
         maxWidth: "100%",
         overflowX: "hidden",
         ...(!dialog && {
@@ -85,11 +77,7 @@ export default function CForm({
           mt={4}
           direction="row"
           justifyContent={
-            alignBtn === "end"
-              ? "flex-end"
-              : alignBtn === "center"
-                ? "center"
-                : "flex-start"
+            alignBtn === "end" ? "flex-end" : alignBtn === "center" ? "center" : "flex-start"
           }
         >
           <CButton
@@ -127,8 +115,7 @@ export default function CForm({
             color="primary"
             disabled={loading}
             sx={{
-              boxShadow: (theme) =>
-                `0 8px 24px ${alpha(theme.palette.primary.main, 0.3)}`,
+              boxShadow: theme => `0 8px 24px ${alpha(theme.palette.primary.main, 0.3)}`,
               width: isSmallScreen ? 56 : 64,
               height: isSmallScreen ? 56 : 64,
             }}
@@ -139,5 +126,5 @@ export default function CForm({
         </motion.div>
       )}
     </Box>
-  );
+  )
 }

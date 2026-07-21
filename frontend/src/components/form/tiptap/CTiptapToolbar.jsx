@@ -195,11 +195,7 @@ export default function CTiptapToolbar({ editor }) {
       <Sep />
 
       {/* Media */}
-      <ToolBtn
-        icon={<ImageIcon fontSize="small" />}
-        title="Insert Image"
-        onClick={insertImage}
-      />
+      <ToolBtn icon={<ImageIcon fontSize="small" />} title="Insert Image" onClick={insertImage} />
       <ToolBtn
         icon={<OndemandVideo fontSize="small" />}
         title="Embed YouTube Video"

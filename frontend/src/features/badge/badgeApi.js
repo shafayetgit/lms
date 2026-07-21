@@ -1,10 +1,10 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const badgeApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // Badges
     createBadge: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/badges/",
         method: "POST",
         body,
@@ -12,7 +12,7 @@ export const badgeApi = api.injectEndpoints({
       invalidatesTags: ["BADGES"],
     }),
     readBadges: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/badges/",
         method: "GET",
         params,
@@ -20,7 +20,7 @@ export const badgeApi = api.injectEndpoints({
       providesTags: ["BADGES"],
     }),
     readBadge: builder.query({
-      query: (id) => `/api/v1/badges/${id}`,
+      query: id => `/api/v1/badges/${id}`,
       providesTags: ["BADGES"],
     }),
     updateBadge: builder.mutation({
@@ -32,7 +32,7 @@ export const badgeApi = api.injectEndpoints({
       invalidatesTags: ["BADGES"],
     }),
     deleteBadge: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/badges/${id}`,
         method: "DELETE",
       }),
@@ -41,7 +41,7 @@ export const badgeApi = api.injectEndpoints({
 
     // Assignments
     assignBadge: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/badges/assign",
         method: "POST",
         body,
@@ -49,7 +49,7 @@ export const badgeApi = api.injectEndpoints({
       invalidatesTags: ["BADGES"],
     }),
     readBadgeAssignments: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/badges/assignments",
         method: "GET",
         params,
@@ -57,14 +57,14 @@ export const badgeApi = api.injectEndpoints({
       providesTags: ["BADGES"],
     }),
     revokeBadge: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/badges/assignments/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["BADGES"],
     }),
   }),
-});
+})
 
 export const {
   useCreateBadgeMutation,
@@ -78,4 +78,4 @@ export const {
   useReadBadgeAssignmentsQuery,
   useLazyReadBadgeAssignmentsQuery,
   useRevokeBadgeMutation,
-} = badgeApi;
+} = badgeApi

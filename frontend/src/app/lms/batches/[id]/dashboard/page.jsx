@@ -25,10 +25,34 @@ export default function BatchDashboardPage() {
   if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Dashboard", href: `/lms/batches/${id}/dashboard`, icon: <Dashboard />, resource: "batch", action: "read" },
-    { label: "Details", href: `/lms/batches/${id}`, icon: <InfoOutlined />, resource: "batch", action: "read" },
-    { label: "Timetable", href: `/lms/batches/${id}/timetable`, icon: <CalendarMonth />, resource: "batch", action: "read" },
-    { label: "Enrollments", href: `/lms/batches/${id}/enrollments`, icon: <Group />, resource: "batch", action: "read" },
+    {
+      label: "Dashboard",
+      href: `/lms/batches/${id}/dashboard`,
+      icon: <Dashboard />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Details",
+      href: `/lms/batches/${id}`,
+      icon: <InfoOutlined />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Timetable",
+      href: `/lms/batches/${id}/timetable`,
+      icon: <CalendarMonth />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/batches/${id}/enrollments`,
+      icon: <Group />,
+      resource: "batch",
+      action: "read",
+    },
   ]
 
   const seatLimitText = batch?.seat_count && batch.seat_count > 0 ? batch.seat_count : "Unlimited"

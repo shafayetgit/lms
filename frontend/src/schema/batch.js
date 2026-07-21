@@ -1,14 +1,16 @@
 import * as Yup from "yup"
 
 export const batchValidationSchema = Yup.object().shape({
-  title: Yup.string().trim().required("Title is required").max(200, "Title must be at most 200 characters"),
+  title: Yup.string()
+    .trim()
+    .required("Title is required")
+    .max(200, "Title must be at most 200 characters"),
   description: Yup.string().trim().nullable(),
   batch_details: Yup.string().nullable(),
   start_date: Yup.date().nullable(),
-  end_date: Yup.date().nullable().min(
-    Yup.ref('start_date'),
-    "End date cannot be before start date"
-  ),
+  end_date: Yup.date()
+    .nullable()
+    .min(Yup.ref("start_date"), "End date cannot be before start date"),
   start_time: Yup.string().nullable(),
   end_time: Yup.string().nullable(),
   timezone: Yup.string().default("UTC"),
@@ -26,7 +28,11 @@ export const batchValidationSchema = Yup.object().shape({
   meta_image: Yup.mixed().nullable(),
   video_link: Yup.string()
     .nullable()
-    .test("is-url", "Must be a valid URL", (val) => !val || val.trim() === "" || /^https?:\/\/.+/.test(val)),
+    .test(
+      "is-url",
+      "Must be a valid URL",
+      val => !val || val.trim() === "" || /^https?:\/\/.+/.test(val)
+    ),
 })
 
 export const timetableValidationSchema = Yup.object().shape({
@@ -37,5 +43,9 @@ export const timetableValidationSchema = Yup.object().shape({
   description: Yup.string().trim().nullable(),
   meeting_link: Yup.string()
     .nullable()
-    .test("is-url", "Must be a valid URL", (val) => !val || val.trim() === "" || /^https?:\/\/.+/.test(val)),
+    .test(
+      "is-url",
+      "Must be a valid URL",
+      val => !val || val.trim() === "" || /^https?:\/\/.+/.test(val)
+    ),
 })

@@ -1,10 +1,4 @@
-import {
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-} from "@mui/material";
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel } from "@mui/material"
 
 export default function CRadioGroup({
   label = "",
@@ -16,10 +10,8 @@ export default function CRadioGroup({
   ...other
 }) {
   return (
-    <FormControl  {...other}>
-      {label && (
-        <FormLabel sx={{ fontWeight: "bold", mb: 1 }}>{label}</FormLabel>
-      )}
+    <FormControl {...other}>
+      {label && <FormLabel sx={{ fontWeight: "bold", mb: 1 }}>{label}</FormLabel>}
       <RadioGroup row={row} value={value} onChange={onChange}>
         {options.map((option, index) => (
           <FormControlLabel
@@ -27,12 +19,12 @@ export default function CRadioGroup({
             value={option.value}
             control={<Radio size="small" />}
             label={option.label}
-            sx={{ ...sx}}
+            sx={{ ...sx }}
           />
         ))}
       </RadioGroup>
     </FormControl>
-  );
+  )
 }
 
 // Example to use:

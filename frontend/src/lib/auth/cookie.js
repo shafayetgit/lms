@@ -1,8 +1,15 @@
 import { removeCookie, setCookie } from "@/utils/shared"
 
-const AUTH_KEYS = ["user", "accessToken", "refreshToken", "profileSetupComplete", "auth", "emailVerified"]
+const AUTH_KEYS = [
+  "user",
+  "accessToken",
+  "refreshToken",
+  "profileSetupComplete",
+  "auth",
+  "emailVerified",
+]
 
-export const setAuthCookie = (payload) => {
+export const setAuthCookie = payload => {
   if (!payload) return
   const data = payload.data || payload
   const { accessToken, access_token, refreshToken, refresh_token, user, emailVerified } = data
@@ -31,4 +38,3 @@ export const removeAuthCookie = () => {
     removeCookie(key)
   })
 }
-

@@ -62,7 +62,14 @@ export default function CourseSidebar({
           {course.title}
         </Typography>
         <Box sx={{ mt: 1.5 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.75 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 0.75,
+            }}
+          >
             <Typography variant="caption" color="text.secondary" fontWeight={600}>
               Course Progress
             </Typography>
@@ -79,13 +86,21 @@ export default function CourseSidebar({
               bgcolor: "action.hover",
               "& .MuiLinearProgress-bar": {
                 borderRadius: 3,
-              }
+              },
             }}
           />
         </Box>
       </Paper>
 
-      <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: 1, overflow: "hidden", mb: 3 }}>
+      <Box
+        sx={{
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 1,
+          overflow: "hidden",
+          mb: 3,
+        }}
+      >
         <Box>
           {sortedChapters.map((chapter, index) => (
             <ChapterAccordionItem
@@ -122,7 +137,13 @@ function HelplineCard() {
       <Typography
         variant="subtitle2"
         fontWeight={800}
-        sx={{ mb: 2, letterSpacing: 0.5, textTransform: "uppercase", color: "text.secondary", fontSize: "0.75rem" }}
+        sx={{
+          mb: 2,
+          letterSpacing: 0.5,
+          textTransform: "uppercase",
+          color: "text.secondary",
+          fontSize: "0.75rem",
+        }}
       >
         Player Helpline & Tips
       </Typography>
@@ -131,17 +152,20 @@ function HelplineCard() {
           {
             icon: <OfflinePin sx={{ color: "success.main", fontSize: 20 }} />,
             primary: "Lesson Completion",
-            secondary: "Complete reading material or video to auto-check. You can manually complete them with the top check button.",
+            secondary:
+              "Complete reading material or video to auto-check. You can manually complete them with the top check button.",
           },
           {
             icon: <HelpOutline sx={{ color: "info.main", fontSize: 20 }} />,
             primary: "Interactive Quizzes",
-            secondary: "Save draft answers automatically. Mark tricky questions for review. Check feedback once submitted.",
+            secondary:
+              "Save draft answers automatically. Mark tricky questions for review. Check feedback once submitted.",
           },
           {
             icon: <Lightbulb sx={{ color: "warning.main", fontSize: 20 }} />,
             primary: "Community Q&A",
-            secondary: "Ask questions, share insights, or start a new thread directly in the Community tab.",
+            secondary:
+              "Ask questions, share insights, or start a new thread directly in the Community tab.",
           },
         ].map((item, index) => (
           <ListItem key={index} sx={{ px: 0, alignItems: "flex-start", mb: index === 2 ? 0 : 2 }}>
@@ -150,7 +174,11 @@ function HelplineCard() {
               primary={item.primary}
               secondary={item.secondary}
               primaryTypographyProps={{ fontWeight: 700, variant: "body2", color: "text.primary" }}
-              secondaryTypographyProps={{ variant: "caption", color: "text.secondary", sx: { mt: 0.25, display: "block", lineHeight: 1.4 } }}
+              secondaryTypographyProps={{
+                variant: "caption",
+                color: "text.secondary",
+                sx: { mt: 0.25, display: "block", lineHeight: 1.4 },
+              }}
               sx={{ m: 0 }}
             />
           </ListItem>

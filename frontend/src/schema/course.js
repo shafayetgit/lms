@@ -4,7 +4,10 @@ export const courseValidationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   overview: Yup.string().nullable(),
   short_introduction: Yup.string().nullable(),
-  instructor_public_ids: Yup.array().of(Yup.string()).min(1, "At least one instructor is required").required("Instructor is required"),
+  instructor_public_ids: Yup.array()
+    .of(Yup.string())
+    .min(1, "At least one instructor is required")
+    .required("Instructor is required"),
   category_public_id: Yup.string().required("Category is required").nullable(),
 
   published: Yup.boolean(),

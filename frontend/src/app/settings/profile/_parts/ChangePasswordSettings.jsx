@@ -1,16 +1,16 @@
-"use client";
-import React, { useState } from "react";
-import { Box, Stack, Alert } from "@mui/material";
-import { toast } from "react-toastify";
-import { useFormik } from "formik";
-import { useChangePasswordMutation } from "@/features/auth/authAPI";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import { changePasswordSchema } from "@/schema/profile";
+"use client"
+import React, { useState } from "react"
+import { Box, Stack, Alert } from "@mui/material"
+import { toast } from "react-toastify"
+import { useFormik } from "formik"
+import { useChangePasswordMutation } from "@/features/auth/authAPI"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import { changePasswordSchema } from "@/schema/profile"
 
 export default function ChangePasswordSettings() {
-  const [changePassword, { isLoading }] = useChangePasswordMutation();
-  const [error, setError] = useState(null);
+  const [changePassword, { isLoading }] = useChangePasswordMutation()
+  const [error, setError] = useState(null)
 
   const formik = useFormik({
     initialValues: {
@@ -20,20 +20,20 @@ export default function ChangePasswordSettings() {
     },
     validationSchema: changePasswordSchema,
     onSubmit: async (values, { resetForm }) => {
-      setError(null);
+      setError(null)
       try {
         await changePassword({
           current_password: values.current_password,
           new_password: values.new_password,
-        }).unwrap();
+        }).unwrap()
 
-        toast.success("Password changed successfully");
-        resetForm();
+        toast.success("Password changed successfully")
+        resetForm()
       } catch (err) {
-        setError(err?.data?.message || err?.data?.detail || "Failed to change password");
+        setError(err?.data?.message || err?.data?.detail || "Failed to change password")
       }
     },
-  });
+  })
 
   return (
     <Box sx={{ maxWidth: 500 }}>
@@ -88,5 +88,5 @@ export default function ChangePasswordSettings() {
         </Stack>
       </CForm>
     </Box>
-  );
+  )
 }

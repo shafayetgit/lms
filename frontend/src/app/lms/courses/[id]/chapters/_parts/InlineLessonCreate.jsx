@@ -1,7 +1,14 @@
 "use client"
 import React, { useState } from "react"
 import { useFormik } from "formik"
-import { Grid, LinearProgress, Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material"
+import {
+  Grid,
+  LinearProgress,
+  Box,
+  Typography,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material"
 import { VideoLibrary, Article, Quiz, Assignment, Add } from "@mui/icons-material"
 
 import CDialog from "@/components/ui/CDialog"
@@ -30,7 +37,12 @@ const TYPE_ICONS = {
 }
 
 // Inline lesson creator — accepts chapterId & courseId as props instead of useParams
-export default function InlineLessonCreate({ chapterId, courseId, onSuccess, triggerType = "button" }) {
+export default function InlineLessonCreate({
+  chapterId,
+  courseId,
+  onSuccess,
+  triggerType = "button",
+}) {
   const [open, setOpen] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
 
@@ -42,10 +54,16 @@ export default function InlineLessonCreate({ chapterId, courseId, onSuccess, tri
   const [update] = useUpdateLessonMutation()
 
   const { data: quizzesData } = useReadQuizzesQuery({ courseId, size: 100 }, { skip: !open })
-  const { data: assignmentsData } = useReadAssignmentsQuery({ course_id: courseId, size: 100 }, { skip: !open })
+  const { data: assignmentsData } = useReadAssignmentsQuery(
+    { course_id: courseId, size: 100 },
+    { skip: !open }
+  )
 
   const quizOptions = (quizzesData?.data ?? []).map(q => ({ label: q.title, value: q.id }))
-  const assignmentOptions = (assignmentsData?.data ?? []).map(a => ({ label: a.title, value: a.id }))
+  const assignmentOptions = (assignmentsData?.data ?? []).map(a => ({
+    label: a.title,
+    value: a.id,
+  }))
 
   const formik = useFormik({
     initialValues: {
@@ -61,8 +79,8 @@ export default function InlineLessonCreate({ chapterId, courseId, onSuccess, tri
       assignment_id: null,
       include_in_preview: false,
       is_active: true,
-      chapter_id: chapterId,   // public_id UUID
-      course_id: courseId,      // public_id UUID
+      chapter_id: chapterId, // public_id UUID
+      course_id: courseId, // public_id UUID
     },
     validationSchema: lessonValidationSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
@@ -87,11 +105,22 @@ export default function InlineLessonCreate({ chapterId, courseId, onSuccess, tri
           toast.info("Video is being uploaded")
           try {
             const uploadedFiles = await uploadMultipleToCloudinary({
-              files: [{ file: video, field: "body", model: "Lesson", model_id: newLessonId, onProgress: p => setUploadProgress(p) }],
+              files: [
+                {
+                  file: video,
+                  field: "body",
+                  model: "Lesson",
+                  model_id: newLessonId,
+                  onProgress: p => setUploadProgress(p),
+                },
+              ],
             })
             if (uploadedFiles?.length > 0) {
               await attach(uploadedFiles).unwrap()
-              await update({ id: newLessonId, body: { body: uploadedFiles[0].meta.secure_url } }).unwrap()
+              await update({
+                id: newLessonId,
+                body: { body: uploadedFiles[0].meta.secure_url },
+              }).unwrap()
               toast.info("Video uploaded and saved")
             }
           } catch (mediaError) {
@@ -124,14 +153,30 @@ export default function InlineLessonCreate({ chapterId, courseId, onSuccess, tri
       title="Add Lesson"
       btnProps={
         triggerType === "icon"
-          ? { tooltip: "Add Lesson", action: "add", iconButton: true, sx: { p: 0.4, color: "text.secondary", "&:hover": { color: "primary.main" } } }
-          : { label: "Add Lesson", action: "add", startIcon: <Add fontSize="small" />, size: "small", variant: "outlined" }
+          ? {
+              tooltip: "Add Lesson",
+              action: "add",
+              iconButton: true,
+              sx: { p: 0.4, color: "text.secondary", "&:hover": { color: "primary.main" } },
+            }
+          : {
+              label: "Add Lesson",
+              action: "add",
+              startIcon: <Add fontSize="small" />,
+              size: "small",
+              variant: "outlined",
+            }
       }
       open={open}
       handleCDialogOpen={handleOpen}
       handleCDialogClose={handleClose}
     >
-      <CForm onSubmit={formik.handleSubmit} width="48rem" btnProps={{ loading: isCreating || isAttaching }} dialog>
+      <CForm
+        onSubmit={formik.handleSubmit}
+        width="48rem"
+        btnProps={{ loading: isCreating || isAttaching }}
+        dialog
+      >
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
@@ -145,7 +190,11 @@ export default function InlineLessonCreate({ chapterId, courseId, onSuccess, tri
               fullWidth
             >
               {LESSON_TYPES.map(t => (
-                <ToggleButton key={t.value} value={t.value} sx={{ gap: 0.75, textTransform: "capitalize" }}>
+                <ToggleButton
+                  key={t.value}
+                  value={t.value}
+                  sx={{ gap: 0.75, textTransform: "capitalize" }}
+                >
                   {TYPE_ICONS[t.value]}
                   {t.label}
                 </ToggleButton>

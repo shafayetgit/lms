@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from "yup"
 
 export const badgeValidationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required").max(150),
@@ -11,9 +11,9 @@ export const badgeValidationSchema = Yup.object().shape({
   field_to_check: Yup.string().nullable().max(100),
   condition: Yup.string().nullable(),
   grant_only_once: Yup.boolean().default(true),
-});
+})
 
 export const badgeAssignmentValidationSchema = Yup.object().shape({
   badge_public_id: Yup.string().required("Badge is required"),
   member_public_id: Yup.string().required("User is required"),
-});
+})

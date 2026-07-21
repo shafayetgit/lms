@@ -1,24 +1,24 @@
-"use client";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import { Grid } from "@mui/material";
-import { toast } from "react-toastify";
+"use client"
+import React, { useState } from "react"
+import { useFormik } from "formik"
+import { Grid } from "@mui/material"
+import { toast } from "react-toastify"
 
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CCheckbox from "@/components/form/CCheckbox";
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CCheckbox from "@/components/form/CCheckbox"
 
-import { useCreateProgramMutation } from "@/features/program/programApi";
-import { programValidationSchema } from "@/schema/program";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import { useCreateProgramMutation } from "@/features/program/programApi"
+import { programValidationSchema } from "@/schema/program"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 export default function CreateDialog() {
-  const [open, setOpen] = useState(false);
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = useState(false)
+  const handleClose = () => setOpen(false)
+  const handleOpen = () => setOpen(true)
 
-  const [create, { isLoading: isCreating }] = useCreateProgramMutation();
+  const [create, { isLoading: isCreating }] = useCreateProgramMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -30,17 +30,17 @@ export default function CreateDialog() {
     validationSchema: programValidationSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
-        await create(values).unwrap();
-        toast.success("Program created successfully");
-        resetForm();
-        handleClose();
+        await create(values).unwrap()
+        toast.success("Program created successfully")
+        resetForm()
+        handleClose()
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Creation failed.");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Creation failed.")
       }
     },
-  });
+  })
 
   return (
     <CDialog
@@ -83,18 +83,18 @@ export default function CreateDialog() {
             <CCheckbox
               label="Enforce Course Order"
               checked={formik.values.enforce_course_order}
-              onChange={(e) => formik.setFieldValue("enforce_course_order", e.target.checked)}
+              onChange={e => formik.setFieldValue("enforce_course_order", e.target.checked)}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CCheckbox
               label="Published"
               checked={formik.values.published}
-              onChange={(e) => formik.setFieldValue("published", e.target.checked)}
+              onChange={e => formik.setFieldValue("published", e.target.checked)}
             />
           </Grid>
         </Grid>
       </CForm>
     </CDialog>
-  );
+  )
 }

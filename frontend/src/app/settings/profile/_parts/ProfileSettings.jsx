@@ -1,39 +1,32 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import {
-  Box,
-  Stack,
-  Avatar,
-  IconButton,
-  Typography,
-  Tooltip,
-} from "@mui/material";
-import { PhotoCamera } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import { useGetMeQuery, useUpdateUserMutation } from "@/features/user/userAPI";
-import { useAttachMutation } from "@/features/media/mediaApi";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import { uploadMultipleToCloudinary } from "@/lib/cloudinary";
-import CPageLoader from "@/components/ui/CPageLoader";
+"use client"
+import React, { useState, useEffect, useRef } from "react"
+import { Box, Stack, Avatar, IconButton, Typography, Tooltip } from "@mui/material"
+import { PhotoCamera } from "@mui/icons-material"
+import { toast } from "react-toastify"
+import { useGetMeQuery, useUpdateUserMutation } from "@/features/user/userAPI"
+import { useAttachMutation } from "@/features/media/mediaApi"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import { uploadMultipleToCloudinary } from "@/lib/cloudinary"
+import CPageLoader from "@/components/ui/CPageLoader"
 
-import { useFormik } from "formik";
-import { profileSchema } from "@/schema/profile";
+import { useFormik } from "formik"
+import { profileSchema } from "@/schema/profile"
 
 const getInitials = (firstName, lastName) => {
-  const f = firstName ? firstName.charAt(0) : "";
-  const l = lastName ? lastName.charAt(0) : "";
-  return `${f}${l}`.toUpperCase() || "U";
-};
+  const f = firstName ? firstName.charAt(0) : ""
+  const l = lastName ? lastName.charAt(0) : ""
+  return `${f}${l}`.toUpperCase() || "U"
+}
 
 export default function ProfileSettings() {
-  const { data: meResponse, isLoading: isFetching, refetch } = useGetMeQuery();
-  const user = meResponse?.data;
-  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
-  const [attach] = useAttachMutation();
+  const { data: meResponse, isLoading: isFetching, refetch } = useGetMeQuery()
+  const user = meResponse?.data
+  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
+  const [attach] = useAttachMutation()
 
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef(null);
+  const [isUploading, setIsUploading] = useState(false)
+  const fileInputRef = useRef(null)
 
   const formik = useFormik({
     initialValues: {
@@ -44,18 +37,18 @@ export default function ProfileSettings() {
     },
     validationSchema: profileSchema,
     enableReinitialize: true,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
-        await updateUser({ publicId: user.public_id, ...values }).unwrap();
-        refetch();
-        toast.success("Profile information updated successfully");
+        await updateUser({ publicId: user.public_id, ...values }).unwrap()
+        refetch()
+        toast.success("Profile information updated successfully")
       } catch (err) {
         toast.error(
           err?.data?.message || err?.data?.detail || "Failed to update profile information"
-        );
+        )
       }
     },
-  });
+  })
 
   useEffect(() => {
     if (user) {
@@ -64,16 +57,16 @@ export default function ProfileSettings() {
         last_name: user.last_name || "",
         phone_number: user.phone_number || "",
         timezone: user.timezone || "UTC",
-      });
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user])
 
-  const handleAvatarChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const handleAvatarChange = async e => {
+    const file = e.target.files[0]
+    if (!file) return
 
-    setIsUploading(true);
+    setIsUploading(true)
     try {
       const uploadedFiles = await uploadMultipleToCloudinary({
         files: [
@@ -84,34 +77,34 @@ export default function ProfileSettings() {
             model_id: user.public_id,
           },
         ],
-      });
+      })
 
       if (uploadedFiles && uploadedFiles.length > 0) {
-        await attach(uploadedFiles).unwrap();
-        refetch();
-        toast.success("Profile photo updated successfully");
+        await attach(uploadedFiles).unwrap()
+        refetch()
+        toast.success("Profile photo updated successfully")
       }
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to upload profile photo");
+      console.error(err)
+      toast.error("Failed to upload profile photo")
     } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      setIsUploading(false)
+      if (fileInputRef.current) fileInputRef.current.value = ""
     }
-  };
+  }
 
   const handleRemoveAvatar = async () => {
     try {
-      await updateUser({ publicId: user.public_id, avatar: "" }).unwrap();
-      refetch();
-      toast.success("Profile photo removed");
+      await updateUser({ publicId: user.public_id, avatar: "" }).unwrap()
+      refetch()
+      toast.success("Profile photo removed")
     } catch (err) {
-      toast.error("Failed to remove profile photo");
+      toast.error("Failed to remove profile photo")
     }
-  };
+  }
 
   if (isFetching) {
-    return <CPageLoader fullPage={false} />;
+    return <CPageLoader fullPage={false} />
   }
 
   return (
@@ -121,7 +114,13 @@ export default function ProfileSettings() {
           <Avatar
             src={user?.avatar || undefined}
             alt={user?.first_name}
-            sx={{ width: 80, height: 80, fontSize: "2rem", bgcolor: "primary.main", color: "primary.contrastText" }}
+            sx={{
+              width: 80,
+              height: 80,
+              fontSize: "2rem",
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+            }}
           >
             {!user?.avatar && getInitials(user?.first_name, user?.last_name)}
           </Avatar>
@@ -239,5 +238,5 @@ export default function ProfileSettings() {
         </Stack>
       </CForm>
     </Box>
-  );
+  )
 }

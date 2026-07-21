@@ -8,7 +8,10 @@ export const LESSON_TYPES = [
 ]
 
 export const lessonValidationSchema = Yup.object().shape({
-  title: Yup.string().trim().required("Title is required").max(220, "Title must be at most 220 characters"),
+  title: Yup.string()
+    .trim()
+    .required("Title is required")
+    .max(220, "Title must be at most 220 characters"),
   lesson_type: Yup.string().oneOf(["video", "content", "quiz", "assignment"]).required(),
   description: Yup.string().trim().nullable(),
   // video

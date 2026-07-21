@@ -4,7 +4,15 @@ import Grid from "@mui/material/Grid"
 import { Box, Typography, Card, CardContent, Stack } from "@mui/material"
 import { toast } from "react-toastify"
 import { useParams } from "next/navigation"
-import { Dashboard, InfoOutlined, CalendarMonth, Group, AccessTime, Event, Link as LinkIcon } from "@mui/icons-material"
+import {
+  Dashboard,
+  InfoOutlined,
+  CalendarMonth,
+  Group,
+  AccessTime,
+  Event,
+  Link as LinkIcon,
+} from "@mui/icons-material"
 
 import CButton from "@/components/ui/CButton"
 import CPageLoader from "@/components/ui/CPageLoader"
@@ -12,10 +20,7 @@ import CModuleLayout from "@/components/ui/CModuleLayout"
 import PermissionGuard from "@/components/ui/PermissionGuard"
 import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
 import { BATCH_TIPS } from "@/choices/helpTips/batch"
-import {
-  useReadBatchQuery,
-  useDeleteBatchTimetableMutation,
-} from "@/features/batch/batchAPI"
+import { useReadBatchQuery, useDeleteBatchTimetableMutation } from "@/features/batch/batchAPI"
 
 import CreateDialog from "./_parts/CreateDialog"
 import UpdateDialog from "./_parts/UpdateDialog"
@@ -31,7 +36,7 @@ export default function BatchTimetablePage() {
 
   const [deleteTimetable] = useDeleteBatchTimetableMutation()
 
-  const handleDelete = async (timetablePublicId) => {
+  const handleDelete = async timetablePublicId => {
     try {
       await deleteTimetable({
         batchId: batch?.public_id || id,
@@ -46,10 +51,34 @@ export default function BatchTimetablePage() {
   if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Dashboard", href: `/lms/batches/${id}/dashboard`, icon: <Dashboard />, resource: "batch", action: "read" },
-    { label: "Details", href: `/lms/batches/${id}`, icon: <InfoOutlined />, resource: "batch", action: "read" },
-    { label: "Timetable", href: `/lms/batches/${id}/timetable`, icon: <CalendarMonth />, resource: "batch", action: "read" },
-    { label: "Enrollments", href: `/lms/batches/${id}/enrollments`, icon: <Group />, resource: "batch", action: "read" },
+    {
+      label: "Dashboard",
+      href: `/lms/batches/${id}/dashboard`,
+      icon: <Dashboard />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Details",
+      href: `/lms/batches/${id}`,
+      icon: <InfoOutlined />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Timetable",
+      href: `/lms/batches/${id}/timetable`,
+      icon: <CalendarMonth />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/batches/${id}/enrollments`,
+      icon: <Group />,
+      resource: "batch",
+      action: "read",
+    },
   ]
 
   return (
@@ -71,7 +100,7 @@ export default function BatchTimetablePage() {
           {/* Timetable Session Cards List */}
           <Grid container spacing={3} columns={{ xs: 4, sm: 8, md: 12 }}>
             {batch?.timetables && batch.timetables.length > 0 ? (
-              batch.timetables.map((item) => (
+              batch.timetables.map(item => (
                 <Grid key={item.public_id || item.id} size={{ xs: 12, sm: 6, md: 4 }}>
                   <Card
                     variant="outlined"
@@ -88,7 +117,14 @@ export default function BatchTimetablePage() {
                     }}
                   >
                     <CardContent sx={{ p: 2.5, pb: 1 }}>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                          mb: 1,
+                        }}
+                      >
                         <Typography variant="h6" fontWeight="bold" sx={{ pr: 1 }}>
                           {item.topic}
                         </Typography>
@@ -107,12 +143,28 @@ export default function BatchTimetablePage() {
                         </Stack>
                       </Box>
 
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "text.secondary", mb: 0.5 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "text.secondary",
+                          mb: 0.5,
+                        }}
+                      >
                         <Event fontSize="small" color="action" />
                         <Typography variant="body2">{item.date}</Typography>
                       </Box>
 
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1, color: "text.secondary", mb: 1.5 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          color: "text.secondary",
+                          mb: 1.5,
+                        }}
+                      >
                         <AccessTime fontSize="small" color="action" />
                         <Typography variant="body2">
                           {item.start_time} - {item.end_time}
@@ -120,7 +172,11 @@ export default function BatchTimetablePage() {
                       </Box>
 
                       {item.description && (
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 1.5, lineHeight: 1.5 }}>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mt: 1, mb: 1.5, lineHeight: 1.5 }}
+                        >
                           {item.description}
                         </Typography>
                       )}
@@ -135,7 +191,11 @@ export default function BatchTimetablePage() {
                             rel="noopener noreferrer"
                             variant="caption"
                             color="primary.main"
-                            sx={{ fontWeight: 600, textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                            sx={{
+                              fontWeight: 600,
+                              textDecoration: "none",
+                              "&:hover": { textDecoration: "underline" },
+                            }}
                           >
                             Join Meeting
                           </Typography>

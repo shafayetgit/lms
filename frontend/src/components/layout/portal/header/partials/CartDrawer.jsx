@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
+import React, { useState } from "react"
 import {
   Drawer,
   Box,
@@ -11,46 +11,46 @@ import {
   Button,
   Avatar,
   Badge,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { useDispatch, useSelector } from "react-redux";
+} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined"
+import AddIcon from "@mui/icons-material/Add"
+import RemoveIcon from "@mui/icons-material/Remove"
+import { useDispatch, useSelector } from "react-redux"
 // import {
 //   increaseQuantity,
 //   decreaseQuantity,
 //   removeFromCart,
 //   clearCart,
 // } from "@/app/store/cart/_features/cartSlice"
-import CButton from "@/components/ui/CButton";
-import Link from "next/link";
+import CButton from "@/components/ui/CButton"
+import Link from "next/link"
 
 export default function CartDrawer() {
-  const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL;
-  const [open, setOpen] = useState(false);
+  const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL
+  const [open, setOpen] = useState(false)
   // const dispatch = useDispatch()
 
   // const { cart_items, subtotal, total_quantity } = useSelector(
   //   state => state.store_cart_slice
   // )
-  const cart_items = [];
-  const subtotal = 0;
-  const total_quantity = 0;
-  const toggleDrawer = (state) => () => setOpen(state);
+  const cart_items = []
+  const subtotal = 0
+  const total_quantity = 0
+  const toggleDrawer = state => () => setOpen(state)
 
   const handleQuantityChange = (vendorId, id, delta) => {
-    if (delta === 1) dispatch(increaseQuantity({ vendor_id: vendorId, id }));
-    else dispatch(decreaseQuantity({ vendor_id: vendorId, id }));
-  };
+    if (delta === 1) dispatch(increaseQuantity({ vendor_id: vendorId, id }))
+    else dispatch(decreaseQuantity({ vendor_id: vendorId, id }))
+  }
 
   const handleRemoveItem = (vendorId, id) => {
-    dispatch(removeFromCart({ vendor_id: vendorId, id }));
-  };
+    dispatch(removeFromCart({ vendor_id: vendorId, id }))
+  }
 
   const handleClearCart = () => {
-    dispatch(clearCart());
-  };
+    dispatch(clearCart())
+  }
 
   const renderCartItems = () => {
     if (!cart_items || cart_items.length === 0) {
@@ -64,9 +64,7 @@ export default function CartDrawer() {
           textAlign="center"
           sx={{ color: "text.secondary", opacity: 0.8 }}
         >
-          <ShoppingCartOutlinedIcon
-            sx={{ fontSize: 64, mb: 1, color: "text.disabled" }}
-          />
+          <ShoppingCartOutlinedIcon sx={{ fontSize: 64, mb: 1, color: "text.disabled" }} />
           <Typography variant="h6" fontWeight="medium">
             Your cart is empty
           </Typography>
@@ -74,7 +72,7 @@ export default function CartDrawer() {
             Add some items to get started
           </Typography>
         </Box>
-      );
+      )
     }
 
     return cart_items.map(({ vendor, items }, p_index) => (
@@ -83,8 +81,7 @@ export default function CartDrawer() {
           Vendor: {vendor.store_name}
         </Typography>
         <Typography variant="caption" fontWeight="bold" mb={1}>
-          Shipping Method: {vendor.shipping_method.name} | Charge: $
-          {vendor.shipping_method.price}
+          Shipping Method: {vendor.shipping_method.name} | Charge: ${vendor.shipping_method.price}
         </Typography>
         {items.map((item, index) => (
           <Box
@@ -140,8 +137,8 @@ export default function CartDrawer() {
           </Box>
         ))}
       </Box>
-    ));
-  };
+    ))
+  }
 
   return (
     <>
@@ -149,7 +146,7 @@ export default function CartDrawer() {
         onClick={toggleDrawer(true)}
         sx={{
           transition: "all 0.2s ease",
-          "&:hover": { transform: "translateY(-2px)", color: "secondary.main" }
+          "&:hover": { transform: "translateY(-2px)", color: "secondary.main" },
         }}
       >
         <Badge
@@ -158,20 +155,15 @@ export default function CartDrawer() {
           sx={{
             "& .MuiBadge-badge": {
               fontWeight: 800,
-              fontSize: "0.7rem"
-            }
+              fontSize: "0.7rem",
+            },
           }}
         >
           <ShoppingCartOutlinedIcon sx={{ fontSize: 26 }} />
         </Badge>
       </IconButton>
 
-      <Drawer
-        anchor="right"
-        open={open}
-        onClose={toggleDrawer(false)}
-        sx={{ zIndex: 1300 }}
-      >
+      <Drawer anchor="right" open={open} onClose={toggleDrawer(false)} sx={{ zIndex: 1300 }}>
         <Box
           sx={{
             width: { xs: "100vw", sm: 400 },
@@ -196,9 +188,7 @@ export default function CartDrawer() {
             </IconButton>
           </Box>
 
-          <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>
-            {renderCartItems()}
-          </Box>
+          <Box sx={{ flex: 1, overflowY: "auto", p: 2 }}>{renderCartItems()}</Box>
 
           {total_quantity > 0 && (
             <>
@@ -249,5 +239,5 @@ export default function CartDrawer() {
         </Box>
       </Drawer>
     </>
-  );
+  )
 }

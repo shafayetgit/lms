@@ -1,45 +1,44 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import Logout from "@mui/icons-material/Logout";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Box from "@mui/material/Box"
+import Avatar from "@mui/material/Avatar"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import Divider from "@mui/material/Divider"
+import Logout from "@mui/icons-material/Logout"
 
-import CButton from "@/components/ui/CButton";
-import { useSignoutMutation } from "@/app/accounts/auth/_features/authApiSlice";
-import { toast } from "react-toastify";
-import { setIsAuth } from "@/redux/features/appSlice";
-import { useDispatch } from "react-redux";
+import CButton from "@/components/ui/CButton"
+import { useSignoutMutation } from "@/app/accounts/auth/_features/authApiSlice"
+import { toast } from "react-toastify"
+import { setIsAuth } from "@/redux/features/appSlice"
+import { useDispatch } from "react-redux"
 
 export default function AccountMenu() {
-  const [signOut] = useSignoutMutation();
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [signOut] = useSignoutMutation()
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+    setAnchorEl(null)
+  }
 
   const handleSignOut = async () => {
-      try {
-        const response = await signOut().unwrap()
-        dispatch(setIsAuth(false))
-        toast.success(response || "Login Successful")
-      } catch (error) {
-        toast.error(error?.data || "Login failed")
-      }
+    try {
+      const response = await signOut().unwrap()
+      dispatch(setIsAuth(false))
+      toast.success(response || "Login Successful")
+    } catch (error) {
+      toast.error(error?.data || "Login failed")
+    }
   }
 
   return (
@@ -98,9 +97,7 @@ export default function AccountMenu() {
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem 
-        onClick={handleSignOut}
-        >
+        <MenuItem onClick={handleSignOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -108,5 +105,5 @@ export default function AccountMenu() {
         </MenuItem>
       </Menu>
     </Box>
-  );
+  )
 }

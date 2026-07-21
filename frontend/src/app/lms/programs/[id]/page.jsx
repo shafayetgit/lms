@@ -1,40 +1,37 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import Grid from "@mui/material/Grid";
-import { InfoOutlined, SchoolOutlined, AssignmentTurnedInOutlined } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import Grid from "@mui/material/Grid"
+import { InfoOutlined, SchoolOutlined, AssignmentTurnedInOutlined } from "@mui/icons-material"
+import { toast } from "react-toastify"
+import { useParams, useRouter } from "next/navigation"
 
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CCheckbox from "@/components/form/CCheckbox";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import { PROGRAM_TIPS } from "@/choices/helpTips/program";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CCheckbox from "@/components/form/CCheckbox"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import { PROGRAM_TIPS } from "@/choices/helpTips/program"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
 
-import {
-  useReadProgramQuery,
-  useUpdateProgramMutation,
-} from "@/features/program/programApi";
-import { programValidationSchema } from "@/schema/program";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import usePermissions from "@/hooks/usePermissions";
+import { useReadProgramQuery, useUpdateProgramMutation } from "@/features/program/programApi"
+import { programValidationSchema } from "@/schema/program"
+import { mapApiErrorsToFormik } from "@/utils/shared"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import usePermissions from "@/hooks/usePermissions"
 
 export default function ProgramDetailPage() {
-  const router = useRouter();
-  const { id } = useParams();
+  const router = useRouter()
+  const { id } = useParams()
 
   const { data: { data: programDataObj } = {}, isLoading } = useReadProgramQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
-  useSetBreadcrumb(programDataObj?.title);
+  useSetBreadcrumb(programDataObj?.title)
 
-  const [update, { isLoading: isUpdating }] = useUpdateProgramMutation();
+  const [update, { isLoading: isUpdating }] = useUpdateProgramMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -47,32 +44,54 @@ export default function ProgramDetailPage() {
     enableReinitialize: true,
     onSubmit: async (values, { setErrors }) => {
       try {
-        await update({ id, body: values }).unwrap();
-        toast.success("Program updated successfully");
-        router.push("/lms/programs");
+        await update({ id, body: values }).unwrap()
+        toast.success("Program updated successfully")
+        router.push("/lms/programs")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed")
       }
     },
-  });
+  })
 
-  const { can, isSuperAdmin } = usePermissions();
-  const canUpdate = isSuperAdmin || can("program", "update");
+  const { can, isSuperAdmin } = usePermissions()
+  const canUpdate = isSuperAdmin || can("program", "update")
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/programs/${id}`, icon: <InfoOutlined />, resource: "program", action: "read" },
-    { label: "Courses", href: `/lms/programs/${id}/courses`, icon: <SchoolOutlined />, resource: "program", action: "read" },
-    { label: "Members", href: `/lms/programs/${id}/members`, icon: <AssignmentTurnedInOutlined />, resource: "program", action: "read" },
-  ];
+    {
+      label: "Details",
+      href: `/lms/programs/${id}`,
+      icon: <InfoOutlined />,
+      resource: "program",
+      action: "read",
+    },
+    {
+      label: "Courses",
+      href: `/lms/programs/${id}/courses`,
+      icon: <SchoolOutlined />,
+      resource: "program",
+      action: "read",
+    },
+    {
+      label: "Members",
+      href: `/lms/programs/${id}/members`,
+      icon: <AssignmentTurnedInOutlined />,
+      resource: "program",
+      action: "read",
+    },
+  ]
 
   return (
     <PermissionGuard resource="program" action="read">
       <CModuleLayout navigators={navigators} helpTips={PROGRAM_TIPS.details}>
-        <CForm onSubmit={canUpdate ? formik.handleSubmit : undefined} width="100%" btnProps={{ loading: isUpdating }}>
+        <CForm
+          onSubmit={canUpdate ? formik.handleSubmit : undefined}
+          width="100%"
+          btnProps={{ loading: isUpdating }}
+        >
           <Grid container spacing={2}>
             <Grid size={{ xs: 12 }}>
               <CTextField
@@ -103,19 +122,19 @@ export default function ProgramDetailPage() {
               <CCheckbox
                 label="Enforce Course Order"
                 checked={formik.values.enforce_course_order}
-                onChange={(e) => formik.setFieldValue("enforce_course_order", e.target.checked)}
+                onChange={e => formik.setFieldValue("enforce_course_order", e.target.checked)}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
               <CCheckbox
                 label="Published"
                 checked={formik.values.published}
-                onChange={(e) => formik.setFieldValue("published", e.target.checked)}
+                onChange={e => formik.setFieldValue("published", e.target.checked)}
               />
             </Grid>
           </Grid>
         </CForm>
       </CModuleLayout>
     </PermissionGuard>
-  );
+  )
 }

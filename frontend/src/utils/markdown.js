@@ -16,10 +16,7 @@ export function parseMarkdown(markdown) {
     let line = lines[i].trim()
 
     // Escape HTML tags to prevent XSS
-    line = line
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
+    line = line.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 
     // Handle code blocks (```)
     if (line.startsWith("```")) {
@@ -63,13 +60,25 @@ export function parseMarkdown(markdown) {
     line = line.replace(/_(.*?)_/g, "<em>$1</em>")
 
     // Links ([text](url))
-    line = line.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    line = line.replace(
+      /\[([^\]]+)\]\(([^)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+    )
 
     // Headings
     if (/^#{1,6}\s+(.*)$/.test(line)) {
-      if (inList) { result.push("</ul>"); inList = false }
-      if (inOrderedList) { result.push("</ol>"); inOrderedList = false }
-      if (inBlockquote) { result.push("</blockquote>"); inBlockquote = false }
+      if (inList) {
+        result.push("</ul>")
+        inList = false
+      }
+      if (inOrderedList) {
+        result.push("</ol>")
+        inOrderedList = false
+      }
+      if (inBlockquote) {
+        result.push("</blockquote>")
+        inBlockquote = false
+      }
 
       const level = line.match(/^(#{1,6})/)[1].length
       const text = line.replace(/^#{1,6}\s+/, "")
@@ -79,9 +88,18 @@ export function parseMarkdown(markdown) {
 
     // Unordered lists (- or * or +)
     if (/^[-*+]\s+(.*)$/.test(line)) {
-      if (inOrderedList) { result.push("</ol>"); inOrderedList = false }
-      if (inBlockquote) { result.push("</blockquote>"); inBlockquote = false }
-      if (!inList) { result.push("<ul>"); inList = true }
+      if (inOrderedList) {
+        result.push("</ol>")
+        inOrderedList = false
+      }
+      if (inBlockquote) {
+        result.push("</blockquote>")
+        inBlockquote = false
+      }
+      if (!inList) {
+        result.push("<ul>")
+        inList = true
+      }
 
       const text = line.replace(/^[-*+]\s+/, "")
       result.push(`<li>${text}</li>`)
@@ -90,9 +108,18 @@ export function parseMarkdown(markdown) {
 
     // Ordered lists (1. or 2.)
     if (/^\d+\.\s+(.*)$/.test(line)) {
-      if (inList) { result.push("</ul>"); inList = false }
-      if (inBlockquote) { result.push("</blockquote>"); inBlockquote = false }
-      if (!inOrderedList) { result.push("<ol>"); inOrderedList = true }
+      if (inList) {
+        result.push("</ul>")
+        inList = false
+      }
+      if (inBlockquote) {
+        result.push("</blockquote>")
+        inBlockquote = false
+      }
+      if (!inOrderedList) {
+        result.push("<ol>")
+        inOrderedList = true
+      }
 
       const text = line.replace(/^\d+\.\s+/, "")
       result.push(`<li>${text}</li>`)
@@ -101,9 +128,18 @@ export function parseMarkdown(markdown) {
 
     // Blockquotes (> text)
     if (/^&gt;\s+(.*)$/.test(line) || /^>\s+(.*)$/.test(line)) {
-      if (inList) { result.push("</ul>"); inList = false }
-      if (inOrderedList) { result.push("</ol>"); inOrderedList = false }
-      if (!inBlockquote) { result.push("<blockquote>"); inBlockquote = true }
+      if (inList) {
+        result.push("</ul>")
+        inList = false
+      }
+      if (inOrderedList) {
+        result.push("</ol>")
+        inOrderedList = false
+      }
+      if (!inBlockquote) {
+        result.push("<blockquote>")
+        inBlockquote = true
+      }
 
       const text = line.replace(/^&gt;\s+/, "").replace(/^>\s+/, "")
       result.push(text)
@@ -112,14 +148,26 @@ export function parseMarkdown(markdown) {
 
     // Empty line - do NOT close lists immediately in case of spacing, but close blockquotes
     if (!line) {
-      if (inBlockquote) { result.push("</blockquote>"); inBlockquote = false }
+      if (inBlockquote) {
+        result.push("</blockquote>")
+        inBlockquote = false
+      }
       continue
     }
 
     // Normal paragraph line - close any open lists or blockquotes
-    if (inList) { result.push("</ul>"); inList = false }
-    if (inOrderedList) { result.push("</ol>"); inOrderedList = false }
-    if (inBlockquote) { result.push("</blockquote>"); inBlockquote = false }
+    if (inList) {
+      result.push("</ul>")
+      inList = false
+    }
+    if (inOrderedList) {
+      result.push("</ol>")
+      inOrderedList = false
+    }
+    if (inBlockquote) {
+      result.push("</blockquote>")
+      inBlockquote = false
+    }
 
     result.push(`<p>${line}</p>`)
   }
@@ -157,13 +205,14 @@ export function renderMarkdownOrHTML(content) {
   }
 
   // Check if the resulting text has markdown patterns (headings, lists, bold/italic, etc.)
-  const hasMarkdown = /^#{1,6}\s/m.test(cleanText) ||
-                      /^[-*+]\s/m.test(cleanText) ||
-                      /^\d+\.\s/m.test(cleanText) ||
-                      /\*\*.*?\*\*/.test(cleanText) ||
-                      /\*.*?\*/.test(cleanText) ||
-                      /^\*\*+#{1,6}\s/m.test(cleanText) ||
-                      /^\*+#{1,6}\s/m.test(cleanText)
+  const hasMarkdown =
+    /^#{1,6}\s/m.test(cleanText) ||
+    /^[-*+]\s/m.test(cleanText) ||
+    /^\d+\.\s/m.test(cleanText) ||
+    /\*\*.*?\*\*/.test(cleanText) ||
+    /\*.*?\*/.test(cleanText) ||
+    /^\*\*+#{1,6}\s/m.test(cleanText) ||
+    /^\*+#{1,6}\s/m.test(cleanText)
 
   if (hasMarkdown) {
     return parseMarkdown(cleanText)

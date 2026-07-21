@@ -1,5 +1,5 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import baseQuery from "@/features/baseQuery";
+import { createApi } from "@reduxjs/toolkit/query/react"
+import baseQuery from "@/features/baseQuery"
 
 export const api = createApi({
   reducerPath: "api",
@@ -49,6 +49,6 @@ export const api = createApi({
     "STATISTICS",
   ],
   endpoints: () => ({}),
-});
+})
 
-export default api;
+export default api

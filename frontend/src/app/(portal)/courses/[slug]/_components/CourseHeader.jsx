@@ -1,6 +1,6 @@
-import React from "react";
-import { Typography, Stack, Rating } from "@mui/material";
-import { MenuBook, FolderOpen } from "@mui/icons-material";
+import React from "react"
+import { Typography, Stack, Rating } from "@mui/material"
+import { MenuBook, FolderOpen } from "@mui/icons-material"
 
 export default function CourseHeader({ course }) {
   return (
@@ -31,17 +31,31 @@ export default function CourseHeader({ course }) {
       >
         <Stack direction="row" alignItems="center" spacing={1}>
           <Rating value={Number(course.avg_rating || 0)} readOnly size="small" precision={0.1} />
-          <Typography variant="body2" sx={{ fontWeight: 700, fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 700, fontSize: { xs: "0.8rem", sm: "0.875rem" } }}
+          >
             {Number(course.avg_rating || 0).toFixed(1)}
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontSize: { xs: "0.8rem", sm: "0.875rem" } }}
+          >
             ({course.total_reviews || 0} reviews)
           </Typography>
         </Stack>
 
         <Stack direction="row" alignItems="center" spacing={1}>
           <MenuBook sx={{ fontSize: 18, color: "text.secondary" }} />
-          <Typography variant="body2" sx={{ fontWeight: 600, color: "text.secondary", fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 600,
+              color: "text.secondary",
+              fontSize: { xs: "0.8rem", sm: "0.875rem" },
+            }}
+          >
             {course.total_lessons || 0} Lessons
           </Typography>
         </Stack>
@@ -49,12 +63,19 @@ export default function CourseHeader({ course }) {
         {course.category && (
           <Stack direction="row" alignItems="center" spacing={1}>
             <FolderOpen sx={{ fontSize: 18, color: "text.secondary" }} />
-            <Typography variant="body2" sx={{ fontWeight: 600, color: "text.secondary", fontSize: { xs: "0.8rem", sm: "0.875rem" } }}>
+            <Typography
+              variant="body2"
+              sx={{
+                fontWeight: 600,
+                color: "text.secondary",
+                fontSize: { xs: "0.8rem", sm: "0.875rem" },
+              }}
+            >
               {course.category.name}
             </Typography>
           </Stack>
         )}
       </Stack>
     </>
-  );
+  )
 }

@@ -4,7 +4,14 @@ import React from "react"
 import { Box } from "@mui/material"
 import CVideoPlayer from "@/components/ui/CVideoPlayer"
 
-export default function VideoPlayer({ activeLesson, isCinemaMode, settings = {}, onVideoEnded, startTime = 0, onTimeUpdate }) {
+export default function VideoPlayer({
+  activeLesson,
+  isCinemaMode,
+  settings = {},
+  onVideoEnded,
+  startTime = 0,
+  onTimeUpdate,
+}) {
   if (activeLesson?.lesson_type !== "video") return null
 
   const videoUrl = activeLesson.body || activeLesson.youtube

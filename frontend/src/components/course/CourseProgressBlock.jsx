@@ -18,9 +18,10 @@ export default function CourseProgressBlock({
   handleRequestCertificate,
   isRequesting = false,
 }) {
-  const completedCount = flatLessonsList.length > 0
-    ? flatLessonsList.filter((l) => completedLessons[l.id]).length
-    : Object.keys(completedLessons).length
+  const completedCount =
+    flatLessonsList.length > 0
+      ? flatLessonsList.filter(l => completedLessons[l.id]).length
+      : Object.keys(completedLessons).length
   const totalLessonsCount = flatLessonsList.length || totalLessons || 0
 
   return (
@@ -79,7 +80,7 @@ export default function CourseProgressBlock({
                   borderRadius: 1,
                   textTransform: "none",
                   boxShadow: "none",
-                  "&:hover": { boxShadow: "none" }
+                  "&:hover": { boxShadow: "none" },
                 }}
               >
                 View Certificate

@@ -59,17 +59,30 @@ export default function Page() {
   if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/courses/${courseId}/chapters/${chapterId}`, icon: <InfoOutlined />, resource: "chapter", action: "read" },
-    { label: "Lessons", href: `/lms/courses/${courseId}/chapters/${chapterId}/lessons`, icon: <AutoStoriesOutlined />, resource: "lesson", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/courses/${courseId}/chapters/${chapterId}`,
+      icon: <InfoOutlined />,
+      resource: "chapter",
+      action: "read",
+    },
+    {
+      label: "Lessons",
+      href: `/lms/courses/${courseId}/chapters/${chapterId}/lessons`,
+      icon: <AutoStoriesOutlined />,
+      resource: "lesson",
+      action: "read",
+    },
   ]
 
   return (
     <PermissionGuard resource="chapter" action="read">
-      <CModuleLayout 
-        navigators={navigators}
-        helpTips={CHAPTER_TIPS.details}
-      >
-        <CForm onSubmit={canUpdate ? formik.handleSubmit : undefined} width="45rem" btnProps={{ loading: isUpdating }}>
+      <CModuleLayout navigators={navigators} helpTips={CHAPTER_TIPS.details}>
+        <CForm
+          onSubmit={canUpdate ? formik.handleSubmit : undefined}
+          width="45rem"
+          btnProps={{ loading: isUpdating }}
+        >
           <Grid container spacing={2}>
             {/* Title */}
             <Grid size={{ xs: 12 }}>

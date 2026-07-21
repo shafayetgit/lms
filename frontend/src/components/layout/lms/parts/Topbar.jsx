@@ -1,48 +1,38 @@
-"use client";
+"use client"
 
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Box,
-  Tooltip,
-  Badge,
-  useTheme,
-  alpha,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  NotificationsNoneOutlined,
-} from "@mui/icons-material";
-import AccountMenu from "@/components/ui/AccountMenu";
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { LOGO, LOGO_HEIGHT, LOGO_WIDTH } from "@/lib/constants/app";
-import Image from "next/image";
-import { useReadSettingsQuery } from "@/features/settings/settingsApi";
-import { useReadNotificationsQuery } from "@/features/notification/notificationApi";
-import TopbarBreadcrumbs from "./TopbarBreadcrumbs";
-import NotificationDrawer from "./NotificationDrawer";
+import { AppBar, Toolbar, IconButton, Box, Tooltip, Badge, useTheme, alpha } from "@mui/material"
+import { Menu as MenuIcon, NotificationsNoneOutlined } from "@mui/icons-material"
+import AccountMenu from "@/components/ui/AccountMenu"
+import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { LOGO, LOGO_HEIGHT, LOGO_WIDTH } from "@/lib/constants/app"
+import Image from "next/image"
+import { useReadSettingsQuery } from "@/features/settings/settingsApi"
+import { useReadNotificationsQuery } from "@/features/notification/notificationApi"
+import TopbarBreadcrumbs from "./TopbarBreadcrumbs"
+import NotificationDrawer from "./NotificationDrawer"
 
 export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
-  const theme = useTheme();
-  const pathname = usePathname();
-  const [notifOpen, setNotifOpen] = useState(false);
+  const theme = useTheme()
+  const pathname = usePathname()
+  const [notifOpen, setNotifOpen] = useState(false)
 
-  const { data: settingsData } = useReadSettingsQuery();
-  const isDarkMode = theme.palette.mode === "dark";
+  const { data: settingsData } = useReadSettingsQuery()
+  const isDarkMode = theme.palette.mode === "dark"
   const dynamicLogo = isDarkMode
     ? settingsData?.site_logo_light || settingsData?.site_logo_dark
-    : settingsData?.site_logo_dark || settingsData?.site_logo_light;
+    : settingsData?.site_logo_dark || settingsData?.site_logo_light
 
   const logoSrc = dynamicLogo
-    ? (dynamicLogo.startsWith("http") ? dynamicLogo : `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/${dynamicLogo.replace(/^\//, "")}`)
-    : LOGO;
+    ? dynamicLogo.startsWith("http")
+      ? dynamicLogo
+      : `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/${dynamicLogo.replace(/^\//, "")}`
+    : LOGO
 
-  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 });
-  const notifications = notificationsData?.data || [];
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 })
+  const notifications = notificationsData?.data || []
+  const unreadCount = notifications.filter(n => !n.read).length
 
   return (
     <>
@@ -69,9 +59,10 @@ export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
         }}
       >
         <Toolbar
+          disableGutters
           sx={{
             justifyContent: "space-between",
-            px: { xs: 2, md: 4 },
+            px: { xs: 1, md: 2 },
             minHeight: { xs: 56, md: 64 },
             height: { xs: 56, md: 64 },
             boxSizing: "border-box",
@@ -80,18 +71,18 @@ export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
             {/* Show Logo only on Mobile, acts as drawer toggle */}
             <Box sx={{ display: { xs: "block", md: "none" } }}>
-              <Box 
+              <Box
                 onClick={handleDrawerToggle}
-                sx={{ 
-                  display: "flex", 
-                  alignItems: "center", 
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
                   cursor: "pointer",
                   p: 0.5,
                   ml: -0.5,
                   borderRadius: 1,
                   "&:hover": {
-                    bgcolor: "action.hover"
-                  }
+                    bgcolor: "action.hover",
+                  },
                 }}
                 role="button"
                 aria-label="open drawer"
@@ -129,8 +120,8 @@ export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
                 size="small"
                 sx={{
                   color: "text.secondary",
-                  border: '1px solid',
-                  borderColor: 'divider',
+                  border: "1px solid",
+                  borderColor: "divider",
                   borderRadius: "50%",
                   p: 0.75,
                   transition: "all 0.2s ease",
@@ -142,14 +133,14 @@ export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
                   },
                 }}
               >
-                <Badge 
-                  badgeContent={unreadCount} 
+                <Badge
+                  badgeContent={unreadCount}
                   color="error"
                   sx={{
                     "& .MuiBadge-badge": {
                       fontWeight: 800,
                       fontSize: "0.7rem",
-                    }
+                    },
                   }}
                 >
                   <NotificationsNoneOutlined sx={{ fontSize: 22 }} />
@@ -174,10 +165,7 @@ export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
       </AppBar>
 
       {/* Notification Drawer */}
-      <NotificationDrawer
-        open={notifOpen}
-        onClose={() => setNotifOpen(false)}
-      />
+      <NotificationDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />
     </>
-  );
+  )
 }

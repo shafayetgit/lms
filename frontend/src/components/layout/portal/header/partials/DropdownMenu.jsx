@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Menu, MenuItem, Button } from "@mui/material";
-import { ArrowDropDown, KeyboardArrowDown } from "@mui/icons-material";
-import CButton from "@/components/ui/CButton";
+import { useState } from "react"
+import { Menu, MenuItem, Button } from "@mui/material"
+import { ArrowDropDown, KeyboardArrowDown } from "@mui/icons-material"
+import CButton from "@/components/ui/CButton"
 
 const NestedMenu = ({ items, anchorEl, handleClose, open }) => {
   return (
@@ -10,55 +10,57 @@ const NestedMenu = ({ items, anchorEl, handleClose, open }) => {
         <MenuItemWithChildren key={index} item={item} handleClose={handleClose} />
       ))}
     </Menu>
-  );
-};
+  )
+}
 
 const MenuItemWithChildren = ({ item, handleClose }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
 
-  const handleOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleOpen = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleCloseSubmenu = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <>
-      <MenuItem onClick={item.children ? handleOpen : handleClose}>
-        {item.label}
-      </MenuItem>
+      <MenuItem onClick={item.children ? handleOpen : handleClose}>{item.label}</MenuItem>
       {item.children && (
-        <NestedMenu items={item.children} anchorEl={anchorEl} handleClose={handleCloseSubmenu} open={open} />
+        <NestedMenu
+          items={item.children}
+          anchorEl={anchorEl}
+          handleClose={handleCloseSubmenu}
+          open={open}
+        />
       )}
     </>
-  );
-};
+  )
+}
 
 const ReusableMenu = ({ menuItems, buttonLabel = "Menu" }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <>
       <CButton label={buttonLabel} onClick={handleClick} endIcon={<KeyboardArrowDown />} />
       <NestedMenu items={menuItems} anchorEl={anchorEl} handleClose={handleClose} open={open} />
     </>
-  );
-};
+  )
+}
 
-export default ReusableMenu;
-
+export default ReusableMenu
 
 // example:
 // const menuItems = [

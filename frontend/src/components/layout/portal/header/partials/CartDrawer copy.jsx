@@ -78,7 +78,7 @@ export default function CartDrawer() {
       <Drawer anchor="right" open={open} onClose={toggleDrawer(false)} sx={{ zIndex: 1300 }}>
         <Box
           sx={{
-            width: {xs: "100vw", sm: 400},
+            width: { xs: "100vw", sm: 400 },
             display: "flex",
             flexDirection: "column",
             height: "100%",

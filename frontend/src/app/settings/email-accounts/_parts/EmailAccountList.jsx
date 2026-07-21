@@ -1,5 +1,5 @@
-"use client";
-import React from "react";
+"use client"
+import React from "react"
 import {
   Box,
   Typography,
@@ -10,25 +10,25 @@ import {
   IconButton,
   Tooltip,
   useTheme,
-} from "@mui/material";
-import Image from "next/image";
+} from "@mui/material"
+import Image from "next/image"
 import {
   MailOutline as MailOutlineIcon,
   CheckCircleOutline,
   RadioButtonUnchecked,
   EditOutlined,
-} from "@mui/icons-material";
-import CButton from "@/components/ui/CButton";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CDelete from "@/components/actions/CDelete";
-import { useListEmailAccountsQuery } from "@/features/shared/emailAccountAPI";
-import { SERVICE_COLORS, SERVICE_INITIALS, SERVICE_IMAGES } from "../emailConfig";
+} from "@mui/icons-material"
+import CButton from "@/components/ui/CButton"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CDelete from "@/components/actions/CDelete"
+import { useListEmailAccountsQuery } from "@/features/shared/emailAccountAPI"
+import { SERVICE_COLORS, SERVICE_INITIALS, SERVICE_IMAGES } from "../emailConfig"
 
 export default function EmailAccountList({ onAddOpen, onEditOpen }) {
-  const theme = useTheme();
-  const { data, isLoading } = useListEmailAccountsQuery({});
+  const theme = useTheme()
+  const { data, isLoading } = useListEmailAccountsQuery({})
 
-  const accounts = data?.data || [];
+  const accounts = data?.data || []
 
   return (
     <Box>
@@ -74,10 +74,10 @@ export default function EmailAccountList({ onAddOpen, onEditOpen }) {
       {/* Account list */}
       {!isLoading && accounts.length > 0 && (
         <Stack spacing={2}>
-          {accounts.map((account) => {
-            const color = SERVICE_COLORS[account.service] || "#607D8B";
-            const initials = SERVICE_INITIALS[account.service] || "?";
-            const sImage = SERVICE_IMAGES[account.service];
+          {accounts.map(account => {
+            const color = SERVICE_COLORS[account.service] || "#607D8B"
+            const initials = SERVICE_INITIALS[account.service] || "?"
+            const sImage = SERVICE_IMAGES[account.service]
 
             return (
               <Paper
@@ -159,16 +159,16 @@ export default function EmailAccountList({ onAddOpen, onEditOpen }) {
                     <Tooltip title="Edit">
                       <IconButton
                         size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEditOpen(account);
+                        onClick={e => {
+                          e.stopPropagation()
+                          onEditOpen(account)
                         }}
                         sx={{ color: "text.secondary" }}
                       >
                         <EditOutlined fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                    <Box onClick={(e) => e.stopPropagation()}>
+                    <Box onClick={e => e.stopPropagation()}>
                       <CDelete
                         size="small"
                         sx={{ color: "error.light" }}
@@ -193,12 +193,12 @@ export default function EmailAccountList({ onAddOpen, onEditOpen }) {
                   <FeatureFlag label="Default Outgoing" active={account.default_outgoing} />
                 </Box>
               </Paper>
-            );
+            )
           })}
         </Stack>
       )}
     </Box>
-  );
+  )
 }
 
 function FeatureFlag({ label, active }) {
@@ -217,5 +217,5 @@ function FeatureFlag({ label, active }) {
         {label}
       </Typography>
     </Box>
-  );
+  )
 }

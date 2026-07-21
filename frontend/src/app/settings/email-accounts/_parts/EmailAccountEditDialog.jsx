@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useState } from "react"
 import {
   Box,
   Typography,
@@ -9,15 +9,15 @@ import {
   Divider,
   FormControlLabel,
   Checkbox,
-} from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { InfoOutlined } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CSectionLabel from "@/components/ui/CSectionLabel";
-import Image from "next/image";
+} from "@mui/material"
+import Grid from "@mui/material/Grid"
+import { InfoOutlined } from "@mui/icons-material"
+import { toast } from "react-toastify"
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CSectionLabel from "@/components/ui/CSectionLabel"
+import Image from "next/image"
 import {
   EMAIL_SERVICES,
   SERVICE_COLORS,
@@ -25,16 +25,16 @@ import {
   SERVICE_IMAGES,
   PROVIDER_FIELDS,
   INCOMING_OUTGOING_FIELDS,
-} from "../emailConfig";
-import { useUpdateEmailAccountMutation } from "@/features/shared/emailAccountAPI";
+} from "../emailConfig"
+import { useUpdateEmailAccountMutation } from "@/features/shared/emailAccountAPI"
 
 export default function EmailAccountEditDialog({ open, handleCDialogClose, account }) {
-  const service = EMAIL_SERVICES.find((s) => s.name === account.service) || {
+  const service = EMAIL_SERVICES.find(s => s.name === account.service) || {
     name: account.service,
     label: account.service,
     info: "Configuring email accounts allows system messaging and notifications.",
     link: null,
-  };
+  }
 
   const [values, setValues] = useState({
     email_account_name: account.email_account_name || "",
@@ -44,43 +44,43 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
     enable_outgoing: account.enable_outgoing || false,
     default_incoming: account.default_incoming || false,
     default_outgoing: account.default_outgoing || false,
-  });
-  const [errors, setErrors] = useState({});
-  const [updateAccount, { isLoading }] = useUpdateEmailAccountMutation();
+  })
+  const [errors, setErrors] = useState({})
+  const [updateAccount, { isLoading }] = useUpdateEmailAccountMutation()
 
-  const color = SERVICE_COLORS[account.service] || "#607D8B";
-  const initials = SERVICE_INITIALS[account.service] || "?";
-  const sImage = SERVICE_IMAGES[account.service];
+  const color = SERVICE_COLORS[account.service] || "#607D8B"
+  const initials = SERVICE_INITIALS[account.service] || "?"
+  const sImage = SERVICE_IMAGES[account.service]
 
   function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setValues((v) => ({ ...v, [name]: type === "checkbox" ? checked : value }));
-    if (errors[name]) setErrors((e) => ({ ...e, [name]: undefined }));
+    const { name, value, type, checked } = e.target
+    setValues(v => ({ ...v, [name]: type === "checkbox" ? checked : value }))
+    if (errors[name]) setErrors(e => ({ ...e, [name]: undefined }))
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    const errs = {};
-    if (!values.email_account_name?.trim()) errs.email_account_name = "Account name is required";
-    if (!values.email_id?.trim()) errs.email_id = "Email ID is required";
+    e.preventDefault()
+    const errs = {}
+    if (!values.email_account_name?.trim()) errs.email_account_name = "Account name is required"
+    if (!values.email_id?.trim()) errs.email_id = "Email ID is required"
     if (Object.keys(errs).length) {
-      setErrors(errs);
-      return;
+      setErrors(errs)
+      return
     }
 
     // Only send non-empty fields — skip password if blank (keep current)
-    const payload = {};
+    const payload = {}
     Object.entries(values).forEach(([k, v]) => {
-      if (k === "password" && !v) return;
-      if (v !== "" && v !== null && v !== undefined) payload[k] = v;
-    });
+      if (k === "password" && !v) return
+      if (v !== "" && v !== null && v !== undefined) payload[k] = v
+    })
 
     try {
-      await updateAccount({ id: account.public_id, body: payload }).unwrap();
-      toast.success("Email account updated successfully");
-      handleCDialogClose();
+      await updateAccount({ id: account.public_id, body: payload }).unwrap()
+      toast.success("Email account updated successfully")
+      handleCDialogClose()
     } catch (err) {
-      toast.error(err?.data?.message || err?.data?.detail || "Failed to update email account");
+      toast.error(err?.data?.message || err?.data?.detail || "Failed to update email account")
     }
   }
 
@@ -169,7 +169,7 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
             {/* Credentials */}
             <CSectionLabel label="Credentials" />
             <Stack spacing={2.5}>
-              {PROVIDER_FIELDS.map((field) => (
+              {PROVIDER_FIELDS.map(field => (
                 <CTextField
                   key={field.name}
                   label={field.label}
@@ -198,10 +198,8 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Stack spacing={3}>
                   {/* Incoming column */}
-                  {INCOMING_OUTGOING_FIELDS.filter(
-                    (f) => f.name.includes("incoming")
-                  ).map((field) => {
-                    if (field.condition && !field.condition(values)) return null;
+                  {INCOMING_OUTGOING_FIELDS.filter(f => f.name.includes("incoming")).map(field => {
+                    if (field.condition && !field.condition(values)) return null
                     return (
                       <Box key={field.name}>
                         <FormControlLabel
@@ -230,7 +228,7 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
                           {field.description}
                         </Typography>
                       </Box>
-                    );
+                    )
                   })}
                 </Stack>
               </Grid>
@@ -238,8 +236,8 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
               <Grid size={{ xs: 12, sm: 6 }}>
                 <Stack spacing={3}>
                   {/* Outgoing column */}
-                  {INCOMING_OUTGOING_FIELDS.filter((f) => f.name.includes("outgoing")).map((field) => {
-                    if (field.condition && !field.condition(values)) return null;
+                  {INCOMING_OUTGOING_FIELDS.filter(f => f.name.includes("outgoing")).map(field => {
+                    if (field.condition && !field.condition(values)) return null
                     return (
                       <Box key={field.name}>
                         <FormControlLabel
@@ -268,7 +266,7 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
                           {field.description}
                         </Typography>
                       </Box>
-                    );
+                    )
                   })}
                 </Stack>
               </Grid>
@@ -277,5 +275,5 @@ export default function EmailAccountEditDialog({ open, handleCDialogClose, accou
         </CForm>
       </Box>
     </CDialog>
-  );
+  )
 }

@@ -10,11 +10,19 @@ export default function QuizInstructions({
   handleStart,
   setSelectedAttemptId,
 }) {
-  const completedAttempts = attempts.filter((a) => a.status !== "in_progress")
+  const completedAttempts = attempts.filter(a => a.status !== "in_progress")
 
   return (
-    <Card sx={{ mt: 2, border: "1px solid", borderColor: "divider", borderRadius: 1, boxShadow: 2 }}>
-      <CardContent sx={{ p: 3 }}>
+    <Card
+      sx={{
+        mt: 2,
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 1,
+        boxShadow: "none",
+      }}
+    >
+      <CardContent sx={{ p: { xs: 2, sm: 3 }, "&:last-child": { pb: { xs: 2, sm: 3 } } }}>
         <Typography variant="h6" fontWeight="800">
           {quiz.title}
         </Typography>
@@ -26,7 +34,7 @@ export default function QuizInstructions({
         <Box
           sx={{
             mb: 3,
-            p: 2.5,
+            p: { xs: 2, sm: 2.5 },
             borderRadius: 1,
             bgcolor: "action.hover",
             borderLeft: "4px solid",
@@ -47,17 +55,22 @@ export default function QuizInstructions({
             }}
           >
             <li>Please read the following instructions carefully before starting the quiz.</li>
-            <li>Do not refresh the page or close this window. Your progress will be saved but the timer continues.</li>
+            <li>
+              Do not refresh the page or close this window. Your progress will be saved but the
+              timer continues.
+            </li>
             <li>
               This quiz consists of <strong>{questions.length}</strong> questions.
             </li>
             {quiz.duration > 0 && (
               <li>
-                Time Limit: <strong>{quiz.duration} minutes</strong>. The quiz will auto-submit when the timer expires.
+                Time Limit: <strong>{quiz.duration} minutes</strong>. The quiz will auto-submit when
+                the timer expires.
               </li>
             )}
             <li>
-              Passing Requirement: You must score at least <strong>{quiz.passing_percentage}%</strong>.
+              Passing Requirement: You must score at least{" "}
+              <strong>{quiz.passing_percentage}%</strong>.
             </li>
             {quiz.max_attempts > 0 && (
               <li>
@@ -66,7 +79,8 @@ export default function QuizInstructions({
             )}
             {quiz.enable_negative_marking && (
               <Box component="li" sx={{ color: "error.main", fontWeight: "600" }}>
-                Negative Marking: <strong>{quiz.marks_to_cut}</strong> marks will be deducted for each incorrect answer.
+                Negative Marking: <strong>{quiz.marks_to_cut}</strong> marks will be deducted for
+                each incorrect answer.
               </Box>
             )}
           </Box>
@@ -82,7 +96,7 @@ export default function QuizInstructions({
               attempts={attempts}
               passingPercentage={quiz.passing_percentage}
               showAnswers={quiz.show_answers}
-              onReview={(attemptId) => setSelectedAttemptId(attemptId)}
+              onReview={attemptId => setSelectedAttemptId(attemptId)}
             />
           </Box>
         )}
@@ -97,7 +111,12 @@ export default function QuizInstructions({
         />
 
         {quiz.max_attempts > 0 && completedAttempts.length >= quiz.max_attempts && (
-          <Typography variant="caption" color="error.main" display="block" sx={{ mt: 1.5, fontWeight: "600" }}>
+          <Typography
+            variant="caption"
+            color="error.main"
+            display="block"
+            sx={{ mt: 1.5, fontWeight: "600" }}
+          >
             You have reached the maximum number of attempts for this quiz.
           </Typography>
         )}

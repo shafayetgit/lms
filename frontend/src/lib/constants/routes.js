@@ -1,4 +1,4 @@
-const ADMIN_PREFIX = "/lms";
+const ADMIN_PREFIX = "/lms"
 export const ROUTES = {
   portal: {
     signIn: { path: "/auth/sign-in", label: "SignIn" },
@@ -21,7 +21,10 @@ export const ROUTES = {
     ebook: { path: `${ADMIN_PREFIX}/ebooks`, label: "E-Books" },
     assignment: { path: `${ADMIN_PREFIX}/assignments`, label: "Assignments" },
     evaluation: { path: `${ADMIN_PREFIX}/evaluations`, label: "Evaluation Sessions" },
-    certificateRequest: { path: `${ADMIN_PREFIX}/certificate-requests`, label: "Certificate Requests" },
+    certificateRequest: {
+      path: `${ADMIN_PREFIX}/certificate-requests`,
+      label: "Certificate Requests",
+    },
     certificate: { path: `${ADMIN_PREFIX}/certificates`, label: "Certificates" },
     badge: { path: `${ADMIN_PREFIX}/badges`, label: "Badges" },
     enrollment: { path: `${ADMIN_PREFIX}/enrollments`, label: "Enrollments" },
@@ -30,7 +33,4 @@ export const ROUTES = {
     coupon: { path: "/settings/coupons", label: "Coupons" },
     settings: { path: `${ADMIN_PREFIX}/settings`, label: "Settings" },
   },
-};
-
-
-
+}

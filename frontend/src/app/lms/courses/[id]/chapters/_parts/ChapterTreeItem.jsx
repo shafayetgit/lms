@@ -42,7 +42,10 @@ import { CSS } from "@dnd-kit/utilities"
 import Link from "next/link"
 import { toast } from "react-toastify"
 
-import { useReadLessonsByChapterQuery, useReorderLessonsMutation } from "@/features/lesson/lessonAPI"
+import {
+  useReadLessonsByChapterQuery,
+  useReorderLessonsMutation,
+} from "@/features/lesson/lessonAPI"
 import InlineLessonCreate from "./InlineLessonCreate"
 import EditChapterDialog from "./EditChapterDialog"
 import EditLessonDialog from "./EditLessonDialog"
@@ -56,15 +59,20 @@ const LESSON_TYPE_CONFIG = {
   assignment: { icon: Assignment, color: "#10b981", label: "Assignment", initial: "A" },
 }
 
-
 // Sortable lesson row with tree connector lines
 function LessonTreeItem({ lesson, index, isLast, courseId, chapterId, chapterIndex }) {
   const theme = useTheme()
   const [editOpen, setEditOpen] = useState(false)
   const [hovered, setHovered] = useState(false)
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: lesson.id })
-  const style = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.45 : 1 }
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: lesson.id,
+  })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.45 : 1,
+  }
   const cfg = LESSON_TYPE_CONFIG[lesson.lesson_type] || LESSON_TYPE_CONFIG.content
 
   return (
@@ -131,7 +139,16 @@ function LessonTreeItem({ lesson, index, isLast, courseId, chapterId, chapterInd
           </Tooltip>
 
           {/* Lesson serial number */}
-          <Typography sx={{ fontSize: "0.78rem", fontWeight: 700, color: "text.secondary", minWidth: 24, textAlign: "left", flexShrink: 0 }}>
+          <Typography
+            sx={{
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              color: "text.secondary",
+              minWidth: 24,
+              textAlign: "left",
+              flexShrink: 0,
+            }}
+          >
             {`${chapterIndex + 1}.${index + 1}`}
           </Typography>
 
@@ -147,18 +164,32 @@ function LessonTreeItem({ lesson, index, isLast, courseId, chapterId, chapterInd
             >
               {lesson.title}
             </Typography>
-            <Typography sx={{ fontSize: "0.72rem", color: cfg.color, fontWeight: 500, flexShrink: 0 }}>
+            <Typography
+              sx={{ fontSize: "0.72rem", color: cfg.color, fontWeight: 500, flexShrink: 0 }}
+            >
               {cfg.label}
             </Typography>
           </Box>
 
           {/* Actions — visible on hover */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.25, ml: 1.5, opacity: hovered ? 1 : 0, transition: "opacity 0.15s" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.25,
+              ml: 1.5,
+              opacity: hovered ? 1 : 0,
+              transition: "opacity 0.15s",
+            }}
+          >
             <PermissionGuard resource="lesson" action="update" silent>
               <Tooltip title="Edit">
                 <IconButton
                   size="small"
-                  onClick={e => { e.preventDefault(); setEditOpen(true) }}
+                  onClick={e => {
+                    e.preventDefault()
+                    setEditOpen(true)
+                  }}
                   sx={{ p: 0.4, color: "text.secondary", "&:hover": { color: "primary.main" } }}
                 >
                   <EditOutlined sx={{ fontSize: 13 }} />
@@ -167,7 +198,10 @@ function LessonTreeItem({ lesson, index, isLast, courseId, chapterId, chapterInd
             </PermissionGuard>
             <PermissionGuard resource="lesson" action="delete" silent>
               <CDelete
-                values={{ model: "Lesson", filters: [{ field: "public_id", operator: "in", value: [lesson.public_id] }] }}
+                values={{
+                  model: "Lesson",
+                  filters: [{ field: "public_id", operator: "in", value: [lesson.public_id] }],
+                }}
                 invalidateTag="LESSONS"
                 label="Delete Lesson"
               />
@@ -191,7 +225,9 @@ function LessonsEmptyState() {
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 1, pl: "64px", py: 1.5, opacity: 0.4 }}>
       <AutoStoriesOutlined sx={{ fontSize: 16, color: "text.disabled" }} />
-      <Typography variant="caption" color="text.disabled">No lessons yet</Typography>
+      <Typography variant="caption" color="text.disabled">
+        No lessons yet
+      </Typography>
     </Box>
   )
 }
@@ -200,7 +236,9 @@ function LessonsEmptyState() {
 function LessonDndList({ lessons, chapterId, courseId, chapterIndex }) {
   const [reorderLessons] = useReorderLessonsMutation()
   const [orderedLessons, setOrderedLessons] = useState(lessons)
-  useEffect(() => { setOrderedLessons(lessons) }, [lessons])
+  useEffect(() => {
+    setOrderedLessons(lessons)
+  }, [lessons])
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -216,7 +254,10 @@ function LessonDndList({ lessons, chapterId, courseId, chapterIndex }) {
     const reordered = arrayMove(orderedLessons, oldIndex, newIndex)
     setOrderedLessons(reordered)
     try {
-      await reorderLessons({ chapterId, body: reordered.map((l, i) => ({ id: l.id, order_index: i })) }).unwrap()
+      await reorderLessons({
+        chapterId,
+        body: reordered.map((l, i) => ({ id: l.id, order_index: i })),
+      }).unwrap()
     } catch (err) {
       setOrderedLessons(lessons)
       toast.error(err?.data?.message || "Failed to reorder lessons")
@@ -242,14 +283,27 @@ function LessonDndList({ lessons, chapterId, courseId, chapterIndex }) {
   )
 }
 
-export default function ChapterTreeItem({ chapter, index, courseId, isDragging, attributes, listeners, setNodeRef, style, expandAllToggle, collapseAllToggle }) {
+export default function ChapterTreeItem({
+  chapter,
+  index,
+  courseId,
+  isDragging,
+  attributes,
+  listeners,
+  setNodeRef,
+  style,
+  expandAllToggle,
+  collapseAllToggle,
+}) {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
   const hasSetInitialExpand = useRef(false)
   const [chapterEditOpen, setChapterEditOpen] = useState(false)
   const [headerHovered, setHeaderHovered] = useState(false)
 
-  const { data: { data: lessons = [] } = {}, isLoading } = useReadLessonsByChapterQuery({ chapterId: chapter.public_id })
+  const { data: { data: lessons = [] } = {}, isLoading } = useReadLessonsByChapterQuery({
+    chapterId: chapter.public_id,
+  })
   const sortedLessons = [...lessons].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
 
   useEffect(() => {
@@ -303,7 +357,14 @@ export default function ChapterTreeItem({ chapter, index, courseId, isDragging, 
               size="small"
               {...attributes}
               {...listeners}
-              sx={{ cursor: isDragging ? "grabbing" : "grab", touchAction: "none", p: 0.3, color: "text.disabled", "&:hover": { color: "text.secondary" }, flexShrink: 0 }}
+              sx={{
+                cursor: isDragging ? "grabbing" : "grab",
+                touchAction: "none",
+                p: 0.3,
+                color: "text.disabled",
+                "&:hover": { color: "text.secondary" },
+                flexShrink: 0,
+              }}
             >
               <DragIndicator sx={{ fontSize: 15 }} />
             </IconButton>
@@ -319,25 +380,47 @@ export default function ChapterTreeItem({ chapter, index, courseId, isDragging, 
           </IconButton>
 
           {/* Chapter serial number */}
-          <Typography sx={{ fontSize: "0.8rem", fontWeight: 800, color: "primary.main", minWidth: 20, textAlign: "left", flexShrink: 0 }}>
+          <Typography
+            sx={{
+              fontSize: "0.8rem",
+              fontWeight: 800,
+              color: "primary.main",
+              minWidth: 20,
+              textAlign: "left",
+              flexShrink: 0,
+            }}
+          >
             {`${index + 1}.`}
           </Typography>
 
           {/* Chapter info */}
-          <Box sx={{ minWidth: 0, display: "flex", alignItems: "baseline", gap: 1, flexWrap: "wrap" }}>
+          <Box
+            sx={{ minWidth: 0, display: "flex", alignItems: "baseline", gap: 1, flexWrap: "wrap" }}
+          >
             <Typography
               sx={{ fontWeight: 700, fontSize: "0.875rem", color: "text.primary", lineHeight: 1.3 }}
             >
               {chapter.title}
             </Typography>
             <Typography sx={{ fontSize: "0.75rem", color: "text.disabled", fontWeight: 400 }}>
-              {isLoading ? "…" : `${sortedLessons.length} ${sortedLessons.length === 1 ? "lesson" : "lessons"}`}
+              {isLoading
+                ? "…"
+                : `${sortedLessons.length} ${sortedLessons.length === 1 ? "lesson" : "lessons"}`}
               {!chapter.is_active && " · Inactive"}
             </Typography>
           </Box>
 
           {/* Add / Edit / Delete — hover-only */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.25, ml: 1.5, opacity: headerHovered ? 1 : 0, transition: "opacity 0.15s" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.25,
+              ml: 1.5,
+              opacity: headerHovered ? 1 : 0,
+              transition: "opacity 0.15s",
+            }}
+          >
             <PermissionGuard resource="lesson" action="create" silent>
               <InlineLessonCreate
                 chapterId={chapter.public_id}
@@ -360,7 +443,10 @@ export default function ChapterTreeItem({ chapter, index, courseId, isDragging, 
 
             <PermissionGuard resource="chapter" action="delete" silent>
               <CDelete
-                values={{ model: "Chapter", filters: [{ field: "public_id", operator: "in", value: [chapter.public_id] }] }}
+                values={{
+                  model: "Chapter",
+                  filters: [{ field: "public_id", operator: "in", value: [chapter.public_id] }],
+                }}
                 invalidateTag="CHAPTERS"
                 label="Delete Chapter"
               />
@@ -378,21 +464,42 @@ export default function ChapterTreeItem({ chapter, index, courseId, isDragging, 
             ) : sortedLessons.length === 0 ? (
               <LessonsEmptyState />
             ) : (
-              <LessonDndList lessons={sortedLessons} chapterId={chapter.public_id} courseId={courseId} chapterIndex={index} />
+              <LessonDndList
+                lessons={sortedLessons}
+                chapterId={chapter.public_id}
+                courseId={courseId}
+                chapterIndex={index}
+              />
             )}
           </Box>
         </Collapse>
       </Box>
 
-      <EditChapterDialog chapter={chapter} open={chapterEditOpen} onClose={() => setChapterEditOpen(false)} />
+      <EditChapterDialog
+        chapter={chapter}
+        open={chapterEditOpen}
+        onClose={() => setChapterEditOpen(false)}
+      />
     </div>
   )
 }
 
 // Wrapper that wires up DnD sortable for chapter-level drag
-export function SortableChapterItem({ chapter, index, courseId, expandAllToggle, collapseAllToggle }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: chapter.id })
-  const style = { transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 10 : "auto" }
+export function SortableChapterItem({
+  chapter,
+  index,
+  courseId,
+  expandAllToggle,
+  collapseAllToggle,
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: chapter.id,
+  })
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : "auto",
+  }
 
   return (
     <ChapterTreeItem

@@ -1,11 +1,11 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
-const PREFIX = "api/v1/email-accounts";
+const PREFIX = "api/v1/email-accounts"
 
 const emailAccountAPI = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     listEmailAccounts: builder.query({
-      query: (params) => ({ url: `${PREFIX}/`, params }),
+      query: params => ({ url: `${PREFIX}/`, params }),
       providesTags: ["EMAIL_ACCOUNTS"],
     }),
 
@@ -15,7 +15,7 @@ const emailAccountAPI = api.injectEndpoints({
     }),
 
     createEmailAccount: builder.mutation({
-      query: (body) => ({ url: `${PREFIX}/`, method: "POST", body }),
+      query: body => ({ url: `${PREFIX}/`, method: "POST", body }),
       invalidatesTags: ["EMAIL_ACCOUNTS"],
     }),
 
@@ -42,7 +42,7 @@ const emailAccountAPI = api.injectEndpoints({
     }),
   }),
   overrideExisting: false,
-});
+})
 
 export const {
   useListEmailAccountsQuery,
@@ -51,6 +51,6 @@ export const {
   useGetEmailAccountQuery,
   useUpdateEmailAccountMutation,
   useDeleteEmailAccountMutation,
-} = emailAccountAPI;
+} = emailAccountAPI
 
-export default emailAccountAPI;
+export default emailAccountAPI

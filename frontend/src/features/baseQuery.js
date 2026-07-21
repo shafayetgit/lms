@@ -38,7 +38,9 @@ const baseQuery = async (args, api, extraOptions) => {
   const refreshToken = getCookie("refreshToken")
   if (!refreshToken) {
     removeAuthCookie()
-    if (typeof window !== "undefined") window.location.href = "/auth/sign-in"
+    if (typeof window !== "undefined" && window.location.pathname !== "/auth/sign-in") {
+      window.location.href = "/auth/sign-in"
+    }
     return result
   }
 
@@ -57,7 +59,9 @@ const baseQuery = async (args, api, extraOptions) => {
     result = await rawBaseQuery(args, api, extraOptions)
   } else {
     removeAuthCookie()
-    if (typeof window !== "undefined") window.location.href = "/auth/sign-in"
+    if (typeof window !== "undefined" && window.location.pathname !== "/auth/sign-in") {
+      window.location.href = "/auth/sign-in"
+    }
   }
 
   return result

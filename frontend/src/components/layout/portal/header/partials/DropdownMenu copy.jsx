@@ -1,41 +1,41 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import React, { useState } from "react"
+import Button from "@mui/material/Button"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 
 const DropdownMenu = ({ label, menuItems }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [subMenuAnchor, setSubMenuAnchor] = useState(null);
-  const [subSubMenuAnchor, setSubSubMenuAnchor] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [subMenuAnchor, setSubMenuAnchor] = useState(null)
+  const [subSubMenuAnchor, setSubSubMenuAnchor] = useState(null)
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleMenuOpen = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSubMenuAnchor(null);
-    setSubSubMenuAnchor(null);
-  };
+    setAnchorEl(null)
+    setSubMenuAnchor(null)
+    setSubSubMenuAnchor(null)
+  }
 
-  const handleSubMenuOpen = (event) => {
-    setSubMenuAnchor(event.currentTarget);
-  };
+  const handleSubMenuOpen = event => {
+    setSubMenuAnchor(event.currentTarget)
+  }
 
   const handleSubMenuClose = () => {
-    setSubMenuAnchor(null);
-  };
+    setSubMenuAnchor(null)
+  }
 
-  const handleSubSubMenuOpen = (event) => {
-    setSubSubMenuAnchor(event.currentTarget);
-  };
+  const handleSubSubMenuOpen = event => {
+    setSubSubMenuAnchor(event.currentTarget)
+  }
 
   const handleSubSubMenuClose = () => {
-    setSubSubMenuAnchor(null);
-  };
+    setSubSubMenuAnchor(null)
+  }
 
-  const renderMenuItems = (items) => {
+  const renderMenuItems = items => {
     return items.map((item, index) => {
       if (item.subMenu) {
         return (
@@ -49,7 +49,7 @@ const DropdownMenu = ({ label, menuItems }) => {
               {renderMenuItems(item.subMenu)}
             </Menu>
           </MenuItem>
-        );
+        )
       } else if (item.subSubMenu) {
         return (
           <MenuItem key={index} onClick={handleSubSubMenuOpen}>
@@ -62,35 +62,27 @@ const DropdownMenu = ({ label, menuItems }) => {
               {renderMenuItems(item.subSubMenu)}
             </Menu>
           </MenuItem>
-        );
+        )
       } else {
         return (
           <MenuItem key={index} onClick={handleMenuClose}>
             {item.label}
           </MenuItem>
-        );
+        )
       }
-    });
-  };
+    })
+  }
 
   return (
     <>
-      <Button
-        color="inherit"
-        endIcon={<ArrowDropDownIcon />}
-        onClick={handleMenuOpen}
-      >
+      <Button color="inherit" endIcon={<ArrowDropDownIcon />} onClick={handleMenuOpen}>
         {label}
       </Button>
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         {renderMenuItems(menuItems)}
       </Menu>
     </>
-  );
-};
+  )
+}
 
-export default DropdownMenu;
+export default DropdownMenu

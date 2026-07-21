@@ -1,6 +1,6 @@
-"use client";
+"use client"
 
-import React from "react";
+import React from "react"
 import {
   Drawer,
   Box,
@@ -11,45 +11,42 @@ import {
   Divider,
   useTheme,
   alpha,
-} from "@mui/material";
-import { 
-  Close as CloseIcon,
-  NotificationsNoneOutlined
-} from "@mui/icons-material";
-import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+} from "@mui/material"
+import { Close as CloseIcon, NotificationsNoneOutlined } from "@mui/icons-material"
+import { useRouter } from "next/navigation"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
 import {
   useReadNotificationsQuery,
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
-} from "@/features/notification/notificationApi";
+} from "@/features/notification/notificationApi"
 
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime)
 
 export default function NotificationDrawer({ open, onClose }) {
-  const theme = useTheme();
-  const router = useRouter();
+  const theme = useTheme()
+  const router = useRouter()
 
-  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 });
-  const [markAsRead] = useMarkNotificationAsReadMutation();
-  const [markAllAsRead] = useMarkAllNotificationsAsReadMutation();
+  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 })
+  const [markAsRead] = useMarkNotificationAsReadMutation()
+  const [markAllAsRead] = useMarkAllNotificationsAsReadMutation()
 
-  const notifications = notificationsData?.data || [];
+  const notifications = notificationsData?.data || []
 
-  const handleNotificationClick = async (notif) => {
+  const handleNotificationClick = async notif => {
     if (!notif.read) {
-      await markAsRead(notif.public_id);
+      await markAsRead(notif.public_id)
     }
     if (notif.link) {
-      router.push(notif.link);
+      router.push(notif.link)
     }
-    onClose();
-  };
+    onClose()
+  }
 
   const handleMarkAllRead = async () => {
-    await markAllAsRead();
-  };
+    await markAllAsRead()
+  }
 
   return (
     <Drawer
@@ -88,25 +85,26 @@ export default function NotificationDrawer({ open, onClose }) {
             borderBottom: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
           }}
         >
-          <Typography
-            variant="h6"
-            fontWeight="600"
-            sx={{ letterSpacing: "-0.01em" }}
-          >
+          <Typography variant="h6" fontWeight="600" sx={{ letterSpacing: "-0.01em" }}>
             Notifications
           </Typography>
-          <IconButton
-            onClick={onClose}
-            size="small"
-            sx={{ color: "text.secondary" }}
-          >
+          <IconButton onClick={onClose} size="small" sx={{ color: "text.secondary" }}>
             <CloseIcon fontSize="small" />
           </IconButton>
         </Box>
 
         <List sx={{ p: 0, flexGrow: 1, overflowY: "auto" }}>
           {notifications.length === 0 ? (
-            <Box sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", p: 3 }}>
+            <Box
+              sx={{
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                p: 3,
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -115,11 +113,13 @@ export default function NotificationDrawer({ open, onClose }) {
                   width: 64,
                   height: 64,
                   borderRadius: "50%",
-                  bgcolor: (theme) => alpha(theme.palette.text.secondary, 0.05),
+                  bgcolor: theme => alpha(theme.palette.text.secondary, 0.05),
                   mb: 2,
                 }}
               >
-                <NotificationsNoneOutlined sx={{ fontSize: 32, color: "text.secondary", opacity: 0.7 }} />
+                <NotificationsNoneOutlined
+                  sx={{ fontSize: 32, color: "text.secondary", opacity: 0.7 }}
+                />
               </Box>
               <Typography variant="body1" sx={{ color: "text.primary", fontWeight: 600, mb: 0.5 }}>
                 No notifications yet
@@ -137,9 +137,7 @@ export default function NotificationDrawer({ open, onClose }) {
                     onClick={() => handleNotificationClick(notif)}
                     sx={{
                       cursor: "pointer",
-                      bgcolor: notif.read
-                        ? "transparent"
-                        : alpha(theme.palette.primary.main, 0.02),
+                      bgcolor: notif.read ? "transparent" : alpha(theme.palette.primary.main, 0.02),
                       "&:hover": {
                         bgcolor: "action.hover",
                       },
@@ -178,7 +176,7 @@ export default function NotificationDrawer({ open, onClose }) {
                   </ListItem>
                   {index < notifications.length - 1 && <Divider />}
                 </Box>
-              );
+              )
             })
           )}
         </List>
@@ -207,5 +205,5 @@ export default function NotificationDrawer({ open, onClose }) {
         </Box>
       </Box>
     </Drawer>
-  );
+  )
 }

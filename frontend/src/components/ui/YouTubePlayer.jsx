@@ -4,7 +4,13 @@ import React, { useEffect, useRef, useMemo } from "react"
 import { Box } from "@mui/material"
 import { getYouTubeEmbedUrl } from "@/utils/shared"
 
-export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, startTime = 0, onTimeUpdate }) {
+export default function YouTubePlayer({
+  videoUrl,
+  preventSkipping,
+  onEnded,
+  startTime = 0,
+  onTimeUpdate,
+}) {
   const iframeRef = useRef(null)
   const playerRef = useRef(null)
   const maxTimeRef = useRef(startTime || 0)
@@ -31,7 +37,7 @@ export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, star
     try {
       const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
       const match = videoUrl.match(regExp)
-      return (match && match[2].length === 11) ? match[2] : null
+      return match && match[2].length === 11 ? match[2] : null
     } catch (e) {
       return null
     }
@@ -51,10 +57,12 @@ export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, star
 
     const initPlayer = () => {
       if (!videoId || !window.YT || !window.YT.Player || !iframeRef.current) return
-      
+
       // Clean up previous player
       if (playerRef.current) {
-        try { playerRef.current.destroy() } catch (e) {}
+        try {
+          playerRef.current.destroy()
+        } catch (e) {}
       }
 
       playerRef.current = new window.YT.Player(iframeRef.current, {
@@ -66,12 +74,12 @@ export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, star
           start: Math.floor(startTimeRef.current || 0),
         },
         events: {
-          onReady: (event) => {
+          onReady: event => {
             if (startTimeRef.current > 0) {
               event.target.seekTo(startTimeRef.current, true)
             }
           },
-          onStateChange: (event) => {
+          onStateChange: event => {
             // YT.PlayerState.ENDED is 0
             if (event.data === 0) {
               if (onEndedRef.current) onEndedRef.current()
@@ -86,11 +94,11 @@ export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, star
           if (playerRef.current && typeof playerRef.current.getCurrentTime === "function") {
             const currentTime = playerRef.current.getCurrentTime()
             const state = playerRef.current.getPlayerState()
-            
+
             if (onTimeUpdateRef.current) {
               onTimeUpdateRef.current(currentTime)
             }
-            
+
             // If playing (state === 1)
             if (preventSkipping && state === 1) {
               if (currentTime > maxTimeRef.current + 2) {
@@ -114,7 +122,7 @@ export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, star
           if (prevCallback) prevCallback()
           initPlayer()
         }
-        
+
         const ytCheck = setInterval(() => {
           if (window.YT && window.YT.Player) {
             clearInterval(ytCheck)
@@ -127,7 +135,9 @@ export default function YouTubePlayer({ videoUrl, preventSkipping, onEnded, star
     return () => {
       if (checkInterval) clearInterval(checkInterval)
       if (playerRef.current) {
-        try { playerRef.current.destroy() } catch (e) {}
+        try {
+          playerRef.current.destroy()
+        } catch (e) {}
       }
     }
   }, [videoId, preventSkipping])

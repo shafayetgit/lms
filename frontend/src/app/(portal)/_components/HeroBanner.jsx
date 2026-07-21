@@ -1,11 +1,11 @@
-"use client";
-import React from "react";
-import { Box, Container, Grid } from "@mui/material";
+"use client"
+import React from "react"
+import { Box, Container, Grid } from "@mui/material"
 
 // Components
-import HeroBackground from "./HeroBanner/HeroBackground";
-import HeroContent from "./HeroBanner/HeroContent";
-import HeroVisuals from "./HeroBanner/HeroVisuals";
+import HeroBackground from "./HeroBanner/HeroBackground"
+import HeroContent from "./HeroBanner/HeroContent"
+import HeroVisuals from "./HeroBanner/HeroVisuals"
 
 const HeroBanner = () => {
   return (
@@ -26,16 +26,13 @@ const HeroBanner = () => {
             <HeroContent />
           </Grid>
 
-          <Grid
-            size={{ xs: 12, md: 5 }}
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
+          <Grid size={{ xs: 12, md: 5 }} sx={{ display: { xs: "none", md: "block" } }}>
             <HeroVisuals />
           </Grid>
         </Grid>
       </Container>
     </Box>
-  );
-};
+  )
+}
 
-export default HeroBanner;
+export default HeroBanner

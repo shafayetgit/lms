@@ -1,7 +1,6 @@
 import { DataGrid, gridClasses } from "@mui/x-data-grid"
 import { alpha, styled } from "@mui/material/styles"
 
-
 const ODD_OPACITY = 0.08
 const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .MuiDataGrid-row": {

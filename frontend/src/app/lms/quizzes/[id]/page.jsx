@@ -60,7 +60,7 @@ export default function Page() {
           passing_percentage: Number(values.passing_percentage),
           max_attempts: Number(values.max_attempts),
           marks_to_cut: Number(values.marks_to_cut),
-        };
+        }
 
         const response = await update({ id, body: payload }).unwrap()
 
@@ -80,17 +80,32 @@ export default function Page() {
   if (isLoadingQuiz) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/quizzes/${id}`, icon: <InfoOutlined />, resource: "quiz", action: "read" },
-    { label: "Questions", href: `/lms/quizzes/${id}/questions`, icon: <Quiz />, resource: "question", action: "read" },
-    { label: "Submissions", href: `/lms/quizzes/${id}/submissions`, icon: <Assignment />, resource: "quiz_submission", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/quizzes/${id}`,
+      icon: <InfoOutlined />,
+      resource: "quiz",
+      action: "read",
+    },
+    {
+      label: "Questions",
+      href: `/lms/quizzes/${id}/questions`,
+      icon: <Quiz />,
+      resource: "question",
+      action: "read",
+    },
+    {
+      label: "Submissions",
+      href: `/lms/quizzes/${id}/submissions`,
+      icon: <Assignment />,
+      resource: "quiz_submission",
+      action: "read",
+    },
   ]
 
   return (
     <PermissionGuard resource="quiz" action="read">
-      <CModuleLayout
-        navigators={navigators}
-        helpTips={QUIZ_TIPS.details}
-      >
+      <CModuleLayout navigators={navigators} helpTips={QUIZ_TIPS.details}>
         <CForm
           onSubmit={canUpdate ? formik.handleSubmit : undefined}
           width="45rem"
@@ -149,7 +164,9 @@ export default function Page() {
                 value={formik.values.passing_percentage}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.passing_percentage && Boolean(formik.errors.passing_percentage)}
+                error={
+                  formik.touched.passing_percentage && Boolean(formik.errors.passing_percentage)
+                }
                 helperText={formik.touched.passing_percentage && formik.errors.passing_percentage}
                 required
               />
@@ -174,7 +191,7 @@ export default function Page() {
               <CCheckbox
                 label="Enable Negative Marking"
                 checked={formik.values.enable_negative_marking}
-                onChange={(e) => formik.setFieldValue("enable_negative_marking", e.target.checked)}
+                onChange={e => formik.setFieldValue("enable_negative_marking", e.target.checked)}
               />
             </Grid>
 
@@ -197,7 +214,7 @@ export default function Page() {
               <CCheckbox
                 label="Shuffle Questions"
                 checked={formik.values.shuffle_questions}
-                onChange={(e) => formik.setFieldValue("shuffle_questions", e.target.checked)}
+                onChange={e => formik.setFieldValue("shuffle_questions", e.target.checked)}
               />
             </Grid>
 
@@ -206,7 +223,7 @@ export default function Page() {
               <CCheckbox
                 label="Show Answers"
                 checked={formik.values.show_answers}
-                onChange={(e) => formik.setFieldValue("show_answers", e.target.checked)}
+                onChange={e => formik.setFieldValue("show_answers", e.target.checked)}
               />
             </Grid>
 
@@ -215,7 +232,7 @@ export default function Page() {
               <CCheckbox
                 label="Show Submission History"
                 checked={formik.values.show_submission_history}
-                onChange={(e) => formik.setFieldValue("show_submission_history", e.target.checked)}
+                onChange={e => formik.setFieldValue("show_submission_history", e.target.checked)}
               />
             </Grid>
 
@@ -224,7 +241,7 @@ export default function Page() {
               <CCheckbox
                 label="Is Active"
                 checked={formik.values.is_active}
-                onChange={(e) => formik.setFieldValue("is_active", e.target.checked)}
+                onChange={e => formik.setFieldValue("is_active", e.target.checked)}
               />
             </Grid>
           </Grid>

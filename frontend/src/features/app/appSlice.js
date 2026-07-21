@@ -9,7 +9,7 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    toggleTheme: (state) => {
+    toggleTheme: state => {
       state.mode = state.mode === "light" ? "dark" : "light"
     },
     setTheme: (state, action) => {

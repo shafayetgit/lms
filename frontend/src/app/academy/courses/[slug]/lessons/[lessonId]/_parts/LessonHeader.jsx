@@ -6,7 +6,7 @@ import {
   DoneAll,
   Check,
   NavigateBefore,
-  NavigateNext
+  NavigateNext,
 } from "@mui/icons-material"
 
 export default function LessonHeader({
@@ -22,7 +22,8 @@ export default function LessonHeader({
   handleSelectLesson,
   settings = {},
 }) {
-  const isVideoEnforced = activeLesson.lesson_type === "video" && (settings.enforce_video_completion ?? true)
+  const isVideoEnforced =
+    activeLesson.lesson_type === "video" && (settings.enforce_video_completion ?? true)
 
   return (
     <Box
@@ -36,7 +37,7 @@ export default function LessonHeader({
       }}
     >
       <Box>
-        <Typography variant="h5" fontWeight="800" sx={{ mb: 0.5 }}>
+        <Typography variant="h6" fontWeight="800" sx={{ mb: 0.5 }}>
           {activeLesson.title}
         </Typography>
         {course.instructors && course.instructors.length > 0 && (
@@ -81,10 +82,14 @@ export default function LessonHeader({
                 borderColor: "text.primary",
                 color: "text.primary",
                 bgcolor: "action.hover",
-              }
+              },
             }}
           >
-            {isCinemaMode ? <CloseFullscreen sx={{ fontSize: 18 }} /> : <OpenInFull sx={{ fontSize: 18 }} />}
+            {isCinemaMode ? (
+              <CloseFullscreen sx={{ fontSize: 18 }} />
+            ) : (
+              <OpenInFull sx={{ fontSize: 18 }} />
+            )}
           </IconButton>
         </Tooltip>
 
@@ -107,7 +112,7 @@ export default function LessonHeader({
                       "&.Mui-disabled": {
                         borderColor: "success.light",
                         color: "success.main",
-                      }
+                      },
                     }}
                   >
                     <DoneAll sx={{ fontSize: 18 }} />
@@ -115,7 +120,9 @@ export default function LessonHeader({
                 </span>
               </Tooltip>
             ) : (
-              <Tooltip title={isVideoEnforced ? "Watch the video fully to complete" : "Mark as Completed"}>
+              <Tooltip
+                title={isVideoEnforced ? "Watch the video fully to complete" : "Mark as Completed"}
+              >
                 <span>
                   <IconButton
                     size="small"
@@ -131,10 +138,14 @@ export default function LessonHeader({
                         borderColor: isVideoEnforced ? "divider" : "primary.main",
                         color: isVideoEnforced ? "text.disabled" : "primary.main",
                         bgcolor: isVideoEnforced ? "transparent" : "action.hover",
-                      }
+                      },
                     }}
                   >
-                    {isCompleting ? <CircularProgress size={18} color="inherit" /> : <Check sx={{ fontSize: 18 }} />}
+                    {isCompleting ? (
+                      <CircularProgress size={18} color="inherit" />
+                    ) : (
+                      <Check sx={{ fontSize: 18 }} />
+                    )}
                   </IconButton>
                 </span>
               </Tooltip>
@@ -143,7 +154,7 @@ export default function LessonHeader({
         )}
 
         {prevLesson && (
-          <Tooltip title="Previous Lesson">
+          <Tooltip title={prevLesson.title || "Previous Lesson"}>
             <IconButton
               size="small"
               onClick={() => handleSelectLesson(prevLesson)}
@@ -157,7 +168,7 @@ export default function LessonHeader({
                   borderColor: "text.primary",
                   color: "text.primary",
                   bgcolor: "action.hover",
-                }
+                },
               }}
             >
               <NavigateBefore sx={{ fontSize: 18 }} />
@@ -165,7 +176,7 @@ export default function LessonHeader({
           </Tooltip>
         )}
 
-        <Tooltip title={nextLesson ? "Next Lesson" : "No Next Lesson"}>
+        <Tooltip title={nextLesson ? nextLesson.title || "Next Lesson" : "No Next Lesson"}>
           <span>
             <IconButton
               size="small"
@@ -181,7 +192,7 @@ export default function LessonHeader({
                   borderColor: "text.primary",
                   color: "text.primary",
                   bgcolor: "action.hover",
-                }
+                },
               }}
             >
               <NavigateNext sx={{ fontSize: 18 }} />

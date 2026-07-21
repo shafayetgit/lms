@@ -1,9 +1,9 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const notificationApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     readNotifications: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/notifications/",
         method: "GET",
         params,
@@ -11,7 +11,7 @@ export const notificationApi = api.injectEndpoints({
       providesTags: ["NOTIFICATIONS"],
     }),
     markNotificationAsRead: builder.mutation({
-      query: (publicId) => ({
+      query: publicId => ({
         url: `/api/v1/notifications/${publicId}/read`,
         method: "PUT",
       }),
@@ -25,11 +25,11 @@ export const notificationApi = api.injectEndpoints({
       invalidatesTags: ["NOTIFICATIONS"],
     }),
   }),
-});
+})
 
 export const {
   useReadNotificationsQuery,
   useLazyReadNotificationsQuery,
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
-} = notificationApi;
+} = notificationApi

@@ -1,20 +1,23 @@
-"use client";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import Grid from "@mui/material/Grid";
-import { toast } from "react-toastify";
+"use client"
+import React, { useState } from "react"
+import { useFormik } from "formik"
+import Grid from "@mui/material/Grid"
+import { toast } from "react-toastify"
 
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CCheckbox from "@/components/form/CCheckbox";
-import CSelect from "@/components/form/CSelect";
-import CDatePicker from "@/components/form/CDatePicker";
-import CAutocomplete from "@/components/form/CAutocomplete";
-import dayjs from "dayjs";
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CCheckbox from "@/components/form/CCheckbox"
+import CSelect from "@/components/form/CSelect"
+import CDatePicker from "@/components/form/CDatePicker"
+import CAutocomplete from "@/components/form/CAutocomplete"
+import dayjs from "dayjs"
 
-import { useCreateEnrollmentMutation, useReadEnrollmentMetaQuery } from "@/features/enrollment/enrollmentAPI";
-import { enrollmentCreateSchema } from "@/schema/enrollment";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import {
+  useCreateEnrollmentMutation,
+  useReadEnrollmentMetaQuery,
+} from "@/features/enrollment/enrollmentAPI"
+import { enrollmentCreateSchema } from "@/schema/enrollment"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 const STATUS_CHOICES = [
   { label: "Active", value: "active" },
@@ -22,16 +25,16 @@ const STATUS_CHOICES = [
   { label: "Cancelled", value: "cancelled" },
   { label: "Expired", value: "expired" },
   { label: "Suspended", value: "suspended" },
-];
+]
 
 export default function CreateDialog({ defaultCourseId }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
-  const handleClose = () => setOpen(false);
-  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false)
+  const handleOpen = () => setOpen(true)
 
-  const { data: { data: meta } = {} } = useReadEnrollmentMetaQuery(undefined, { skip: !open });
-  const [create, { isLoading }] = useCreateEnrollmentMutation();
+  const { data: { data: meta } = {} } = useReadEnrollmentMetaQuery(undefined, { skip: !open })
+  const [create, { isLoading }] = useCreateEnrollmentMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -49,35 +52,35 @@ export default function CreateDialog({ defaultCourseId }) {
     validationSchema: enrollmentCreateSchema,
     onSubmit: async (values, { resetForm, setErrors }) => {
       try {
-        const { temp_user, temp_course, temp_batch, ...createPayload } = values;
-        if (!createPayload.expires_at) delete createPayload.expires_at;
-        if (!createPayload.batch_id) delete createPayload.batch_id;
+        const { temp_user, temp_course, temp_batch, ...createPayload } = values
+        if (!createPayload.expires_at) delete createPayload.expires_at
+        if (!createPayload.batch_id) delete createPayload.batch_id
 
-        const response = await create(createPayload).unwrap();
-        toast.success(response?.message || "Enrollment created successfully");
-        resetForm();
-        handleClose();
+        const response = await create(createPayload).unwrap()
+        toast.success(response?.message || "Enrollment created successfully")
+        resetForm()
+        handleClose()
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Create failed. Please try again.");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Create failed. Please try again.")
       }
     },
-  });
+  })
 
-  const { setFieldValue } = formik;
+  const { setFieldValue } = formik
 
   React.useEffect(() => {
     if (open && defaultCourseId && meta?.courses) {
       const selected = meta.courses.find(
-        (c) => c.public_id === defaultCourseId || String(c.value) === String(defaultCourseId)
-      );
+        c => c.public_id === defaultCourseId || String(c.value) === String(defaultCourseId)
+      )
       if (selected) {
-        setFieldValue("course_id", selected.value);
-        setFieldValue("temp_course", selected);
+        setFieldValue("course_id", selected.value)
+        setFieldValue("temp_course", selected)
       }
     }
-  }, [open, defaultCourseId, meta?.courses, setFieldValue]);
+  }, [open, defaultCourseId, meta?.courses, setFieldValue])
 
   return (
     <CDialog
@@ -89,12 +92,7 @@ export default function CreateDialog({ defaultCourseId }) {
       handleCDialogOpen={handleOpen}
       handleCDialogClose={handleClose}
     >
-      <CForm
-        onSubmit={formik.handleSubmit}
-        width="32rem"
-        btnProps={{ loading: isLoading }}
-        dialog
-      >
+      <CForm onSubmit={formik.handleSubmit} width="32rem" btnProps={{ loading: isLoading }} dialog>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 6 }}>
             <CAutocomplete
@@ -103,10 +101,10 @@ export default function CreateDialog({ defaultCourseId }) {
               value={formik.values.temp_user}
               options={meta?.users || []}
               isOptionEqualToValue={(option, value) => option.value === value?.value}
-              getOptionLabel={(option) => option?.label || ""}
+              getOptionLabel={option => option?.label || ""}
               onChange={(e, value) => {
-                formik.setFieldValue("user_id", value ? value.value : "");
-                formik.setFieldValue("temp_user", value);
+                formik.setFieldValue("user_id", value ? value.value : "")
+                formik.setFieldValue("temp_user", value)
               }}
               onBlur={formik.handleBlur}
               required
@@ -121,10 +119,10 @@ export default function CreateDialog({ defaultCourseId }) {
               value={formik.values.temp_course}
               options={meta?.courses || []}
               isOptionEqualToValue={(option, value) => option.value === value?.value}
-              getOptionLabel={(option) => option?.label || ""}
+              getOptionLabel={option => option?.label || ""}
               onChange={(e, value) => {
-                formik.setFieldValue("course_id", value ? value.value : "");
-                formik.setFieldValue("temp_course", value);
+                formik.setFieldValue("course_id", value ? value.value : "")
+                formik.setFieldValue("temp_course", value)
               }}
               onBlur={formik.handleBlur}
               required
@@ -140,10 +138,10 @@ export default function CreateDialog({ defaultCourseId }) {
               value={formik.values.temp_batch}
               options={meta?.batches || []}
               isOptionEqualToValue={(option, value) => option.value === value?.value}
-              getOptionLabel={(option) => option?.label || ""}
+              getOptionLabel={option => option?.label || ""}
               onChange={(e, value) => {
-                formik.setFieldValue("batch_id", value ? value.value : "");
-                formik.setFieldValue("temp_batch", value);
+                formik.setFieldValue("batch_id", value ? value.value : "")
+                formik.setFieldValue("temp_batch", value)
               }}
               onBlur={formik.handleBlur}
               error={formik.touched.batch_id && Boolean(formik.errors.batch_id)}
@@ -156,7 +154,7 @@ export default function CreateDialog({ defaultCourseId }) {
               name="status"
               value={formik.values.status}
               options={STATUS_CHOICES}
-              onChange={(e) => formik.setFieldValue("status", e.target.value)}
+              onChange={e => formik.setFieldValue("status", e.target.value)}
               onBlur={formik.handleBlur}
               error={formik.touched.status && Boolean(formik.errors.status)}
               helperText={formik.touched.status && formik.errors.status}
@@ -167,8 +165,8 @@ export default function CreateDialog({ defaultCourseId }) {
               label="Expires At"
               name="expires_at"
               value={formik.values.expires_at ? dayjs(formik.values.expires_at) : null}
-              onChange={(newValue) => {
-                formik.setFieldValue("expires_at", newValue ? newValue.toISOString() : "");
+              onChange={newValue => {
+                formik.setFieldValue("expires_at", newValue ? newValue.toISOString() : "")
               }}
               error={formik.touched.expires_at && Boolean(formik.errors.expires_at)}
               helperText={formik.touched.expires_at && formik.errors.expires_at}
@@ -178,20 +176,18 @@ export default function CreateDialog({ defaultCourseId }) {
             <CCheckbox
               label="Purchased Certificate"
               checked={formik.values.purchased_certificate}
-              onChange={(e) => formik.setFieldValue("purchased_certificate", e.target.checked)}
+              onChange={e => formik.setFieldValue("purchased_certificate", e.target.checked)}
             />
           </Grid>
           <Grid size={{ xs: 12, sm: 6 }}>
             <CCheckbox
               label="Is Active"
               checked={formik.values.is_active}
-              onChange={(e) => formik.setFieldValue("is_active", e.target.checked)}
+              onChange={e => formik.setFieldValue("is_active", e.target.checked)}
             />
           </Grid>
         </Grid>
       </CForm>
     </CDialog>
-  );
+  )
 }
-
-

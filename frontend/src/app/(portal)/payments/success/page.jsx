@@ -1,44 +1,44 @@
-"use client";
-import React, { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Box, Typography, Button, Paper, Divider } from "@mui/material";
-import { CheckCircleOutline } from "@mui/icons-material";
-import { useReadPaymentByPublicIdQuery } from "@/features/payment/paymentApi";
-import CPageLoader from "@/components/ui/CPageLoader";
-import dayjs from "dayjs";
-import { getRole } from "@/utils/shared";
+"use client"
+import React, { Suspense } from "react"
+import { useSearchParams, useRouter } from "next/navigation"
+import { Box, Typography, Button, Paper, Divider } from "@mui/material"
+import { CheckCircleOutline } from "@mui/icons-material"
+import { useReadPaymentByPublicIdQuery } from "@/features/payment/paymentApi"
+import CPageLoader from "@/components/ui/CPageLoader"
+import dayjs from "dayjs"
+import { getRole } from "@/utils/shared"
 
 function SuccessContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const ref = searchParams.get("ref");
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const ref = searchParams.get("ref")
 
-  const { data, isLoading } = useReadPaymentByPublicIdQuery(ref, { skip: !ref });
-  const payment = data?.data;
+  const { data, isLoading } = useReadPaymentByPublicIdQuery(ref, { skip: !ref })
+  const payment = data?.data
 
-  if (isLoading) return <CPageLoader />;
+  if (isLoading) return <CPageLoader />
 
-  const isFree = payment && parseFloat(payment.amount) === 0;
-  const role = getRole();
-  const isStudent = role === "student";
+  const isFree = payment && parseFloat(payment.amount) === 0
+  const role = getRole()
+  const isStudent = role === "student"
 
-  let enrollmentsPath = "/lms/enrollments";
-  let dashboardPath = "/lms/dashboard";
-  let enrollmentsLabel = "Go to My Enrollments";
+  let enrollmentsPath = "/lms/enrollments"
+  let dashboardPath = "/lms/dashboard"
+  let enrollmentsLabel = "Go to My Enrollments"
 
   if (isStudent) {
-    dashboardPath = "/academy/dashboard";
+    dashboardPath = "/academy/dashboard"
     if (payment?.payment_for_type === "Batch") {
-      enrollmentsPath = "/academy/batches";
-      enrollmentsLabel = "Go to My Batches";
+      enrollmentsPath = "/academy/batches"
+      enrollmentsLabel = "Go to My Batches"
     } else {
-      enrollmentsPath = "/academy/courses";
-      enrollmentsLabel = "Go to My Courses";
+      enrollmentsPath = "/academy/courses"
+      enrollmentsLabel = "Go to My Courses"
     }
   } else {
     if (payment?.payment_for_type === "Batch") {
-      enrollmentsPath = "/lms/batches";
-      enrollmentsLabel = "Go to Batches";
+      enrollmentsPath = "/lms/batches"
+      enrollmentsLabel = "Go to Batches"
     }
   }
 
@@ -82,14 +82,28 @@ function SuccessContent() {
             <Box sx={{ textAlign: "left", mb: 2.5 }}>
               {[
                 ["Reference", payment.public_id],
-                ["Amount", isFree ? "Free" : `${payment.currency} ${parseFloat(payment.amount).toFixed(2)}`],
+                [
+                  "Amount",
+                  isFree ? "Free" : `${payment.currency} ${parseFloat(payment.amount).toFixed(2)}`,
+                ],
                 ["Type", payment.payment_for_type],
                 ["Date", dayjs(payment.created_at).format("MMM DD, YYYY HH:mm")],
                 ["Status", payment.status],
               ].map(([label, value]) => (
-                <Box key={label} sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
-                  <Typography variant="body2" color="text.secondary">{label}</Typography>
-                  <Typography variant="body2" fontWeight={600}>{value}</Typography>
+                <Box
+                  key={label}
+                  sx={{ display: "flex", justifyContent: "space-between", mb: 1, gap: 2 }}
+                >
+                  <Typography variant="body2" color="text.secondary" sx={{ flexShrink: 0 }}>
+                    {label}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    fontWeight={600}
+                    sx={{ wordBreak: "break-all", textAlign: "right" }}
+                  >
+                    {value}
+                  </Typography>
                 </Box>
               ))}
             </Box>
@@ -116,7 +130,7 @@ function SuccessContent() {
         </Box>
       </Paper>
     </Box>
-  );
+  )
 }
 
 export default function PaymentSuccessPage() {
@@ -124,5 +138,5 @@ export default function PaymentSuccessPage() {
     <Suspense fallback={<CPageLoader />}>
       <SuccessContent />
     </Suspense>
-  );
+  )
 }

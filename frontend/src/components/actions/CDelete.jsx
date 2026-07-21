@@ -5,25 +5,25 @@ import { useDeleteMutation } from "@/features/shared/crudAPI"
 
 /**
  * CDelete Component - Delete action button with confirmation and cache invalidation
- * 
+ *
  * @param {Object} values - The request payload (model, filters, etc.)
  * @param {string} invalidateTag - The tag to invalidate after successful deletion
  * @param {string} label - Button label/tooltip (default: "Delete")
- * 
+ *
  * @example
  * // From courses page
- * <CDelete 
- *   values={{ 
+ * <CDelete
+ *   values={{
  *     model: "Course",
  *     filters: [{ field: "id", operator: "eq", value: [123] }]
  *   }}
  *   invalidateTag="COURSES"
  * />
- * 
+ *
  * @example
  * // From ebooks page
- * <CDelete 
- *   values={{ 
+ * <CDelete
+ *   values={{
  *     model: "Ebook",
  *     filters: [{ field: "id", operator: "eq", value: [456] }]
  *   }}
@@ -31,12 +31,7 @@ import { useDeleteMutation } from "@/features/shared/crudAPI"
  *   label="Remove"
  * />
  */
-export default function CDelete({
-  values,
-  invalidateTag,
-  label = "Delete",
-  onSuccess,
-}) {
+export default function CDelete({ values, invalidateTag, label = "Delete", onSuccess }) {
   const [destroy, { isLoading }] = useDeleteMutation()
 
   const handleDelete = async () => {

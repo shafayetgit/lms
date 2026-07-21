@@ -97,12 +97,7 @@ const VerifyEmail = () => {
         Verify your email
       </Typography>
 
-      <Typography
-        color="text.secondary"
-        textAlign="center"
-        mb={3}
-        sx={{ fontSize: "0.875rem" }}
-      >
+      <Typography color="text.secondary" textAlign="center" mb={3} sx={{ fontSize: "0.875rem" }}>
         We sent a {OTP_LENGTH}-digit code to{" "}
         <Typography
           component="span"

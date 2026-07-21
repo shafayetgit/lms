@@ -1,29 +1,32 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import Grid from "@mui/material/Grid";
-import { toast } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
-import dayjs from "dayjs";
-import { InfoOutlined } from "@mui/icons-material";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import Grid from "@mui/material/Grid"
+import { toast } from "react-toastify"
+import { useParams, useRouter } from "next/navigation"
+import dayjs from "dayjs"
+import { InfoOutlined } from "@mui/icons-material"
 
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CNumberField from "@/components/form/CNumberField";
-import CCheckbox from "@/components/form/CCheckbox";
-import CSelect from "@/components/form/CSelect";
-import CDatePicker from "@/components/form/CDatePicker";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import CSectionLabel from "@/components/ui/CSectionLabel";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import usePermissions from "@/hooks/usePermissions";
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CNumberField from "@/components/form/CNumberField"
+import CCheckbox from "@/components/form/CCheckbox"
+import CSelect from "@/components/form/CSelect"
+import CDatePicker from "@/components/form/CDatePicker"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import CSectionLabel from "@/components/ui/CSectionLabel"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import usePermissions from "@/hooks/usePermissions"
 
-import { useReadEnrollmentQuery, useUpdateEnrollmentMutation } from "@/features/enrollment/enrollmentAPI";
-import { enrollmentUpdateSchema } from "@/schema/enrollment";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
-import ENROLLMENT_TIPS from "@/choices/helpTips/enrollment";
+import {
+  useReadEnrollmentQuery,
+  useUpdateEnrollmentMutation,
+} from "@/features/enrollment/enrollmentAPI"
+import { enrollmentUpdateSchema } from "@/schema/enrollment"
+import { mapApiErrorsToFormik } from "@/utils/shared"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
+import ENROLLMENT_TIPS from "@/choices/helpTips/enrollment"
 
 const STATUS_CHOICES = [
   { label: "Active", value: "active" },
@@ -31,24 +34,29 @@ const STATUS_CHOICES = [
   { label: "Cancelled", value: "cancelled" },
   { label: "Expired", value: "expired" },
   { label: "Suspended", value: "suspended" },
-];
+]
 
 export default function Page() {
-  const router = useRouter();
-  const { id } = useParams();
+  const router = useRouter()
+  const { id } = useParams()
 
   const { data = {}, isLoading } = useReadEnrollmentQuery(
     { id },
     { refetchOnMountOrArgChange: true, skip: !id }
-  );
+  )
 
-  const studentName = data?.data?.user?.full_name || `${data?.data?.user?.first_name || ""} ${data?.data?.user?.last_name || ""}`.trim();
-  const courseTitle = data?.data?.course?.title;
-  const breadcrumbLabel = studentName && courseTitle ? `${studentName} (${courseTitle})` : studentName || courseTitle || "Enrollment Details";
+  const studentName =
+    data?.data?.user?.full_name ||
+    `${data?.data?.user?.first_name || ""} ${data?.data?.user?.last_name || ""}`.trim()
+  const courseTitle = data?.data?.course?.title
+  const breadcrumbLabel =
+    studentName && courseTitle
+      ? `${studentName} (${courseTitle})`
+      : studentName || courseTitle || "Enrollment Details"
 
-  useSetBreadcrumb(breadcrumbLabel);
+  useSetBreadcrumb(breadcrumbLabel)
 
-  const [update, { isLoading: isUpdating }] = useUpdateEnrollmentMutation();
+  const [update, { isLoading: isUpdating }] = useUpdateEnrollmentMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -63,29 +71,35 @@ export default function Page() {
     enableReinitialize: true,
     onSubmit: async (values, { setErrors }) => {
       try {
-        const updatePayload = { ...values };
-        if (!updatePayload.expires_at) updatePayload.expires_at = null;
-        if (!updatePayload.completed_at) updatePayload.completed_at = null;
+        const updatePayload = { ...values }
+        if (!updatePayload.expires_at) updatePayload.expires_at = null
+        if (!updatePayload.completed_at) updatePayload.completed_at = null
 
-        const response = await update({ id, body: updatePayload }).unwrap();
-        toast.success(response?.message || "Enrollment updated successfully");
-        router.push("/lms/enrollments");
+        const response = await update({ id, body: updatePayload }).unwrap()
+        toast.success(response?.message || "Enrollment updated successfully")
+        router.push("/lms/enrollments")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed. Please try again.");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed. Please try again.")
       }
     },
-  });
+  })
 
-  const { can, isSuperAdmin } = usePermissions();
-  const canUpdate = isSuperAdmin || can("enrollment", "update");
+  const { can, isSuperAdmin } = usePermissions()
+  const canUpdate = isSuperAdmin || can("enrollment", "update")
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/enrollments/${id}`, icon: <InfoOutlined />, resource: "enrollment", action: "read" },
-  ];
+    {
+      label: "Details",
+      href: `/lms/enrollments/${id}`,
+      icon: <InfoOutlined />,
+      resource: "enrollment",
+      action: "read",
+    },
+  ]
 
   return (
     <PermissionGuard resource="enrollment" action="read">
@@ -107,7 +121,7 @@ export default function Page() {
                 min={0}
                 max={100}
                 value={formik.values.progress}
-                onChange={(e) => formik.setFieldValue("progress", e.target.value)}
+                onChange={e => formik.setFieldValue("progress", e.target.value)}
                 onBlur={formik.handleBlur}
                 error={formik.touched.progress && Boolean(formik.errors.progress)}
                 helperText={formik.touched.progress && formik.errors.progress}
@@ -119,7 +133,7 @@ export default function Page() {
                 name="status"
                 value={formik.values.status}
                 options={STATUS_CHOICES}
-                onChange={(e) => formik.setFieldValue("status", e.target.value)}
+                onChange={e => formik.setFieldValue("status", e.target.value)}
                 onBlur={formik.handleBlur}
                 error={formik.touched.status && Boolean(formik.errors.status)}
                 helperText={formik.touched.status && formik.errors.status}
@@ -130,8 +144,8 @@ export default function Page() {
                 label="Expires At"
                 name="expires_at"
                 value={formik.values.expires_at ? dayjs(formik.values.expires_at) : null}
-                onChange={(newValue) => {
-                  formik.setFieldValue("expires_at", newValue ? newValue.toISOString() : null);
+                onChange={newValue => {
+                  formik.setFieldValue("expires_at", newValue ? newValue.toISOString() : null)
                 }}
                 error={formik.touched.expires_at && Boolean(formik.errors.expires_at)}
                 helperText={formik.touched.expires_at && formik.errors.expires_at}
@@ -142,8 +156,8 @@ export default function Page() {
                 label="Completed At"
                 name="completed_at"
                 value={formik.values.completed_at ? dayjs(formik.values.completed_at) : null}
-                onChange={(newValue) => {
-                  formik.setFieldValue("completed_at", newValue ? newValue.toISOString() : null);
+                onChange={newValue => {
+                  formik.setFieldValue("completed_at", newValue ? newValue.toISOString() : null)
                 }}
                 error={formik.touched.completed_at && Boolean(formik.errors.completed_at)}
                 helperText={formik.touched.completed_at && formik.errors.completed_at}
@@ -156,19 +170,19 @@ export default function Page() {
               <CCheckbox
                 label="Purchased Certificate"
                 checked={formik.values.purchased_certificate}
-                onChange={(e) => formik.setFieldValue("purchased_certificate", e.target.checked)}
+                onChange={e => formik.setFieldValue("purchased_certificate", e.target.checked)}
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CCheckbox
                 label="Is Active"
                 checked={formik.values.is_active}
-                onChange={(e) => formik.setFieldValue("is_active", e.target.checked)}
+                onChange={e => formik.setFieldValue("is_active", e.target.checked)}
               />
             </Grid>
           </Grid>
         </CForm>
       </CModuleLayout>
     </PermissionGuard>
-  );
+  )
 }

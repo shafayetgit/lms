@@ -12,16 +12,58 @@ export default function CoursePreviewVideo({ course }) {
   const hasVideo = Boolean(course.video)
   const gradient = getGradient(course.card_gradient)
 
-  return (
-    <>
-      <Card
-        variant="outlined"
-        sx={{
-          mb: 2,
-          borderRadius: 1,
-          overflow: "hidden",
+  const renderVideo = () => {
+    const youtubeEmbedUrl = getYouTubeEmbedUrl(course.video)
+    if (youtubeEmbedUrl) {
+      return (
+        <iframe
+          width="100%"
+          src={youtubeEmbedUrl}
+          title="Course Preview Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          style={{
+            display: "block",
+            border: "none",
+            width: "100%",
+            aspectRatio: "16 / 9",
+          }}
+        />
+      )
+    }
+    return (
+      <video
+        width="100%"
+        controls
+        autoPlay
+        src={course.video}
+        style={{
+          display: "block",
+          borderRadius: 0,
+          backgroundColor: "black",
+          width: "100%",
+          aspectRatio: "16 / 9",
         }}
-      >
+      />
+    )
+  }
+
+  return (
+    <Card
+      variant="outlined"
+      sx={{
+        mt: { xs: -4, md: 0 }, // Remove gap between Topbar and Video on mobile
+        mb: 2,
+        mx: { xs: -1, sm: -2, md: 0 }, // Pull to edges on mobile (8px -> 0px)
+        borderRadius: { xs: 0, md: 1 }, // Flat on mobile
+        border: { xs: "none", md: theme => `1px solid ${theme.palette.divider}` },
+        overflow: "hidden",
+      }}
+    >
+      {videoOpen && hasVideo ? (
+        <Box sx={{ bgcolor: "black", width: "100%" }}>{renderVideo()}</Box>
+      ) : (
         <CardMedia
           component="div"
           onClick={() => hasVideo && setVideoOpen(true)}
@@ -33,15 +75,17 @@ export default function CoursePreviewVideo({ course }) {
             cursor: hasVideo ? "pointer" : "default",
             position: "relative",
             background: !course.thumbnail ? gradient : "transparent",
-            "&:hover .play-overlay": hasVideo ? {
-              transform: "scale(1.05)",
-              backgroundColor: (theme) => alpha(theme.palette.common.white, 0.15),
-            } : {},
+            "&:hover .play-overlay": hasVideo
+              ? {
+                  transform: "scale(1.05)",
+                  backgroundColor: theme => alpha(theme.palette.common.white, 0.15),
+                }
+              : {},
           }}
           aria-label={hasVideo ? "Watch course preview video" : "Course thumbnail"}
           role={hasVideo ? "button" : "img"}
           tabIndex={hasVideo ? 0 : -1}
-          onKeyDown={(e) => e.key === "Enter" && hasVideo && setVideoOpen(true)}
+          onKeyDown={e => e.key === "Enter" && hasVideo && setVideoOpen(true)}
         >
           {course.thumbnail && (
             <Image
@@ -65,7 +109,8 @@ export default function CoursePreviewVideo({ course }) {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: "linear-gradient(45deg, rgba(25,118,210,0.3) 0%, rgba(156,39,176,0.3) 100%)",
+                background:
+                  "linear-gradient(45deg, rgba(25,118,210,0.3) 0%, rgba(156,39,176,0.3) 100%)",
                 transition: "all 0.3s ease",
                 opacity: 0.7,
               }}
@@ -115,62 +160,7 @@ export default function CoursePreviewVideo({ course }) {
             </motion.div>
           )}
         </CardMedia>
-      </Card>
-
-      <Dialog
-        open={videoOpen}
-        onClose={() => setVideoOpen(false)}
-        maxWidth="md"
-        fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 1,
-            border: "none",
-            overflow: "hidden",
-          },
-        }}
-      >
-        <DialogContent sx={{ p: 0, bgcolor: "black", overflow: "hidden" }}>
-          {videoOpen && course.video && (
-            (() => {
-              const youtubeEmbedUrl = getYouTubeEmbedUrl(course.video)
-              if (youtubeEmbedUrl) {
-                return (
-                  <iframe
-                    width="100%"
-                    src={youtubeEmbedUrl}
-                    title="Course Preview Video"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    style={{
-                      display: "block",
-                      border: "none",
-                      width: "100%",
-                      aspectRatio: "16 / 9",
-                    }}
-                  />
-                )
-              }
-              return (
-                <video
-                  width="100%"
-                  controls
-                  autoPlay
-                  src={course.video}
-                  style={{
-                    display: "block",
-                    borderRadius: 0,
-                    backgroundColor: "black",
-                    width: "100%",
-                    aspectRatio: "16 / 9",
-                  }}
-                />
-              )
-            })()
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
+      )}
+    </Card>
   )
 }

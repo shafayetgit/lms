@@ -1,30 +1,30 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import { Box, Typography, Card, CardContent } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { toast } from "react-toastify";
-import { useParams } from "next/navigation";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import { Box, Typography, Card, CardContent } from "@mui/material"
+import Grid from "@mui/material/Grid"
+import { toast } from "react-toastify"
+import { useParams } from "next/navigation"
 
-import CForm from "@/components/ui/CForm";
-import CSelect from "@/components/form/CSelect";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
+import CForm from "@/components/ui/CForm"
+import CSelect from "@/components/form/CSelect"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
 
-import { useReadPaymentQuery, useUpdatePaymentStatusMutation } from "@/features/payment/paymentApi";
-import { paymentStatusValidationSchema } from "@/schema/payment";
-import { PAYMENT_TIPS } from "@/choices/helpTips/payment";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import { useReadPaymentQuery, useUpdatePaymentStatusMutation } from "@/features/payment/paymentApi"
+import { paymentStatusValidationSchema } from "@/schema/payment"
+import { PAYMENT_TIPS } from "@/choices/helpTips/payment"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 export default function TransactionDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams()
 
   const { data: paymentData, isLoading } = useReadPaymentQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
-  const [update, { isLoading: isUpdating }] = useUpdatePaymentStatusMutation();
+  const [update, { isLoading: isUpdating }] = useUpdatePaymentStatusMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -34,17 +34,17 @@ export default function TransactionDetailPage() {
     enableReinitialize: true,
     onSubmit: async (values, { setErrors }) => {
       try {
-        await update({ id, body: values }).unwrap();
-        toast.success("Payment status updated successfully");
+        await update({ id, body: values }).unwrap()
+        toast.success("Payment status updated successfully")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed")
       }
     },
-  });
+  })
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   return (
     <CModuleLayout helpTips={PAYMENT_TIPS.details}>
@@ -87,7 +87,8 @@ export default function TransactionDetailPage() {
                   Original Amount
                 </Typography>
                 <Typography variant="body1">
-                  {paymentData?.currency} {paymentData?.original_amount?.toFixed?.(2) ?? paymentData?.original_amount}
+                  {paymentData?.currency}{" "}
+                  {paymentData?.original_amount?.toFixed?.(2) ?? paymentData?.original_amount}
                 </Typography>
               </Grid>
               <Grid size={{ xs: 4, sm: 4, md: 4 }}>
@@ -95,7 +96,8 @@ export default function TransactionDetailPage() {
                   Discount
                 </Typography>
                 <Typography variant="body1">
-                  {paymentData?.currency} {paymentData?.discount_amount?.toFixed?.(2) ?? paymentData?.discount_amount}
+                  {paymentData?.currency}{" "}
+                  {paymentData?.discount_amount?.toFixed?.(2) ?? paymentData?.discount_amount}
                 </Typography>
               </Grid>
               <Grid size={{ xs: 4, sm: 4, md: 4 }}>
@@ -113,7 +115,11 @@ export default function TransactionDetailPage() {
         <Typography variant="h6" mb={2}>
           Update Status
         </Typography>
-        <CForm onSubmit={formik.handleSubmit} width="100%" btnProps={{ loading: isUpdating, label: "Update Status" }}>
+        <CForm
+          onSubmit={formik.handleSubmit}
+          width="100%"
+          btnProps={{ loading: isUpdating, label: "Update Status" }}
+        >
           <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
             <Grid size={{ xs: 4, sm: 4, md: 6 }}>
               <CSelect
@@ -136,5 +142,5 @@ export default function TransactionDetailPage() {
         </CForm>
       </Box>
     </CModuleLayout>
-  );
+  )
 }

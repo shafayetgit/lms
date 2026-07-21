@@ -25,13 +25,13 @@ export function usePermissions() {
     if (rawDecodedUser && rawDecodedUser.exp) {
       const now = Math.floor(Date.now() / 1000)
       const isExpired = rawDecodedUser.exp < now
-      
+
       setTimeout(() => {
         if (active) setTokenExpired(isExpired)
       }, 0)
 
       if (!isExpired) {
-        const timeLeft = (rawDecodedUser.exp * 1000) - Date.now()
+        const timeLeft = rawDecodedUser.exp * 1000 - Date.now()
         const timer = setTimeout(() => {
           if (active) setTokenExpired(true)
         }, timeLeft)
@@ -53,17 +53,20 @@ export function usePermissions() {
   const decodedUser = tokenExpired ? null : rawDecodedUser
 
   const hasToken = token && decodedUser !== null
-  const { data, isLoading, isFetching, isError } = useGetMyPermissionsQuery(undefined, { skip: !hasToken })
+  const { data, isLoading, isFetching, isError } = useGetMyPermissionsQuery(undefined, {
+    skip: !hasToken,
+  })
 
   const isSuperAdmin = Boolean(
     decodedUser?.is_superadmin ||
-      decodedUser?.role === "superadmin" ||
-      decodedUser?.sub === "superadmin"
+    decodedUser?.role === "superadmin" ||
+    decodedUser?.sub === "superadmin"
   )
 
   const permData = data?.data ?? null
-  const permissions = (permData?.permissions || (permData && typeof permData === "object" ? permData : null)) ?? {}
-  const featureFlags = (decodedUser?.feature_flags ?? decodedUser?.flags ?? []).map((f) =>
+  const permissions =
+    (permData?.permissions || (permData && typeof permData === "object" ? permData : null)) ?? {}
+  const featureFlags = (decodedUser?.feature_flags ?? decodedUser?.flags ?? []).map(f =>
     (typeof f === "object" ? f?.slug : String(f)).toLowerCase()
   )
 
@@ -81,9 +84,7 @@ export function usePermissions() {
 
     // Match exact key, singular ("categories" -> "category"), or plural ("course" -> "courses")
     const singular = resource.replace(/ies$/, "y").replace(/s$/, "")
-    const plural = resource.endsWith("y")
-      ? resource.slice(0, -1) + "ies"
-      : resource + "s"
+    const plural = resource.endsWith("y") ? resource.slice(0, -1) + "ies" : resource + "s"
 
     const perm = permissions[resource] || permissions[singular] || permissions[plural]
     if (!perm) return false
@@ -102,9 +103,14 @@ export function usePermissions() {
         return true
       }
 
-      const ownerId = typeof recordOrOwnerId === "object"
-        ? (recordOrOwnerId.owner_id ?? recordOrOwnerId.owner_public_id ?? recordOrOwnerId.created_by ?? recordOrOwnerId.created_by_id ?? recordOrOwnerId.user_id)
-        : recordOrOwnerId
+      const ownerId =
+        typeof recordOrOwnerId === "object"
+          ? (recordOrOwnerId.owner_id ??
+            recordOrOwnerId.owner_public_id ??
+            recordOrOwnerId.created_by ??
+            recordOrOwnerId.created_by_id ??
+            recordOrOwnerId.user_id)
+          : recordOrOwnerId
 
       if (ownerId !== null && ownerId !== undefined) {
         const strOwnerId = String(ownerId)

@@ -1,35 +1,43 @@
-"use client";
-import React, { useEffect, Suspense } from "react";
-import { useParams, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { Chip, Box, LinearProgress, Typography } from "@mui/material";
-import { School, Star, InfoOutlined, AssignmentTurnedInOutlined, MenuBookOutlined, DashboardOutlined, VisibilityOutlined } from "@mui/icons-material";
+"use client"
+import React, { useEffect, Suspense } from "react"
+import { useParams, useSearchParams } from "next/navigation"
+import Link from "next/link"
+import { Chip, Box, LinearProgress, Typography } from "@mui/material"
+import {
+  School,
+  Star,
+  InfoOutlined,
+  AssignmentTurnedInOutlined,
+  MenuBookOutlined,
+  DashboardOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material"
 
-import CDataTable from "@/components/table/CDatatable";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CError from "@/components/ui/CError";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import { formatDate } from "@/utils/cdayjs";
-import { ENROLLMENT_TIPS } from "@/choices/helpTips/enrollment";
-import { useLazyReadEnrollmentsQuery } from "@/features/enrollment/enrollmentAPI";
-import { useReadCourseQuery } from "@/features/course/courseAPI";
-import CreateDialog from "@/app/lms/enrollments/_parts/CreateDialog";
+import CDataTable from "@/components/table/CDatatable"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CError from "@/components/ui/CError"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import { formatDate } from "@/utils/cdayjs"
+import { ENROLLMENT_TIPS } from "@/choices/helpTips/enrollment"
+import { useLazyReadEnrollmentsQuery } from "@/features/enrollment/enrollmentAPI"
+import { useReadCourseQuery } from "@/features/course/courseAPI"
+import CreateDialog from "@/app/lms/enrollments/_parts/CreateDialog"
 
 function EnrollmentList({ courseId, action }) {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? 1;
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") ?? 1
 
-  const [trigger, { data: { data, meta } = {}, isLoading, isError }] = useLazyReadEnrollmentsQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading, isError }] = useLazyReadEnrollmentsQuery()
 
   useEffect(() => {
     if (courseId) {
-      trigger({ page, course_id: courseId });
+      trigger({ page, course_id: courseId })
     }
-  }, [page, trigger, courseId]);
+  }, [page, trigger, courseId])
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
-  if (isError) return <CError fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
+  if (isError) return <CError fullPage={false} />
 
   const columns = [
     {
@@ -37,7 +45,10 @@ function EnrollmentList({ courseId, action }) {
       headerName: "Student",
       flex: 1.2,
       renderCell: ({ row }) => {
-        const fullName = row.user?.full_name || `${row.user?.first_name || ""} ${row.user?.last_name || ""}`.trim() || `User #${row.user_id}`;
+        const fullName =
+          row.user?.full_name ||
+          `${row.user?.first_name || ""} ${row.user?.last_name || ""}`.trim() ||
+          `User #${row.user_id}`
         return (
           <Link
             href={`/lms/enrollments/${row.public_id || row.id}`}
@@ -45,7 +56,7 @@ function EnrollmentList({ courseId, action }) {
           >
             {fullName}
           </Link>
-        );
+        )
       },
     },
     {
@@ -54,8 +65,15 @@ function EnrollmentList({ courseId, action }) {
       flex: 1.2,
       renderCell: ({ value = 0 }) => (
         <Box sx={{ width: "100%", display: "flex", alignItems: "center", gap: 1 }}>
-          <LinearProgress variant="determinate" value={Math.min(value, 100)} sx={{ flexGrow: 1, height: 8, borderRadius: 1 }} />
-          <Typography variant="caption" sx={{ fontWeight: 600 }}>{`${Math.round(value)}%`}</Typography>
+          <LinearProgress
+            variant="determinate"
+            value={Math.min(value, 100)}
+            sx={{ flexGrow: 1, height: 8, borderRadius: 1 }}
+          />
+          <Typography
+            variant="caption"
+            sx={{ fontWeight: 600 }}
+          >{`${Math.round(value)}%`}</Typography>
         </Box>
       ),
     },
@@ -77,7 +95,7 @@ function EnrollmentList({ courseId, action }) {
       flex: 1.2,
       renderCell: ({ value }) => value && formatDate(value),
     },
-  ];
+  ]
 
   return (
     <CDataTable
@@ -88,29 +106,72 @@ function EnrollmentList({ courseId, action }) {
       action={action}
       bulkDelete={{ model: "Enrollment", invalidateTag: "ENROLLMENTS" }}
     />
-  );
+  )
 }
 
 export default function Page() {
-  const { id: courseId } = useParams();
-  const { data: { data: courseData } = {} } = useReadCourseQuery({ id: courseId }, { skip: !courseId });
+  const { id: courseId } = useParams()
+  const { data: { data: courseData } = {} } = useReadCourseQuery(
+    { id: courseId },
+    { skip: !courseId }
+  )
 
   const navigators = [
-    { label: "Details", href: `/lms/courses/${courseId}`, icon: <InfoOutlined />, resource: "course", action: "read" },
-    { label: "Chapters", href: `/lms/courses/${courseId}/chapters`, icon: <MenuBookOutlined />, resource: "chapter", action: "read" },
-    { label: "Reviews", href: `/lms/courses/${courseId}/reviews`, icon: <Star />, resource: "review", action: "read" },
-    { label: "Enrollments", href: `/lms/courses/${courseId}/enrollments`, icon: <AssignmentTurnedInOutlined />, resource: "enrollment", action: "read" },
-    { label: "Dashboard", href: `/lms/courses/${courseId}/dashboard`, icon: <DashboardOutlined />, resource: "course", action: "read" },
-    { label: "Preview", href: `/courses/${courseData?.slug || ""}`, target: "_blank", icon: <VisibilityOutlined />, resource: "course", action: "read" },
-  ];
+    {
+      label: "Details",
+      href: `/lms/courses/${courseId}`,
+      icon: <InfoOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Chapters",
+      href: `/lms/courses/${courseId}/chapters`,
+      icon: <MenuBookOutlined />,
+      resource: "chapter",
+      action: "read",
+    },
+    {
+      label: "Reviews",
+      href: `/lms/courses/${courseId}/reviews`,
+      icon: <Star />,
+      resource: "review",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/courses/${courseId}/enrollments`,
+      icon: <AssignmentTurnedInOutlined />,
+      resource: "enrollment",
+      action: "read",
+    },
+    {
+      label: "Dashboard",
+      href: `/lms/courses/${courseId}/dashboard`,
+      icon: <DashboardOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Preview",
+      href: `/courses/${courseData?.slug || ""}`,
+      target: "_blank",
+      icon: <VisibilityOutlined />,
+      resource: "course",
+      action: "read",
+    },
+  ]
 
   return (
     <PermissionGuard resource="enrollment" action="read">
       <CModuleLayout navigators={navigators} helpTips={ENROLLMENT_TIPS.list}>
         <Suspense fallback={<CPageLoader fullPage={false} />}>
-          <EnrollmentList courseId={courseId} action={<CreateDialog defaultCourseId={courseId} />} />
+          <EnrollmentList
+            courseId={courseId}
+            action={<CreateDialog defaultCourseId={courseId} />}
+          />
         </Suspense>
       </CModuleLayout>
     </PermissionGuard>
-  );
+  )
 }

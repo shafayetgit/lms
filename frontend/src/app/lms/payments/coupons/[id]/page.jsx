@@ -1,58 +1,58 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import { Box, Typography, IconButton, Button, Stack } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { toast } from "react-toastify";
-import { useParams } from "next/navigation";
-import dayjs from "dayjs";
-import { AddCircleOutline, DeleteOutline } from "@mui/icons-material";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import { Box, Typography, IconButton, Button, Stack } from "@mui/material"
+import Grid from "@mui/material/Grid"
+import { toast } from "react-toastify"
+import { useParams } from "next/navigation"
+import dayjs from "dayjs"
+import { AddCircleOutline, DeleteOutline } from "@mui/icons-material"
 
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CNumberField from "@/components/form/CNumberField";
-import CSelect from "@/components/form/CSelect";
-import CDatePicker from "@/components/form/CDatePicker";
-import CCheckbox from "@/components/form/CCheckbox";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CNumberField from "@/components/form/CNumberField"
+import CSelect from "@/components/form/CSelect"
+import CDatePicker from "@/components/form/CDatePicker"
+import CCheckbox from "@/components/form/CCheckbox"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
 
-import { useReadCouponQuery, useUpdateCouponMutation } from "@/features/payment/paymentApi";
-import { useReadCoursesQuery } from "@/features/course/courseAPI";
-import { useReadBatchesQuery } from "@/features/batch/batchAPI";
-import { useReadProgramsQuery } from "@/features/program/programApi";
-import { couponValidationSchema } from "@/schema/payment";
-import { COUPON_TIPS } from "@/choices/helpTips/coupon";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import { useReadCouponQuery, useUpdateCouponMutation } from "@/features/payment/paymentApi"
+import { useReadCoursesQuery } from "@/features/course/courseAPI"
+import { useReadBatchesQuery } from "@/features/batch/batchAPI"
+import { useReadProgramsQuery } from "@/features/program/programApi"
+import { couponValidationSchema } from "@/schema/payment"
+import { COUPON_TIPS } from "@/choices/helpTips/coupon"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 // Coupon detail & edit page component
 export default function CouponDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams()
 
   const { data: couponData, isLoading } = useReadCouponQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
-  const [update, { isLoading: isUpdating }] = useUpdateCouponMutation();
-  const { data: coursesData } = useReadCoursesQuery({ size: 100 });
-  const { data: batchesData } = useReadBatchesQuery({ size: 100 });
-  const { data: programsData } = useReadProgramsQuery({ size: 100 });
+  const [update, { isLoading: isUpdating }] = useUpdateCouponMutation()
+  const { data: coursesData } = useReadCoursesQuery({ size: 100 })
+  const { data: batchesData } = useReadBatchesQuery({ size: 100 })
+  const { data: programsData } = useReadProgramsQuery({ size: 100 })
 
-  const courseOptions = (coursesData?.data ?? []).map((c) => ({
+  const courseOptions = (coursesData?.data ?? []).map(c => ({
     label: c.title,
     value: String(c.id),
-  }));
+  }))
 
-  const batchOptions = (batchesData?.data ?? []).map((b) => ({
+  const batchOptions = (batchesData?.data ?? []).map(b => ({
     label: b.title,
     value: String(b.id),
-  }));
+  }))
 
-  const programOptions = (programsData?.data ?? []).map((p) => ({
+  const programOptions = (programsData?.data ?? []).map(p => ({
     label: p.title,
     value: String(p.id),
-  }));
+  }))
 
   const formik = useFormik({
     initialValues: {
@@ -69,11 +69,11 @@ export default function CouponDetailPage() {
     onSubmit: async (values, { setErrors }) => {
       try {
         const applicable_items = (values.applicable_items || [])
-          .filter((item) => item.reference_id)
-          .map((item) => ({
+          .filter(item => item.reference_id)
+          .map(item => ({
             reference_type: item.reference_type,
             reference_id: Number(item.reference_id),
-          }));
+          }))
 
         const payload = {
           code: values.code,
@@ -83,18 +83,18 @@ export default function CouponDetailPage() {
           max_uses: values.max_uses === "" ? null : Number(values.max_uses),
           is_active: values.is_active,
           applicable_items,
-        };
-        await update({ id, body: payload }).unwrap();
-        toast.success("Coupon updated successfully");
+        }
+        await update({ id, body: payload }).unwrap()
+        toast.success("Coupon updated successfully")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Update failed");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Update failed")
       }
     },
-  });
+  })
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   return (
     <CModuleLayout helpTips={COUPON_TIPS.details}>
@@ -150,7 +150,7 @@ export default function CouponDetailPage() {
                 label="Valid Until"
                 name="validity"
                 value={formik.values.validity}
-                onChange={(val) => formik.setFieldValue("validity", val)}
+                onChange={val => formik.setFieldValue("validity", val)}
                 error={formik.touched.validity && Boolean(formik.errors.validity)}
                 helperText={formik.touched.validity && formik.errors.validity}
               />
@@ -169,7 +169,15 @@ export default function CouponDetailPage() {
             </Grid>
 
             <Grid size={{ xs: 4, sm: 8, md: 12 }}>
-              <Box sx={{ mt: 2, mb: 1, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <Box
+                sx={{
+                  mt: 2,
+                  mb: 1,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
                   Applicable Items (Optional - Blank for Global)
                 </Typography>
@@ -178,11 +186,11 @@ export default function CouponDetailPage() {
                   size="small"
                   startIcon={<AddCircleOutline />}
                   onClick={() => {
-                    const current = formik.values.applicable_items || [];
+                    const current = formik.values.applicable_items || []
                     formik.setFieldValue("applicable_items", [
                       ...current,
-                      { reference_type: "Course", reference_id: "" }
-                    ]);
+                      { reference_type: "Course", reference_id: "" },
+                    ])
                   }}
                 >
                   Add Restriction
@@ -195,8 +203,8 @@ export default function CouponDetailPage() {
                     item.reference_type === "Course"
                       ? courseOptions
                       : item.reference_type === "Batch"
-                      ? batchOptions
-                      : programOptions;
+                        ? batchOptions
+                        : programOptions
 
                   return (
                     <Box
@@ -222,9 +230,12 @@ export default function CouponDetailPage() {
                             { label: "Batch", value: "Batch" },
                             { label: "Program", value: "Program" },
                           ]}
-                          onChange={(e) => {
-                            formik.setFieldValue(`applicable_items[${index}].reference_type`, e.target.value);
-                            formik.setFieldValue(`applicable_items[${index}].reference_id`, "");
+                          onChange={e => {
+                            formik.setFieldValue(
+                              `applicable_items[${index}].reference_type`,
+                              e.target.value
+                            )
+                            formik.setFieldValue(`applicable_items[${index}].reference_id`, "")
                           }}
                         />
                       </Box>
@@ -240,15 +251,15 @@ export default function CouponDetailPage() {
                       <IconButton
                         color="error"
                         onClick={() => {
-                          const current = [...(formik.values.applicable_items || [])];
-                          current.splice(index, 1);
-                          formik.setFieldValue("applicable_items", current);
+                          const current = [...(formik.values.applicable_items || [])]
+                          current.splice(index, 1)
+                          formik.setFieldValue("applicable_items", current)
                         }}
                       >
                         <DeleteOutline />
                       </IconButton>
                     </Box>
-                  );
+                  )
                 })}
               </Stack>
             </Grid>
@@ -257,12 +268,12 @@ export default function CouponDetailPage() {
               <CCheckbox
                 label="Active"
                 checked={formik.values.is_active}
-                onChange={(e) => formik.setFieldValue("is_active", e.target.checked)}
+                onChange={e => formik.setFieldValue("is_active", e.target.checked)}
               />
             </Grid>
           </Grid>
         </CForm>
       </Box>
     </CModuleLayout>
-  );
+  )
 }

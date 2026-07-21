@@ -1,9 +1,9 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const liveClassApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     createLiveClass: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/live-classes/",
         method: "POST",
         body,
@@ -11,7 +11,7 @@ export const liveClassApi = api.injectEndpoints({
       invalidatesTags: ["LIVE_CLASSES"],
     }),
     readLiveClasses: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/live-classes/",
         method: "GET",
         params,
@@ -19,7 +19,7 @@ export const liveClassApi = api.injectEndpoints({
       providesTags: ["LIVE_CLASSES"],
     }),
     readLiveClass: builder.query({
-      query: (id) => `/api/v1/live-classes/${id}`,
+      query: id => `/api/v1/live-classes/${id}`,
       providesTags: ["LIVE_CLASSES"],
     }),
     updateLiveClass: builder.mutation({
@@ -31,14 +31,14 @@ export const liveClassApi = api.injectEndpoints({
       invalidatesTags: ["LIVE_CLASSES"],
     }),
     deleteLiveClass: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/live-classes/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["LIVE_CLASSES"],
     }),
   }),
-});
+})
 
 export const {
   useCreateLiveClassMutation,
@@ -47,4 +47,4 @@ export const {
   useReadLiveClassQuery,
   useUpdateLiveClassMutation,
   useDeleteLiveClassMutation,
-} = liveClassApi;
+} = liveClassApi

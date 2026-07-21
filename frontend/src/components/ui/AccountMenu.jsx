@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import * as React from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 import {
   Box,
   Typography,
@@ -13,7 +13,7 @@ import {
   Divider,
   IconButton,
   alpha,
-} from "@mui/material";
+} from "@mui/material"
 import {
   PersonOutline,
   ExitToAppOutlined,
@@ -22,122 +22,124 @@ import {
   SpaceDashboardOutlined,
   LanguageOutlined,
   DeleteSweepOutlined,
-} from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "@/features/app/appSlice";
+} from "@mui/icons-material"
+import { useDispatch, useSelector } from "react-redux"
+import { toggleTheme } from "@/features/app/appSlice"
 
-import { toast } from "react-toastify";
-import { removeAuthCookie } from "@/lib/auth/cookie";
-import { getCurrentUser, getProfileUser } from "@/lib/auth/client";
-import { useGetMeQuery } from "@/features/user/userAPI";
-import { useFlushCacheMutation } from "@/features/settings/settingsApi";
-import { getCookie } from "@/utils/shared";
-import api from "@/redux/api";
-import { getStore } from "@/redux/storeProvider";
+import { toast } from "react-toastify"
+import { removeAuthCookie } from "@/lib/auth/cookie"
+import { getCurrentUser, getProfileUser } from "@/lib/auth/client"
+import { useGetMeQuery } from "@/features/user/userAPI"
+import { useFlushCacheMutation } from "@/features/settings/settingsApi"
+import { getCookie } from "@/utils/shared"
+import api from "@/redux/api"
+import { getStore } from "@/redux/storeProvider"
 
 export default function AccountMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mounted, setMounted] = React.useState(false);
-  const open = Boolean(anchorEl);
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const [flushBackendCache] = useFlushCacheMutation();
-  const mode = useSelector((state) => state.app?.mode || "light");
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [mounted, setMounted] = React.useState(false)
+  const open = Boolean(anchorEl)
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const [flushBackendCache] = useFlushCacheMutation()
+  const mode = useSelector(state => state.app?.mode || "light")
 
-  const hasToken = typeof window !== "undefined" && !!getCookie("accessToken");
-  const { data: meResponse } = useGetMeQuery(undefined, { skip: !hasToken });
-  const user = meResponse?.data || getCurrentUser();
+  const hasToken = typeof window !== "undefined" && !!getCookie("accessToken")
+  const { data: meResponse } = useGetMeQuery(undefined, { skip: !hasToken })
+  const user = meResponse?.data || getCurrentUser()
 
   React.useEffect(() => {
-    setMounted(true);
-  }, []);
+    setMounted(true)
+  }, [])
 
   const getInitials = () => {
-    if (!mounted || !user) return "US";
+    if (!mounted || !user) return "US"
     if (user.first_name && user.last_name) {
-      return `${user.first_name[0]}${user.last_name[0]}`.toUpperCase();
+      return `${user.first_name[0]}${user.last_name[0]}`.toUpperCase()
     }
     if (user.first_name) {
-      return user.first_name.slice(0, 2).toUpperCase();
+      return user.first_name.slice(0, 2).toUpperCase()
     }
     if (user.currentUsername) {
-      return user.currentUsername.slice(0, 2).toUpperCase();
+      return user.currentUsername.slice(0, 2).toUpperCase()
     }
     if (user.username) {
-      return user.username.slice(0, 2).toUpperCase();
+      return user.username.slice(0, 2).toUpperCase()
     }
     if (user.email) {
-      return user.email.slice(0, 2).toUpperCase();
+      return user.email.slice(0, 2).toUpperCase()
     }
     if (user.sub) {
-      return user.sub.slice(0, 2).toUpperCase();
+      return user.sub.slice(0, 2).toUpperCase()
     }
-    return "US";
-  };
+    return "US"
+  }
 
   const getFullName = () => {
-    if (!mounted || !user) return "Authenticated User";
+    if (!mounted || !user) return "Authenticated User"
     if (user.first_name && user.last_name) {
-      return `${user.first_name} ${user.last_name}`;
+      return `${user.first_name} ${user.last_name}`
     }
-    return user.currentUsername || user.username || user.email || "Authenticated User";
-  };
-
+    return user.currentUsername || user.username || user.email || "Authenticated User"
+  }
 
   const getDashboardLink = () => {
-    if (!mounted || !user) return "/academy/dashboard";
+    if (!mounted || !user) return "/academy/dashboard"
     switch (user.role?.toLowerCase()) {
       case "superadmin":
-      case "admin": return "/lms/dashboard";
-      case "student": return "/academy/dashboard";
-      default: return "/academy/dashboard";
+      case "admin":
+        return "/lms/dashboard"
+      case "student":
+        return "/academy/dashboard"
+      default:
+        return "/academy/dashboard"
     }
-  };
+  }
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleFlushCache = async () => {
     try {
       // 1. Flush backend redis cache (only works if admin, otherwise fails silently)
       try {
-        await flushBackendCache().unwrap();
+        await flushBackendCache().unwrap()
       } catch (err) {
-        console.warn("Backend cache flush unauthorized or failed, proceeding with frontend flush");
+        console.warn("Backend cache flush unauthorized or failed, proceeding with frontend flush")
       }
 
       // 2. Reset RTK Query API cache
-      dispatch(api.util.resetApiState());
-      
+      dispatch(api.util.resetApiState())
+
       // 3. Purge redux-persist storage
-      const { persistor } = getStore();
-      await persistor.purge();
-      
-      toast.success("Cache flushed successfully");
-      window.location.reload();
+      const { persistor } = getStore()
+      await persistor.purge()
+
+      toast.success("Cache flushed successfully")
+      window.location.reload()
     } catch {
-      toast.error("Failed to flush cache");
+      toast.error("Failed to flush cache")
     } finally {
-      handleClose();
+      handleClose()
     }
-  };
+  }
 
   const handleSignOut = () => {
     try {
-      removeAuthCookie();
-      toast.success("Signed out successfully");
-      window.location.href = "/";
+      removeAuthCookie()
+      toast.success("Signed out successfully")
+      window.location.href = "/"
     } catch (error) {
-      toast.error("Sign out failed");
+      toast.error("Sign out failed")
     } finally {
-      handleClose();
+      handleClose()
     }
-  };
+  }
 
   return (
     <>
@@ -164,7 +166,7 @@ export default function AccountMenu() {
           </Avatar>
         </IconButton>
       </Box>
- 
+
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -181,7 +183,7 @@ export default function AccountMenu() {
               boxShadow: "none",
               mt: 2,
               backdropFilter: "blur(40px)",
-              bgcolor: (theme) => alpha(theme.palette.background.paper, 0.95),
+              bgcolor: theme => alpha(theme.palette.background.paper, 0.95),
               border: "1px solid",
               borderColor: "divider",
               borderRadius: 1,
@@ -216,7 +218,7 @@ export default function AccountMenu() {
               whiteSpace: "nowrap",
             }}
           >
-            {mounted ? (user?.email || "No email provided") : ""}
+            {mounted ? user?.email || "No email provided" : ""}
           </Typography>
         </Box>
 
@@ -262,8 +264,8 @@ export default function AccountMenu() {
 
         <MenuItem
           onClick={() => {
-            dispatch(toggleTheme());
-            handleClose();
+            dispatch(toggleTheme())
+            handleClose()
           }}
           sx={{
             py: 1,
@@ -326,5 +328,5 @@ export default function AccountMenu() {
         </MenuItem>
       </Menu>
     </>
-  );
+  )
 }

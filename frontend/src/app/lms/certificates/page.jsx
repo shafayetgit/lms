@@ -1,31 +1,30 @@
-"use client";
-import React, { Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Stack, Box, Grid, Typography } from "@mui/material";
-import Link from "next/link";
-import dayjs from "dayjs";
+"use client"
+import React, { Suspense, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { Stack, Box, Grid, Typography } from "@mui/material"
+import Link from "next/link"
+import dayjs from "dayjs"
 
-import CPageLoader from "@/components/ui/CPageLoader";
-import CDataTable from "@/components/table/CDatatable";
-import CButton from "@/components/ui/CButton";
-import { renderCell } from "@/utils/tableTools";
-import CModuleLayout from "@/components/ui/CModuleLayout";
+import CPageLoader from "@/components/ui/CPageLoader"
+import CDataTable from "@/components/table/CDatatable"
+import CButton from "@/components/ui/CButton"
+import { renderCell } from "@/utils/tableTools"
+import CModuleLayout from "@/components/ui/CModuleLayout"
 
-import { useLazyReadCertificatesQuery } from "@/features/certificate/certificateApi";
-import CreateDialog from "./_parts/CreateDialog";
-
+import { useLazyReadCertificatesQuery } from "@/features/certificate/certificateApi"
+import CreateDialog from "./_parts/CreateDialog"
 
 function CertificateList({ action }) {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? 1;
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") ?? 1
 
-  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadCertificatesQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadCertificatesQuery()
 
   useEffect(() => {
-    trigger({ page });
-  }, [page, trigger]);
+    trigger({ page })
+  }, [page, trigger])
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
   const columns = [
     {
@@ -59,9 +58,18 @@ function CertificateList({ action }) {
       flex: 1,
       renderCell: ({ value }) => renderCell(value ? "Published" : "Draft"),
     },
-  ];
+  ]
 
-  return <CDataTable columns={columns} rows={data} meta={meta} loading={isLoading}  action={action}  bulkDelete={{ model: "Certificate", invalidateTag: "CERTIFICATES" }} />;
+  return (
+    <CDataTable
+      columns={columns}
+      rows={data}
+      meta={meta}
+      loading={isLoading}
+      action={action}
+      bulkDelete={{ model: "Certificate", invalidateTag: "CERTIFICATES" }}
+    />
+  )
 }
 
 export default function CertificatesPage() {
@@ -78,10 +86,11 @@ export default function CertificatesPage() {
       },
       {
         title: "Template Reference",
-        description: "Certs use predefined HTML/PDF templates configured globally for customization.",
+        description:
+          "Certs use predefined HTML/PDF templates configured globally for customization.",
       },
     ],
-  };
+  }
 
   return (
     <CModuleLayout helpTips={helpTips}>
@@ -89,5 +98,5 @@ export default function CertificatesPage() {
         <CertificateList action={<CreateDialog />} />
       </Suspense>
     </CModuleLayout>
-  );
+  )
 }

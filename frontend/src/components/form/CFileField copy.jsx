@@ -1,13 +1,13 @@
-import * as React from "react";
-import { useState, useRef, useCallback } from "react";
-import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import CloseIcon from "@mui/icons-material/Close";
-import CropIcon from "@mui/icons-material/Crop";
+import * as React from "react"
+import { useState, useRef, useCallback } from "react"
+import { styled } from "@mui/material/styles"
+import Button from "@mui/material/Button"
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined"
+import AddIcon from "@mui/icons-material/Add"
+import CloseIcon from "@mui/icons-material/Close"
+import CropIcon from "@mui/icons-material/Crop"
 import {
   Typography,
   Box,
@@ -19,8 +19,8 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   CircularProgress,
-} from "@mui/material";
-import Cropper from "react-easy-crop";
+} from "@mui/material"
+import Cropper from "react-easy-crop"
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -32,34 +32,28 @@ const VisuallyHiddenInput = styled("input")({
   left: 0,
   whiteSpace: "nowrap",
   width: 1,
-});
+})
 
-const IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/gif",
-  "image/webp",
-  "image/svg+xml",
-];
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"]
 
 // SVG is not compressible via canvas — skip it
-const COMPRESSIBLE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const COMPRESSIBLE_TYPES = ["image/jpeg", "image/png", "image/webp"]
 
 export const DEFAULT_ASPECT_RATIOS = [
   { label: "Free", value: undefined },
   { label: "1:1", value: 1 },
   { label: "4:3", value: 4 / 3 },
   { label: "16:9", value: 16 / 9 },
-];
+]
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
 async function getCroppedBlob(imageSrc, pixelCrop, outputType = "image/jpeg") {
-  const image = await createImageBitmap(await (await fetch(imageSrc)).blob());
-  const canvas = document.createElement("canvas");
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
-  const ctx = canvas.getContext("2d");
+  const image = await createImageBitmap(await (await fetch(imageSrc)).blob())
+  const canvas = document.createElement("canvas")
+  canvas.width = pixelCrop.width
+  canvas.height = pixelCrop.height
+  const ctx = canvas.getContext("2d")
   ctx.drawImage(
     image,
     pixelCrop.x,
@@ -69,11 +63,9 @@ async function getCroppedBlob(imageSrc, pixelCrop, outputType = "image/jpeg") {
     0,
     0,
     pixelCrop.width,
-    pixelCrop.height,
-  );
-  return new Promise((resolve) =>
-    canvas.toBlob((blob) => resolve(blob), outputType, 0.92),
-  );
+    pixelCrop.height
+  )
+  return new Promise(resolve => canvas.toBlob(blob => resolve(blob), outputType, 0.92))
 }
 
 /**
@@ -81,28 +73,28 @@ async function getCroppedBlob(imageSrc, pixelCrop, outputType = "image/jpeg") {
  * Returns a new File (or the original if compression is skipped/fails).
  */
 async function compressFile(file, options = {}) {
-  if (!COMPRESSIBLE_TYPES.includes(file.type)) return file;
+  if (!COMPRESSIBLE_TYPES.includes(file.type)) return file
 
-  const Compressor = (await import("compressorjs")).default;
+  const Compressor = (await import("compressorjs")).default
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     new Compressor(file, {
-      quality: 0.6,  // default: ~67.99% compression ratio (recommended)
-      ...options,    // caller overrides go here
+      quality: 0.6, // default: ~67.99% compression ratio (recommended)
+      ...options, // caller overrides go here
       success(result) {
         // compressorjs may return a Blob; wrap it in a File to preserve name
         const compressed =
           result instanceof File
             ? result
-            : new File([result], file.name, { type: result.type || file.type });
-        resolve(compressed);
+            : new File([result], file.name, { type: result.type || file.type })
+        resolve(compressed)
       },
       error() {
         // fallback to original on any error
-        resolve(file);
+        resolve(file)
       },
-    });
-  });
+    })
+  })
 }
 
 // ─── CropDialog ───────────────────────────────────────────────────────────────
@@ -115,27 +107,27 @@ function CropDialog({
   onApply,
   aspectRatios = DEFAULT_ASPECT_RATIOS,
 }) {
-  const [crop, setCrop]               = useState({ x: 0, y: 0 });
-  const [zoom, setZoom]               = useState(1);
-  const [aspectIndex, setAspectIndex] = useState(0);
-  const [croppedArea, setCroppedArea] = useState(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+  const [aspectIndex, setAspectIndex] = useState(0)
+  const [croppedArea, setCroppedArea] = useState(null)
 
-  const aspect = aspectRatios[aspectIndex]?.value;
+  const aspect = aspectRatios[aspectIndex]?.value
 
   React.useEffect(() => {
     if (open) {
-      setCrop({ x: 0, y: 0 });
-      setZoom(1);
-      setAspectIndex(0);
-      setCroppedArea(null);
+      setCrop({ x: 0, y: 0 })
+      setZoom(1)
+      setAspectIndex(0)
+      setCroppedArea(null)
     }
-  }, [open, imageSrc]);
+  }, [open, imageSrc])
 
   const handleApply = async () => {
-    if (!croppedArea) return;
-    const blob = await getCroppedBlob(imageSrc, croppedArea, imageType);
-    onApply(blob);
-  };
+    if (!croppedArea) return
+    const blob = await getCroppedBlob(imageSrc, croppedArea, imageType)
+    onApply(blob)
+  }
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -154,9 +146,14 @@ function CropDialog({
 
       <Box
         sx={{
-          px: 2, pt: 1.5, pb: 0.5,
-          display: "flex", alignItems: "center", gap: 2,
-          borderTop: "0.5px solid", borderColor: "divider",
+          px: 2,
+          pt: 1.5,
+          pb: 0.5,
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
+          borderTop: "0.5px solid",
+          borderColor: "divider",
         }}
       >
         <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
@@ -164,7 +161,9 @@ function CropDialog({
         </Typography>
         <Slider
           value={zoom}
-          min={1} max={3} step={0.05}
+          min={1}
+          max={3}
+          step={0.05}
           onChange={(_, v) => setZoom(v)}
           sx={{ flex: 1, maxWidth: 140 }}
           size="small"
@@ -174,7 +173,9 @@ function CropDialog({
           value={aspectIndex}
           exclusive
           size="small"
-          onChange={(_, v) => { if (v !== null) setAspectIndex(v); }}
+          onChange={(_, v) => {
+            if (v !== null) setAspectIndex(v)
+          }}
           sx={{ ml: "auto" }}
         >
           {aspectRatios.map((r, i) => (
@@ -186,11 +187,15 @@ function CropDialog({
       </Box>
 
       <DialogActions sx={{ px: 2, pb: 1.5 }}>
-        <Button size="small" onClick={onClose}>Cancel</Button>
-        <Button size="small" variant="contained" onClick={handleApply}>Apply crop</Button>
+        <Button size="small" onClick={onClose}>
+          Cancel
+        </Button>
+        <Button size="small" variant="contained" onClick={handleApply}>
+          Apply crop
+        </Button>
       </DialogActions>
     </Dialog>
-  );
+  )
 }
 
 // ─── FilePreviewGrid ──────────────────────────────────────────────────────────
@@ -203,9 +208,12 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
           key={i}
           sx={{
             position: "relative",
-            width: 72, height: 72,
-            borderRadius: 2, overflow: "hidden",
-            border: "0.5px solid", borderColor: "divider",
+            width: 72,
+            height: 72,
+            borderRadius: 2,
+            overflow: "hidden",
+            border: "0.5px solid",
+            borderColor: "divider",
             flexShrink: 0,
           }}
         >
@@ -219,10 +227,15 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
           ) : (
             <Box
               sx={{
-                width: "100%", height: "100%",
-                display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center",
-                gap: 0.5, bgcolor: "background.default", px: 0.5,
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 0.5,
+                bgcolor: "background.default",
+                px: 0.5,
               }}
             >
               <InsertDriveFileOutlinedIcon sx={{ fontSize: 20, color: "text.secondary" }} />
@@ -230,9 +243,13 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
                 variant="caption"
                 color="text.secondary"
                 sx={{
-                  overflow: "hidden", textOverflow: "ellipsis",
-                  whiteSpace: "nowrap", width: "100%",
-                  textAlign: "center", fontSize: 10, px: 0.5,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  width: "100%",
+                  textAlign: "center",
+                  fontSize: 10,
+                  px: 0.5,
                 }}
               >
                 {f.name}
@@ -243,12 +260,20 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
           {IMAGE_TYPES.includes(f.type) && onReCrop && (
             <IconButton
               size="small"
-              onClick={(e) => { e.stopPropagation(); onReCrop(i); }}
+              onClick={e => {
+                e.stopPropagation()
+                onReCrop(i)
+              }}
               sx={{
-                position: "absolute", bottom: 2, left: 2,
-                width: 18, height: 18,
-                bgcolor: "rgba(0,0,0,0.55)", color: "white",
-                "&:hover": { bgcolor: "rgba(0,0,0,0.75)" }, p: 0,
+                position: "absolute",
+                bottom: 2,
+                left: 2,
+                width: 18,
+                height: 18,
+                bgcolor: "rgba(0,0,0,0.55)",
+                color: "white",
+                "&:hover": { bgcolor: "rgba(0,0,0,0.75)" },
+                p: 0,
               }}
             >
               <CropIcon sx={{ fontSize: 11 }} />
@@ -257,12 +282,20 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
 
           <IconButton
             size="small"
-            onClick={(e) => { e.stopPropagation(); onRemove(i); }}
+            onClick={e => {
+              e.stopPropagation()
+              onRemove(i)
+            }}
             sx={{
-              position: "absolute", top: 2, right: 2,
-              width: 18, height: 18,
-              bgcolor: "rgba(0,0,0,0.55)", color: "white",
-              "&:hover": { bgcolor: "rgba(0,0,0,0.75)" }, p: 0,
+              position: "absolute",
+              top: 2,
+              right: 2,
+              width: 18,
+              height: 18,
+              bgcolor: "rgba(0,0,0,0.55)",
+              color: "white",
+              "&:hover": { bgcolor: "rgba(0,0,0,0.75)" },
+              p: 0,
             }}
           >
             <CloseIcon sx={{ fontSize: 11 }} />
@@ -272,12 +305,21 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
 
       {onAdd && (
         <Box
-          onClick={(e) => { e.stopPropagation(); onAdd(); }}
+          onClick={e => {
+            e.stopPropagation()
+            onAdd()
+          }}
           sx={{
-            width: 72, height: 72, borderRadius: 2,
-            border: "1.5px dashed", borderColor: "divider",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", color: "text.disabled",
+            width: 72,
+            height: 72,
+            borderRadius: 2,
+            border: "1.5px dashed",
+            borderColor: "divider",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            color: "text.disabled",
             "&:hover": { borderColor: "primary.main", color: "primary.main" },
           }}
         >
@@ -285,7 +327,7 @@ function FilePreviewGrid({ files, onRemove, onAdd, onReCrop }) {
         </Box>
       )}
     </Box>
-  );
+  )
 }
 
 // ─── CFileField ───────────────────────────────────────────────────────────────
@@ -304,150 +346,154 @@ export default function CFileField({
   showPreview = true,
   cropOnSingle = true,
   aspectRatios,
-  compress = true,          // NEW: enable/disable compressorjs
-  compressOptions = {},     // NEW: compressorjs option overrides (quality, maxWidth, etc.)
+  compress = true, // NEW: enable/disable compressorjs
+  compressOptions = {}, // NEW: compressorjs option overrides (quality, maxWidth, etc.)
   ...other
 }) {
-  const [fileEntries, setFileEntries]   = useState([]);
-  const [isDragging, setIsDragging]     = useState(false);
-  const [cropState, setCropState]       = useState(null);
-  const [isCompressing, setIsCompressing] = useState(false);
-  const inputRef = useRef(null);
+  const [fileEntries, setFileEntries] = useState([])
+  const [isDragging, setIsDragging] = useState(false)
+  const [cropState, setCropState] = useState(null)
+  const [isCompressing, setIsCompressing] = useState(false)
+  const inputRef = useRef(null)
 
   /**
    * Compress a file if compress=true and the file type is supported.
    * Returns the (possibly compressed) File.
    */
   const maybeCompress = useCallback(
-    async (file) => {
-      if (!compress || !COMPRESSIBLE_TYPES.includes(file.type)) return file;
-      return compressFile(file, compressOptions);
+    async file => {
+      if (!compress || !COMPRESSIBLE_TYPES.includes(file.type)) return file
+      return compressFile(file, compressOptions)
     },
-    [compress, compressOptions],
-  );
+    [compress, compressOptions]
+  )
 
   const buildEntries = useCallback(
-    async (fileList) => {
-      const files = Array.from(fileList);
+    async fileList => {
+      const files = Array.from(fileList)
       const entries = await Promise.all(
-        files.map(async (file) => {
-          const processed = await maybeCompress(file);
+        files.map(async file => {
+          const processed = await maybeCompress(file)
           return {
             file: processed,
             name: processed.name,
             type: processed.type,
-            preview: IMAGE_TYPES.includes(processed.type)
-              ? URL.createObjectURL(processed)
-              : null,
-          };
-        }),
-      );
-      return entries;
+            preview: IMAGE_TYPES.includes(processed.type) ? URL.createObjectURL(processed) : null,
+          }
+        })
+      )
+      return entries
     },
-    [maybeCompress],
-  );
+    [maybeCompress]
+  )
 
   const commitEntries = useCallback(
-    (entries) => {
-      setFileEntries(entries);
-      const dt = new DataTransfer();
-      entries.forEach((e) => dt.items.add(e.file));
-      if (inputRef.current) inputRef.current.files = dt.files;
-      onChange({ target: { files: dt.files, name } });
+    entries => {
+      setFileEntries(entries)
+      const dt = new DataTransfer()
+      entries.forEach(e => dt.items.add(e.file))
+      if (inputRef.current) inputRef.current.files = dt.files
+      onChange({ target: { files: dt.files, name } })
     },
-    [name, onChange],
-  );
+    [name, onChange]
+  )
 
   const handleIncomingFiles = useCallback(
-    async (fileList) => {
-      setIsCompressing(true);
+    async fileList => {
+      setIsCompressing(true)
       try {
-        const incoming = await buildEntries(fileList);
-        const merged = multiple ? [...fileEntries, ...incoming] : incoming;
-        commitEntries(merged);
+        const incoming = await buildEntries(fileList)
+        const merged = multiple ? [...fileEntries, ...incoming] : incoming
+        commitEntries(merged)
 
-        if (cropOnSingle && !multiple && incoming.length === 1 && IMAGE_TYPES.includes(incoming[0].type)) {
-          setCropState({ index: 0, src: incoming[0].preview, type: incoming[0].type });
+        if (
+          cropOnSingle &&
+          !multiple &&
+          incoming.length === 1 &&
+          IMAGE_TYPES.includes(incoming[0].type)
+        ) {
+          setCropState({ index: 0, src: incoming[0].preview, type: incoming[0].type })
         }
       } finally {
-        setIsCompressing(false);
+        setIsCompressing(false)
       }
     },
-    [buildEntries, multiple, fileEntries, commitEntries, cropOnSingle],
-  );
+    [buildEntries, multiple, fileEntries, commitEntries, cropOnSingle]
+  )
 
-  const handleFileChange = (e) => handleIncomingFiles(e.target.files);
+  const handleFileChange = e => handleIncomingFiles(e.target.files)
 
   const handleDrop = useCallback(
-    (e) => {
-      e.preventDefault();
-      setIsDragging(false);
-      if (disabled) return;
-      handleIncomingFiles(e.dataTransfer.files);
+    e => {
+      e.preventDefault()
+      setIsDragging(false)
+      if (disabled) return
+      handleIncomingFiles(e.dataTransfer.files)
     },
-    [disabled, handleIncomingFiles],
-  );
+    [disabled, handleIncomingFiles]
+  )
 
   const handleRemove = useCallback(
-    (index) => {
-      const next = fileEntries.filter((_, i) => i !== index);
-      if (fileEntries[index].preview) URL.revokeObjectURL(fileEntries[index].preview);
-      commitEntries(next);
+    index => {
+      const next = fileEntries.filter((_, i) => i !== index)
+      if (fileEntries[index].preview) URL.revokeObjectURL(fileEntries[index].preview)
+      commitEntries(next)
     },
-    [fileEntries, commitEntries],
-  );
+    [fileEntries, commitEntries]
+  )
 
   const handleReCrop = useCallback(
-    (index) => {
-      const entry = fileEntries[index];
-      setCropState({ index, src: entry.preview, type: entry.type });
+    index => {
+      const entry = fileEntries[index]
+      setCropState({ index, src: entry.preview, type: entry.type })
     },
-    [fileEntries],
-  );
+    [fileEntries]
+  )
 
   const handleCropApply = useCallback(
-    async (blob) => {
-      const { index, type } = cropState;
-      const oldEntry = fileEntries[index];
-      const ext = type.split("/")[1] || "jpg";
+    async blob => {
+      const { index, type } = cropState
+      const oldEntry = fileEntries[index]
+      const ext = type.split("/")[1] || "jpg"
 
       // Close dialog immediately so the loading state is visible beneath
-      setCropState(null);
-      setIsCompressing(true);
+      setCropState(null)
+      setIsCompressing(true)
 
       try {
-        const croppedFile = new File(
-          [blob],
-          oldEntry.name.replace(/\.[^.]+$/, `.${ext}`),
-          { type },
-        );
+        const croppedFile = new File([blob], oldEntry.name.replace(/\.[^.]+$/, `.${ext}`), { type })
 
         // Run compression on the cropped result if enabled
-        const processedFile = await maybeCompress(croppedFile);
+        const processedFile = await maybeCompress(croppedFile)
 
-        const newPreview = URL.createObjectURL(processedFile);
-        if (oldEntry.preview) URL.revokeObjectURL(oldEntry.preview);
+        const newPreview = URL.createObjectURL(processedFile)
+        if (oldEntry.preview) URL.revokeObjectURL(oldEntry.preview)
 
         const next = fileEntries.map((e, i) =>
           i === index
             ? { file: processedFile, name: processedFile.name, type, preview: newPreview }
-            : e,
-        );
-        commitEntries(next);
+            : e
+        )
+        commitEntries(next)
       } finally {
-        setIsCompressing(false);
+        setIsCompressing(false)
       }
     },
-    [cropState, fileEntries, commitEntries, maybeCompress],
-  );
+    [cropState, fileEntries, commitEntries, maybeCompress]
+  )
 
-  const handleDragOver  = (e) => { e.preventDefault(); if (!disabled) setIsDragging(true); };
-  const handleDragLeave = (e) => { if (!e.currentTarget.contains(e.relatedTarget)) setIsDragging(false); };
+  const handleDragOver = e => {
+    e.preventDefault()
+    if (!disabled) setIsDragging(true)
+  }
+  const handleDragLeave = e => {
+    if (!e.currentTarget.contains(e.relatedTarget)) setIsDragging(false)
+  }
 
-  const hasFiles       = fileEntries.length > 0;
-  const fileCountLabel = `${fileEntries.length} file${fileEntries.length > 1 ? "s" : ""} selected`;
-  const reCropHandler  = cropOnSingle && !multiple ? handleReCrop : undefined;
-  const isDisabled     = disabled || isCompressing;
+  const hasFiles = fileEntries.length > 0
+  const fileCountLabel = `${fileEntries.length} file${fileEntries.length > 1 ? "s" : ""} selected`
+  const reCropHandler = cropOnSingle && !multiple ? handleReCrop : undefined
+  const isDisabled = disabled || isCompressing
 
   const hiddenInput = (
     <VisuallyHiddenInput
@@ -459,7 +505,7 @@ export default function CFileField({
       name={name}
       {...other}
     />
-  );
+  )
 
   const preview = showPreview && hasFiles && (
     <FilePreviewGrid
@@ -468,7 +514,7 @@ export default function CFileField({
       onAdd={multiple ? () => inputRef.current?.click() : undefined}
       onReCrop={reCropHandler}
     />
-  );
+  )
 
   return (
     <>
@@ -521,7 +567,10 @@ export default function CFileField({
                   component="span"
                   color="primary.main"
                   sx={{ textDecoration: "underline", cursor: "pointer" }}
-                  onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}
+                  onClick={e => {
+                    e.stopPropagation()
+                    inputRef.current?.click()
+                  }}
                 >
                   browse files
                 </Box>
@@ -529,7 +578,9 @@ export default function CFileField({
               <Typography variant="caption" color="text.disabled">
                 {label}
                 {required && (
-                  <Typography component="span" color="error" ml={0.5}>*</Typography>
+                  <Typography component="span" color="error" ml={0.5}>
+                    *
+                  </Typography>
                 )}
               </Typography>
             </>
@@ -544,7 +595,10 @@ export default function CFileField({
                   component="span"
                   color="primary.main"
                   sx={{ textDecoration: "underline", cursor: "pointer" }}
-                  onClick={(e) => { e.stopPropagation(); inputRef.current?.click(); }}
+                  onClick={e => {
+                    e.stopPropagation()
+                    inputRef.current?.click()
+                  }}
                 >
                   browse
                 </Box>
@@ -562,7 +616,9 @@ export default function CFileField({
             color={error ? "error" : "primary"}
             fullWidth
             size="large"
-            startIcon={isCompressing ? <CircularProgress size={16} color="inherit" /> : <CloudUploadIcon />}
+            startIcon={
+              isCompressing ? <CircularProgress size={16} color="inherit" /> : <CloudUploadIcon />
+            }
             sx={{ justifyContent: "flex-start", height: size === "small" ? 40 : 57 }}
             disabled={isDisabled}
           >
@@ -572,7 +628,9 @@ export default function CFileField({
               <span>
                 {label}
                 {required && (
-                  <Typography component="span" color="error" ml={0.5}>*</Typography>
+                  <Typography component="span" color="error" ml={0.5}>
+                    *
+                  </Typography>
                 )}
               </span>
             ) : (
@@ -601,9 +659,8 @@ export default function CFileField({
         />
       )}
     </>
-  );
+  )
 }
-
 
 // Here are all the usage patterns:
 
@@ -767,7 +824,6 @@ export default function CFileField({
 // />
 // ```
 
-
 // Default (compress on, quality 0.6 ~68% reduction):
 // <CFileField label="Photo" name="photo" onChange={...} dragNdrop />
 
@@ -784,4 +840,3 @@ export default function CFileField({
 //   onChange={...}
 //   compressOptions={{ quality: 0.6, maxWidth: 1920, maxHeight: 1080 }}
 // />
-

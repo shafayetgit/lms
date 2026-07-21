@@ -1,9 +1,9 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const certificateApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     createCertificate: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/certificates/",
         method: "POST",
         body,
@@ -11,7 +11,7 @@ export const certificateApi = api.injectEndpoints({
       invalidatesTags: ["CERTIFICATES"],
     }),
     readCertificates: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/certificates/",
         method: "GET",
         params,
@@ -19,7 +19,7 @@ export const certificateApi = api.injectEndpoints({
       providesTags: ["CERTIFICATES"],
     }),
     readCertificate: builder.query({
-      query: (id) => `/api/v1/certificates/${id}`,
+      query: id => `/api/v1/certificates/${id}`,
       providesTags: ["CERTIFICATES"],
     }),
     updateCertificate: builder.mutation({
@@ -31,7 +31,7 @@ export const certificateApi = api.injectEndpoints({
       invalidatesTags: ["CERTIFICATES"],
     }),
     deleteCertificate: builder.mutation({
-      query: (id) => ({
+      query: id => ({
         url: `/api/v1/certificates/${id}`,
         method: "DELETE",
       }),
@@ -39,7 +39,7 @@ export const certificateApi = api.injectEndpoints({
     }),
 
     requestCertificate: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/certificates/request",
         method: "POST",
         body,
@@ -47,7 +47,7 @@ export const certificateApi = api.injectEndpoints({
       invalidatesTags: ["CERTIFICATES"],
     }),
     readCertificateRequests: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/certificates/requests",
         method: "GET",
         params,
@@ -55,7 +55,7 @@ export const certificateApi = api.injectEndpoints({
       providesTags: ["CERTIFICATES"],
     }),
     readCertificateRequest: builder.query({
-      query: (id) => `/api/v1/certificates/requests/${id}`,
+      query: id => `/api/v1/certificates/requests/${id}`,
       providesTags: ["CERTIFICATES"],
     }),
     updateCertificateRequest: builder.mutation({
@@ -68,7 +68,7 @@ export const certificateApi = api.injectEndpoints({
     }),
 
     createEvaluation: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/certificates/evaluations",
         method: "POST",
         body,
@@ -76,7 +76,7 @@ export const certificateApi = api.injectEndpoints({
       invalidatesTags: ["CERTIFICATES"],
     }),
     readEvaluations: builder.query({
-      query: (params) => ({
+      query: params => ({
         url: "/api/v1/certificates/evaluations",
         method: "GET",
         params,
@@ -84,7 +84,7 @@ export const certificateApi = api.injectEndpoints({
       providesTags: ["CERTIFICATES"],
     }),
     readEvaluation: builder.query({
-      query: (id) => `/api/v1/certificates/evaluations/${id}`,
+      query: id => `/api/v1/certificates/evaluations/${id}`,
       providesTags: ["CERTIFICATES"],
     }),
     gradeEvaluation: builder.mutation({
@@ -96,7 +96,7 @@ export const certificateApi = api.injectEndpoints({
       invalidatesTags: ["CERTIFICATES"],
     }),
   }),
-});
+})
 
 export const {
   useCreateCertificateMutation,
@@ -118,4 +118,4 @@ export const {
   useLazyReadEvaluationsQuery,
   useReadEvaluationQuery,
   useGradeEvaluationMutation,
-} = certificateApi;
+} = certificateApi

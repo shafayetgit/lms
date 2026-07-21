@@ -1,49 +1,59 @@
-"use client";
+"use client"
 
-import React, { Fragment, useState, useEffect } from "react";
-import Link from "next/link";
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip, Typography, Box, alpha } from "@mui/material";
-import { usePermissions } from "@/hooks/usePermissions";
-import { ROUTES } from "@/lib/constants/routes";
-import { lmsMenuItems, settingsMenuItems, academyMenuItems, coreMenuItems } from "../navigation";
+import React, { Fragment, useState, useEffect } from "react"
+import Link from "next/link"
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+  Typography,
+  Box,
+  alpha,
+} from "@mui/material"
+import { usePermissions } from "@/hooks/usePermissions"
+import { ROUTES } from "@/lib/constants/routes"
+import { lmsMenuItems, settingsMenuItems, academyMenuItems, coreMenuItems } from "../navigation"
 
 export default function NavigationList({ isMini, isMobile, pathname, theme }) {
-  const [mounted, setMounted] = useState(false);
-  const { can } = usePermissions();
+  const [mounted, setMounted] = useState(false)
+  const { can } = usePermissions()
 
   const currentValue = pathname.startsWith("/settings")
     ? "settings"
     : pathname.startsWith("/academy")
-    ? "academy"
-    : pathname.startsWith("/core")
-    ? "core"
-    : "lms";
+      ? "academy"
+      : pathname.startsWith("/core")
+        ? "core"
+        : "lms"
 
   useEffect(() => {
-    let active = true;
+    let active = true
     setTimeout(() => {
-      if (active) setMounted(true);
-    }, 0);
+      if (active) setMounted(true)
+    }, 0)
     return () => {
-      active = false;
-    };
-  }, []);
+      active = false
+    }
+  }, [])
 
   const itemsSource =
     currentValue === "settings"
       ? settingsMenuItems
       : currentValue === "academy"
-      ? academyMenuItems
-      : currentValue === "core"
-      ? coreMenuItems
-      : lmsMenuItems;
+        ? academyMenuItems
+        : currentValue === "core"
+          ? coreMenuItems
+          : lmsMenuItems
 
   const filteredItems = mounted
-    ? itemsSource.filter((item) => {
-      if (!item.resource) return true;
-      return can(item.resource, item.action || "read");
-    })
-    : [];
+    ? itemsSource.filter(item => {
+        if (!item.resource) return true
+        return can(item.resource, item.action || "read")
+      })
+    : []
 
   return (
     <List
@@ -64,11 +74,10 @@ export default function NavigationList({ isMini, isMobile, pathname, theme }) {
         const isActive =
           item.path === ROUTES.admin.dashboard.path
             ? pathname === item.path
-            : pathname === item.path ||
-            (item.path !== "/" && pathname?.startsWith(item.path + "/"));
+            : pathname === item.path || (item.path !== "/" && pathname?.startsWith(item.path + "/"))
 
-        const prevItem = index > 0 ? filteredItems[index - 1] : null;
-        const showGroup = item.group && item.group !== prevItem?.group;
+        const prevItem = index > 0 ? filteredItems[index - 1] : null
+        const showGroup = item.group && item.group !== prevItem?.group
 
         return (
           <Fragment key={item.path}>
@@ -90,9 +99,12 @@ export default function NavigationList({ isMini, isMobile, pathname, theme }) {
                 {item.group}
               </Typography>
             )}
-            {showGroup && (isMini && !isMobile) && <Box sx={{ height: index === 0 ? 4 : 16 }} />}
+            {showGroup && isMini && !isMobile && <Box sx={{ height: index === 0 ? 4 : 16 }} />}
 
-            <ListItem disablePadding sx={{ mb: 0, justifyContent: isMini && !isMobile ? "center" : "flex-start" }}>
+            <ListItem
+              disablePadding
+              sx={{ mb: 0, justifyContent: isMini && !isMobile ? "center" : "flex-start" }}
+            >
               <Tooltip title={isMini && !isMobile ? item.title : ""} placement="right" arrow>
                 <ListItemButton
                   component={Link}
@@ -151,8 +163,8 @@ export default function NavigationList({ isMini, isMobile, pathname, theme }) {
               </Tooltip>
             </ListItem>
           </Fragment>
-        );
+        )
       })}
     </List>
-  );
+  )
 }

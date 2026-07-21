@@ -30,7 +30,7 @@ const lessonAPI = api.injectEndpoints({
       }),
       invalidatesTags: ["LESSONS"],
     }),
-    
+
     deleteLesson: builder.mutation({
       query: ({ id } = {}) => ({
         url: `${PREFIX}/${id}`,

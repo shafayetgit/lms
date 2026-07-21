@@ -14,7 +14,17 @@ const courseAPI = api.injectEndpoints({
     }),
 
     readCourses: builder.query({
-      query: ({ size, page, term, badge, level, is_active, published, upcoming, is_portal } = {}) => {
+      query: ({
+        size,
+        page,
+        term,
+        badge,
+        level,
+        is_active,
+        published,
+        upcoming,
+        is_portal,
+      } = {}) => {
         const params = new URLSearchParams()
 
         if (term) params.set("term", term)
@@ -54,7 +64,7 @@ const courseAPI = api.injectEndpoints({
       }),
       invalidatesTags: ["COURSES"],
     }),
-    
+
     deleteCourse: builder.mutation({
       query: ({ id } = {}) => ({
         url: `${PREFIX}/${id}`,

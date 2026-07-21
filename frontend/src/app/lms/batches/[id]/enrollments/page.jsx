@@ -27,7 +27,8 @@ function EnrollmentList({ batchPublicId }) {
   const searchParams = useSearchParams()
   const page = Number(searchParams.get("page") ?? 1)
 
-  const [trigger, { data: { data: enrollments, meta } = {}, isLoading }] = useLazyReadBatchEnrollmentsQuery()
+  const [trigger, { data: { data: enrollments, meta } = {}, isLoading }] =
+    useLazyReadBatchEnrollmentsQuery()
   const [deleteEnrollment] = useDeleteBatchEnrollmentMutation()
 
   useEffect(() => {
@@ -36,7 +37,7 @@ function EnrollmentList({ batchPublicId }) {
     }
   }, [batchPublicId, page, trigger])
 
-  const handleDelete = async (enrollmentPublicId) => {
+  const handleDelete = async enrollmentPublicId => {
     try {
       await deleteEnrollment({ batchId: batchPublicId, enrollmentId: enrollmentPublicId }).unwrap()
       toast.success("Student unenrolled successfully")
@@ -54,7 +55,9 @@ function EnrollmentList({ batchPublicId }) {
       flex: 1.5,
       renderCell: ({ row }) => {
         const member = row.member
-        return member ? `${member.first_name || ""} ${member.last_name || ""}`.trim() || member.email : `User #${row.member_id}`
+        return member
+          ? `${member.first_name || ""} ${member.last_name || ""}`.trim() || member.email
+          : `User #${row.member_id}`
       },
     },
     {
@@ -159,10 +162,34 @@ export default function BatchEnrollmentsPage() {
   if (isLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Dashboard", href: `/lms/batches/${id}/dashboard`, icon: <Dashboard />, resource: "batch", action: "read" },
-    { label: "Details", href: `/lms/batches/${id}`, icon: <InfoOutlined />, resource: "batch", action: "read" },
-    { label: "Timetable", href: `/lms/batches/${id}/timetable`, icon: <CalendarMonth />, resource: "batch", action: "read" },
-    { label: "Enrollments", href: `/lms/batches/${id}/enrollments`, icon: <Group />, resource: "batch", action: "read" },
+    {
+      label: "Dashboard",
+      href: `/lms/batches/${id}/dashboard`,
+      icon: <Dashboard />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Details",
+      href: `/lms/batches/${id}`,
+      icon: <InfoOutlined />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Timetable",
+      href: `/lms/batches/${id}/timetable`,
+      icon: <CalendarMonth />,
+      resource: "batch",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/batches/${id}/enrollments`,
+      icon: <Group />,
+      resource: "batch",
+      action: "read",
+    },
   ]
 
   return (

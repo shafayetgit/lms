@@ -1,7 +1,14 @@
 "use client"
 import React, { useState } from "react"
 import { useFormik } from "formik"
-import { Grid, LinearProgress, Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material"
+import {
+  Grid,
+  LinearProgress,
+  Box,
+  Typography,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material"
 import { useParams } from "next/navigation"
 import { VideoLibrary, Article, Quiz, Assignment } from "@mui/icons-material"
 
@@ -46,10 +53,16 @@ export default function CreateDialog() {
 
   // Fetch quizzes and assignments for this course
   const { data: quizzesData } = useReadQuizzesQuery({ courseId, size: 100 }, { skip: !open })
-  const { data: assignmentsData } = useReadAssignmentsQuery({ course_id: courseId, size: 100 }, { skip: !open })
+  const { data: assignmentsData } = useReadAssignmentsQuery(
+    { course_id: courseId, size: 100 },
+    { skip: !open }
+  )
 
   const quizOptions = (quizzesData?.data ?? []).map(q => ({ label: q.title, value: q.id }))
-  const assignmentOptions = (assignmentsData?.data ?? []).map(a => ({ label: a.title, value: a.id }))
+  const assignmentOptions = (assignmentsData?.data ?? []).map(a => ({
+    label: a.title,
+    value: a.id,
+  }))
 
   const formik = useFormik({
     initialValues: {
@@ -115,7 +128,10 @@ export default function CreateDialog() {
             })
             if (uploadedFiles?.length > 0) {
               await attach(uploadedFiles).unwrap()
-              await update({ id: newLessonId, body: { body: uploadedFiles[0].meta.secure_url } }).unwrap()
+              await update({
+                id: newLessonId,
+                body: { body: uploadedFiles[0].meta.secure_url },
+              }).unwrap()
               toast.info("Video uploaded and saved")
             }
           } catch (mediaError) {
@@ -149,165 +165,180 @@ export default function CreateDialog() {
         handleCDialogOpen={handleOpen}
         handleCDialogClose={handleClose}
       >
-      <CForm onSubmit={formik.handleSubmit} width="48rem" btnProps={{ loading: isCreating || isAttaching }} dialog>
-        <Grid container spacing={2}>
-          {/* Lesson Type Selector */}
-          <Grid size={{ xs: 12 }}>
-            <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
-              Lesson Type
-            </Typography>
-            <ToggleButtonGroup
-              value={lessonType}
-              exclusive
-              onChange={(_, val) => val && formik.setFieldValue("lesson_type", val)}
-              size="small"
-              fullWidth
-            >
-              {LESSON_TYPES.map(t => (
-                <ToggleButton key={t.value} value={t.value} sx={{ gap: 0.75, textTransform: "capitalize" }}>
-                  {TYPE_ICONS[t.value]}
-                  {t.label}
-                </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-          </Grid>
+        <CForm
+          onSubmit={formik.handleSubmit}
+          width="48rem"
+          btnProps={{ loading: isCreating || isAttaching }}
+          dialog
+        >
+          <Grid container spacing={2}>
+            {/* Lesson Type Selector */}
+            <Grid size={{ xs: 12 }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mb: 0.5, display: "block" }}
+              >
+                Lesson Type
+              </Typography>
+              <ToggleButtonGroup
+                value={lessonType}
+                exclusive
+                onChange={(_, val) => val && formik.setFieldValue("lesson_type", val)}
+                size="small"
+                fullWidth
+              >
+                {LESSON_TYPES.map(t => (
+                  <ToggleButton
+                    key={t.value}
+                    value={t.value}
+                    sx={{ gap: 0.75, textTransform: "capitalize" }}
+                  >
+                    {TYPE_ICONS[t.value]}
+                    {t.label}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Grid>
 
-          {/* Title – always shown */}
-          <Grid size={{ xs: 12 }}>
-            <CTextField
-              label="Title"
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.title && Boolean(formik.errors.title)}
-              helperText={formik.touched.title && formik.errors.title}
-              required
-            />
-          </Grid>
+            {/* Title – always shown */}
+            <Grid size={{ xs: 12 }}>
+              <CTextField
+                label="Title"
+                name="title"
+                value={formik.values.title}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+                required
+              />
+            </Grid>
 
-          {/* ── VIDEO ─────────────────────────────── */}
-          {lessonType === "video" && (
-            <>
+            {/* ── VIDEO ─────────────────────────────── */}
+            {lessonType === "video" && (
+              <>
+                <Grid size={{ xs: 12 }}>
+                  <CTextField
+                    label="YouTube URL"
+                    name="youtube"
+                    value={formik.values.youtube}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.youtube && Boolean(formik.errors.youtube)}
+                    helperText={formik.touched.youtube && formik.errors.youtube}
+                    placeholder="https://youtube.com/..."
+                  />
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                  <CFileField
+                    label="Or upload video file"
+                    dragNdrop
+                    onChange={e => formik.setFieldValue("video", e.target.files[0])}
+                  />
+                  {uploadProgress > 0 && uploadProgress <= 100 && (
+                    <Box sx={{ width: "100%", mt: 2 }}>
+                      <LinearProgress variant="determinate" value={uploadProgress} />
+                      <Typography variant="body2" color="text.secondary" align="center" mt={1}>
+                        {uploadProgress < 100 ? `Uploading... ${uploadProgress}%` : "Processing..."}
+                      </Typography>
+                    </Box>
+                  )}
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <CTextField
+                    label="Duration (minutes)"
+                    name="duration"
+                    type="number"
+                    value={formik.values.duration}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.duration && Boolean(formik.errors.duration)}
+                    helperText={formik.touched.duration && formik.errors.duration}
+                  />
+                </Grid>
+              </>
+            )}
+
+            {/* ── CONTENT ───────────────────────────── */}
+            {lessonType === "content" && (
               <Grid size={{ xs: 12 }}>
-                <CTextField
-                  label="YouTube URL"
-                  name="youtube"
-                  value={formik.values.youtube}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.youtube && Boolean(formik.errors.youtube)}
-                  helperText={formik.touched.youtube && formik.errors.youtube}
-                  placeholder="https://youtube.com/..."
+                <CTiptap
+                  label="Content"
+                  value={formik.values.content}
+                  onChange={val => formik.setFieldValue("content", val)}
+                  placeholder="Write your lesson content..."
+                  error={formik.touched.content && Boolean(formik.errors.content)}
+                  helperText={formik.touched.content && formik.errors.content}
                 />
               </Grid>
+            )}
+
+            {/* ── QUIZ ──────────────────────────────── */}
+            {lessonType === "quiz" && (
               <Grid size={{ xs: 12 }}>
-                <CFileField
-                  label="Or upload video file"
-                  dragNdrop
-                  onChange={e => formik.setFieldValue("video", e.target.files[0])}
-                />
-                {uploadProgress > 0 && uploadProgress <= 100 && (
-                  <Box sx={{ width: "100%", mt: 2 }}>
-                    <LinearProgress variant="determinate" value={uploadProgress} />
-                    <Typography variant="body2" color="text.secondary" align="center" mt={1}>
-                      {uploadProgress < 100 ? `Uploading... ${uploadProgress}%` : "Processing..."}
-                    </Typography>
-                  </Box>
-                )}
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <CTextField
-                  label="Duration (minutes)"
-                  name="duration"
-                  type="number"
-                  value={formik.values.duration}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.duration && Boolean(formik.errors.duration)}
-                  helperText={formik.touched.duration && formik.errors.duration}
+                <CAutocomplete
+                  label="Select Quiz"
+                  options={quizOptions}
+                  value={quizOptions.find(o => o.value === formik.values.quiz_id) || null}
+                  getOptionLabel={o => o.label}
+                  isOptionEqualToValue={(o, v) => o.value === v?.value}
+                  onChange={(_, val) => formik.setFieldValue("quiz_id", val?.value ?? null)}
+                  error={formik.touched.quiz_id && Boolean(formik.errors.quiz_id)}
+                  helperText={formik.touched.quiz_id && formik.errors.quiz_id}
                 />
               </Grid>
-            </>
-          )}
+            )}
 
-          {/* ── CONTENT ───────────────────────────── */}
-          {lessonType === "content" && (
+            {/* ── ASSIGNMENT ────────────────────────── */}
+            {lessonType === "assignment" && (
+              <Grid size={{ xs: 12 }}>
+                <CAutocomplete
+                  label="Select Assignment"
+                  options={assignmentOptions}
+                  value={
+                    assignmentOptions.find(o => o.value === formik.values.assignment_id) || null
+                  }
+                  getOptionLabel={o => o.label}
+                  isOptionEqualToValue={(o, v) => o.value === v?.value}
+                  onChange={(_, val) => formik.setFieldValue("assignment_id", val?.value ?? null)}
+                  error={formik.touched.assignment_id && Boolean(formik.errors.assignment_id)}
+                  helperText={formik.touched.assignment_id && formik.errors.assignment_id}
+                />
+              </Grid>
+            )}
+
+            {/* Description – always shown */}
             <Grid size={{ xs: 12 }}>
-              <CTiptap
-                label="Content"
-                value={formik.values.content}
-                onChange={val => formik.setFieldValue("content", val)}
-                placeholder="Write your lesson content..."
-                error={formik.touched.content && Boolean(formik.errors.content)}
-                helperText={formik.touched.content && formik.errors.content}
+              <CTextField
+                label="Description"
+                name="description"
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                multiline
+                rows={2}
               />
             </Grid>
-          )}
 
-          {/* ── QUIZ ──────────────────────────────── */}
-          {lessonType === "quiz" && (
-            <Grid size={{ xs: 12 }}>
-              <CAutocomplete
-                label="Select Quiz"
-                options={quizOptions}
-                value={quizOptions.find(o => o.value === formik.values.quiz_id) || null}
-                getOptionLabel={o => o.label}
-                isOptionEqualToValue={(o, v) => o.value === v?.value}
-                onChange={(_, val) => formik.setFieldValue("quiz_id", val?.value ?? null)}
-                error={formik.touched.quiz_id && Boolean(formik.errors.quiz_id)}
-                helperText={formik.touched.quiz_id && formik.errors.quiz_id}
+            {/* Checkboxes – always shown */}
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CCheckbox
+                label="Is Preview (Free)"
+                checked={formik.values.include_in_preview}
+                onChange={e => formik.setFieldValue("include_in_preview", e.target.checked)}
               />
             </Grid>
-          )}
-
-          {/* ── ASSIGNMENT ────────────────────────── */}
-          {lessonType === "assignment" && (
-            <Grid size={{ xs: 12 }}>
-              <CAutocomplete
-                label="Select Assignment"
-                options={assignmentOptions}
-                value={assignmentOptions.find(o => o.value === formik.values.assignment_id) || null}
-                getOptionLabel={o => o.label}
-                isOptionEqualToValue={(o, v) => o.value === v?.value}
-                onChange={(_, val) => formik.setFieldValue("assignment_id", val?.value ?? null)}
-                error={formik.touched.assignment_id && Boolean(formik.errors.assignment_id)}
-                helperText={formik.touched.assignment_id && formik.errors.assignment_id}
+            <Grid size={{ xs: 12, md: 6 }}>
+              <CCheckbox
+                label="Is Active"
+                checked={formik.values.is_active}
+                onChange={e => formik.setFieldValue("is_active", e.target.checked)}
               />
             </Grid>
-          )}
-
-          {/* Description – always shown */}
-          <Grid size={{ xs: 12 }}>
-            <CTextField
-              label="Description"
-              name="description"
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              multiline
-              rows={2}
-            />
           </Grid>
-
-          {/* Checkboxes – always shown */}
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CCheckbox
-              label="Is Preview (Free)"
-              checked={formik.values.include_in_preview}
-              onChange={e => formik.setFieldValue("include_in_preview", e.target.checked)}
-            />
-          </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <CCheckbox
-              label="Is Active"
-              checked={formik.values.is_active}
-              onChange={e => formik.setFieldValue("is_active", e.target.checked)}
-            />
-          </Grid>
-        </Grid>
-      </CForm>
-    </CDialog>
+        </CForm>
+      </CDialog>
     </PermissionGuard>
   )
 }

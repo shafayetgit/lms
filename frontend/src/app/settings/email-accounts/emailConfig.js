@@ -56,7 +56,7 @@ export const EMAIL_SERVICES = [
     info: "Setting up Yandex requires two-factor authentication and an app-specific password.",
     link: "https://yandex.com/support/id/authorization/app-passwords.html",
   },
-];
+]
 
 // Provider initials for avatar fallback
 export const SERVICE_INITIALS = {
@@ -68,11 +68,9 @@ export const SERVICE_INITIALS = {
   Resend: "R",
   Yahoo: "Y",
   Yandex: "YX",
-};
+}
 
-export const SERVICE_COLORS = Object.fromEntries(
-  EMAIL_SERVICES.map((s) => [s.name, s.color])
-);
+export const SERVICE_COLORS = Object.fromEntries(EMAIL_SERVICES.map(s => [s.name, s.color]))
 
 export const SERVICE_IMAGES = {
   GMail: "/images/providers/gmail.png",
@@ -82,7 +80,7 @@ export const SERVICE_IMAGES = {
   Resend: "/images/providers/resend.png",
   Yahoo: "/images/providers/yahoo.png",
   Yandex: "/images/providers/yandex.png",
-};
+}
 
 // Account name + email ID (shared by all providers)
 const FIXED_FIELDS = [
@@ -100,7 +98,7 @@ const FIXED_FIELDS = [
     placeholder: "you@example.com",
     required: true,
   },
-];
+]
 
 // All providers use password-based auth
 export const PROVIDER_FIELDS = [
@@ -112,7 +110,7 @@ export const PROVIDER_FIELDS = [
     placeholder: "App password",
     required: true,
   },
-];
+]
 
 // Incoming/outgoing feature toggles
 export const INCOMING_OUTGOING_FIELDS = [
@@ -138,15 +136,14 @@ export const INCOMING_OUTGOING_FIELDS = [
     description:
       "If enabled, all outgoing emails will be sent from this account. Note: Only one account can be default outgoing.",
   },
-];
+]
 
 export function validateAccountForm(values) {
-  const errors = {};
-  if (!values.email_account_name?.trim())
-    errors.email_account_name = "Account name is required";
-  if (!values.email_id?.trim()) errors.email_id = "Email ID is required";
+  const errors = {}
+  if (!values.email_account_name?.trim()) errors.email_account_name = "Account name is required"
+  if (!values.email_id?.trim()) errors.email_id = "Email ID is required"
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email_id || ""))
-    errors.email_id = "Invalid email address";
-  if (!values.password?.trim()) errors.password = "Password is required";
-  return errors;
+    errors.email_id = "Invalid email address"
+  if (!values.password?.trim()) errors.password = "Password is required"
+  return errors
 }

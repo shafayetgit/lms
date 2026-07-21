@@ -54,8 +54,10 @@ export default function CModuleLayout({ children, navigators, helpTips, Navigati
           {visibleNavigators.map((item, index) => {
             // Find the most specific (longest) href that matches the current pathname
             const activeItem = [...visibleNavigators]
-              .sort((a, b) => ((b?.href?.length || 0) - (a?.href?.length || 0)))
-              .find(nav => nav?.href && (pathname === nav.href || pathname.startsWith(nav.href + "/")))
+              .sort((a, b) => (b?.href?.length || 0) - (a?.href?.length || 0))
+              .find(
+                nav => nav?.href && (pathname === nav.href || pathname.startsWith(nav.href + "/"))
+              )
 
             const isStrictActive = activeItem ? activeItem.href === item.href : false
 
@@ -142,7 +144,11 @@ export default function CModuleLayout({ children, navigators, helpTips, Navigati
         {renderedSidebar && (
           <>
             <Divider sx={{ display: { xs: "block", md: "none" } }} />
-            <Divider orientation="vertical" flexItem sx={{ display: { xs: "none", md: "block" } }} />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ display: { xs: "none", md: "block" } }}
+            />
 
             <Box sx={{ width: { xs: "100%", md: "320px" }, flexShrink: 0, py: 2, pl: { md: 3 } }}>
               {renderedSidebar}

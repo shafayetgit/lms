@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Chip, Stack, Typography } from "@mui/material";
+import { useState } from "react"
+import { Chip, Stack, Typography } from "@mui/material"
 
 export default function CourseFilter() {
   // Dummy filter state (you can change/remove values)
@@ -7,11 +7,11 @@ export default function CourseFilter() {
     // category: "Business & Management",
     // price_range: "$10 - $50",
     rating: 4,
-  });
+  })
 
-  const clearFilter = (key) => {
-    setFilters((prev) => ({ ...prev, [key]: null }));
-  };
+  const clearFilter = key => {
+    setFilters(prev => ({ ...prev, [key]: null }))
+  }
 
   const activeFilters = [
     filters.category && {
@@ -26,9 +26,9 @@ export default function CourseFilter() {
       label: `Rating: ${filters.rating} star`,
       onDelete: () => clearFilter("rating"),
     },
-  ].filter(Boolean);
+  ].filter(Boolean)
 
-  if (activeFilters.length === 0) return null;
+  if (activeFilters.length === 0) return null
 
   return (
     <Stack
@@ -36,7 +36,7 @@ export default function CourseFilter() {
       spacing={1}
       alignItems={{ xs: "flex-start", sm: "center" }}
       flexWrap="wrap"
-      sx={{ mb: 2, }}
+      sx={{ mb: 2 }}
     >
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         Active Filters:
@@ -62,5 +62,5 @@ export default function CourseFilter() {
         />
       ))}
     </Stack>
-  );
+  )
 }

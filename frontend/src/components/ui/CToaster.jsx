@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 import { ToastContainer, Bounce } from "react-toastify"
 
 export default function CToaster() {
@@ -16,5 +16,5 @@ export default function CToaster() {
       theme="light"
       transition={Bounce}
     />
-  );
+  )
 }

@@ -13,7 +13,6 @@ import { renderCell } from "@/utils/tableTools"
 import { useLazyReadBatchesQuery } from "@/features/batch/batchAPI"
 import CreateDialog from "./_parts/CreateDialog"
 
-
 function BatchList({ action }) {
   const searchParams = useSearchParams()
   const page = searchParams.get("page") ?? 1
@@ -46,25 +45,25 @@ function BatchList({ action }) {
       field: "medium",
       headerName: "Medium",
       flex: 1,
-      renderCell: (row) => renderCell(row.value || "Online"),
+      renderCell: row => renderCell(row.value || "Online"),
     },
     {
       field: "seat_count",
       headerName: "Seats",
       flex: 0.8,
-      renderCell: (row) => (row.value && row.value > 0 ? row.value : "Unlimited"),
+      renderCell: row => (row.value && row.value > 0 ? row.value : "Unlimited"),
     },
     {
       field: "published",
       headerName: "Status",
       flex: 1,
-      renderCell: (row) => renderCell(row.value ? "Published" : "Draft"),
+      renderCell: row => renderCell(row.value ? "Published" : "Draft"),
     },
   ]
 
   return (
     <CDataTable
-      getRowId={(row) => row?.public_id || row?.id}
+      getRowId={row => row?.public_id || row?.id}
       columns={columns}
       rows={data}
       meta={meta}

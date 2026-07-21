@@ -109,7 +109,7 @@ export default function CButton({
         return <HowToReg />
       case "submit":
         return <ArrowForward />
-        
+
       // File / Print / Upload / Download
       case "print":
         return <Print />

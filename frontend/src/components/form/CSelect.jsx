@@ -1,4 +1,4 @@
-import { MenuItem, TextField } from "@mui/material";
+import { MenuItem, TextField } from "@mui/material"
 
 export default function CSelect({ placeholder, size = "small", options = [], ...rest }) {
   return (
@@ -34,5 +34,5 @@ export default function CSelect({ placeholder, size = "small", options = [], ...
         ))}
       </TextField>
     </>
-  );
+  )
 }

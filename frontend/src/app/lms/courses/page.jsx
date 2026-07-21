@@ -50,16 +50,18 @@ export default function Page() {
       headerName: "Price",
       flex: 1,
       renderCell: ({ row }) => {
-        const isFree = !row.paid_course;
-        const currencySymbol = row.currency === "BDT" ? "৳" : row.currency || "$";
-        return isFree ? "Free" : `${currencySymbol} ${Number(row.course_price || 0).toLocaleString()}`;
+        const isFree = !row.paid_course
+        const currencySymbol = row.currency === "BDT" ? "৳" : row.currency || "$"
+        return isFree
+          ? "Free"
+          : `${currencySymbol} ${Number(row.course_price || 0).toLocaleString()}`
       },
     },
     {
       field: "thumbnail",
       headerName: "Thumbnail",
       flex: 1,
-      renderCell: ({ row }) => (
+      renderCell: ({ row }) =>
         row.thumbnail ? (
           <Image
             src={row.thumbnail}
@@ -77,8 +79,7 @@ export default function Page() {
               backgroundImage: getGradient(row.card_gradient),
             }}
           />
-        )
-      ),
+        ),
     },
     {
       field: "created_at",

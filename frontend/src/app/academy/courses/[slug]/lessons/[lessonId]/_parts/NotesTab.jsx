@@ -26,7 +26,7 @@ export default function NotesTab({ activeLesson, isMobile = false }) {
     try {
       await upsertNote({
         lesson_public_id: activeLesson.public_id,
-        note: noteText.trim()
+        note: noteText.trim(),
       }).unwrap()
       setIsEditingNote(false)
     } catch (err) {
@@ -40,7 +40,7 @@ export default function NotesTab({ activeLesson, isMobile = false }) {
     try {
       await upsertNote({
         lesson_public_id: activeLesson.public_id,
-        note: ""
+        note: "",
       }).unwrap()
       setIsEditingNote(false)
     } catch (err) {
@@ -73,7 +73,7 @@ export default function NotesTab({ activeLesson, isMobile = false }) {
         <Button
           size="small"
           variant="outlined"
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation()
             setIsEditingNote(true)
           }}
@@ -86,19 +86,21 @@ export default function NotesTab({ activeLesson, isMobile = false }) {
   }
 
   return (
-    <Box sx={{
-      mt: isMobile ? 0 : 2,
-      display: "flex",
-      flexDirection: "column",
-      width: "100%"
-    }}>
+    <Box
+      sx={{
+        mt: isMobile ? 0 : 2,
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+      }}
+    >
       <CTextField
         multiline
         fullWidth
         minRows={8}
         placeholder="Make notes for quick revision. Press / for menu."
         value={noteText}
-        onChange={(e) => setNoteText(e.target.value)}
+        onChange={e => setNoteText(e.target.value)}
         autoFocus
         onBlur={() => {
           if (!noteText.trim()) {

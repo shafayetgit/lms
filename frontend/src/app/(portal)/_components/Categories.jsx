@@ -1,27 +1,27 @@
-"use client";
-import React from "react";
-import { Box, Container, Typography, Grid } from "@mui/material";
-import { motion } from "framer-motion";
+"use client"
+import React from "react"
+import { Box, Container, Typography, Grid } from "@mui/material"
+import { motion } from "framer-motion"
 
 // Components
-import CategoryCard from "./Categories/CategoryCard";
-import CategorySkeleton from "./Categories/CategorySkeleton";
+import CategoryCard from "./Categories/CategoryCard"
+import CategorySkeleton from "./Categories/CategorySkeleton"
 
 // Data
 // import { categories } from "./data";
-import { useReadCategoriesQuery } from "@/features/category/categoryAPI";
+import { useReadCategoriesQuery } from "@/features/category/categoryAPI"
 
 const fadeUp = {
   hidden: { y: 20, opacity: 0 },
   visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
-};
+}
 
 const CategoriesSection = () => {
   const { data: { data: categories } = {}, isLoading } = useReadCategoriesQuery({
     badge: "featured",
     size: 8,
     is_portal: true,
-  });
+  })
   return (
     <Box
       id="categories"
@@ -37,11 +37,7 @@ const CategoriesSection = () => {
           viewport={{ once: true }}
           variants={fadeUp}
         >
-          <Typography
-            variant="h2"
-            align="center"
-            sx={{ fontWeight: 800, mb: 2 }}
-          >
+          <Typography variant="h2" align="center" sx={{ fontWeight: 800, mb: 2 }}>
             Master Any Discipline
           </Typography>
           <Typography
@@ -50,8 +46,8 @@ const CategoriesSection = () => {
             color="text.secondary"
             sx={{ maxWidth: 700, mx: "auto", mb: 8 }}
           >
-            Choose from thousands of expert-led courses across diverse
-            categories. Your journey to excellence starts here.
+            Choose from thousands of expert-led courses across diverse categories. Your journey to
+            excellence starts here.
           </Typography>
         </motion.div>
 
@@ -71,7 +67,7 @@ const CategoriesSection = () => {
         </Grid>
       </Container>
     </Box>
-  );
-};
+  )
+}
 
-export default CategoriesSection;
+export default CategoriesSection

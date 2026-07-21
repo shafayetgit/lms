@@ -1,27 +1,27 @@
-"use client";
+"use client"
 
-import React from "react";
-import CTextField from "@/components/form/CTextField";
+import React from "react"
+import CTextField from "@/components/form/CTextField"
 
-import { Box, Typography, Button, Stack, Divider, alpha } from "@mui/material";
-import { Google, Person, PersonAddOutlined } from "@mui/icons-material";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { useFormik } from "formik";
+import { Box, Typography, Button, Stack, Divider, alpha } from "@mui/material"
+import { Google, Person, PersonAddOutlined } from "@mui/icons-material"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { useFormik } from "formik"
 
-import { signUpSchema } from "@/schema/auth";
-import CButton from "@/components/ui/CButton";
-import CPasswordField from "@/components/form/CPasswordField";
-import AuthLogo from "@/components/ui/AuthLogo";
-import { useSignUpMutation } from "@/features/auth/authAPI";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-import { ROUTES } from "@/lib/constants";
+import { signUpSchema } from "@/schema/auth"
+import CButton from "@/components/ui/CButton"
+import CPasswordField from "@/components/form/CPasswordField"
+import AuthLogo from "@/components/ui/AuthLogo"
+import { useSignUpMutation } from "@/features/auth/authAPI"
+import { toast } from "react-toastify"
+import { useRouter } from "next/navigation"
+import { mapApiErrorsToFormik } from "@/utils/shared"
+import { ROUTES } from "@/lib/constants"
 
 export default function Page() {
-  const router = useRouter();
-  const [signUp, { isLoading }] = useSignUpMutation();
+  const router = useRouter()
+  const [signUp, { isLoading }] = useSignUpMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -35,21 +35,20 @@ export default function Page() {
     validationSchema: signUpSchema,
     onSubmit: async (values, { setErrors }) => {
       try {
-        const response = await signUp(values).unwrap();
+        const response = await signUp(values).unwrap()
 
         toast.success(
-          response.message ||
-          "Signup successful! Please check your email to verify your account.",
-        );
-        router.push("/auth/verify-email?email=" + values.email);
+          response.message || "Signup successful! Please check your email to verify your account."
+        )
+        router.push("/auth/verify-email?email=" + values.email)
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
 
-        toast.error(error?.data?.message || "Signup failed. Please try again.");
+        toast.error(error?.data?.message || "Signup failed. Please try again.")
       }
     },
-  });
+  })
 
   return (
     <Box
@@ -83,11 +82,7 @@ export default function Page() {
       >
         Create an Account
       </Typography>
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ textAlign: "center", mb: 3 }}
-      >
+      <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mb: 3 }}>
         Join ecoFin Institute and accelerate your career.
       </Typography>
 
@@ -109,9 +104,7 @@ export default function Page() {
               value={formik.values.first_name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={
-                formik.touched.first_name && Boolean(formik.errors.first_name)
-              }
+              error={formik.touched.first_name && Boolean(formik.errors.first_name)}
               helperText={formik.touched.first_name && formik.errors.first_name}
               required
             />
@@ -124,9 +117,7 @@ export default function Page() {
               value={formik.values.last_name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={
-                formik.touched.last_name && Boolean(formik.errors.last_name)
-              }
+              error={formik.touched.last_name && Boolean(formik.errors.last_name)}
               helperText={formik.touched.last_name && formik.errors.last_name}
               required
             />
@@ -182,13 +173,8 @@ export default function Page() {
             value={formik.values.confirm_password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched.confirm_password &&
-              Boolean(formik.errors.confirm_password)
-            }
-            helperText={
-              formik.touched.confirm_password && formik.errors.confirm_password
-            }
+            error={formik.touched.confirm_password && Boolean(formik.errors.confirm_password)}
+            helperText={formik.touched.confirm_password && formik.errors.confirm_password}
             required
           />
         </Stack>
@@ -234,10 +220,10 @@ export default function Page() {
             borderRadius: 1,
             fontWeight: 600,
             color: "text.primary",
-            borderColor: (theme) => alpha(theme.palette.text.primary, 0.15),
+            borderColor: theme => alpha(theme.palette.text.primary, 0.15),
             "&:hover": {
               borderColor: "text.primary",
-              bgcolor: (theme) => alpha(theme.palette.text.primary, 0.02),
+              bgcolor: theme => alpha(theme.palette.text.primary, 0.02),
             },
           }}
         >
@@ -262,5 +248,5 @@ export default function Page() {
         </Typography>
       </Typography>
     </Box>
-  );
+  )
 }

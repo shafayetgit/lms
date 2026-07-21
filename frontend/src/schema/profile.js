@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from "yup"
 
 export const profileSchema = Yup.object().shape({
   first_name: Yup.string()
@@ -9,7 +9,7 @@ export const profileSchema = Yup.object().shape({
     .required("Last name is required"),
   phone_number: Yup.string().max(20, "Phone number must be at most 20 characters").nullable(),
   timezone: Yup.string().nullable(),
-});
+})
 
 export const changePasswordSchema = Yup.object().shape({
   current_password: Yup.string().required("Current password is required"),
@@ -19,4 +19,4 @@ export const changePasswordSchema = Yup.object().shape({
   confirm_password: Yup.string()
     .oneOf([Yup.ref("new_password"), null], "Passwords must match")
     .required("Confirm new password is required"),
-});
+})

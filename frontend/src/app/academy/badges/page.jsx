@@ -1,18 +1,19 @@
-"use client";
+"use client"
 
-import React from "react";
-import { Box, Typography, Card, CardContent, Avatar } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { MilitaryTechOutlined } from "@mui/icons-material";
-import { useReadBadgeAssignmentsQuery } from "@/features/badge/badgeApi";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CError from "@/components/ui/CError";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
-import dayjs from "dayjs";
+import React from "react"
+import { Box, Typography, Card, CardContent, Avatar } from "@mui/material"
+import Grid from "@mui/material/Grid"
+import { MilitaryTechOutlined } from "@mui/icons-material"
+import { useReadBadgeAssignmentsQuery } from "@/features/badge/badgeApi"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CError from "@/components/ui/CError"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
+import dayjs from "dayjs"
 
 const STUDENT_BADGE_TIPS = {
-  description: "Celebrate your learning milestones! Earn badges as you complete courses, score well on quizzes, and finish assignments.",
+  description:
+    "Celebrate your learning milestones! Earn badges as you complete courses, score well on quizzes, and finish assignments.",
   tips: [
     {
       label: "What are Badges?",
@@ -27,25 +28,23 @@ const STUDENT_BADGE_TIPS = {
       text: "Click or hover over any badge card to see when it was awarded and read its description.",
     },
   ],
-};
+}
 
 export default function MyBadgesPage() {
-  useSetBreadcrumb("My Badges");
+  useSetBreadcrumb("My Badges")
 
-  const { data, isLoading, isError } = useReadBadgeAssignmentsQuery({ size: 100 });
-  const assignments = data?.data ?? [];
+  const { data, isLoading, isError } = useReadBadgeAssignmentsQuery({ size: 100 })
+  const assignments = data?.data ?? []
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
-  if (isError) return <CError fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
+  if (isError) return <CError fullPage={false} />
 
   return (
     <CModuleLayout helpTips={STUDENT_BADGE_TIPS}>
-
-
       {assignments.length > 0 ? (
         <Grid container spacing={{ xs: 1.5, md: 2 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-          {assignments.map((assignment) => {
-            const badge = assignment.badge || {};
+          {assignments.map(assignment => {
+            const badge = assignment.badge || {}
             return (
               <Grid key={assignment.public_id} size={{ xs: 2, sm: 4, md: 3 }}>
                 <Card
@@ -77,7 +76,10 @@ export default function MyBadgesPage() {
                     <MilitaryTechOutlined sx={{ fontSize: 32 }} />
                   </Avatar>
                   <CardContent sx={{ p: 0, flexGrow: 1, width: "100%" }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: "text.primary" }}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontWeight: 700, mb: 0.5, color: "text.primary" }}
+                    >
                       {badge.title}
                     </Typography>
                     <Typography
@@ -111,7 +113,7 @@ export default function MyBadgesPage() {
                   </CardContent>
                 </Card>
               </Grid>
-            );
+            )
           })}
         </Grid>
       ) : (
@@ -126,5 +128,5 @@ export default function MyBadgesPage() {
         </Box>
       )}
     </CModuleLayout>
-  );
+  )
 }

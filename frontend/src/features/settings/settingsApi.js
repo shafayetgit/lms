@@ -1,7 +1,7 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const settingsApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     readSettings: builder.query({
       query: () => ({
         url: "/api/v1/settings/",
@@ -10,7 +10,7 @@ export const settingsApi = api.injectEndpoints({
       providesTags: ["SETTINGS"],
     }),
     updateSettings: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: `/api/v1/settings/`,
         method: "PUT",
         body,
@@ -24,11 +24,11 @@ export const settingsApi = api.injectEndpoints({
       }),
     }),
   }),
-});
+})
 
 export const {
   useReadSettingsQuery,
   useLazyReadSettingsQuery,
   useUpdateSettingsMutation,
   useFlushCacheMutation,
-} = settingsApi;
+} = settingsApi

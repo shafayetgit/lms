@@ -1,57 +1,60 @@
-"use client";
-import React from "react";
-import { useFormik } from "formik";
-import { Grid } from "@mui/material";
-import { toast } from "react-toastify";
-import { useParams, useRouter } from "next/navigation";
-import * as Yup from "yup";
+"use client"
+import React from "react"
+import { useFormik } from "formik"
+import { Grid } from "@mui/material"
+import { toast } from "react-toastify"
+import { useParams, useRouter } from "next/navigation"
+import * as Yup from "yup"
 
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CSelect from "@/components/form/CSelect";
-import CAutocomplete from "@/components/form/CAutocomplete";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import { InfoOutlined } from "@mui/icons-material";
-import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb";
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CSelect from "@/components/form/CSelect"
+import CAutocomplete from "@/components/form/CAutocomplete"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import { InfoOutlined } from "@mui/icons-material"
+import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
 
-import { useReadCertificateRequestQuery, useUpdateCertificateRequestMutation } from "@/features/certificate/certificateApi";
-import { useReadInstructorsQuery } from "@/features/instructor/instructorAPI";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import {
+  useReadCertificateRequestQuery,
+  useUpdateCertificateRequestMutation,
+} from "@/features/certificate/certificateApi"
+import { useReadInstructorsQuery } from "@/features/instructor/instructorAPI"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 const validationSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
   evaluator_public_id: Yup.string().when("status", {
     is: "Approved",
-    then: (schema) => schema.required("An evaluator is required when approving"),
-    otherwise: (schema) => schema.nullable(),
+    then: schema => schema.required("An evaluator is required when approving"),
+    otherwise: schema => schema.nullable(),
   }),
-});
+})
 
 export default function RequestDetailPage() {
-  const { id } = useParams();
-  const router = useRouter();
+  const { id } = useParams()
+  const router = useRouter()
 
   const { data: requestRes, isLoading: isRequestLoading } = useReadCertificateRequestQuery(id, {
     refetchOnMountOrArgChange: true,
     skip: !id,
-  });
+  })
 
   const { data: instructorsRes, isLoading: isInstructorsLoading } = useReadInstructorsQuery({
     size: 100,
-  });
+  })
 
-  const [updateRequest, { isLoading: isUpdating }] = useUpdateCertificateRequestMutation();
+  const [updateRequest, { isLoading: isUpdating }] = useUpdateCertificateRequestMutation()
 
-  const request = requestRes?.data;
-  const instructors = instructorsRes?.data || [];
+  const request = requestRes?.data
+  const instructors = instructorsRes?.data || []
 
-  useSetBreadcrumb(request?.member?.full_name || request?.member?.email);
+  useSetBreadcrumb(request?.member?.full_name || request?.member?.email)
 
-  const instructorOptions = instructors.map((inst) => ({
+  const instructorOptions = instructors.map(inst => ({
     label: `${inst.first_name} ${inst.last_name} (${inst.email})`,
     value: inst.public_id,
-  }));
+  }))
 
   const formik = useFormik({
     initialValues: {
@@ -62,25 +65,26 @@ export default function RequestDetailPage() {
     enableReinitialize: true,
     onSubmit: async (values, { setErrors }) => {
       try {
-        await updateRequest({ id, body: values }).unwrap();
-        toast.success("Certificate request updated successfully");
-        router.push("/lms/certificate-requests");
+        await updateRequest({ id, body: values }).unwrap()
+        toast.success("Certificate request updated successfully")
+        router.push("/lms/certificate-requests")
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        toast.error(error?.data?.message || "Failed to update request");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        toast.error(error?.data?.message || "Failed to update request")
       }
     },
-  });
+  })
 
-  if (isRequestLoading || isInstructorsLoading) return <CPageLoader fullPage={false} />;
+  if (isRequestLoading || isInstructorsLoading) return <CPageLoader fullPage={false} />
 
   const navigators = [
     { label: "Details", href: `/lms/certificate-requests/${id}`, icon: <InfoOutlined /> },
-  ];
+  ]
 
   const helpTips = {
-    description: "When a student requests a certificate, they need to be evaluated by an instructor.",
+    description:
+      "When a student requests a certificate, they need to be evaluated by an instructor.",
     tips: [
       {
         title: "Assign Evaluator",
@@ -88,10 +92,11 @@ export default function RequestDetailPage() {
       },
       {
         title: "Approval",
-        description: "Approving the request automatically generates a pending Evaluation Session for the assigned instructor.",
+        description:
+          "Approving the request automatically generates a pending Evaluation Session for the assigned instructor.",
       },
     ],
-  };
+  }
 
   return (
     <CModuleLayout navigators={navigators} helpTips={helpTips}>
@@ -141,17 +146,21 @@ export default function RequestDetailPage() {
               options={instructorOptions}
               value={
                 formik.values.evaluator_public_id
-                  ? instructorOptions.find((opt) => opt.value === formik.values.evaluator_public_id) || null
+                  ? instructorOptions.find(
+                      opt => opt.value === formik.values.evaluator_public_id
+                    ) || null
                   : null
               }
               onChange={(e, val) => formik.setFieldValue("evaluator_public_id", val?.value || "")}
               isOptionEqualToValue={(option, val) => option?.value === val?.value}
-              error={formik.touched.evaluator_public_id && Boolean(formik.errors.evaluator_public_id)}
+              error={
+                formik.touched.evaluator_public_id && Boolean(formik.errors.evaluator_public_id)
+              }
               helperText={formik.touched.evaluator_public_id && formik.errors.evaluator_public_id}
             />
           </Grid>
         </Grid>
       </CForm>
     </CModuleLayout>
-  );
+  )
 }

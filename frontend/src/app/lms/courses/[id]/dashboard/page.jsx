@@ -1,15 +1,7 @@
 "use client"
 import React, { useState } from "react"
 import { useParams } from "next/navigation"
-import {
-  Box,
-  Grid,
-  Typography,
-  LinearProgress,
-  Stack,
-  alpha,
-  useTheme,
-} from "@mui/material"
+import { Box, Grid, Typography, LinearProgress, Stack, alpha, useTheme } from "@mui/material"
 import {
   PeopleOutlined,
   TrendingUpOutlined,
@@ -26,7 +18,14 @@ import CError from "@/components/ui/CError"
 import CModuleLayout from "@/components/ui/CModuleLayout"
 import PermissionGuard from "@/components/ui/PermissionGuard"
 import { COURSE_TIPS } from "@/choices/helpTips/course"
-import { InfoOutlined, MenuBookOutlined, Star, AssignmentTurnedInOutlined, DashboardOutlined, VisibilityOutlined } from "@mui/icons-material"
+import {
+  InfoOutlined,
+  MenuBookOutlined,
+  Star,
+  AssignmentTurnedInOutlined,
+  DashboardOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material"
 import CSelect from "@/components/form/CSelect"
 
 function KpiCard({ icon, label, value, color }) {
@@ -95,7 +94,11 @@ function DistributionBar({ label, count, total, color, icon }) {
           "& .MuiLinearProgress-bar": { bgcolor: color, borderRadius: 4 },
         }}
       />
-      <Typography variant="caption" fontWeight={700} sx={{ minWidth: 56, textAlign: "right", whiteSpace: "nowrap" }}>
+      <Typography
+        variant="caption"
+        fontWeight={700}
+        sx={{ minWidth: 56, textAlign: "right", whiteSpace: "nowrap" }}
+      >
         {count} ({pct}%)
       </Typography>
     </Box>
@@ -107,26 +110,66 @@ export default function Page() {
   const theme = useTheme()
   const [lessonSort, setLessonSort] = useState("index") // "index" | "completion"
 
-  const { data: { data } = {}, isLoading, isError } = useReadCourseDashboardQuery(
-    { id },
-    { skip: !id, refetchOnMountOrArgChange: true }
-  )
+  const {
+    data: { data } = {},
+    isLoading,
+    isError,
+  } = useReadCourseDashboardQuery({ id }, { skip: !id, refetchOnMountOrArgChange: true })
   const { data: { data: courseData } = {} } = useReadCourseQuery({ id }, { skip: !id })
 
   const navigators = [
-    { label: "Details", href: `/lms/courses/${id}`, icon: <InfoOutlined />, resource: "course", action: "read" },
-    { label: "Chapters", href: `/lms/courses/${id}/chapters`, icon: <MenuBookOutlined />, resource: "chapter", action: "read" },
-    { label: "Reviews", href: `/lms/courses/${id}/reviews`, icon: <Star />, resource: "review", action: "read" },
-    { label: "Enrollments", href: `/lms/courses/${id}/enrollments`, icon: <AssignmentTurnedInOutlined />, resource: "enrollment", action: "read" },
-    { label: "Dashboard", href: `/lms/courses/${id}/dashboard`, icon: <DashboardOutlined />, resource: "course", action: "read" },
-    { label: "Preview", href: `/courses/${courseData?.slug || ""}`, target: "_blank", icon: <VisibilityOutlined />, resource: "course", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/courses/${id}`,
+      icon: <InfoOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Chapters",
+      href: `/lms/courses/${id}/chapters`,
+      icon: <MenuBookOutlined />,
+      resource: "chapter",
+      action: "read",
+    },
+    {
+      label: "Reviews",
+      href: `/lms/courses/${id}/reviews`,
+      icon: <Star />,
+      resource: "review",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/courses/${id}/enrollments`,
+      icon: <AssignmentTurnedInOutlined />,
+      resource: "enrollment",
+      action: "read",
+    },
+    {
+      label: "Dashboard",
+      href: `/lms/courses/${id}/dashboard`,
+      icon: <DashboardOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Preview",
+      href: `/courses/${courseData?.slug || ""}`,
+      target: "_blank",
+      icon: <VisibilityOutlined />,
+      resource: "course",
+      action: "read",
+    },
   ]
 
   if (isLoading) return <CPageLoader fullPage={false} />
   if (isError) return <CError fullPage={false} />
 
   const sortedLessons = [...(data?.lesson_stats ?? [])].sort((a, b) =>
-    lessonSort === "completion" ? b.completion_rate - a.completion_rate : (a.chapter_idx - b.chapter_idx) || (a.lesson_idx - b.lesson_idx)
+    lessonSort === "completion"
+      ? b.completion_rate - a.completion_rate
+      : a.chapter_idx - b.chapter_idx || a.lesson_idx - b.lesson_idx
   )
 
   const dist = data?.progress_distribution ?? {}
@@ -138,16 +181,36 @@ export default function Page() {
         {/* KPI Row */}
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <KpiCard icon={<PeopleOutlined />} label="Enrolled Students" value={data?.total_enrollments ?? 0} color={theme.palette.primary.main} />
+            <KpiCard
+              icon={<PeopleOutlined />}
+              label="Enrolled Students"
+              value={data?.total_enrollments ?? 0}
+              color={theme.palette.primary.main}
+            />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <KpiCard icon={<TrendingUpOutlined />} label="Avg. Completion" value={`${data?.average_progress ?? 0}%`} color={theme.palette.success.main} />
+            <KpiCard
+              icon={<TrendingUpOutlined />}
+              label="Avg. Completion"
+              value={`${data?.average_progress ?? 0}%`}
+              color={theme.palette.success.main}
+            />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <KpiCard icon={<StarOutlined />} label="Average Rating" value={data?.rating ?? 0} color="#f59e0b" />
+            <KpiCard
+              icon={<StarOutlined />}
+              label="Average Rating"
+              value={data?.rating ?? 0}
+              color="#f59e0b"
+            />
           </Grid>
           <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-            <KpiCard icon={<AutoStoriesOutlined />} label="Total Lessons" value={data?.total_lessons ?? 0} color={theme.palette.secondary.main} />
+            <KpiCard
+              icon={<AutoStoriesOutlined />}
+              label="Total Lessons"
+              value={data?.total_lessons ?? 0}
+              color={theme.palette.secondary.main}
+            />
           </Grid>
         </Grid>
 
@@ -169,10 +232,34 @@ export default function Page() {
                 Progress Distribution
               </Typography>
               <Stack spacing={1.5} sx={{ flexGrow: 1, justifyContent: "center" }}>
-                <DistributionBar label="Just Started" count={dist.just_started ?? 0} total={totalEnroll} color="#ef4444" icon={<HourglassTopOutlined />} />
-                <DistributionBar label="In Progress" count={dist.in_progress ?? 0} total={totalEnroll} color="#f59e0b" icon={<DirectionsRunOutlined />} />
-                <DistributionBar label="Advanced" count={dist.advanced ?? 0} total={totalEnroll} color="#3b82f6" icon={<TrendingUpOutlined />} />
-                <DistributionBar label="Completed" count={dist.completed ?? 0} total={totalEnroll} color="#10b981" icon={<EmojiEventsOutlined />} />
+                <DistributionBar
+                  label="Just Started"
+                  count={dist.just_started ?? 0}
+                  total={totalEnroll}
+                  color="#ef4444"
+                  icon={<HourglassTopOutlined />}
+                />
+                <DistributionBar
+                  label="In Progress"
+                  count={dist.in_progress ?? 0}
+                  total={totalEnroll}
+                  color="#f59e0b"
+                  icon={<DirectionsRunOutlined />}
+                />
+                <DistributionBar
+                  label="Advanced"
+                  count={dist.advanced ?? 0}
+                  total={totalEnroll}
+                  color="#3b82f6"
+                  icon={<TrendingUpOutlined />}
+                />
+                <DistributionBar
+                  label="Completed"
+                  count={dist.completed ?? 0}
+                  total={totalEnroll}
+                  color="#10b981"
+                  icon={<EmojiEventsOutlined />}
+                />
               </Stack>
             </Box>
           </Grid>
@@ -190,7 +277,14 @@ export default function Page() {
                 flexDirection: "column",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 2 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  mb: 2,
+                }}
+              >
                 <Typography variant="subtitle2" fontWeight={700} color="text.secondary">
                   Lesson Completion
                 </Typography>
@@ -207,9 +301,11 @@ export default function Page() {
 
               <Box sx={{ maxHeight: "50vh", overflowY: "auto", flexGrow: 1 }}>
                 {sortedLessons.length === 0 ? (
-                  <Typography variant="caption" color="text.disabled">No lesson data yet.</Typography>
+                  <Typography variant="caption" color="text.disabled">
+                    No lesson data yet.
+                  </Typography>
                 ) : (
-                  sortedLessons.map((l) => (
+                  sortedLessons.map(l => (
                     <Box
                       key={l.lesson_id}
                       sx={{
@@ -221,14 +317,28 @@ export default function Page() {
                       }}
                     >
                       <Box sx={{ display: "flex", alignItems: "baseline", gap: 0.75, minWidth: 0 }}>
-                        <Typography variant="caption" color="text.disabled" fontWeight={700} sx={{ flexShrink: 0 }}>
+                        <Typography
+                          variant="caption"
+                          color="text.disabled"
+                          fontWeight={700}
+                          sx={{ flexShrink: 0 }}
+                        >
                           {l.chapter_idx}.{l.lesson_idx}
                         </Typography>
-                        <Typography variant="caption" noWrap sx={{ color: "text.primary", fontWeight: 500 }}>
+                        <Typography
+                          variant="caption"
+                          noWrap
+                          sx={{ color: "text.primary", fontWeight: 500 }}
+                        >
                           {l.title}
                         </Typography>
                       </Box>
-                      <Typography variant="caption" fontWeight={700} color="primary.main" sx={{ flexShrink: 0, ml: 1 }}>
+                      <Typography
+                        variant="caption"
+                        fontWeight={700}
+                        color="primary.main"
+                        sx={{ flexShrink: 0, ml: 1 }}
+                      >
                         {l.completion_rate}%
                       </Typography>
                     </Box>

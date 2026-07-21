@@ -1,9 +1,9 @@
-"use client";
-import React from "react";
-import { Box, Grid, InputAdornment, Stack, Chip } from "@mui/material";
-import { SearchOutlined } from "@mui/icons-material";
+"use client"
+import React from "react"
+import { Box, Grid, InputAdornment, Stack, Chip } from "@mui/material"
+import { SearchOutlined } from "@mui/icons-material"
 
-import CTextField from "@/components/form/CTextField";
+import CTextField from "@/components/form/CTextField"
 
 const EbookFilters = ({
   searchQuery,
@@ -20,7 +20,7 @@ const EbookFilters = ({
             fullWidth
             placeholder="Search by title or author..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -44,7 +44,7 @@ const EbookFilters = ({
               "&::-webkit-scrollbar": { display: "none" },
             }}
           >
-            {categories.map((cat) => (
+            {categories.map(cat => (
               <Chip
                 key={cat}
                 label={cat}
@@ -63,7 +63,7 @@ const EbookFilters = ({
         </Grid>
       </Grid>
     </Box>
-  );
-};
+  )
+}
 
-export default EbookFilters;
+export default EbookFilters

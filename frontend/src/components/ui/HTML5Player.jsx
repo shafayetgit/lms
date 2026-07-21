@@ -3,7 +3,13 @@
 import React, { useEffect, useRef } from "react"
 import { Box } from "@mui/material"
 
-export default function HTML5Player({ src, preventSkipping, onEnded, startTime = 0, onTimeUpdate }) {
+export default function HTML5Player({
+  src,
+  preventSkipping,
+  onEnded,
+  startTime = 0,
+  onTimeUpdate,
+}) {
   const maxTimeRef = useRef(startTime || 0)
   const videoRef = useRef(null)
   const hasSeekedRef = useRef(false)
@@ -20,7 +26,7 @@ export default function HTML5Player({ src, preventSkipping, onEnded, startTime =
     }
   }, [src, startTime])
 
-  const handleTimeUpdate = (e) => {
+  const handleTimeUpdate = e => {
     const video = e.target
     if (onTimeUpdate) {
       onTimeUpdate(video.currentTime)
@@ -34,7 +40,7 @@ export default function HTML5Player({ src, preventSkipping, onEnded, startTime =
     }
   }
 
-  const handleSeeking = (e) => {
+  const handleSeeking = e => {
     const video = e.target
     if (preventSkipping) {
       if (video.currentTime > maxTimeRef.current) {

@@ -33,7 +33,8 @@ export default function RoleSelector({ user, roles: propRoles = [] }) {
   }
 
   const matchedRole = roles.find(r => r.slug === currentRoleName)
-  const displayLabel = matchedRole?.name || (currentRoleName.charAt(0).toUpperCase() + currentRoleName.slice(1))
+  const displayLabel =
+    matchedRole?.name || currentRoleName.charAt(0).toUpperCase() + currentRoleName.slice(1)
   const displayIcon = getRoleIcon(currentRoleName)
 
   const handleClick = event => {

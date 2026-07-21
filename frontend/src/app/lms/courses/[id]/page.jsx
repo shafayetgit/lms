@@ -31,7 +31,15 @@ import CAutocomplete from "@/components/form/CAutocomplete"
 import CTiptap from "@/components/form/CTiptap"
 import CModuleLayout from "@/components/ui/CModuleLayout"
 import { COURSE_TIPS } from "@/choices/helpTips/course"
-import { School, Star, InfoOutlined, AssignmentTurnedInOutlined, MenuBookOutlined, DashboardOutlined, VisibilityOutlined } from "@mui/icons-material"
+import {
+  School,
+  Star,
+  InfoOutlined,
+  AssignmentTurnedInOutlined,
+  MenuBookOutlined,
+  DashboardOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material"
 import { useSetBreadcrumb } from "@/hooks/useSetBreadcrumb"
 
 import PermissionGuard from "@/components/ui/PermissionGuard"
@@ -69,7 +77,9 @@ export default function Page() {
       enable_certification: data?.enable_certification ?? false,
       currency: data?.currency ?? DEFAULT_CURRENCY,
       thumbnail: null,
-      temp_category: data?.category ? { label: data.category.name, value: data.category.public_id } : null,
+      temp_category: data?.category
+        ? { label: data.category.name, value: data.category.public_id }
+        : null,
       temp_instructors: data?.instructors
         ? data.instructors.map(inst => ({
             label: inst.first_name + " " + inst.last_name,
@@ -162,20 +172,54 @@ export default function Page() {
   if (isLoading || isLoadingMeta) return <CPageLoader fullPage={false} />
 
   const navigators = [
-    { label: "Details", href: `/lms/courses/${id}`, icon: <InfoOutlined />, resource: "course", action: "read" },
-    { label: "Chapters", href: `/lms/courses/${id}/chapters`, icon: <MenuBookOutlined />, resource: "chapter", action: "read" },
-    { label: "Reviews", href: `/lms/courses/${id}/reviews`, icon: <Star />, resource: "review", action: "read" },
-    { label: "Enrollments", href: `/lms/courses/${id}/enrollments`, icon: <AssignmentTurnedInOutlined />, resource: "enrollment", action: "read" },
-    { label: "Dashboard", href: `/lms/courses/${id}/dashboard`, icon: <DashboardOutlined />, resource: "course", action: "read" },
-    { label: "Preview", href: `/courses/${data?.slug || ""}`, target: "_blank", icon: <VisibilityOutlined />, resource: "course", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/courses/${id}`,
+      icon: <InfoOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Chapters",
+      href: `/lms/courses/${id}/chapters`,
+      icon: <MenuBookOutlined />,
+      resource: "chapter",
+      action: "read",
+    },
+    {
+      label: "Reviews",
+      href: `/lms/courses/${id}/reviews`,
+      icon: <Star />,
+      resource: "review",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/courses/${id}/enrollments`,
+      icon: <AssignmentTurnedInOutlined />,
+      resource: "enrollment",
+      action: "read",
+    },
+    {
+      label: "Dashboard",
+      href: `/lms/courses/${id}/dashboard`,
+      icon: <DashboardOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Preview",
+      href: `/courses/${data?.slug || ""}`,
+      target: "_blank",
+      icon: <VisibilityOutlined />,
+      resource: "course",
+      action: "read",
+    },
   ]
 
   return (
     <PermissionGuard resource="course" action="read">
-      <CModuleLayout 
-        navigators={navigators}
-        helpTips={COURSE_TIPS.details}
-      >
+      <CModuleLayout navigators={navigators} helpTips={COURSE_TIPS.details}>
         <CForm
           onSubmit={canUpdate ? formik.handleSubmit : undefined}
           width="70rem"
@@ -216,7 +260,9 @@ export default function Page() {
                   }}
                   onBlur={formik.handleBlur}
                   required
-                  error={formik.touched.category_public_id && Boolean(formik.errors.category_public_id)}
+                  error={
+                    formik.touched.category_public_id && Boolean(formik.errors.category_public_id)
+                  }
                   helperText={formik.touched.category_public_id && formik.errors.category_public_id}
                 />
               </Grid>
@@ -231,13 +277,21 @@ export default function Page() {
                   isOptionEqualToValue={(option, value) => option.value === value?.value}
                   getOptionLabel={option => option?.label || ""}
                   onChange={(e, value) => {
-                    formik.setFieldValue("instructor_public_ids", value ? value.map(v => v.value) : [])
+                    formik.setFieldValue(
+                      "instructor_public_ids",
+                      value ? value.map(v => v.value) : []
+                    )
                     formik.setFieldValue("temp_instructors", value || [])
                   }}
                   onBlur={formik.handleBlur}
                   required
-                  error={formik.touched.instructor_public_ids && Boolean(formik.errors.instructor_public_ids)}
-                  helperText={formik.touched.instructor_public_ids && formik.errors.instructor_public_ids}
+                  error={
+                    formik.touched.instructor_public_ids &&
+                    Boolean(formik.errors.instructor_public_ids)
+                  }
+                  helperText={
+                    formik.touched.instructor_public_ids && formik.errors.instructor_public_ids
+                  }
                 />
               </Grid>
 
@@ -333,8 +387,12 @@ export default function Page() {
                 <CAutocomplete
                   label="Card Gradient"
                   name="card_gradient"
-                  value={GRADIENT_OPTIONS.find((opt) => opt.value === formik.values.card_gradient) || null}
-                  onChange={(event, newValue) => formik.setFieldValue("card_gradient", newValue ? newValue.value : "")}
+                  value={
+                    GRADIENT_OPTIONS.find(opt => opt.value === formik.values.card_gradient) || null
+                  }
+                  onChange={(event, newValue) =>
+                    formik.setFieldValue("card_gradient", newValue ? newValue.value : "")
+                  }
                   onBlur={() => formik.setFieldTouched("card_gradient", true)}
                   options={GRADIENT_OPTIONS}
                   error={formik.touched.card_gradient && Boolean(formik.errors.card_gradient)}
@@ -350,9 +408,7 @@ export default function Page() {
                   onChange={e => {
                     formik.setFieldValue("thumbnail", e.target.files[0])
                   }}
-                  aspectRatios={[
-                    { label: "16:9", value: 16 / 9 },
-                  ]}
+                  aspectRatios={[{ label: "16:9", value: 16 / 9 }]}
                 />
                 {uploadProgress > 0 && uploadProgress <= 100 && (
                   <Box sx={{ width: "100%", mt: 2 }}>
@@ -441,12 +497,21 @@ export default function Page() {
                 isOptionEqualToValue={(option, value) => option.value === value?.value}
                 getOptionLabel={option => option?.label || ""}
                 onChange={(e, value) => {
-                  formik.setFieldValue("related_course_public_ids", value ? value.map(v => v.value) : [])
+                  formik.setFieldValue(
+                    "related_course_public_ids",
+                    value ? value.map(v => v.value) : []
+                  )
                   formik.setFieldValue("temp_related_courses", value || [])
                 }}
                 onBlur={formik.handleBlur}
-                error={formik.touched.related_course_public_ids && Boolean(formik.errors.related_course_public_ids)}
-                helperText={formik.touched.related_course_public_ids && formik.errors.related_course_public_ids}
+                error={
+                  formik.touched.related_course_public_ids &&
+                  Boolean(formik.errors.related_course_public_ids)
+                }
+                helperText={
+                  formik.touched.related_course_public_ids &&
+                  formik.errors.related_course_public_ids
+                }
               />
             </Grid>
           </Grid>
@@ -455,7 +520,11 @@ export default function Page() {
             {/* Meta Tags */}
             <Grid size={{ xs: 12 }}>
               <CSectionLabel label="Meta Tags" />
-              <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5, mb: 1 }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: "block", mt: 0.5, mb: 1 }}
+              >
                 These tags help search engines describe and rank your course in results.
               </Typography>
             </Grid>

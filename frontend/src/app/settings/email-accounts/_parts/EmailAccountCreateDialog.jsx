@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useState } from "react"
 import {
   Box,
   Typography,
@@ -11,15 +11,15 @@ import {
   Checkbox,
   alpha,
   useTheme,
-} from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { InfoOutlined } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CSectionLabel from "@/components/ui/CSectionLabel";
-import Image from "next/image";
+} from "@mui/material"
+import Grid from "@mui/material/Grid"
+import { InfoOutlined } from "@mui/icons-material"
+import { toast } from "react-toastify"
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CSectionLabel from "@/components/ui/CSectionLabel"
+import Image from "next/image"
 import {
   EMAIL_SERVICES,
   SERVICE_COLORS,
@@ -28,8 +28,8 @@ import {
   PROVIDER_FIELDS,
   INCOMING_OUTGOING_FIELDS,
   validateAccountForm,
-} from "../emailConfig";
-import { useCreateEmailAccountMutation } from "@/features/shared/emailAccountAPI";
+} from "../emailConfig"
+import { useCreateEmailAccountMutation } from "@/features/shared/emailAccountAPI"
 
 const DEFAULT_VALUES = {
   email_account_name: "",
@@ -39,46 +39,46 @@ const DEFAULT_VALUES = {
   enable_outgoing: false,
   default_incoming: false,
   default_outgoing: false,
-};
+}
 
 export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
-  const theme = useTheme();
-  const [selected, setSelected] = useState(null);
-  const [values, setValues] = useState(DEFAULT_VALUES);
-  const [errors, setErrors] = useState({});
-  const [createAccount, { isLoading }] = useCreateEmailAccountMutation();
+  const theme = useTheme()
+  const [selected, setSelected] = useState(null)
+  const [values, setValues] = useState(DEFAULT_VALUES)
+  const [errors, setErrors] = useState({})
+  const [createAccount, { isLoading }] = useCreateEmailAccountMutation()
 
   function handleSelect(service) {
-    setSelected(service);
-    setValues({ ...DEFAULT_VALUES, service: service.name });
-    setErrors({});
+    setSelected(service)
+    setValues({ ...DEFAULT_VALUES, service: service.name })
+    setErrors({})
   }
 
   function handleChange(e) {
-    const { name, value, type, checked } = e.target;
-    setValues((v) => ({ ...v, [name]: type === "checkbox" ? checked : value }));
-    if (errors[name]) setErrors((e) => ({ ...e, [name]: undefined }));
+    const { name, value, type, checked } = e.target
+    setValues(v => ({ ...v, [name]: type === "checkbox" ? checked : value }))
+    if (errors[name]) setErrors(e => ({ ...e, [name]: undefined }))
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     if (!selected) {
-      toast.warning("Please select a provider first.");
-      return;
+      toast.warning("Please select a provider first.")
+      return
     }
 
-    const errs = validateAccountForm(values);
+    const errs = validateAccountForm(values)
     if (Object.keys(errs).length) {
-      setErrors(errs);
-      return;
+      setErrors(errs)
+      return
     }
 
     try {
-      await createAccount({ ...values, service: selected.name }).unwrap();
-      toast.success("Email account created successfully");
-      handleCDialogClose();
+      await createAccount({ ...values, service: selected.name }).unwrap()
+      toast.success("Email account created successfully")
+      handleCDialogClose()
     } catch (err) {
-      toast.error(err?.data?.message || err?.data?.detail || "Failed to create email account");
+      toast.error(err?.data?.message || err?.data?.detail || "Failed to create email account")
     }
   }
 
@@ -96,11 +96,11 @@ export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
         <Box sx={{ mb: 3 }}>
           <CSectionLabel label="Select Provider" />
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5 }}>
-            {EMAIL_SERVICES.map((service) => {
-              const isSelected = selected?.name === service.name;
-              const sColor = SERVICE_COLORS[service.name] || "#607D8B";
-              const sInitials = SERVICE_INITIALS[service.name] || "?";
-              const sImage = SERVICE_IMAGES[service.name];
+            {EMAIL_SERVICES.map(service => {
+              const isSelected = selected?.name === service.name
+              const sColor = SERVICE_COLORS[service.name] || "#607D8B"
+              const sInitials = SERVICE_INITIALS[service.name] || "?"
+              const sImage = SERVICE_IMAGES[service.name]
               return (
                 <Box
                   key={service.name}
@@ -166,7 +166,7 @@ export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
                     {service.label}
                   </Typography>
                 </Box>
-              );
+              )
             })}
           </Box>
         </Box>
@@ -207,7 +207,7 @@ export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
               {/* Credentials */}
               <CSectionLabel label="Credentials" />
               <Stack spacing={2.5}>
-                {PROVIDER_FIELDS.map((field) => (
+                {PROVIDER_FIELDS.map(field => (
                   <CTextField
                     key={field.name}
                     label={field.label}
@@ -230,49 +230,9 @@ export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
                 <Grid size={{ xs: 12, sm: 6 }}>
                   <Stack spacing={3}>
                     {/* Incoming column */}
-                    {INCOMING_OUTGOING_FIELDS.filter(
-                      (f) => f.name.includes("incoming")
-                    ).map((field) => {
-                      if (field.condition && !field.condition(values)) return null;
-                      return (
-                        <Box key={field.name}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                size="small"
-                                name={field.name}
-                                checked={Boolean(values[field.name])}
-                                onChange={handleChange}
-                                sx={{ p: 0.5 }}
-                              />
-                            }
-                            label={
-                              <Typography variant="body2" fontWeight={500} sx={{ ml: 0.5 }}>
-                                {field.label}
-                              </Typography>
-                            }
-                            sx={{ ml: 0 }}
-                          />
-                          <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            display="block"
-                            sx={{ ml: 4, mt: 0.5 }}
-                          >
-                            {field.description}
-                          </Typography>
-                        </Box>
-                      );
-                    })}
-                  </Stack>
-                </Grid>
-
-                <Grid size={{ xs: 12, sm: 6 }}>
-                  <Stack spacing={3}>
-                    {/* Outgoing column */}
-                    {INCOMING_OUTGOING_FIELDS.filter((f) => f.name.includes("outgoing")).map(
-                      (field) => {
-                        if (field.condition && !field.condition(values)) return null;
+                    {INCOMING_OUTGOING_FIELDS.filter(f => f.name.includes("incoming")).map(
+                      field => {
+                        if (field.condition && !field.condition(values)) return null
                         return (
                           <Box key={field.name}>
                             <FormControlLabel
@@ -301,7 +261,47 @@ export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
                               {field.description}
                             </Typography>
                           </Box>
-                        );
+                        )
+                      }
+                    )}
+                  </Stack>
+                </Grid>
+
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Stack spacing={3}>
+                    {/* Outgoing column */}
+                    {INCOMING_OUTGOING_FIELDS.filter(f => f.name.includes("outgoing")).map(
+                      field => {
+                        if (field.condition && !field.condition(values)) return null
+                        return (
+                          <Box key={field.name}>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  size="small"
+                                  name={field.name}
+                                  checked={Boolean(values[field.name])}
+                                  onChange={handleChange}
+                                  sx={{ p: 0.5 }}
+                                />
+                              }
+                              label={
+                                <Typography variant="body2" fontWeight={500} sx={{ ml: 0.5 }}>
+                                  {field.label}
+                                </Typography>
+                              }
+                              sx={{ ml: 0 }}
+                            />
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              display="block"
+                              sx={{ ml: 4, mt: 0.5 }}
+                            >
+                              {field.description}
+                            </Typography>
+                          </Box>
+                        )
                       }
                     )}
                   </Stack>
@@ -312,5 +312,5 @@ export default function EmailAccountCreateDialog({ open, handleCDialogClose }) {
         )}
       </Box>
     </CDialog>
-  );
+  )
 }

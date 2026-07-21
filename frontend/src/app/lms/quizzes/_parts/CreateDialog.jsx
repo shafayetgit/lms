@@ -1,29 +1,29 @@
-"use client";
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import { Grid } from "@mui/material";
+"use client"
+import React, { useState } from "react"
+import { useFormik } from "formik"
+import { Grid } from "@mui/material"
 
-import CDialog from "@/components/ui/CDialog";
-import CForm from "@/components/ui/CForm";
-import CTextField from "@/components/form/CTextField";
-import CNumberField from "@/components/form/CNumberField";
-import CCheckbox from "@/components/form/CCheckbox";
+import CDialog from "@/components/ui/CDialog"
+import CForm from "@/components/ui/CForm"
+import CTextField from "@/components/form/CTextField"
+import CNumberField from "@/components/form/CNumberField"
+import CCheckbox from "@/components/form/CCheckbox"
 
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"
 
-import { useCreateQuizMutation } from "@/features/quiz/quizAPI";
-import { quizValidationSchema } from "@/schema/quiz";
-import { mapApiErrorsToFormik } from "@/utils/shared";
+import { useCreateQuizMutation } from "@/features/quiz/quizAPI"
+import { quizValidationSchema } from "@/schema/quiz"
+import { mapApiErrorsToFormik } from "@/utils/shared"
 
 export default function CreateDialog() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => setOpen(true);
+    setOpen(false)
+  }
+  const handleOpen = () => setOpen(true)
 
-  const [create, { isLoading: isCreatingQuiz }] = useCreateQuizMutation();
+  const [create, { isLoading: isCreatingQuiz }] = useCreateQuizMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -48,21 +48,21 @@ export default function CreateDialog() {
           passing_percentage: Number(values.passing_percentage),
           max_attempts: Number(values.max_attempts),
           marks_to_cut: Number(values.marks_to_cut),
-        };
+        }
 
-        const response = await create(payload).unwrap();
+        const response = await create(payload).unwrap()
 
-        toast.success(response?.message || "Quiz created successfully");
-        resetForm();
-        handleClose();
+        toast.success(response?.message || "Quiz created successfully")
+        resetForm()
+        handleClose()
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
-        console.error("Create error:", error);
-        toast.error(error?.data?.message || "Create failed. Please try again.");
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
+        console.error("Create error:", error)
+        toast.error(error?.data?.message || "Create failed. Please try again.")
       }
     },
-  });
+  })
 
   return (
     <CDialog
@@ -77,7 +77,7 @@ export default function CreateDialog() {
       <CForm
         onSubmit={formik.handleSubmit}
         width="30rem"
-        btnProps={{ action:"", label: "Create", loading: isCreatingQuiz }}
+        btnProps={{ action: "", label: "Create", loading: isCreatingQuiz }}
         dialog
       >
         <Grid container spacing={2}>
@@ -103,12 +103,8 @@ export default function CreateDialog() {
               value={formik.values.description}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={
-                formik.touched.description && Boolean(formik.errors.description)
-              }
-              helperText={
-                formik.touched.description && formik.errors.description
-              }
+              error={formik.touched.description && Boolean(formik.errors.description)}
+              helperText={formik.touched.description && formik.errors.description}
               multiline
               rows={4}
             />
@@ -171,36 +167,28 @@ export default function CreateDialog() {
             <CCheckbox
               label="Shuffle Questions"
               checked={formik.values.shuffle_questions}
-              onChange={(e) =>
-                formik.setFieldValue("shuffle_questions", e.target.checked)
-              }
+              onChange={e => formik.setFieldValue("shuffle_questions", e.target.checked)}
             />
           </Grid>
           <Grid size={{ xs: 6 }}>
             <CCheckbox
               label="Enable Negative Marking"
               checked={formik.values.enable_negative_marking}
-              onChange={(e) =>
-                formik.setFieldValue("enable_negative_marking", e.target.checked)
-              }
+              onChange={e => formik.setFieldValue("enable_negative_marking", e.target.checked)}
             />
           </Grid>
           <Grid size={{ xs: 6 }}>
             <CCheckbox
               label="Show Answers"
               checked={formik.values.show_answers}
-              onChange={(e) =>
-                formik.setFieldValue("show_answers", e.target.checked)
-              }
+              onChange={e => formik.setFieldValue("show_answers", e.target.checked)}
             />
           </Grid>
           <Grid size={{ xs: 6 }}>
             <CCheckbox
               label="Show Submission History"
               checked={formik.values.show_submission_history}
-              onChange={(e) =>
-                formik.setFieldValue("show_submission_history", e.target.checked)
-              }
+              onChange={e => formik.setFieldValue("show_submission_history", e.target.checked)}
             />
           </Grid>
 
@@ -209,13 +197,11 @@ export default function CreateDialog() {
             <CCheckbox
               label="Is Active"
               checked={formik.values.is_active}
-              onChange={(e) =>
-                formik.setFieldValue("is_active", e.target.checked)
-              }
+              onChange={e => formik.setFieldValue("is_active", e.target.checked)}
             />
           </Grid>
         </Grid>
       </CForm>
     </CDialog>
-  );
+  )
 }

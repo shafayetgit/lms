@@ -10,7 +10,8 @@ export default function UsersLayout({ children }) {
   const pathname = usePathname()
 
   // Inside a user detail route — let [id]/layout.jsx own the full layout
-  const isDetailRoute = /^\/core\/users\/[^/]+/.test(pathname) &&
+  const isDetailRoute =
+    /^\/core\/users\/[^/]+/.test(pathname) &&
     pathname !== "/core/users" &&
     pathname !== "/core/users/pending-invites"
 
@@ -40,9 +41,7 @@ export default function UsersLayout({ children }) {
 
   return (
     <PermissionGuard resource="user" action="read">
-      <CModuleLayout helpTips={activeTips}>
-        {children}
-      </CModuleLayout>
+      <CModuleLayout helpTips={activeTips}>{children}</CModuleLayout>
     </PermissionGuard>
   )
 }

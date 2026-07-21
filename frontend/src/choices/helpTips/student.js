@@ -27,6 +27,6 @@ export const STUDENT_TIPS = {
       },
     ],
   },
-};
+}
 
-export default STUDENT_TIPS;
+export default STUDENT_TIPS

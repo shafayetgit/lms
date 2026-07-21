@@ -1,5 +1,5 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useState } from "react"
 import {
   Box,
   Typography,
@@ -10,65 +10,83 @@ import {
   Chip,
   IconButton,
   Tooltip,
-} from "@mui/material";
+} from "@mui/material"
 import {
   PaymentsOutlined,
   CheckCircleOutline,
   RadioButtonUnchecked,
   EditOutlined,
   DeleteOutline,
-} from "@mui/icons-material";
-import CButton from "@/components/ui/CButton";
-import CPageLoader from "@/components/ui/CPageLoader";
-import CModuleLayout from "@/components/ui/CModuleLayout";
+} from "@mui/icons-material"
+import CButton from "@/components/ui/CButton"
+import CPageLoader from "@/components/ui/CPageLoader"
+import CModuleLayout from "@/components/ui/CModuleLayout"
 import {
   useListGatewayConfigsQuery,
   useDeleteGatewayConfigMutation,
-} from "@/features/payment/paymentGatewayApi";
-import { toast } from "react-toastify";
-import GatewayDialog from "./_parts/GatewayDialog";
+} from "@/features/payment/paymentGatewayApi"
+import { toast } from "react-toastify"
+import GatewayDialog from "./_parts/GatewayDialog"
 
 const GATEWAY_COLORS = {
   SSLCommerz: "#e63327",
   Stripe: "#635bff",
-};
+}
 
 const GATEWAY_INITIALS = {
   SSLCommerz: "SSL",
   Stripe: "STR",
-};
+}
 
 const helpTips = {
-  description: "Configure the payment gateways used for course and batch purchases. Only one gateway can be active at a time.",
+  description:
+    "Configure the payment gateways used for course and batch purchases. Only one gateway can be active at a time.",
   tips: [
-    { label: "SSLCommerz", text: "Most widely used Bangladeshi payment gateway. Supports cards, bKash, Nagad, and more." },
-    { label: "Stripe", text: "Global card payment provider. Requires Stripe account and webhook secret for verification." },
-    { label: "Razorpay", text: "Indian payment gateway. Uses JS-based checkout widget — your frontend needs Razorpay.js." },
-    { label: "Active Gateway", text: "Only one gateway can be active. Activating one automatically deactivates the other." },
-    { label: "Webhook URL", text: "Configure your gateway's webhook to POST to: /api/v1/payment-gateways/webhook/{gateway_name}" },
+    {
+      label: "SSLCommerz",
+      text: "Most widely used Bangladeshi payment gateway. Supports cards, bKash, Nagad, and more.",
+    },
+    {
+      label: "Stripe",
+      text: "Global card payment provider. Requires Stripe account and webhook secret for verification.",
+    },
+    {
+      label: "Razorpay",
+      text: "Indian payment gateway. Uses JS-based checkout widget — your frontend needs Razorpay.js.",
+    },
+    {
+      label: "Active Gateway",
+      text: "Only one gateway can be active. Activating one automatically deactivates the other.",
+    },
+    {
+      label: "Webhook URL",
+      text: "Configure your gateway's webhook to POST to: /api/v1/payment-gateways/webhook/{gateway_name}",
+    },
   ],
-};
+}
 
 export default function PaymentGatewaysPage() {
-  const { data, isLoading } = useListGatewayConfigsQuery();
-  const [deleteConfig, { isLoading: isDeleting }] = useDeleteGatewayConfigMutation();
-  const [dialogState, setDialogState] = useState({ open: false, gateway: null });
+  const { data, isLoading } = useListGatewayConfigsQuery()
+  const [deleteConfig, { isLoading: isDeleting }] = useDeleteGatewayConfigMutation()
+  const [dialogState, setDialogState] = useState({ open: false, gateway: null })
 
-  const configs = Array.isArray(data) ? data : [];
+  const configs = Array.isArray(data) ? data : []
 
-  const handleDelete = async (gateway) => {
+  const handleDelete = async gateway => {
     try {
-      await deleteConfig(gateway).unwrap();
-      toast.success(`${gateway} configuration removed`);
+      await deleteConfig(gateway).unwrap()
+      toast.success(`${gateway} configuration removed`)
     } catch {
-      toast.error("Failed to remove gateway configuration");
+      toast.error("Failed to remove gateway configuration")
     }
-  };
+  }
 
   return (
     <CModuleLayout helpTips={helpTips}>
       <Box>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 3 }}>
+        <Box
+          sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 3 }}
+        >
           <Box>
             <Typography variant="h5" fontWeight={600} mb={0.5}>
               Payment Gateways
@@ -98,7 +116,9 @@ export default function PaymentGatewaysPage() {
               textAlign: "center",
             }}
           >
-            <PaymentsOutlined sx={{ fontSize: 32, mb: 1.5, color: "text.secondary", opacity: 0.5 }} />
+            <PaymentsOutlined
+              sx={{ fontSize: 32, mb: 1.5, color: "text.secondary", opacity: 0.5 }}
+            />
             <Typography sx={{ fontSize: "15px", fontWeight: 600, mb: 0.5 }}>
               No Gateways Configured
             </Typography>
@@ -110,9 +130,9 @@ export default function PaymentGatewaysPage() {
 
         {!isLoading && configs.length > 0 && (
           <Stack spacing={2}>
-            {configs.map((config) => {
-              const color = GATEWAY_COLORS[config.gateway] || "#607D8B";
-              const initials = GATEWAY_INITIALS[config.gateway] || "GW";
+            {configs.map(config => {
+              const color = GATEWAY_COLORS[config.gateway] || "#607D8B"
+              const initials = GATEWAY_INITIALS[config.gateway] || "GW"
 
               return (
                 <Paper
@@ -127,9 +147,7 @@ export default function PaymentGatewaysPage() {
                     "&:hover": { borderColor: "primary.main" },
                   }}
                 >
-                  <Box
-                    sx={{ p: 2.5, display: "flex", alignItems: "center", gap: 2 }}
-                  >
+                  <Box sx={{ p: 2.5, display: "flex", alignItems: "center", gap: 2 }}>
                     <Avatar
                       sx={{
                         width: 36,
@@ -150,15 +168,26 @@ export default function PaymentGatewaysPage() {
                           {config.gateway}
                         </Typography>
                         {config.is_active && (
-                          <Chip label="Active" color="success" size="small" sx={{ height: 20, fontSize: "0.7rem" }} />
+                          <Chip
+                            label="Active"
+                            color="success"
+                            size="small"
+                            sx={{ height: 20, fontSize: "0.7rem" }}
+                          />
                         )}
                       </Box>
                       <Typography variant="body2" color="text.secondary">
                         {config.gateway === "SSLCommerz"
-                          ? config.ssl_sandbox ? "Sandbox mode" : "Live mode"
+                          ? config.ssl_sandbox
+                            ? "Sandbox mode"
+                            : "Live mode"
                           : config.gateway === "Stripe"
-                          ? config.stripe_publishable_key ? "Configured" : "Not configured"
-                          : config.razorpay_key_id ? "Configured" : "Not configured"}
+                            ? config.stripe_publishable_key
+                              ? "Configured"
+                              : "Not configured"
+                            : config.razorpay_key_id
+                              ? "Configured"
+                              : "Not configured"}
                       </Typography>
                     </Box>
 
@@ -196,13 +225,16 @@ export default function PaymentGatewaysPage() {
                     )}
                     {config.gateway === "Stripe" && (
                       <>
-                        <StatusFlag label="Publishable Key" active={!!config.stripe_publishable_key} />
+                        <StatusFlag
+                          label="Publishable Key"
+                          active={!!config.stripe_publishable_key}
+                        />
                         <StatusFlag label="Webhook Secret" active={false} note="masked" />
                       </>
                     )}
                   </Box>
                 </Paper>
-              );
+              )
             })}
           </Stack>
         )}
@@ -214,7 +246,7 @@ export default function PaymentGatewaysPage() {
         />
       </Box>
     </CModuleLayout>
-  );
+  )
 }
 
 function StatusFlag({ label, active, note }) {
@@ -230,8 +262,9 @@ function StatusFlag({ label, active, note }) {
         color={active ? "text.primary" : "text.disabled"}
         fontWeight={active ? 600 : 400}
       >
-        {label}{note ? ` (${note})` : ""}
+        {label}
+        {note ? ` (${note})` : ""}
       </Typography>
     </Box>
-  );
+  )
 }

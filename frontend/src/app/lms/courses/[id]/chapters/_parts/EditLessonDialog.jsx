@@ -1,7 +1,14 @@
 "use client"
 import React, { useState } from "react"
 import { useFormik } from "formik"
-import { Grid, LinearProgress, Box, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material"
+import {
+  Grid,
+  LinearProgress,
+  Box,
+  Typography,
+  ToggleButton,
+  ToggleButtonGroup,
+} from "@mui/material"
 import { VideoLibrary, Article, Quiz, Assignment } from "@mui/icons-material"
 import { toast } from "react-toastify"
 
@@ -36,10 +43,16 @@ export default function EditLessonDialog({ lesson, courseId, chapterId, open, on
   const [attach, { isLoading: isAttaching }] = useAttachMutation()
 
   const { data: quizzesData } = useReadQuizzesQuery({ courseId, size: 100 }, { skip: !open })
-  const { data: assignmentsData } = useReadAssignmentsQuery({ course_id: courseId, size: 100 }, { skip: !open })
+  const { data: assignmentsData } = useReadAssignmentsQuery(
+    { course_id: courseId, size: 100 },
+    { skip: !open }
+  )
 
   const quizOptions = (quizzesData?.data ?? []).map(q => ({ label: q.title, value: q.id }))
-  const assignmentOptions = (assignmentsData?.data ?? []).map(a => ({ label: a.title, value: a.id }))
+  const assignmentOptions = (assignmentsData?.data ?? []).map(a => ({
+    label: a.title,
+    value: a.id,
+  }))
 
   const formik = useFormik({
     initialValues: {
@@ -85,11 +98,22 @@ export default function EditLessonDialog({ lesson, courseId, chapterId, open, on
           toast.info("Video is being uploaded")
           try {
             const uploadedFiles = await uploadMultipleToCloudinary({
-              files: [{ file: video, field: "body", model: "Lesson", model_id: lesson.id, onProgress: p => setUploadProgress(p) }],
+              files: [
+                {
+                  file: video,
+                  field: "body",
+                  model: "Lesson",
+                  model_id: lesson.id,
+                  onProgress: p => setUploadProgress(p),
+                },
+              ],
             })
             if (uploadedFiles?.length > 0) {
               await attach(uploadedFiles).unwrap()
-              await update({ id: lessonId, body: { body: uploadedFiles[0].meta.secure_url } }).unwrap()
+              await update({
+                id: lessonId,
+                body: { body: uploadedFiles[0].meta.secure_url },
+              }).unwrap()
               toast.info("Video uploaded and saved")
             }
           } catch (mediaError) {
@@ -117,9 +141,17 @@ export default function EditLessonDialog({ lesson, courseId, chapterId, open, on
     <CDialog
       title={`Edit Lesson: ${lesson?.title}`}
       open={open}
-      handleCDialogClose={() => { onClose(); formik.resetForm() }}
+      handleCDialogClose={() => {
+        onClose()
+        formik.resetForm()
+      }}
     >
-      <CForm onSubmit={formik.handleSubmit} width="48rem" btnProps={{ loading: isUpdating || isAttaching }} dialog>
+      <CForm
+        onSubmit={formik.handleSubmit}
+        width="48rem"
+        btnProps={{ loading: isUpdating || isAttaching }}
+        dialog
+      >
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
@@ -133,7 +165,11 @@ export default function EditLessonDialog({ lesson, courseId, chapterId, open, on
               fullWidth
             >
               {LESSON_TYPES.map(t => (
-                <ToggleButton key={t.value} value={t.value} sx={{ gap: 0.75, textTransform: "capitalize" }}>
+                <ToggleButton
+                  key={t.value}
+                  value={t.value}
+                  sx={{ gap: 0.75, textTransform: "capitalize" }}
+                >
                   {TYPE_ICONS[t.value]}
                   {t.label}
                 </ToggleButton>
@@ -176,7 +212,10 @@ export default function EditLessonDialog({ lesson, courseId, chapterId, open, on
                 />
                 {typeof formik.values.video === "string" && formik.values.video !== "" && (
                   <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                    Current video: <a href={formik.values.video} target="_blank" rel="noreferrer">View</a>
+                    Current video:{" "}
+                    <a href={formik.values.video} target="_blank" rel="noreferrer">
+                      View
+                    </a>
                   </Typography>
                 )}
                 {uploadProgress > 0 && uploadProgress <= 100 && (

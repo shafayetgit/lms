@@ -1,9 +1,9 @@
-import api from "@/redux/api";
+import api from "@/redux/api"
 
 export const trackingApi = api.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     upsertNote: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/tracking/notes",
         method: "POST",
         body,
@@ -11,11 +11,11 @@ export const trackingApi = api.injectEndpoints({
       invalidatesTags: ["TRACKING"],
     }),
     readNote: builder.query({
-      query: (lesson_id) => `/api/v1/tracking/notes/${lesson_id}`,
+      query: lesson_id => `/api/v1/tracking/notes/${lesson_id}`,
       providesTags: ["TRACKING"],
     }),
     updateWatchDuration: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/tracking/video",
         method: "POST",
         body,
@@ -23,7 +23,7 @@ export const trackingApi = api.injectEndpoints({
       invalidatesTags: ["TRACKING"],
     }),
     registerInterest: builder.mutation({
-      query: (body) => ({
+      query: body => ({
         url: "/api/v1/tracking/interest",
         method: "POST",
         body,
@@ -39,7 +39,7 @@ export const trackingApi = api.injectEndpoints({
       invalidatesTags: ["TRACKING"],
     }),
   }),
-});
+})
 
 export const {
   useUpsertNoteMutation,
@@ -48,4 +48,4 @@ export const {
   useUpdateWatchDurationMutation,
   useRegisterInterestMutation,
   useUpdateRelatedCoursesMutation,
-} = trackingApi;
+} = trackingApi

@@ -50,9 +50,10 @@ export default function CourseActionCard({
   handleRequestCertificate,
   isRequesting = false,
 }) {
-  const completedCount = flatLessonsList.length > 0
-    ? flatLessonsList.filter((l) => completedLessons[l.id]).length
-    : Object.keys(completedLessons).length
+  const completedCount =
+    flatLessonsList.length > 0
+      ? flatLessonsList.filter(l => completedLessons[l.id]).length
+      : Object.keys(completedLessons).length
   const totalLessonsCount = flatLessonsList.length || course.total_lessons || 0
   const gradient = getGradient(course.card_gradient)
 
@@ -62,7 +63,7 @@ export default function CourseActionCard({
       sx={{
         borderRadius: 1,
         overflow: "hidden",
-        border: (theme) => `1px solid ${theme.palette.divider}`,
+        border: theme => `1px solid ${theme.palette.divider}`,
         boxShadow: "0 12px 40px rgba(0,0,0,0.08)",
       }}
     >
@@ -121,7 +122,12 @@ export default function CourseActionCard({
               gap: 1,
             }}
           >
-            <Typography variant="h4" color="text.primary" fontWeight="800" sx={{ letterSpacing: "-0.02em" }}>
+            <Typography
+              variant="h4"
+              color="text.primary"
+              fontWeight="800"
+              sx={{ letterSpacing: "-0.02em" }}
+            >
               {priceDisplay}
             </Typography>
             <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -143,7 +149,13 @@ export default function CourseActionCard({
                   startIcon={<Share />}
                   onClick={onShare}
                   color="inherit"
-                  sx={{ textTransform: "none", minWidth: 0, px: 1.5, boxShadow: "none", "&:hover": { boxShadow: "none" } }}
+                  sx={{
+                    textTransform: "none",
+                    minWidth: 0,
+                    px: 1.5,
+                    boxShadow: "none",
+                    "&:hover": { boxShadow: "none" },
+                  }}
                   size="small"
                 >
                   Share
@@ -158,7 +170,9 @@ export default function CourseActionCard({
             <>
               <CButton
                 label={courseProgressPercent > 0 ? "Continue Learning" : "Start Learning"}
-                variant={courseProgressPercent === 100 && enableCertification ? "outlined" : "contained"}
+                variant={
+                  courseProgressPercent === 100 && enableCertification ? "outlined" : "contained"
+                }
                 color="primary"
                 fullWidth
                 size="large"
@@ -189,7 +203,7 @@ export default function CourseActionCard({
                         borderRadius: 1,
                         textTransform: "none",
                         boxShadow: "none",
-                        "&:hover": { boxShadow: "none" }
+                        "&:hover": { boxShadow: "none" },
                       }}
                     >
                       View Certificate

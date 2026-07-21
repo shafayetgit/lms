@@ -1,29 +1,29 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Box, alpha } from "@mui/material";
-import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react"
+import { Box, alpha } from "@mui/material"
+import { usePathname } from "next/navigation"
 
-const drawerWidth = 280;
-const miniDrawerWidth = 88;
+const drawerWidth = 280
+const miniDrawerWidth = 88
 
 function BaseLayout({ children, sidebar: Sidebar, topbar: Topbar }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMini, setIsMini] = useState(false);
-  const pathname = usePathname();
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [isMini, setIsMini] = useState(false)
+  const pathname = usePathname()
 
-  const currentDrawerWidth = isMini ? miniDrawerWidth : drawerWidth;
+  const currentDrawerWidth = isMini ? miniDrawerWidth : drawerWidth
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+    setMobileOpen(!mobileOpen)
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setMobileOpen(false);
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [pathname]);
+      setMobileOpen(false)
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [pathname])
 
   return (
     <Box
@@ -92,7 +92,7 @@ function BaseLayout({ children, sidebar: Sidebar, topbar: Topbar }) {
         </Box>
       </Box>
     </Box>
-  );
+  )
 }
 
-export default BaseLayout;
+export default BaseLayout

@@ -1,6 +1,6 @@
-import React from "react";
-import { Box, Card, Typography, CircularProgress } from "@mui/material";
-import ChapterAccordion from "@/components/course/CurriculumAccordion";
+import React from "react"
+import { Box, Card, Typography, CircularProgress } from "@mui/material"
+import ChapterAccordion from "@/components/course/CurriculumAccordion"
 
 export default function CourseCurriculum({
   isChaptersLoading,
@@ -11,7 +11,11 @@ export default function CourseCurriculum({
 }) {
   return (
     <Card variant="outlined" sx={{ p: 3, borderRadius: 1, mb: 3 }}>
-      <Typography variant="h4" component="h2" sx={{ fontWeight: 800, mb: 1.5, color: "text.primary" }}>
+      <Typography
+        variant="h4"
+        component="h2"
+        sx={{ fontWeight: 800, mb: 1.5, color: "text.primary" }}
+      >
         Curriculum
       </Typography>
 
@@ -36,5 +40,5 @@ export default function CourseCurriculum({
         ))
       )}
     </Card>
-  );
+  )
 }

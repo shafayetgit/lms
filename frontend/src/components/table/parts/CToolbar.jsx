@@ -26,7 +26,7 @@ const StyledQuickFilter = styled(QuickFilter)(({ theme }) => ({
 
 import { useGridApiContext } from "@mui/x-data-grid"
 
-export default function CToolbar({ action, selectedRows , deleteData, additionalFilters }) {
+export default function CToolbar({ action, selectedRows, deleteData, additionalFilters }) {
   const apiRef = useGridApiContext()
 
   return (
@@ -41,7 +41,15 @@ export default function CToolbar({ action, selectedRows , deleteData, additional
         border: "none !important",
       }}
     >
-      <Box sx={{ display: "flex", flex: 1, justifyContent: "flex-start", alignItems: "center", gap: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flex: 1,
+          justifyContent: "flex-start",
+          alignItems: "center",
+          gap: 2,
+        }}
+      >
         <StyledQuickFilter expanded>
           <QuickFilterControl
             render={({ ref, ...other }) => (

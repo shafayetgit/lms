@@ -1,20 +1,20 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Box, Typography, Divider, Stack, alpha } from "@mui/material";
-import { motion } from "framer-motion";
-import { LockOutlined, ArrowBack } from "@mui/icons-material";
-import { toast } from "react-toastify";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import React from "react"
+import { useFormik } from "formik"
+import * as Yup from "yup"
+import { Box, Typography, Divider, Stack, alpha } from "@mui/material"
+import { motion } from "framer-motion"
+import { LockOutlined, ArrowBack } from "@mui/icons-material"
+import { toast } from "react-toastify"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
-import CTextField from "@/components/form/CTextField";
-import CButton from "@/components/ui/CButton";
-import AuthLogo from "@/components/ui/AuthLogo";
+import CTextField from "@/components/form/CTextField"
+import CButton from "@/components/ui/CButton"
+import AuthLogo from "@/components/ui/AuthLogo"
 
-import { useForgotPasswordMutation } from "@/features/auth/authAPI";
+import { useForgotPasswordMutation } from "@/features/auth/authAPI"
 
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -26,39 +26,32 @@ const containerVariants = {
       staggerChildren: 0.1,
     },
   },
-};
+}
 
 const itemVariants = {
   hidden: { opacity: 0, y: 10 },
   visible: { opacity: 1, y: 0 },
-};
+}
 
 const ForgotPassword = () => {
-  const router = useRouter();
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const router = useRouter()
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation()
 
   const formik = useFormik({
     initialValues: { email: "" },
     validationSchema: Yup.object({
-      email: Yup.string()
-        .email("Please enter a valid email address")
-        .required("Email is required"),
+      email: Yup.string().email("Please enter a valid email address").required("Email is required"),
     }),
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       try {
-        const response = await forgotPassword(values).unwrap();
-        toast.success(
-          response.message || "Password reset link sent to your email!",
-        );
-        router.push("/auth/sign-in");
+        const response = await forgotPassword(values).unwrap()
+        toast.success(response.message || "Password reset link sent to your email!")
+        router.push("/auth/sign-in")
       } catch (error) {
-        toast.error(
-          error?.data?.message ||
-          "Failed to send reset link. Please try again.",
-        );
+        toast.error(error?.data?.message || "Failed to send reset link. Please try again.")
       }
     },
-  });
+  })
 
   return (
     <Box
@@ -97,25 +90,15 @@ const ForgotPassword = () => {
         </motion.div>
 
         <motion.div variants={itemVariants}>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            px={2}
-            lineHeight={1.5}
-          >
-            Enter your registered email address and we&apos;re sending you
-            instructions to reset your password.
+          <Typography variant="body2" color="text.secondary" px={2} lineHeight={1.5}>
+            Enter your registered email address and we&apos;re sending you instructions to reset
+            your password.
           </Typography>
         </motion.div>
       </Box>
 
       {/* Form Container */}
-      <Box
-        component="form"
-        onSubmit={formik.handleSubmit}
-        noValidate
-        sx={{ px: { xs: 0, sm: 2 } }}
-      >
+      <Box component="form" onSubmit={formik.handleSubmit} noValidate sx={{ px: { xs: 0, sm: 2 } }}>
         <Stack spacing={2.5}>
           <motion.div variants={itemVariants}>
             <CTextField
@@ -132,7 +115,7 @@ const ForgotPassword = () => {
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: 1,
-                  backgroundColor: (theme) =>
+                  backgroundColor: theme =>
                     theme.palette.mode === "dark"
                       ? alpha(theme.palette.common.white, 0.02)
                       : alpha(theme.palette.common.black, 0.01),
@@ -172,12 +155,7 @@ const ForgotPassword = () => {
 
       {/* Footer Actions */}
       <motion.div variants={itemVariants}>
-        <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-        >
+        <Stack direction="row" justifyContent="center" alignItems="center" spacing={1}>
           <ArrowBack sx={{ fontSize: 18, color: "text.secondary" }} />
           <Link href="/auth/sign-in" style={{ textDecoration: "none" }}>
             <Typography
@@ -195,7 +173,7 @@ const ForgotPassword = () => {
         </Stack>
       </motion.div>
     </Box>
-  );
-};
+  )
+}
 
-export default ForgotPassword;
+export default ForgotPassword

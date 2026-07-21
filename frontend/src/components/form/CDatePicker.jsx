@@ -12,7 +12,7 @@ export default function CDatePicker({
   size = "small",
   required = false,
   format = "YYYY-MM-DD",
-  views = ['year', 'month', 'day'],
+  views = ["year", "month", "day"],
   // views=['year-mm-dd'],
   ...rest
 }) {

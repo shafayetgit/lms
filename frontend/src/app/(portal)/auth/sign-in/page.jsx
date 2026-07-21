@@ -1,35 +1,30 @@
-"use client";
+"use client"
 
-import React from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Stack,
-  Divider,
-  alpha,
-} from "@mui/material";
-import { Google, Person } from "@mui/icons-material";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import React from "react"
+import { Box, Typography, Button, Stack, Divider, alpha } from "@mui/material"
+import { Google, Person } from "@mui/icons-material"
+import Link from "next/link"
+import { motion } from "framer-motion"
 
-import CTextField from "@/components/form/CTextField";
-import CPasswordField from "@/components/form/CPasswordField";
-import AuthLogo from "@/components/ui/AuthLogo";
+import CTextField from "@/components/form/CTextField"
+import CPasswordField from "@/components/form/CPasswordField"
+import AuthLogo from "@/components/ui/AuthLogo"
 
-import { useFormik } from "formik";
-import { useSignInMutation } from "@/features/auth/authAPI";
-import { signInSchema } from "@/schema/auth";
+import { useFormik } from "formik"
+import { useSignInMutation } from "@/features/auth/authAPI"
+import { signInSchema } from "@/schema/auth"
 
-import { toast } from "react-toastify";
-import { mapApiErrorsToFormik } from "@/utils/shared";
-import CButton from "@/components/ui/CButton";
-import { setAuthCookie } from "@/lib/auth/cookie";
-import { useRouter } from "next/navigation";
+import { toast } from "react-toastify"
+import { mapApiErrorsToFormik } from "@/utils/shared"
+import CButton from "@/components/ui/CButton"
+import { setAuthCookie } from "@/lib/auth/cookie"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function SignInPage() {
   const router = useRouter()
-  const [signIn, { isLoading }] = useSignInMutation();
+  const searchParams = useSearchParams()
+  const redirectUrl = searchParams.get("next") || "/"
+  const [signIn, { isLoading }] = useSignInMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -39,24 +34,20 @@ export default function SignInPage() {
     validationSchema: signInSchema,
     onSubmit: async (values, { setErrors }) => {
       try {
-        const response = await signIn(values).unwrap();
+        const response = await signIn(values).unwrap()
         setAuthCookie(response)
-        toast.success(
-          response.message ||
-          "Sign-in successful! Welcome back to your account.",
-        );
-        window.location.href = '/';
-        router.push('/')
+        toast.success(response.message || "Sign-in successful! Welcome back to your account.")
+        window.location.href = redirectUrl
+        router.push(redirectUrl)
       } catch (error) {
-        const errors = mapApiErrorsToFormik(error);
-        setErrors(errors);
+        const errors = mapApiErrorsToFormik(error)
+        setErrors(errors)
 
         if (error.status === 403) {
           toast.error(
             <div>
               <div>
-                Your account is not verified. Please check your email for the
-                verification link.
+                Your account is not verified. Please check your email for the verification link.
               </div>
               <CButton
                 label="Verify Email"
@@ -65,16 +56,14 @@ export default function SignInPage() {
                 href={"/auth/verify-email?email=" + values.username}
                 sx={{ mt: 1, borderRadius: 1 }}
               />
-            </div>,
-          );
+            </div>
+          )
         } else {
-          toast.error(
-            error?.data?.message || "Sign-in failed. Please try again.",
-          );
+          toast.error(error?.data?.message || "Sign-in failed. Please try again.")
         }
       }
     },
-  });
+  })
 
   return (
     <Box
@@ -94,18 +83,11 @@ export default function SignInPage() {
     >
       <AuthLogo />
 
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: 800, textAlign: "center", mb: 0.5 }}
-      >
+      <Typography variant="h4" sx={{ fontWeight: 800, textAlign: "center", mb: 0.5 }}>
         Welcome Back
       </Typography>
 
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        sx={{ textAlign: "center", mb: 3 }}
-      >
+      <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mb: 3 }}>
         Enter your credentials to access your account.
       </Typography>
 
@@ -118,9 +100,7 @@ export default function SignInPage() {
             value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched.username && Boolean(formik.errors.username)
-            }
+            error={formik.touched.username && Boolean(formik.errors.username)}
             helperText={formik.touched.username && formik.errors.username}
           />
 
@@ -130,9 +110,7 @@ export default function SignInPage() {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched.password && Boolean(formik.errors.password)
-            }
+            error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
           />
 
@@ -173,12 +151,7 @@ export default function SignInPage() {
       <Divider sx={{ mb: 2.5 }}>OR CONTINUE WITH</Divider>
 
       <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<Google />}
-          sx={{ borderRadius: 1, py: 1 }}
-        >
+        <Button fullWidth variant="outlined" startIcon={<Google />} sx={{ borderRadius: 1, py: 1 }}>
           Google
         </Button>
       </Stack>
@@ -198,5 +171,5 @@ export default function SignInPage() {
         </Typography>
       </Typography>
     </Box>
-  );
+  )
 }

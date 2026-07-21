@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { persistStore } from 'redux-persist'
-import { middleware } from './middleware'
-import reducers from './reducers'
+import { configureStore } from "@reduxjs/toolkit"
+import { persistStore } from "redux-persist"
+import { middleware } from "./middleware"
+import reducers from "./reducers"
 
 export const makeStore = () => {
   const store = configureStore({

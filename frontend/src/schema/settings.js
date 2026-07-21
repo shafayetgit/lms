@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from "yup"
 
 export const settingsValidationSchema = Yup.object().shape({
   default_currency: Yup.string().max(10).required("Currency is required"),
@@ -42,4 +42,4 @@ export const settingsValidationSchema = Yup.object().shape({
   send_payment_reminders_for_course: Yup.boolean().default(false),
   payment_gateway: Yup.string().nullable(),
   apply_rounding_on_equivalent: Yup.boolean().default(false),
-});
+})

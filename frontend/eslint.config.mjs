@@ -1,5 +1,5 @@
-import { defineConfig } from "eslint/config";
-import nextConfig from "eslint-config-next/core-web-vitals";
+import { defineConfig } from "eslint/config"
+import nextConfig from "eslint-config-next/core-web-vitals"
 
 export default defineConfig([
   ...nextConfig,
@@ -14,4 +14,4 @@ export default defineConfig([
       "**/page copy*.js",
     ],
   },
-]);
+])

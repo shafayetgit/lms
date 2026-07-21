@@ -1,13 +1,7 @@
-"use client";
-import React, { useState, useMemo, useEffect } from "react";
-import {
-  Box,
-  Stack,
-  Typography,
-  useTheme,
-  alpha,
-} from "@mui/material";
-import { toast } from "react-toastify";
+"use client"
+import React, { useState, useMemo, useEffect } from "react"
+import { Box, Stack, Typography, useTheme, alpha } from "@mui/material"
+import { toast } from "react-toastify"
 import {
   DndContext,
   closestCenter,
@@ -15,101 +9,93 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-} from "@dnd-kit/core";
+} from "@dnd-kit/core"
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+} from "@dnd-kit/sortable"
 
-import {
-  useDeleteQuestionMutation,
-  useReorderQuestionsMutation,
-} from "@/features/quiz/quizAPI";
-import CreateQuestionDialog from "./CreateQuestionDialog";
-import SortableQuestionItem from "./SortableQuestionItem";
-import CCheckbox from "@/components/form/CCheckbox";
-import CDelete from "@/components/actions/CDelete";
+import { useDeleteQuestionMutation, useReorderQuestionsMutation } from "@/features/quiz/quizAPI"
+import CreateQuestionDialog from "./CreateQuestionDialog"
+import SortableQuestionItem from "./SortableQuestionItem"
+import CCheckbox from "@/components/form/CCheckbox"
+import CDelete from "@/components/actions/CDelete"
 
-import PermissionGuard from "@/components/ui/PermissionGuard";
+import PermissionGuard from "@/components/ui/PermissionGuard"
 
 export default function QuestionsBuilder({ quizId, questions = [] }) {
-  const theme = useTheme();
-  const [expandedId, setExpandedId] = useState(null);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const [deleteQuestion] = useDeleteQuestionMutation();
-  const [reorderQuestions] = useReorderQuestionsMutation();
+  const theme = useTheme()
+  const [expandedId, setExpandedId] = useState(null)
+  const [selectedIds, setSelectedIds] = useState([])
+  const [deleteQuestion] = useDeleteQuestionMutation()
+  const [reorderQuestions] = useReorderQuestionsMutation()
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
+  )
 
   const sortedQuestions = useMemo(
     () => [...questions].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0)),
     [questions]
-  );
+  )
 
-  const questionIds = useMemo(
-    () => sortedQuestions.map((q) => q.id),
-    [sortedQuestions]
-  );
+  const questionIds = useMemo(() => sortedQuestions.map(q => q.id), [sortedQuestions])
 
-  const [prevQuestions, setPrevQuestions] = useState(questions);
+  const [prevQuestions, setPrevQuestions] = useState(questions)
   if (questions !== prevQuestions) {
-    setPrevQuestions(questions);
-    const existingIds = sortedQuestions.map((q) => q.id);
-    setSelectedIds((prev) => prev.filter((id) => existingIds.includes(id)));
+    setPrevQuestions(questions)
+    const existingIds = sortedQuestions.map(q => q.id)
+    setSelectedIds(prev => prev.filter(id => existingIds.includes(id)))
   }
 
-  const handleSelectAll = (e) => {
+  const handleSelectAll = e => {
     if (e.target.checked) {
-      setSelectedIds(sortedQuestions.map((q) => q.id));
+      setSelectedIds(sortedQuestions.map(q => q.id))
     } else {
-      setSelectedIds([]);
+      setSelectedIds([])
     }
-  };
+  }
 
-  const handleSelectOne = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
+  const handleSelectOne = id => {
+    setSelectedIds(prev => (prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]))
+  }
 
-  const handleDragEnd = async (event) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+  const handleDragEnd = async event => {
+    const { active, over } = event
+    if (!over || active.id === over.id) return
 
-    const oldIndex = sortedQuestions.findIndex((q) => q.id === active.id);
-    const newIndex = sortedQuestions.findIndex((q) => q.id === over.id);
-    const reordered = arrayMove(sortedQuestions, oldIndex, newIndex);
+    const oldIndex = sortedQuestions.findIndex(q => q.id === active.id)
+    const newIndex = sortedQuestions.findIndex(q => q.id === over.id)
+    const reordered = arrayMove(sortedQuestions, oldIndex, newIndex)
 
     const orderPayload = reordered.map((q, i) => ({
       id: q.id,
       order_index: i,
-    }));
+    }))
 
     try {
-      await reorderQuestions({ quizId, body: orderPayload }).unwrap();
-      toast.success("Order updated");
+      await reorderQuestions({ quizId, body: orderPayload }).unwrap()
+      toast.success("Order updated")
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to reorder");
+      toast.error(err?.data?.message || "Failed to reorder")
     }
-  };
+  }
 
-  const handleDelete = async (questionId) => {
+  const handleDelete = async questionId => {
     try {
-      await deleteQuestion({ quizId, questionId }).unwrap();
-      toast.success("Question deleted");
+      await deleteQuestion({ quizId, questionId }).unwrap()
+      toast.success("Question deleted")
     } catch (err) {
-      toast.error(err?.data?.message || "Failed to delete question");
+      toast.error(err?.data?.message || "Failed to delete question")
     }
-  };
+  }
 
-  const toggleExpand = (id) => {
-    setExpandedId((prev) => (prev === id ? null : id));
-  };
+  const toggleExpand = id => {
+    setExpandedId(prev => (prev === id ? null : id))
+  }
 
   return (
     <Box sx={{ p: { xs: 2, md: 3 } }}>
@@ -166,11 +152,7 @@ export default function QuestionsBuilder({ quizId, questions = [] }) {
         </Stack>
       </Stack>
 
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-      >
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={questionIds} strategy={verticalListSortingStrategy}>
           <Stack spacing={2}>
             {sortedQuestions.map((q, index) => (
@@ -202,5 +184,5 @@ export default function QuestionsBuilder({ quizId, questions = [] }) {
         </Box>
       )}
     </Box>
-  );
+  )
 }

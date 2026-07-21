@@ -18,12 +18,7 @@ export default function QuizReview({ questions, submissionDetail, onClose }) {
           <Typography variant="h6" fontWeight="800">
             Quiz Attempt Review
           </Typography>
-          <CButton
-            label="Close Review"
-            variant="outlined"
-            onClick={onClose}
-            action="close"
-          />
+          <CButton label="Close Review" variant="outlined" onClick={onClose} action="close" />
         </Stack>
         <Divider sx={{ mb: 3 }} />
 
@@ -42,7 +37,8 @@ export default function QuizReview({ questions, submissionDetail, onClose }) {
             Result: {submissionDetail.passing ? "Passed" : "Failed"}
           </Typography>
           <Typography variant="body2">
-            Score: {submissionDetail.score} / {submissionDetail.score_out_of} ({submissionDetail.percentage.toFixed(1)}%)
+            Score: {submissionDetail.score} / {submissionDetail.score_out_of} (
+            {submissionDetail.percentage.toFixed(1)}%)
           </Typography>
         </Box>
 
@@ -91,7 +87,11 @@ export default function QuizReview({ questions, submissionDetail, onClose }) {
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     Your Answer:
                   </Typography>
-                  <Typography variant="body1" fontWeight="600" color={isCorrect ? "success.main" : "error.main"}>
+                  <Typography
+                    variant="body1"
+                    fontWeight="600"
+                    color={isCorrect ? "success.main" : "error.main"}
+                  >
                     {studentAnswerText || "(No response)"}
                   </Typography>
                   {!isCorrect && (
@@ -100,14 +100,14 @@ export default function QuizReview({ questions, submissionDetail, onClose }) {
                         Correct Answer:
                       </Typography>
                       <Typography variant="body1" fontWeight="600" color="success.main">
-                        {question.choices.find((c) => c.is_correct)?.text || "N/A"}
+                        {question.choices.find(c => c.is_correct)?.text || "N/A"}
                       </Typography>
                     </Box>
                   )}
                 </Box>
               ) : (
                 <Box sx={{ ml: 5, display: "flex", flexDirection: "column", gap: 1 }}>
-                  {(question.choices || []).map((opt) => {
+                  {(question.choices || []).map(opt => {
                     const isSelected = studentResult?.selected_option_id === opt.id
                     const isOptCorrect = opt.is_correct
 

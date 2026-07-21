@@ -1,46 +1,46 @@
-"use client";
-import React, { Suspense, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { Box, Chip } from "@mui/material";
-import Link from "next/link";
-import dayjs from "dayjs";
+"use client"
+import React, { Suspense, useEffect } from "react"
+import { useSearchParams } from "next/navigation"
+import { Box, Chip } from "@mui/material"
+import Link from "next/link"
+import dayjs from "dayjs"
 
-import CPageLoader from "@/components/ui/CPageLoader";
-import CDataTable from "@/components/table/CDatatable";
-import CModuleLayout from "@/components/ui/CModuleLayout";
-import PermissionGuard from "@/components/ui/PermissionGuard";
-import { renderCell } from "@/utils/tableTools";
+import CPageLoader from "@/components/ui/CPageLoader"
+import CDataTable from "@/components/table/CDatatable"
+import CModuleLayout from "@/components/ui/CModuleLayout"
+import PermissionGuard from "@/components/ui/PermissionGuard"
+import { renderCell } from "@/utils/tableTools"
 
-import { useLazyReadPaymentsQuery } from "@/features/payment/paymentApi";
-import { PAYMENT_TIPS } from "@/choices/helpTips/payment";
-import CreateTransactionDialog from "./_parts/CreateTransactionDialog";
+import { useLazyReadPaymentsQuery } from "@/features/payment/paymentApi"
+import { PAYMENT_TIPS } from "@/choices/helpTips/payment"
+import CreateTransactionDialog from "./_parts/CreateTransactionDialog"
 
 function TransactionList() {
-  const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? 1;
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page") ?? 1
 
-  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadPaymentsQuery();
+  const [trigger, { data: { data, meta } = {}, isLoading }] = useLazyReadPaymentsQuery()
 
   useEffect(() => {
-    trigger({ page });
-  }, [page, trigger]);
+    trigger({ page })
+  }, [page, trigger])
 
-  if (isLoading) return <CPageLoader fullPage={false} />;
+  if (isLoading) return <CPageLoader fullPage={false} />
 
-  const getStatusColor = (status) => {
+  const getStatusColor = status => {
     switch (status) {
       case "Completed":
-        return "success";
+        return "success"
       case "Pending":
-        return "warning";
+        return "warning"
       case "Failed":
-        return "error";
+        return "error"
       case "Refunded":
-        return "default";
+        return "default"
       default:
-        return "default";
+        return "default"
     }
-  };
+  }
 
   const columns = [
     {
@@ -60,13 +60,13 @@ function TransactionList() {
       field: "amount",
       headerName: "Amount",
       flex: 1,
-      renderCell: (row) => renderCell(`${row.currency} ${row.amount?.toFixed?.(2) ?? row.amount}`),
+      renderCell: row => renderCell(`${row.currency} ${row.amount?.toFixed?.(2) ?? row.amount}`),
     },
     {
       field: "payment_for_type",
       headerName: "Type",
       flex: 1,
-      renderCell: (row) => renderCell(`${row.value} (${row.payment_for_id})`),
+      renderCell: row => renderCell(`${row.value} (${row.payment_for_id})`),
     },
     {
       field: "source",
@@ -77,15 +77,16 @@ function TransactionList() {
       field: "status",
       headerName: "Status",
       flex: 1,
-      renderCell: (row) => renderCell(<Chip label={row.value} color={getStatusColor(row.value)} size="small" />),
+      renderCell: row =>
+        renderCell(<Chip label={row.value} color={getStatusColor(row.value)} size="small" />),
     },
     {
       field: "created_at",
       headerName: "Date",
       flex: 1,
-      renderCell: (row) => renderCell(dayjs(row.value).format("MMM DD, YYYY HH:mm")),
+      renderCell: row => renderCell(dayjs(row.value).format("MMM DD, YYYY HH:mm")),
     },
-  ];
+  ]
 
   return (
     <CDataTable
@@ -100,7 +101,7 @@ function TransactionList() {
       }
       deleteData={{ model: "Payment", invalidateTag: "PAYMENTS" }}
     />
-  );
+  )
 }
 
 export default function TransactionsPage() {
@@ -112,5 +113,5 @@ export default function TransactionsPage() {
         </Suspense>
       </Box>
     </CModuleLayout>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import React from "react";
-import { Typography, Box } from "@mui/material";
-import PermissionGuard from "@/components/ui/PermissionGuard";
+import React from "react"
+import { Typography, Box } from "@mui/material"
+import PermissionGuard from "@/components/ui/PermissionGuard"
 
 export default function Page() {
   return (
@@ -16,5 +16,5 @@ export default function Page() {
         </Typography>
       </Box>
     </PermissionGuard>
-  );
+  )
 }

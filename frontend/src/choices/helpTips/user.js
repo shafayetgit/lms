@@ -35,4 +35,4 @@ export const USER_TIPS = {
       },
     ],
   },
-};
+}

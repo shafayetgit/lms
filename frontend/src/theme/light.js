@@ -133,6 +133,18 @@ let light = createTheme({
         },
       },
     },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingLeft: "8px",
+          paddingRight: "8px",
+          "@media (min-width: 900px)": {
+            paddingLeft: "16px",
+            paddingRight: "16px",
+          },
+        },
+      },
+    },
     MuiCssBaseline: {
       styleOverrides: {
         body: {
@@ -296,6 +308,7 @@ let light = createTheme({
           background: COLORS.white,
           color: COLORS.black,
           backgroundImage: "none",
+          borderRadius: 0,
           borderBottom: `1px solid ${alpha(COLORS.black, 0.08)}`,
         },
       },

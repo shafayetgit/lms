@@ -1,37 +1,30 @@
-"use client";
-import React from "react";
-import {
-  Box,
-  Stack,
-  Typography,
-  Paper,
-  IconButton,
-  Chip,
-  alpha,
-  useTheme,
-} from "@mui/material";
-import { DragIndicator } from "@mui/icons-material";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import Link from "next/link";
-import CCheckbox from "@/components/form/CCheckbox";
+"use client"
+import React from "react"
+import { Box, Stack, Typography, Paper, IconButton, Chip, alpha, useTheme } from "@mui/material"
+import { DragIndicator } from "@mui/icons-material"
+import { useSortable } from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import Link from "next/link"
+import CCheckbox from "@/components/form/CCheckbox"
 
-export default function SortableChapterItem({ chapter, index, courseId, theme, checked, onToggle }) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: chapter.id });
+export default function SortableChapterItem({
+  chapter,
+  index,
+  courseId,
+  theme,
+  checked,
+  onToggle,
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: chapter.id,
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 10 : "auto",
-  };
+  }
 
   return (
     <div ref={setNodeRef} style={style}>
@@ -39,9 +32,7 @@ export default function SortableChapterItem({ chapter, index, courseId, theme, c
         elevation={0}
         sx={{
           border: "1px solid",
-          borderColor: isDragging
-            ? alpha(theme.palette.primary.main, 0.5)
-            : "divider",
+          borderColor: isDragging ? alpha(theme.palette.primary.main, 0.5) : "divider",
           borderRadius: 1,
           overflow: "hidden",
           transition: "border-color 0.2s",
@@ -58,12 +49,7 @@ export default function SortableChapterItem({ chapter, index, courseId, theme, c
             "&:hover": { bgcolor: alpha(theme.palette.primary.main, 0.02) },
           }}
         >
-          <CCheckbox
-            label=""
-            checked={checked}
-            onChange={onToggle}
-            sx={{ mr: -1 }}
-          />
+          <CCheckbox label="" checked={checked} onChange={onToggle} sx={{ mr: -1 }} />
 
           <IconButton
             size="small"
@@ -113,5 +99,5 @@ export default function SortableChapterItem({ chapter, index, courseId, theme, c
         </Stack>
       </Paper>
     </div>
-  );
+  )
 }

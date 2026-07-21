@@ -70,15 +70,14 @@ export default function CreateTransactionDialog({ onSuccess }) {
     },
   })
 
-  const itemOptions = formik.values.payment_for_type === "Course"
-    ? meta?.courses || []
-    : meta?.batches || []
+  const itemOptions =
+    formik.values.payment_for_type === "Course" ? meta?.courses || [] : meta?.batches || []
 
   return (
     <>
       <CDialog
-      resource="payment"
-      action="create"
+        resource="payment"
+        action="create"
         title="New Transaction"
         btnProps={{ label: "New Transaction", action: "add" }}
         open={open}
@@ -100,7 +99,7 @@ export default function CreateTransactionDialog({ onSuccess }) {
                 value={formik.values.student}
                 options={meta?.users || []}
                 isOptionEqualToValue={(option, value) => option.value === value?.value}
-                getOptionLabel={(option) => option?.label || ""}
+                getOptionLabel={option => option?.label || ""}
                 onChange={(e, value) => {
                   formik.setFieldValue("student", value)
                   if (value && !formik.values.billing_name) {
@@ -118,7 +117,7 @@ export default function CreateTransactionDialog({ onSuccess }) {
                 name="payment_for_type"
                 required
                 value={formik.values.payment_for_type}
-                onChange={(e) => {
+                onChange={e => {
                   formik.setFieldValue("payment_for_type", e.target.value)
                   formik.setFieldValue("item", null)
                 }}
@@ -135,7 +134,7 @@ export default function CreateTransactionDialog({ onSuccess }) {
                 value={formik.values.item}
                 options={itemOptions}
                 isOptionEqualToValue={(option, value) => option.value === value?.value}
-                getOptionLabel={(option) => option?.label || ""}
+                getOptionLabel={option => option?.label || ""}
                 onChange={(e, value) => formik.setFieldValue("item", value)}
                 required
                 error={formik.touched.item && Boolean(formik.errors.item)}
@@ -168,7 +167,7 @@ export default function CreateTransactionDialog({ onSuccess }) {
                 name="currency"
                 required
                 value={formik.values.currency}
-                onChange={(e) => formik.setFieldValue("currency", e.target.value)}
+                onChange={e => formik.setFieldValue("currency", e.target.value)}
                 options={CURRENCY_OPTIONS}
               />
             </Grid>
@@ -189,7 +188,7 @@ export default function CreateTransactionDialog({ onSuccess }) {
                 name="status"
                 required
                 value={formik.values.status}
-                onChange={(e) => formik.setFieldValue("status", e.target.value)}
+                onChange={e => formik.setFieldValue("status", e.target.value)}
                 options={[
                   { label: "Completed", value: "Completed" },
                   { label: "Pending", value: "Pending" },

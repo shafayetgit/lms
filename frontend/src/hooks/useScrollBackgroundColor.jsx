@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect } from "react"
+import { useSelector } from "react-redux"
 
 const light = [
   "#FFFFFF", // Pure White
@@ -11,7 +11,7 @@ const light = [
   "#FDF6E3", // Soft Warm Cream
   "#F0FAF5", // Refreshing Light Mint
   "#FFFFFF", // Pure White (repeat)
-];
+]
 
 const dark = [
   "#0A0A0A", // Obsidian Black
@@ -21,46 +21,42 @@ const dark = [
   "#12201D", // Deep Forest Black
   "#0D1117", // Rich GitHub Dark
   "#0A0A0A", // Obsidian Black (repeat)
-];
+]
 
 const useScrollBackgroundColor = () => {
   // const themeMode = useSelector((state) => state.app.mode);
-  const themeMode = 'light'; //
-  const colors = themeMode === "dark" ? dark : light;
+  const themeMode = "light" //
+  const colors = themeMode === "dark" ? dark : light
 
-  const [bgColor, setBgColor] = useState(colors[0]);
-  const [prevThemeMode, setPrevThemeMode] = useState(themeMode);
+  const [bgColor, setBgColor] = useState(colors[0])
+  const [prevThemeMode, setPrevThemeMode] = useState(themeMode)
 
   if (themeMode !== prevThemeMode) {
-    setPrevThemeMode(themeMode);
-    setBgColor(colors[0]);
+    setPrevThemeMode(themeMode)
+    setBgColor(colors[0])
   }
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const scrollHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const scrollFraction = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
-      const colorIndex = Math.min(
-        Math.floor(scrollFraction * colors.length),
-        colors.length - 1
-      );
-      setBgColor(colors[colorIndex]);
-    };
+      const scrollTop = window.scrollY
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollFraction = scrollHeight > 0 ? scrollTop / scrollHeight : 0
+      const colorIndex = Math.min(Math.floor(scrollFraction * colors.length), colors.length - 1)
+      setBgColor(colors[colorIndex])
+    }
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll)
 
     // Apply the background color and smooth transition effect to the body
-    document.body.style.transition = "background-color 1.5s ease";
-    document.body.style.backgroundColor = bgColor;
+    document.body.style.transition = "background-color 1.5s ease"
+    document.body.style.backgroundColor = bgColor
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [bgColor, colors]);
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [bgColor, colors])
 
-  return bgColor;
-};
+  return bgColor
+}
 
-export default useScrollBackgroundColor;
+export default useScrollBackgroundColor

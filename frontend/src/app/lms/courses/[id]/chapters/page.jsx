@@ -1,7 +1,10 @@
 "use client"
 import React from "react"
 import { useParams } from "next/navigation"
-import { useReadChaptersByCourseQuery, useReorderChaptersMutation } from "@/features/chapter/chapterAPI"
+import {
+  useReadChaptersByCourseQuery,
+  useReorderChaptersMutation,
+} from "@/features/chapter/chapterAPI"
 import { useReadCourseQuery } from "@/features/course/courseAPI"
 import CPageLoader from "@/components/ui/CPageLoader"
 import CError from "@/components/ui/CError"
@@ -9,7 +12,15 @@ import CModuleLayout from "@/components/ui/CModuleLayout"
 import CreateDialog from "./_parts/CreateDialog"
 import { Stack, Box, Typography, useTheme, alpha } from "@mui/material"
 import { CHAPTER_TIPS } from "@/choices/helpTips/chapter"
-import { School, Star, InfoOutlined, AssignmentTurnedInOutlined, MenuBookOutlined, DashboardOutlined, VisibilityOutlined } from "@mui/icons-material"
+import {
+  School,
+  Star,
+  InfoOutlined,
+  AssignmentTurnedInOutlined,
+  MenuBookOutlined,
+  DashboardOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material"
 import {
   DndContext,
   closestCenter,
@@ -84,7 +95,10 @@ export default function Page() {
     isLoading,
     isError,
   } = useReadChaptersByCourseQuery({ courseId })
-  const { data: { data: courseData } = {} } = useReadCourseQuery({ id: courseId }, { skip: !courseId })
+  const { data: { data: courseData } = {} } = useReadCourseQuery(
+    { id: courseId },
+    { skip: !courseId }
+  )
   const theme = useTheme()
   const [allExpanded, setAllExpanded] = React.useState(true)
   const [expandAllToggle, setExpandAllToggle] = React.useState(0)
@@ -105,14 +119,50 @@ export default function Page() {
   )
 
   const navigators = [
-    { label: "Details", href: `/lms/courses/${courseId}`, icon: <InfoOutlined />, resource: "course", action: "read" },
-    { label: "Chapters", href: `/lms/courses/${courseId}/chapters`, icon: <MenuBookOutlined />, resource: "chapter", action: "read" },
-    { label: "Reviews", href: `/lms/courses/${courseId}/reviews`, icon: <Star />, resource: "review", action: "read" },
-    { label: "Enrollments", href: `/lms/courses/${courseId}/enrollments`, icon: <AssignmentTurnedInOutlined />, resource: "enrollment", action: "read" },
-    { label: "Dashboard", href: `/lms/courses/${courseId}/dashboard`, icon: <DashboardOutlined />, resource: "course", action: "read" },
-    { label: "Preview", href: `/courses/${courseData?.slug || ""}`, target: "_blank", icon: <VisibilityOutlined />, resource: "course", action: "read" },
+    {
+      label: "Details",
+      href: `/lms/courses/${courseId}`,
+      icon: <InfoOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Chapters",
+      href: `/lms/courses/${courseId}/chapters`,
+      icon: <MenuBookOutlined />,
+      resource: "chapter",
+      action: "read",
+    },
+    {
+      label: "Reviews",
+      href: `/lms/courses/${courseId}/reviews`,
+      icon: <Star />,
+      resource: "review",
+      action: "read",
+    },
+    {
+      label: "Enrollments",
+      href: `/lms/courses/${courseId}/enrollments`,
+      icon: <AssignmentTurnedInOutlined />,
+      resource: "enrollment",
+      action: "read",
+    },
+    {
+      label: "Dashboard",
+      href: `/lms/courses/${courseId}/dashboard`,
+      icon: <DashboardOutlined />,
+      resource: "course",
+      action: "read",
+    },
+    {
+      label: "Preview",
+      href: `/courses/${courseData?.slug || ""}`,
+      target: "_blank",
+      icon: <VisibilityOutlined />,
+      resource: "course",
+      action: "read",
+    },
   ]
-
 
   if (isLoading) return <CPageLoader fullPage={false} />
   if (isError) return <CError fullPage={false} />
@@ -151,12 +201,15 @@ export default function Page() {
               borderRadius: 1,
             }}
           >
-            <MenuBookOutlined sx={{ fontSize: 44, color: "text.disabled", mb: 1.5, opacity: 0.5 }} />
+            <MenuBookOutlined
+              sx={{ fontSize: 44, color: "text.disabled", mb: 1.5, opacity: 0.5 }}
+            />
             <Typography variant="body1" color="text.secondary" fontWeight={600} mb={0.5}>
               No chapters yet
             </Typography>
             <Typography variant="body2" color="text.disabled" mb={1.5}>
-              Chapters group your lessons into structured modules. Add your first chapter to get started.
+              Chapters group your lessons into structured modules. Add your first chapter to get
+              started.
             </Typography>
           </Box>
         ) : (
