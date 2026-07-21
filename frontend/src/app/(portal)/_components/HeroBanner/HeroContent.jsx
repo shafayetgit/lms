@@ -1,5 +1,6 @@
 "use client"
 import React from "react"
+import Link from "next/link"
 import { Chip, Typography, Stack, alpha } from "@mui/material"
 import { AutoAwesome, Verified, ArrowForward, PlayCircleOutline } from "@mui/icons-material"
 import { motion } from "framer-motion"
@@ -91,6 +92,7 @@ const HeroContent = () => {
         >
           <CButton
             label="Get Started"
+            component={Link}
             href="/courses"
             size="large"
             color="secondary"
@@ -111,6 +113,7 @@ const HeroContent = () => {
           />
           <CButton
             label="Watch Video"
+            component={Link}
             href="/about"
             variant="outlined"
             size="large"
