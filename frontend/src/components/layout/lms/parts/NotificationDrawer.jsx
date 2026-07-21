@@ -21,6 +21,7 @@ import {
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
 } from "@/features/notification/notificationApi"
+import { getCookie } from "@/utils/shared"
 
 dayjs.extend(relativeTime)
 
@@ -28,7 +29,11 @@ export default function NotificationDrawer({ open, onClose }) {
   const theme = useTheme()
   const router = useRouter()
 
-  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 })
+  const hasToken = typeof window !== "undefined" && !!getCookie("accessToken")
+  const { data: notificationsData } = useReadNotificationsQuery(
+    { page: 1, size: 50 },
+    { skip: !hasToken }
+  )
   const [markAsRead] = useMarkNotificationAsReadMutation()
   const [markAllAsRead] = useMarkAllNotificationsAsReadMutation()
 

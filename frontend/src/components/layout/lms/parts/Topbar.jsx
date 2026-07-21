@@ -10,6 +10,7 @@ import { LOGO, LOGO_HEIGHT, LOGO_WIDTH } from "@/lib/constants/app"
 import Image from "next/image"
 import { useReadSettingsQuery } from "@/features/settings/settingsApi"
 import { useReadNotificationsQuery } from "@/features/notification/notificationApi"
+import { getCookie } from "@/utils/shared"
 import TopbarBreadcrumbs from "./TopbarBreadcrumbs"
 import NotificationDrawer from "./NotificationDrawer"
 
@@ -30,7 +31,11 @@ export default function Topbar({ handleDrawerToggle, drawerWidth, isMini }) {
       : `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/${dynamicLogo.replace(/^\//, "")}`
     : LOGO
 
-  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 })
+  const hasToken = typeof window !== "undefined" && !!getCookie("accessToken")
+  const { data: notificationsData } = useReadNotificationsQuery(
+    { page: 1, size: 50 },
+    { skip: !hasToken }
+  )
   const notifications = notificationsData?.data || []
   const unreadCount = notifications.filter(n => !n.read).length
 

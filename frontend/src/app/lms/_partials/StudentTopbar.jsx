@@ -40,6 +40,7 @@ import {
   useMarkNotificationAsReadMutation,
   useMarkAllNotificationsAsReadMutation,
 } from "@/features/notification/notificationApi"
+import { getCookie } from "@/utils/shared"
 
 dayjs.extend(relativeTime)
 
@@ -48,7 +49,11 @@ export default function StudentTopbar({ handleDrawerToggle, drawerWidth }) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [notifOpen, setNotifOpen] = useState(false)
 
-  const { data: notificationsData } = useReadNotificationsQuery({ page: 1, size: 50 })
+  const hasToken = typeof window !== "undefined" && !!getCookie("accessToken")
+  const { data: notificationsData } = useReadNotificationsQuery(
+    { page: 1, size: 50 },
+    { skip: !hasToken }
+  )
   const [markAsRead] = useMarkNotificationAsReadMutation()
   const [markAllAsRead] = useMarkAllNotificationsAsReadMutation()
 
