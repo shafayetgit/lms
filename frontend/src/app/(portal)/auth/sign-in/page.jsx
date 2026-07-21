@@ -38,7 +38,6 @@ export default function SignInPage() {
         setAuthCookie(response)
         toast.success(response.message || "Sign-in successful! Welcome back to your account.")
         window.location.href = redirectUrl
-        router.push(redirectUrl)
       } catch (error) {
         const errors = mapApiErrorsToFormik(error)
         setErrors(errors)

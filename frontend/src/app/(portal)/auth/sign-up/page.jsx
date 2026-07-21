@@ -1,10 +1,10 @@
 "use client"
 
-import React from "react"
+import React, { Suspense } from "react"
 import CTextField from "@/components/form/CTextField"
 
 import { Box, Typography, Button, Stack, Divider, alpha } from "@mui/material"
-import { Google, Person, PersonAddOutlined } from "@mui/icons-material"
+import { Google } from "@mui/icons-material"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { useFormik } from "formik"
@@ -15,12 +15,55 @@ import CPasswordField from "@/components/form/CPasswordField"
 import AuthLogo from "@/components/ui/AuthLogo"
 import { useSignUpMutation } from "@/features/auth/authAPI"
 import { toast } from "react-toastify"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { mapApiErrorsToFormik } from "@/utils/shared"
 import { ROUTES } from "@/lib/constants"
 
-export default function Page() {
+function SignUpContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const urlEmail = searchParams.get("email") || ""
+  const urlCode = searchParams.get("code") || ""
+
+  const [isEmailLocked, setIsEmailLocked] = React.useState(false)
+  const [isValidating, setIsValidating] = React.useState(!!urlEmail && !!urlCode)
+
+  React.useEffect(() => {
+    const abortController = new AbortController()
+
+    if (urlEmail && urlCode) {
+      const verifyInvitation = async () => {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/invitations/verify?email=${encodeURIComponent(urlEmail)}&code=${encodeURIComponent(urlCode)}`,
+            {
+              signal: abortController.signal,
+            }
+          )
+          const data = await res.json()
+          if (res.ok && data.success && data.data?.valid) {
+            setIsEmailLocked(true)
+          } else {
+            toast.error("Invalid or expired invitation link. You can sign up as a regular student.")
+          }
+        } catch (error) {
+          if (error.name !== "AbortError") {
+            toast.error("Failed to verify invitation link.")
+          }
+        } finally {
+          setIsValidating(false)
+        }
+      }
+      verifyInvitation()
+    } else {
+      setIsValidating(false)
+    }
+
+    return () => {
+      abortController.abort()
+    }
+  }, [urlEmail, urlCode])
+
   const [signUp, { isLoading }] = useSignUpMutation()
 
   const formik = useFormik({
@@ -28,7 +71,7 @@ export default function Page() {
       first_name: "",
       last_name: "",
       username: "",
-      email: "",
+      email: urlEmail,
       password: "",
       confirm_password: "",
     },
@@ -150,6 +193,7 @@ export default function Page() {
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
             required
+            disabled={isEmailLocked || isValidating}
           />
 
           <CPasswordField
@@ -248,5 +292,13 @@ export default function Page() {
         </Typography>
       </Typography>
     </Box>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Box sx={{ p: 4, textAlign: "center" }}>Loading...</Box>}>
+      <SignUpContent />
+    </Suspense>
   )
 }

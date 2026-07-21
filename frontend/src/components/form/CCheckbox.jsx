@@ -12,6 +12,7 @@ export default function CCheckbox({
 }) {
   return (
     <FormControlLabel
+      required={false}
       control={
         <Checkbox
           name={name}

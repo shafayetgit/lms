@@ -72,7 +72,7 @@ export default function EnrollButton({
   const [couponCode, setCouponCode] = useState("")
   const [hasPrefilled, setHasPrefilled] = useState(false)
 
-  const { data: paymentsData } = useReadPaymentsQuery({ size: 1 }, { skip: !user || !paidItem })
+  const { data: paymentsData } = useReadPaymentsQuery({ size: 1 }, { skip: !user })
 
   React.useEffect(() => {
     if (paymentsData?.data?.length > 0 && !hasPrefilled) {
@@ -93,7 +93,7 @@ export default function EnrollButton({
 
   async function initiateCheckout(e) {
     if (e) e.preventDefault()
-    if (paidItem && !consentInvoicing) {
+    if (!consentInvoicing) {
       toast.error("You must consent to your personal information being stored for invoicing.")
       return
     }
@@ -105,16 +105,16 @@ export default function EnrollButton({
       const res = await getCheckoutLink({
         payment_for_type: normalizedType,
         payment_for_public_id: paymentForPublicId,
-        billing_name: paidItem ? billingName : "Free Student",
-        billing_address_line_1: paidItem ? billingAddressLine1 : "Free Address",
-        billing_address_line_2: paidItem ? billingAddressLine2 || undefined : undefined,
-        billing_city: paidItem ? billingCity : "Free City",
-        billing_state: paidItem ? billingState || undefined : undefined,
-        billing_country: paidItem ? billingCountry : "United States",
-        billing_postal_code: paidItem ? billingPostalCode || undefined : undefined,
-        billing_phone: paidItem ? billingPhone || undefined : undefined,
-        where_heard: paidItem ? whereHeard : "Website",
-        consent_invoicing: paidItem ? consentInvoicing : true,
+        billing_name: billingName,
+        billing_address_line_1: billingAddressLine1,
+        billing_address_line_2: billingAddressLine2 || undefined,
+        billing_city: billingCity,
+        billing_state: billingState || undefined,
+        billing_country: billingCountry,
+        billing_postal_code: billingPostalCode || undefined,
+        billing_phone: billingPhone || undefined,
+        where_heard: whereHeard,
+        consent_invoicing: consentInvoicing,
         coupon_code: paidItem ? couponCode || undefined : undefined,
       }).unwrap()
 
@@ -138,9 +138,12 @@ export default function EnrollButton({
     }
   }
 
-  const { data: activeGatewayData, isLoading: isGatewayLoading } = useGetActiveGatewayQuery(undefined, {
-    skip: !paidItem,
-  })
+  const { data: activeGatewayData, isLoading: isGatewayLoading } = useGetActiveGatewayQuery(
+    undefined,
+    {
+      skip: !paidItem,
+    }
+  )
 
   function handleClick() {
     if (!user) {
@@ -157,10 +160,8 @@ export default function EnrollButton({
         toast.error("Purchases are currently disabled as no payment methods are configured.")
         return
       }
-      setBillingOpen(true)
-    } else {
-      initiateCheckout()
     }
+    setBillingOpen(true)
   }
 
   return (
@@ -279,6 +280,7 @@ export default function EnrollButton({
                     value={couponCode}
                     onChange={e => setCouponCode(e.target.value)}
                     placeholder="Enter coupon code"
+                    disabled={!paidItem}
                   />
                 </Stack>
               </Grid>
