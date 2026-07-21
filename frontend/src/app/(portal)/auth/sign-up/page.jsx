@@ -34,8 +34,9 @@ function SignUpContent() {
     if (urlEmail && urlCode) {
       const verifyInvitation = async () => {
         try {
+          const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
           const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/invitations/verify?email=${encodeURIComponent(urlEmail)}&code=${encodeURIComponent(urlCode)}`,
+            `${baseUrl}/api/v1/invitations/verify?email=${encodeURIComponent(urlEmail)}&code=${encodeURIComponent(urlCode)}`,
             {
               signal: abortController.signal,
             }
