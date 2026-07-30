@@ -1,6 +1,6 @@
 "use client"
 
-import React, { Fragment, useState, useEffect } from "react"
+import React, { Fragment, useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import {
   List,
@@ -19,7 +19,7 @@ import { lmsMenuItems, settingsMenuItems, academyMenuItems, coreMenuItems } from
 
 export default function NavigationList({ isMini, isMobile, pathname, theme }) {
   const [mounted, setMounted] = useState(false)
-  const { can } = usePermissions()
+  const { can, isSuperAdmin, permissions, isLoading } = usePermissions()
 
   const currentValue = pathname.startsWith("/settings")
     ? "settings"
@@ -48,12 +48,13 @@ export default function NavigationList({ isMini, isMobile, pathname, theme }) {
           ? coreMenuItems
           : lmsMenuItems
 
-  const filteredItems = mounted
-    ? itemsSource.filter(item => {
-        if (!item.resource) return true
-        return can(item.resource, item.action || "read")
-      })
-    : []
+  const filteredItems = useMemo(() => {
+    if (!mounted) return []
+    return itemsSource.filter(item => {
+      if (!item.resource) return true
+      return isSuperAdmin || can(item.resource, item.action || "read")
+    })
+  }, [mounted, itemsSource, isSuperAdmin, can])
 
   return (
     <List
@@ -129,8 +130,8 @@ export default function NavigationList({ isMini, isMobile, pathname, theme }) {
                     "&:hover": {
                       bgcolor: isActive
                         ? alpha(theme.palette.primary.main, 0.15)
-                        : alpha(theme.palette.action.hover, 0.5),
-                      color: isActive ? "primary.main" : "text.primary",
+                        : alpha(theme.palette.primary.main, 0.08),
+                      color: "primary.main",
                     },
                   }}
                 >

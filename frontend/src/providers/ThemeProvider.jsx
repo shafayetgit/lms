@@ -28,6 +28,14 @@ export default function ThemeProvider({ children }) {
 
   const theme = useMemo(() => (mode === "light" ? lightTheme : darkTheme), [mode])
 
+  useEffect(() => {
+    // Remove the FOUC prevention style tag once the theme has hydrated
+    const foucFix = document.getElementById("fouc-fix")
+    if (foucFix) {
+      foucFix.remove()
+    }
+  }, [mode])
+
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />

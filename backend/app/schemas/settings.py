@@ -91,3 +91,7 @@ class LMSSettingsResponse(LMSSettingsBase):
     id: int
 
     model_config = ConfigDict(from_attributes=True)
+
+class LMSSettingsReadResponse(BaseModel):
+    success: bool
+    data: LMSSettingsResponse

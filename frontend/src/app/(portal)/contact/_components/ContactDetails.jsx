@@ -24,8 +24,7 @@ const ContactDetails = () => {
   return (
     <motion.div
       initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      animate="visible"
       variants={itemVariants}
     >
       <Typography variant="h4" sx={{ fontWeight: 600, mb: 4, color: theme.palette.primary.dark }}>

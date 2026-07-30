@@ -104,7 +104,7 @@ async def get_statistics(
         .limit(6)
     )
     top_courses = [
-        {"title": row.title[:30], "enrollments": row.enrollments}
+        {"title": row.title, "enrollments": row.enrollments}
         for row in top_courses_result.all()
     ]
 

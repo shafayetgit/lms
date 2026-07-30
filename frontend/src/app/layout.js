@@ -37,7 +37,6 @@ export const viewport = {
 export default function Layout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-      <head />
       <body
         className={`${dmSans.variable} ${jetbrainsMono.variable} ${hindSiliguri.variable}`}
         suppressHydrationWarning

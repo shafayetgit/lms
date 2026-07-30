@@ -1,7 +1,7 @@
 from typing import Optional, Dict, Any
 from app.core.cache import CacheService
 
-CACHE_PREFIX = "lms:dashboard:global_stats"
+CACHE_PREFIX = "lms:dashboard:global_stats_v2"
 
 
 async def get_cached_statistics() -> Optional[Dict[str, Any]]:

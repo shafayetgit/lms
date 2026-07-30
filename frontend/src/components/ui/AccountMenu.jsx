@@ -192,7 +192,7 @@ export default function AccountMenu() {
           },
         }}
       >
-        <Box sx={{ px: 1.5, py: 1, borderBottom: 1, borderColor: "divider", mb: 0.5 }}>
+        <Box sx={{ px: 1.5, py: 0.5, borderBottom: 1, borderColor: "divider" }}>
           <Typography
             variant="subtitle2"
             sx={{
@@ -228,10 +228,8 @@ export default function AccountMenu() {
           component={Link}
           href={getDashboardLink()}
           sx={{
-            py: 1,
-            mx: 1,
-            my: 0,
-            borderRadius: 1,
+            py: 0.5,
+            px: 1.5,
             fontWeight: 700,
             fontSize: "0.875rem",
           }}
@@ -248,10 +246,8 @@ export default function AccountMenu() {
           component={Link}
           href="/"
           sx={{
-            py: 1,
-            mx: 1,
-            my: 0,
-            borderRadius: 1,
+            py: 0.5,
+            px: 1.5,
             fontWeight: 700,
             fontSize: "0.875rem",
           }}
@@ -268,10 +264,8 @@ export default function AccountMenu() {
             handleClose()
           }}
           sx={{
-            py: 1,
-            mx: 1,
-            my: 0,
-            borderRadius: 1,
+            py: 0.5,
+            px: 1.5,
             fontWeight: 700,
             fontSize: "0.875rem",
           }}
@@ -292,10 +286,8 @@ export default function AccountMenu() {
         <MenuItem
           onClick={handleFlushCache}
           sx={{
-            py: 1,
-            mx: 1,
-            my: 0,
-            borderRadius: 1,
+            py: 0.5,
+            px: 1.5,
             color: "warning.main",
             fontWeight: 700,
             fontSize: "0.875rem",
@@ -312,10 +304,8 @@ export default function AccountMenu() {
         <MenuItem
           onClick={handleSignOut}
           sx={{
-            py: 1,
-            mx: 1,
-            my: 0,
-            borderRadius: 1,
+            py: 0.5,
+            px: 1.5,
             color: "error.main",
             fontWeight: 800,
             fontSize: "0.875rem",

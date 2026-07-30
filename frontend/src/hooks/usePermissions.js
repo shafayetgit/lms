@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react"
 import { useGetMyPermissionsQuery } from "@/features/auth/authAPI"
 import { getCookie, decodeTokenClient } from "@/utils/shared"
+import { getProfileUser } from "@/lib/auth/client"
 
 /**
  * Central hook for dynamic authorization.
@@ -19,6 +20,10 @@ export function usePermissions() {
   const rawDecodedUser = useMemo(() => {
     return token ? decodeTokenClient(token) : null
   }, [token])
+
+  const profileUser = useMemo(() => {
+    return typeof window !== "undefined" ? getProfileUser() : null
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -59,8 +64,12 @@ export function usePermissions() {
 
   const isSuperAdmin = Boolean(
     decodedUser?.is_superadmin ||
-    decodedUser?.role === "superadmin" ||
-    decodedUser?.sub === "superadmin"
+    decodedUser?.role?.toLowerCase() === "superadmin" ||
+    decodedUser?.role?.toLowerCase() === "super_admin" ||
+    decodedUser?.sub === "superadmin" ||
+    profileUser?.is_superadmin ||
+    profileUser?.role?.toLowerCase() === "superadmin" ||
+    profileUser?.role?.toLowerCase() === "super_admin"
   )
 
   const permData = data?.data ?? null
