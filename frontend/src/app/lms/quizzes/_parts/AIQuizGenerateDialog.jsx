@@ -75,7 +75,7 @@ export default function AIQuizGenerateDialog() {
 
     pollIntervalRef.current = setInterval(async () => {
       try {
-        const res = await triggerStatus(id, true).unwrap()
+        const res = await triggerStatus(id, false).unwrap()
         const currentStatus = res?.data?.status
 
         if (currentStatus === "queued") {
@@ -92,7 +92,7 @@ export default function AIQuizGenerateDialog() {
           clearInterval(pollIntervalRef.current)
           setStatusMessage("Completed! Loading review editor...")
 
-          const draftRes = await triggerDraft(res?.data?.draft_quiz_public_id, true).unwrap()
+          const draftRes = await triggerDraft(res?.data?.draft_quiz_public_id, false).unwrap()
           setDraftQuizData(draftRes?.data)
           setIsProcessing(false)
           setOpen(false)
