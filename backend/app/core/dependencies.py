@@ -212,6 +212,8 @@ class PermissionChecker:
         target_user = user or optional_user
 
         if is_portal:
+            if request is not None and target_user:
+                request.state.user = target_user
             return target_user
 
         if not target_user:
@@ -220,6 +222,9 @@ class PermissionChecker:
                 detail="Could not validate credentials",
                 headers={"WWW-Authenticate": "Bearer"},
             )
+
+        if request is not None:
+            request.state.user = target_user
 
         if target_user.role in ("superadmin", "admin"):
             return target_user
