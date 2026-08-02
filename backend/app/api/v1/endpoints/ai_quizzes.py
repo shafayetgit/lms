@@ -13,7 +13,8 @@ from app.schemas.ai_content import (
     AISourceContentResponse,
 )
 from app.schemas.quiz import QuizRead
-from app.services.ai_content import ai_content_service
+from app.services.ai_quiz import ai_quiz_service
+from app.services.ai_source_content import ai_source_content_service
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -121,7 +122,7 @@ async def generate_quiz_from_file(
     file_base64 = base64.b64encode(content).decode("utf-8")
 
     try:
-        source_content = await ai_content_service.initiate_quiz_generation(
+        source_content = await ai_quiz_service.initiate_quiz_generation(
             db=db,
             title=title,
             filename=file.filename,
@@ -158,7 +159,7 @@ async def get_generation_status(
     """
     Retrieve real-time generation status for an AI quiz pipeline run.
     """
-    status_data = await ai_content_service.get_generation_status(db, source_public_id)
+    status_data = await ai_source_content_service.get_generation_status(db, source_public_id)
     if not status_data:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -183,7 +184,7 @@ async def get_draft_quiz(
     """
     Retrieve the AI-generated draft quiz details and its quality review report.
     """
-    draft = await ai_content_service.get_draft_quiz(db, draft_public_id)
+    draft = await ai_quiz_service.get_draft_quiz(db, draft_public_id)
     if not draft:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Draft quiz not found"
@@ -206,7 +207,7 @@ async def update_draft_quiz(
     """
     Update the draft quiz questions/options (human editing/corrections).
     """
-    updated_draft = await ai_content_service.update_draft_quiz(
+    updated_draft = await ai_quiz_service.update_draft_quiz(
         db, draft_public_id, obj_in
     )
     if not updated_draft:
@@ -234,7 +235,7 @@ async def confirm_draft_quiz(
     """
     Confirm and publish the draft quiz, converting it into a live LMS Quiz.
     """
-    live_quiz = await ai_content_service.confirm_and_publish_quiz(
+    live_quiz = await ai_quiz_service.confirm_and_publish_quiz(
         db=db,
         public_id=draft_public_id,
         obj_in=obj_in,
