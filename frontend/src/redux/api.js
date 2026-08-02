@@ -47,6 +47,7 @@ export const api = createApi({
     "FEATURE_FLAGS",
     "ME",
     "STATISTICS",
+    "AI_QUIZZES",
   ],
   endpoints: () => ({}),
 })

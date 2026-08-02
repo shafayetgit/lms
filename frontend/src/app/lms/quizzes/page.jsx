@@ -9,7 +9,8 @@ import CPageLoader from "@/components/ui/CPageLoader"
 import CError from "@/components/ui/CError"
 import CModuleLayout from "@/components/ui/CModuleLayout"
 import CreateDialog from "./_parts/CreateDialog"
-import { Chip } from "@mui/material"
+import AIQuizGenerateDialog from "./_parts/AIQuizGenerateDialog"
+import { Chip, Stack } from "@mui/material"
 import Link from "next/link"
 import { QUIZ_TIPS } from "@/choices/helpTips/quiz"
 
@@ -84,7 +85,10 @@ export default function Page() {
         loading={isLoading}
         action={
           <PermissionGuard resource="quiz" action="create" silent>
-            <CreateDialog />
+            <Stack direction="row" spacing={1} alignItems="center">
+              <AIQuizGenerateDialog />
+              <CreateDialog />
+            </Stack>
           </PermissionGuard>
         }
         deleteData={{ model: "Quiz", invalidateTag: "QUIZZES" }}
