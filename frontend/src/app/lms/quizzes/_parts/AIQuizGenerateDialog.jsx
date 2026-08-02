@@ -9,6 +9,7 @@ import CForm from "@/components/ui/CForm"
 import CTextField from "@/components/form/CTextField"
 import CNumberField from "@/components/form/CNumberField"
 import CSelect from "@/components/form/CSelect"
+import CFileField from "@/components/form/CFileField"
 import CPageLoader from "@/components/ui/CPageLoader"
 import CButton from "@/components/ui/CButton"
 
@@ -188,39 +189,25 @@ export default function AIQuizGenerateDialog() {
 
               {/* File Upload */}
               <Grid size={{ xs: 12 }}>
-                <Box
-                  sx={{
-                    border: "2px dashed",
-                    borderColor: file ? "primary.main" : "divider",
-                    borderRadius: 1,
-                    p: 2,
-                    textAlign: "center",
-                    bgcolor: "background.paper",
-                    cursor: "pointer",
-                  }}
-                  component="label"
-                >
-                  <input
-                    type="file"
-                    accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg"
-                    style={{ display: "none" }}
-                    onChange={e => {
-                      if (e.target.files?.[0]) {
-                        setFile(e.target.files[0])
-                        if (!title) {
-                          const baseName = e.target.files[0].name.replace(/\.[^/.]+$/, "")
-                          setTitle(baseName)
-                        }
+                <CFileField
+                  label="Document File"
+                  name="file"
+                  dragNdrop
+                  accept=".pdf,.docx,.txt,.md,.png,.jpg,.jpeg"
+                  onChange={e => {
+                    const selectedFile = e.target.files?.[0]
+                    if (selectedFile) {
+                      setFile(selectedFile)
+                      if (!title) {
+                        const baseName = selectedFile.name.replace(/\.[^/.]+$/, "")
+                        setTitle(baseName)
                       }
-                    }}
-                  />
-                  <Typography variant="body1" fontWeight={600}>
-                    {file ? `File: ${file.name}` : "Click to select or drop document here"}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Supports PDF, DOCX, TXT, PNG, JPG (Max 10MB)
-                  </Typography>
-                </Box>
+                    } else {
+                      setFile(null)
+                    }
+                  }}
+                  required
+                />
               </Grid>
 
               {/* Difficulty Select */}
