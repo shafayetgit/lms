@@ -39,6 +39,7 @@ from .endpoints import (
     feature_flags,
     user_roles,
     statistics,
+    ai_quizzes,
 )
 
 api_router = APIRouter()
@@ -90,3 +91,4 @@ api_router.include_router(permissions.router, prefix="/permissions", tags=["Perm
 api_router.include_router(feature_flags.router, prefix="/feature-flags", tags=["Feature Flags"])
 api_router.include_router(user_roles.router, prefix="/user-roles", tags=["User Roles"])
 api_router.include_router(statistics.router, prefix="/statistics", tags=["Statistics"])
+api_router.include_router(ai_quizzes.router, prefix="/ai-quizzes", tags=["AI Quizzes"])
