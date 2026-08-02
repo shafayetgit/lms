@@ -170,12 +170,6 @@ export default function AIQuizGenerateDialog() {
             dialog
           >
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12 }}>
-                <Alert severity="info">
-                  Upload a PDF, Word document, text file, or image. Our AI Vision & Processing engine will extract content, clean OCR errors, and auto-generate a structured quiz.
-                </Alert>
-              </Grid>
-
               {/* Title */}
               <Grid size={{ xs: 12 }}>
                 <CTextField
