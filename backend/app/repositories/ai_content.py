@@ -1,46 +1,15 @@
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+from app.repositories.ai_quiz import (
+    AIDraftQuizRepository,
+    ai_draft_quiz_repo,
+)
+from app.repositories.ai_source_content import (
+    AISourceContentRepository,
+    ai_source_content_repo,
+)
 
-from app.models.ai_content import AIDraftQuiz, AISourceContent
-from app.repositories.base import BaseRepository
-
-
-class AISourceContentRepository(BaseRepository[AISourceContent]):
-    pass
-
-
-class AIDraftQuizRepository(BaseRepository[AIDraftQuiz]):
-    async def get_by_public_id(
-        self, db: AsyncSession, public_id: str
-    ) -> AIDraftQuiz | None:
-        from sqlalchemy.orm import selectinload
-        stmt = (
-            select(self.model)
-            .where(self.model.public_id == public_id)
-            .options(
-                selectinload(self.model.source_content),
-                selectinload(self.model.confirmed_quiz),
-            )
-        )
-        result = await db.execute(stmt)
-        return result.scalar_one_or_none()
-
-    async def get_pending_drafts(
-        self, db: AsyncSession, skip: int = 0, limit: int = 100
-    ) -> list[AIDraftQuiz]:
-        """
-        Helper to fetch drafts awaiting human review.
-        """
-        stmt = (
-            select(self.model)
-            .where(self.model.status == "pending_review")
-            .offset(skip)
-            .limit(limit)
-        )
-        result = await db.execute(stmt)
-        return list(result.scalars().all())
-
-
-# Instantiate repos
-ai_source_content_repo = AISourceContentRepository(AISourceContent)
-ai_draft_quiz_repo = AIDraftQuizRepository(AIDraftQuiz)
+__all__ = [
+    "AISourceContentRepository",
+    "AIDraftQuizRepository",
+    "ai_source_content_repo",
+    "ai_draft_quiz_repo",
+]

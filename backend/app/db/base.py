@@ -45,7 +45,8 @@ class Base(DeclarativeBase):
     )
 
 
-from app.models.ai_content import AIDraftQuiz, AISourceContent
+from app.models.ai_quiz import AIDraftQuiz
+from app.models.ai_source_content import AISourceContent
 from app.models.assignment import Assignment, AssignmentSubmission
 from app.models.badge import Badge, BadgeAssignment
 from app.models.batch import (
