@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect, useRef } from "react"
-import { Grid, Typography, Box, Alert, Stack } from "@mui/material"
+import { Typography, Box, Alert, Stack } from "@mui/material"
+import Grid from "@mui/material/Grid"
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome"
 import { toast } from "react-toastify"
 
@@ -27,12 +28,10 @@ export default function AIQuizGenerateDialog() {
   const [difficulty, setDifficulty] = useState("medium")
   const [numQuestions, setNumQuestions] = useState(5)
 
-  // Pipeline Status State
   const [sourcePublicId, setSourcePublicId] = useState(null)
   const [statusMessage, setStatusMessage] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
 
-  // Review Dialog State
   const [reviewOpen, setReviewOpen] = useState(false)
   const [draftQuizData, setDraftQuizData] = useState(null)
 
@@ -44,7 +43,7 @@ export default function AIQuizGenerateDialog() {
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => {
-    if (isProcessing) return // Prevent closing while pipeline active
+    if (isProcessing) return
     setOpen(false)
     resetForm()
   }
@@ -60,14 +59,12 @@ export default function AIQuizGenerateDialog() {
     if (pollIntervalRef.current) clearInterval(pollIntervalRef.current)
   }
 
-  // Clear polling interval on unmount
   useEffect(() => {
     return () => {
       if (pollIntervalRef.current) clearInterval(pollIntervalRef.current)
     }
   }, [])
 
-  // Poll status endpoint until completed or failed
   const startPollingStatus = id => {
     setSourcePublicId(id)
     setIsProcessing(true)
@@ -170,7 +167,6 @@ export default function AIQuizGenerateDialog() {
             dialog
           >
             <Grid container spacing={2}>
-              {/* Title */}
               <Grid size={{ xs: 12 }}>
                 <CTextField
                   label="Quiz Title"
@@ -181,7 +177,6 @@ export default function AIQuizGenerateDialog() {
                 />
               </Grid>
 
-              {/* File Upload */}
               <Grid size={{ xs: 12 }}>
                 <CFileField
                   label="Document File"
@@ -204,7 +199,6 @@ export default function AIQuizGenerateDialog() {
                 />
               </Grid>
 
-              {/* Difficulty Select */}
               <Grid size={{ xs: 6 }}>
                 <CSelect
                   label="Difficulty Level"
@@ -219,7 +213,6 @@ export default function AIQuizGenerateDialog() {
                 />
               </Grid>
 
-              {/* Question Count */}
               <Grid size={{ xs: 6 }}>
                 <CNumberField
                   label="Number of Questions (1-30)"
@@ -234,7 +227,6 @@ export default function AIQuizGenerateDialog() {
         )}
       </CDialog>
 
-      {/* Human-in-the-Loop Review Editor Dialog */}
       <AIQuizReviewDialog
         open={reviewOpen}
         onClose={() => setReviewOpen(false)}

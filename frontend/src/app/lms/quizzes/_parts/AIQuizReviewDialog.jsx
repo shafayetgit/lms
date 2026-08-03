@@ -4,7 +4,6 @@ import {
   Box,
   Typography,
   Chip,
-  Grid,
   Stack,
   Card,
   CardContent,
@@ -16,6 +15,7 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material"
+import Grid from "@mui/material/Grid"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import { toast } from "react-toastify"
@@ -56,14 +56,12 @@ export default function AIQuizReviewDialog({
   const issues = draftData.quality_report?.issues || []
   const suggestions = draftData.quality_report?.suggestions || []
 
-  // Update a question field
   const handleQuestionChange = (index, field, value) => {
     const updated = [...questions]
     updated[index] = { ...updated[index], [field]: value }
     setQuestions(updated)
   }
 
-  // Update an option text
   const handleOptionChange = (qIndex, optIndex, value) => {
     const updated = [...questions]
     const newOptions = [...updated[qIndex].options]
@@ -71,17 +69,14 @@ export default function AIQuizReviewDialog({
     newOptions[optIndex] = value
     updated[qIndex].options = newOptions
 
-    // If edited option was the correct one, update correct_option reference
     if (updated[qIndex].correct_option === oldVal) {
       updated[qIndex].correct_option = value
     }
     setQuestions(updated)
   }
 
-  // Confirm and publish quiz
   const handlePublish = async () => {
     try {
-      // First save inline edits if modified
       const updatedPayload = {
         quiz_data: {
           ...draftData.quiz_data,
@@ -94,7 +89,6 @@ export default function AIQuizReviewDialog({
         body: updatedPayload,
       }).unwrap()
 
-      // Confirm & Publish
       const response = await confirmDraft({
         draftPublicId: draftData.public_id,
         body: { title_override: quizTitle },
@@ -117,7 +111,6 @@ export default function AIQuizReviewDialog({
       handleCDialogClose={onClose}
     >
       <Box sx={{ py: 1 }}>
-        {/* Quality Audit Summary */}
         <Card variant="outlined" sx={{ mb: 3, bgcolor: "background.paper" }}>
           <CardContent>
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
@@ -158,7 +151,6 @@ export default function AIQuizReviewDialog({
           dialog
         >
           <Grid container spacing={2}>
-            {/* Quiz Title Override */}
             <Grid size={{ xs: 12 }}>
               <CTextField
                 label="Quiz Title"
@@ -168,7 +160,6 @@ export default function AIQuizReviewDialog({
               />
             </Grid>
 
-            {/* Questions List */}
             <Grid size={{ xs: 12 }}>
               <Typography variant="subtitle1" fontWeight={700} mb={1}>
                 Generated Questions ({questions.length})
@@ -196,7 +187,6 @@ export default function AIQuizReviewDialog({
                         />
                       </Grid>
 
-                      {/* Options */}
                       <Grid size={{ xs: 12 }}>
                         <Typography variant="body2" fontWeight={600} mb={1}>
                           Options (Select radio for correct answer):
@@ -236,7 +226,6 @@ export default function AIQuizReviewDialog({
                         </RadioGroup>
                       </Grid>
 
-                      {/* Explanation */}
                       <Grid size={{ xs: 12 }}>
                         <CTextField
                           label="Explanation (Optional)"
