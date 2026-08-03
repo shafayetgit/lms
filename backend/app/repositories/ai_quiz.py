@@ -48,6 +48,10 @@ class AIDraftQuizRepository(BaseRepository[AIDraftQuiz]):
                 self.model.owner_id == owner_id,
                 self.model.status == "pending_review"
             )
+            .options(
+                selectinload(self.model.source_content),
+                selectinload(self.model.confirmed_quiz),
+            )
             .order_by(self.model.created_at.desc())
             .offset(skip)
             .limit(limit)
