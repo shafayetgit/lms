@@ -9,6 +9,7 @@ import {
   Chip,
   Stack,
   Divider,
+  Box,
 } from "@mui/material"
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted"
 
@@ -18,8 +19,14 @@ import CPageLoader from "@/components/ui/CPageLoader"
 import CError from "@/components/ui/CError"
 import { formatDate } from "@/utils/cdayjs"
 
-import { useGetAIDraftQuizzesQuery } from "@/features/aiQuiz/aiQuizAPI"
+import {
+  useGetAIDraftQuizzesQuery,
+  useRegenerateAIQuizMutation,
+  useLazyGetAIGenerationStatusQuery,
+  useLazyGetAIDraftQuizQuery,
+} from "@/features/aiQuiz/aiQuizAPI"
 import AIQuizReviewDialog from "./AIQuizReviewDialog"
+import { toast } from "react-toastify"
 
 export default function AIDraftsDialog() {
   const [open, setOpen] = useState(false)
@@ -29,7 +36,55 @@ export default function AIDraftsDialog() {
     skip: !open,
   })
 
+  const [regenerateAIQuiz] = useRegenerateAIQuizMutation()
+  const [triggerStatus] = useLazyGetAIGenerationStatusQuery()
+  const [triggerDraft] = useLazyGetAIDraftQuizQuery()
+  
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [statusMessage, setStatusMessage] = useState("")
+  const pollIntervalRef = React.useRef(null)
+
   const drafts = data?.data || []
+
+  React.useEffect(() => {
+    return () => {
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current)
+    }
+  }, [])
+
+  const startPollingStatus = id => {
+    setIsProcessing(true)
+    setStatusMessage("Queued for processing...")
+
+    pollIntervalRef.current = setInterval(async () => {
+      try {
+        const res = await triggerStatus(id, false).unwrap()
+        const currentStatus = res?.data?.status
+
+        if (currentStatus === "queued") {
+          setStatusMessage("Queued in queue worker...")
+        } else if (currentStatus === "generating") {
+          setStatusMessage("Generating structured quiz questions...")
+        } else if (currentStatus === "auditing") {
+          setStatusMessage("Auditing quiz quality & accuracy...")
+        } else if (currentStatus === "completed") {
+          clearInterval(pollIntervalRef.current)
+          setStatusMessage("Completed! Loading review editor...")
+
+          const draftRes = await triggerDraft(res?.data?.draft_quiz_public_id, false).unwrap()
+          setIsProcessing(false)
+          setSelectedDraft(draftRes?.data)
+          refetch()
+        } else if (currentStatus === "failed") {
+          clearInterval(pollIntervalRef.current)
+          setIsProcessing(false)
+          toast.error(res?.data?.error_message || "Quiz regeneration failed. Please try again.")
+        }
+      } catch (err) {
+        console.error("Polling status error:", err)
+      }
+    }, 2000)
+  }
 
   return (
     <>
@@ -47,7 +102,17 @@ export default function AIDraftsDialog() {
         handleCDialogClose={() => setOpen(false)}
         maxWidth="sm"
       >
-        {isLoading ? (
+        {isProcessing ? (
+          <Box sx={{ py: 4, textAlign: "center" }}>
+            <CPageLoader fullPage={false} />
+            <Typography variant="h6" fontWeight={600} mt={2}>
+              {statusMessage}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" mt={1}>
+              Please wait while AI regenerates your quiz...
+            </Typography>
+          </Box>
+        ) : isLoading ? (
           <CPageLoader fullPage={false} />
         ) : isError ? (
           <CError fullPage={false} />
@@ -90,7 +155,7 @@ export default function AIDraftsDialog() {
       </CDialog>
 
       {/* Review Dialog for the selected draft */}
-      {selectedDraft && (
+      {selectedDraft && !isProcessing && (
         <AIQuizReviewDialog
           open={!!selectedDraft}
           onClose={() => setSelectedDraft(null)}
@@ -99,9 +164,27 @@ export default function AIDraftsDialog() {
             setSelectedDraft(null)
             refetch()
           }}
-          // Note: Regeneration flow might need access to sourcePublicId if they want to regenerate from here
-          // For now, we skip onRegenerate from this view or we could pass it if we have source_content_public_id
-          onRegenerate={null}
+          onRegenerate={async opts => {
+            try {
+              const regenDifficulty = opts?.difficulty || selectedDraft.difficulty
+              const regenNumQuestions = opts?.numQuestions || selectedDraft.num_questions
+
+              const formData = new FormData()
+              formData.append("difficulty", regenDifficulty)
+              formData.append("num_questions", regenNumQuestions)
+
+              setSelectedDraft(null) // Close the review dialog
+
+              await regenerateAIQuiz({
+                sourcePublicId: selectedDraft.source_content_public_id,
+                formData,
+              }).unwrap()
+              
+              startPollingStatus(selectedDraft.source_content_public_id)
+            } catch (err) {
+              toast.error(err?.data?.message || "Failed to initiate regeneration.")
+            }
+          }}
         />
       )}
     </>
