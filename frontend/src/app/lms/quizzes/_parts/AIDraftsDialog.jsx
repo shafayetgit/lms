@@ -78,6 +78,7 @@ export default function AIDraftsDialog() {
                           </Typography>
                         </Stack>
                       }
+                      secondaryTypographyProps={{ component: "div" }}
                     />
                   </ListItemButton>
                 </ListItem>
