@@ -49,7 +49,7 @@ export default function StudentCoursePlayerPage() {
 
   // Fetch General LMS Settings
   const { data: settingsResponse } = useReadSettingsQuery()
-  const settings = useMemo(() => settingsResponse || {}, [settingsResponse])
+  const settings = useMemo(() => settingsResponse?.data || {}, [settingsResponse])
 
   // Fetch Course details
   const {
