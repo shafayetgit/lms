@@ -135,7 +135,7 @@ async def test_get_and_update_draft(client: AsyncClient, test_admin, test_draft_
         # 1. Retrieve draft details
         res_get = await client.get(f"/api/v1/ai-quizzes/drafts/{draft_id}")
         assert res_get.status_code == 200
-        body_get = res_get.json()
+        body_get = res_get.json()["data"]
         assert body_get["quiz_data"]["title"] == "Gravity Quiz"
 
         # 2. Update draft quiz questions

@@ -169,7 +169,7 @@ async def get_generation_status(
     response_data = AIGenerationStatusResponse.model_validate(status_data).model_dump(
         by_alias=False
     )
-    return read_response(response_data)
+    return read_response({"data": response_data})
 
 
 @router.get(
@@ -191,7 +191,7 @@ async def get_draft_quiz(
         )
 
     response_data = AIDraftQuizResponse.model_validate(draft).model_dump(by_alias=False)
-    return read_response(response_data)
+    return read_response({"data": response_data})
 
 
 @router.put(
