@@ -203,7 +203,13 @@ export default function AIQuizReviewDialog({
               </Typography>
 
               {questions.map((q, qIndex) => (
-                <Accordion key={qIndex} defaultExpanded={qIndex === 0} sx={{ mb: 1 }}>
+                <Accordion
+                  key={qIndex}
+                  defaultExpanded={qIndex === 0}
+                  elevation={0}
+                  variant="outlined"
+                  sx={{ mb: 1 }}
+                >
                   <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Typography fontWeight={600}>
                       Q{qIndex + 1}: {q.question_text || "Untitled Question"}
