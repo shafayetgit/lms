@@ -77,7 +77,8 @@ const helpTips = {
 }
 
 export default function SettingsPage() {
-  const { data: settingsData, isLoading } = useReadSettingsQuery()
+  const { data: settingsResponse, isLoading } = useReadSettingsQuery()
+  const settingsData = settingsResponse?.data
   const [update, { isLoading: isUpdating }] = useUpdateSettingsMutation()
   const { data: templatesData } = useListEmailTemplatesQuery({ size: 100 })
 
