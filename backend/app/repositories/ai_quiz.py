@@ -36,5 +36,24 @@ class AIDraftQuizRepository(BaseRepository[AIDraftQuiz]):
         result = await db.execute(stmt)
         return list(result.scalars().all())
 
+    async def get_user_drafts(
+        self, db: AsyncSession, owner_id: int, skip: int = 0, limit: int = 100
+    ) -> list[AIDraftQuiz]:
+        """
+        Fetch pending drafts for a specific user.
+        """
+        stmt = (
+            select(self.model)
+            .where(
+                self.model.owner_id == owner_id,
+                self.model.status == "pending_review"
+            )
+            .order_by(self.model.created_at.desc())
+            .offset(skip)
+            .limit(limit)
+        )
+        result = await db.execute(stmt)
+        return list(result.scalars().all())
+
 
 ai_draft_quiz_repo = AIDraftQuizRepository(AIDraftQuiz)

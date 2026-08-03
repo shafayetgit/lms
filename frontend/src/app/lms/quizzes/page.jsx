@@ -10,6 +10,7 @@ import CError from "@/components/ui/CError"
 import CModuleLayout from "@/components/ui/CModuleLayout"
 import CreateDialog from "./_parts/CreateDialog"
 import AIQuizGenerateDialog from "./_parts/AIQuizGenerateDialog"
+import AIDraftsDialog from "./_parts/AIDraftsDialog"
 import { Chip, Stack } from "@mui/material"
 import Link from "next/link"
 import { QUIZ_TIPS } from "@/choices/helpTips/quiz"
@@ -86,6 +87,7 @@ export default function Page() {
         action={
           <PermissionGuard resource="quiz" action="create" silent>
             <Stack direction="row" spacing={1} alignItems="center">
+              <AIDraftsDialog />
               <AIQuizGenerateDialog />
               <CreateDialog />
             </Stack>

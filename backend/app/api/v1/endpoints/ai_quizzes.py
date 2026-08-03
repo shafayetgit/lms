@@ -253,6 +253,28 @@ async def get_generation_status(
 
 
 @router.get(
+    "/drafts",
+    response_model=None,
+    dependencies=[Depends(PermissionChecker("quiz", "read"))],
+)
+async def list_draft_quizzes(
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[Any, Depends(PermissionChecker("quiz", "read"))],
+):
+    """
+    List all pending AI-generated draft quizzes for the current user.
+    """
+    from app.repositories.ai_quiz import ai_draft_quiz_repo
+    drafts = await ai_draft_quiz_repo.get_user_drafts(db, owner_id=current_user.id)
+    
+    response_data = [
+        AIDraftQuizResponse.model_validate(d).model_dump(by_alias=False)
+        for d in drafts
+    ]
+    return read_response({"data": response_data})
+
+
+@router.get(
     "/drafts/{draft_public_id}",
     response_model=None,
     dependencies=[Depends(PermissionChecker("quiz", "read"))],

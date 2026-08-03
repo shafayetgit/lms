@@ -27,6 +27,11 @@ const aiQuizAPI = api.injectEndpoints({
       providesTags: (result, error, sourcePublicId) => [{ type: "AI_QUIZZES", id: sourcePublicId }],
     }),
 
+    getAIDraftQuizzes: builder.query({
+      query: () => `${PREFIX}/drafts`,
+      providesTags: ["AI_QUIZZES"],
+    }),
+
     getAIDraftQuiz: builder.query({
       query: draftPublicId => `${PREFIX}/drafts/${draftPublicId}`,
       providesTags: (result, error, draftPublicId) => [{ type: "AI_QUIZZES", id: draftPublicId }],
@@ -58,6 +63,7 @@ export const {
   useRegenerateAIQuizMutation,
   useGetAIGenerationStatusQuery,
   useLazyGetAIGenerationStatusQuery,
+  useGetAIDraftQuizzesQuery,
   useGetAIDraftQuizQuery,
   useLazyGetAIDraftQuizQuery,
   useUpdateAIDraftQuizMutation,
