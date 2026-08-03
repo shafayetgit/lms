@@ -234,12 +234,15 @@ export default function AIQuizGenerateDialog() {
         onClose={() => setReviewOpen(false)}
         draftData={draftQuizData}
         onConfirmed={resetForm}
-        onRegenerate={async () => {
+        onRegenerate={async opts => {
           try {
+            const regenDifficulty = opts?.difficulty || difficulty
+            const regenNumQuestions = opts?.numQuestions || numQuestions
+
             const formData = new FormData()
-            formData.append("difficulty", difficulty)
-            formData.append("num_questions", numQuestions)
-            
+            formData.append("difficulty", regenDifficulty)
+            formData.append("num_questions", regenNumQuestions)
+
             const res = await regenerateAIQuiz({
               sourcePublicId,
               formData,

@@ -25,6 +25,8 @@ import CForm from "@/components/ui/CForm"
 import CTextField from "@/components/form/CTextField"
 import CPageLoader from "@/components/ui/CPageLoader"
 import CButton from "@/components/ui/CButton"
+import CSelect from "@/components/form/CSelect"
+import CNumberField from "@/components/form/CNumberField"
 
 import {
   useUpdateAIDraftQuizMutation,
@@ -42,6 +44,10 @@ export default function AIQuizReviewDialog({
   const [questions, setQuestions] = useState([])
   const [quizTitle, setQuizTitle] = useState("")
 
+  const [regenOpen, setRegenOpen] = useState(false)
+  const [regenDifficulty, setRegenDifficulty] = useState("medium")
+  const [regenNumQuestions, setRegenNumQuestions] = useState(5)
+
   const [updateDraft, { isLoading: isUpdating }] = useUpdateAIDraftQuizMutation()
   const [confirmDraft, { isLoading: isConfirming }] = useConfirmAIDraftQuizMutation()
 
@@ -49,6 +55,10 @@ export default function AIQuizReviewDialog({
     if (draftData?.quiz_data) {
       setQuizTitle(draftData.quiz_data.title || "AI Generated Quiz")
       setQuestions(draftData.quiz_data.questions || [])
+    }
+    if (draftData) {
+      if (draftData.difficulty) setRegenDifficulty(draftData.difficulty)
+      if (draftData.num_questions) setRegenNumQuestions(draftData.num_questions)
     }
   }, [draftData])
 
@@ -106,39 +116,51 @@ export default function AIQuizReviewDialog({
     }
   }
 
+  const handleRegenSubmit = e => {
+    e.preventDefault()
+    setRegenOpen(false)
+    if (onRegenerate) {
+      onRegenerate({
+        difficulty: regenDifficulty,
+        numQuestions: regenNumQuestions,
+      })
+    }
+  }
+
   return (
-    <CDialog
-      title="Review & Confirm AI Quiz"
-      maxWidth="md"
-      open={open}
-      handleCDialogClose={onClose}
-    >
-      <Box sx={{ py: 1 }}>
-        <Card variant="outlined" sx={{ mb: 3, bgcolor: "background.paper" }}>
-          <CardContent>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
-              <Typography variant="h6" fontWeight={700}>
-                AI Quality Audit Report
-              </Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
-                {onRegenerate && (
-                  <CButton
-                    label="Regenerate"
-                    onClick={onRegenerate}
-                    loading={isRegenerating}
-                    variant="outlined"
-                    color="secondary"
-                    size="small"
+    <>
+      <CDialog
+        title="Review & Confirm AI Quiz"
+        maxWidth="md"
+        open={open}
+        handleCDialogClose={onClose}
+      >
+        <Box sx={{ py: 1 }}>
+          <Card variant="outlined" sx={{ mb: 3, bgcolor: "background.paper" }}>
+            <CardContent>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="h6" fontWeight={700}>
+                  AI Quality Audit Report
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  {onRegenerate && (
+                    <CButton
+                      label="Regenerate"
+                      onClick={() => setRegenOpen(true)}
+                      loading={isRegenerating}
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
+                    />
+                  )}
+                  <Chip
+                    icon={<CheckCircleOutlineIcon />}
+                    label={`Score: ${qualityScore}/100`}
+                    color={qualityScore >= 80 ? "success" : qualityScore >= 60 ? "warning" : "error"}
+                    fontWeight={700}
                   />
-                )}
-                <Chip
-                  icon={<CheckCircleOutlineIcon />}
-                  label={`Score: ${qualityScore}/100`}
-                  color={qualityScore >= 80 ? "success" : qualityScore >= 60 ? "warning" : "error"}
-                  fontWeight={700}
-                />
+                </Stack>
               </Stack>
-            </Stack>
 
             {issues.length > 0 && (
               <Alert severity="warning" sx={{ mb: 1 }}>
@@ -261,5 +283,46 @@ export default function AIQuizReviewDialog({
         </CForm>
       </Box>
     </CDialog>
+
+    <CDialog
+      title="Regenerate Quiz Options"
+      open={regenOpen}
+      handleCDialogClose={() => setRegenOpen(false)}
+    >
+      <CForm
+        onSubmit={handleRegenSubmit}
+        width="25rem"
+        btnProps={{ label: "Regenerate Quiz", loading: isRegenerating }}
+        dialog
+      >
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <CSelect
+              label="Difficulty Level"
+              value={regenDifficulty}
+              onChange={e => setRegenDifficulty(e.target.value)}
+              options={[
+                { label: "Easy", value: "easy" },
+                { label: "Medium", value: "medium" },
+                { label: "Hard", value: "hard" },
+              ]}
+              required
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <CNumberField
+              label="Number of Questions (1-30)"
+              value={regenNumQuestions}
+              onChange={val => setRegenNumQuestions(val)}
+              min={1}
+              max={30}
+              required
+            />
+          </Grid>
+        </Grid>
+      </CForm>
+    </CDialog>
+    </>
   )
 }
