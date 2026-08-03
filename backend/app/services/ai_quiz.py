@@ -49,6 +49,38 @@ class AIQuizService:
 
         return source_obj
 
+    async def regenerate_quiz(
+        self,
+        db: AsyncSession,
+        *,
+        source_public_id: str,
+        difficulty: str,
+        num_questions: int,
+    ) -> AISourceContent | None:
+        source_obj = await ai_source_content_repo.get_by_public_id(
+            db, public_id=source_public_id
+        )
+        if not source_obj:
+            return None
+
+        # Reset status
+        source_obj.status = "queued"
+        source_obj.error_message = None
+        
+        # We need to import the new task
+        from app.tasks.ai_quizzes import run_quiz_regeneration_task
+        task_result = run_quiz_regeneration_task.delay(
+            source_content_id=source_obj.id,
+            difficulty=difficulty,
+            num_questions=num_questions,
+        )
+
+        source_obj.celery_task_id = task_result.id
+        await db.commit()
+        await db.refresh(source_obj)
+
+        return source_obj
+
     async def get_draft_quiz(
         self, db: AsyncSession, public_id: str
     ) -> AIDraftQuiz | None:

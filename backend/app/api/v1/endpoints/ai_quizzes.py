@@ -147,6 +147,86 @@ async def generate_quiz_from_file(
         )
 
 
+@router.post(
+    "/regenerate/{source_public_id}",
+    status_code=status.HTTP_202_ACCEPTED,
+    dependencies=[Depends(PermissionChecker("quiz", "create"))],
+)
+async def regenerate_quiz(
+    source_public_id: str,
+    db: Annotated[AsyncSession, Depends(get_db)],
+    current_user: Annotated[Any, Depends(PermissionChecker("quiz", "create"))],
+    difficulty: Annotated[str, Form()] = "medium",
+    num_questions: Annotated[int, Form()] = 5,
+):
+    """
+    Regenerate a quiz from an existing source document, skipping OCR and text correction.
+    """
+    # 0. Check Rate Limit (5 requests per minute per user)
+    from app.core.redis import get_redis_client
+    redis_client = get_redis_client()
+    if redis_client:
+        rate_limit_key = f"rate_limit:regenerate_quiz:{current_user.id}"
+        try:
+            count = await redis_client.incr(rate_limit_key)
+            if count == 1:
+                await redis_client.expire(rate_limit_key, 60)
+            elif count > 5:
+                raise HTTPException(
+                    status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                    detail="Rate limit exceeded. Please wait before regenerating another quiz.",
+                )
+        except HTTPException:
+            raise
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Redis rate limiter error | error={str(e)}")
+
+    valid_difficulties = ["easy", "medium", "hard"]
+    if difficulty not in valid_difficulties:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid difficulty. Must be one of: {', '.join(valid_difficulties)}",
+        )
+
+    if not (1 <= num_questions <= 30):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Number of questions must be between 1 and 30",
+        )
+
+    try:
+        source_content = await ai_quiz_service.regenerate_quiz(
+            db=db,
+            source_public_id=source_public_id,
+            difficulty=difficulty,
+            num_questions=num_questions,
+        )
+
+        if not source_content:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Original document source not found.",
+            )
+
+        response_data = AISourceContentResponse.model_validate(
+            source_content
+        ).model_dump(by_alias=False)
+        return create_response(
+            response_data,
+            message="Quiz regeneration initiated successfully",
+            status_code=status.HTTP_202_ACCEPTED,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to initiate quiz regeneration: {e!s}",
+        )
+
+
 @router.get(
     "/status/{source_public_id}",
     response_model=None,

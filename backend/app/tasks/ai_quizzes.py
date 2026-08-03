@@ -156,3 +156,130 @@ def run_quiz_generation_task(
             num_questions=num_questions,
         )
     )
+
+
+async def run_quiz_regeneration_pipeline(
+    source_content_id: int,
+    difficulty: str,
+    num_questions: int,
+):
+    from app.ai.workflows.quiz_pipeline import QuizGenerationPipeline
+    from app.db.session import dispose_current_loop_engine, get_session_maker
+    from app.repositories.ai_quiz import ai_draft_quiz_repo
+    from app.repositories.ai_source_content import ai_source_content_repo
+
+    trace_id = uuid.uuid4().hex[:12]
+    logger.info(
+        "[%s] Quiz regeneration pipeline started | source_content_id=%d",
+        trace_id,
+        source_content_id,
+    )
+
+    session_maker = get_session_maker()
+
+    async def update_status(status_str: str, error_msg: str | None = None):
+        try:
+            async with session_maker() as status_db:
+                source = await ai_source_content_repo.get_by_id(
+                    status_db, id=source_content_id
+                )
+                if source:
+                    source.status = status_str
+                    if error_msg is not None:
+                        source.error_message = error_msg
+                    status_db.add(source)
+                    await status_db.commit()
+        except Exception as ex:
+            logger.error(
+                "[%s] Failed to update status to %s: %s", trace_id, status_str, ex
+            )
+
+    async with session_maker() as db:
+        try:
+            source_obj = await ai_source_content_repo.get_by_id(
+                db, id=source_content_id
+            )
+            if not source_obj or not source_obj.corrected_text:
+                logger.error(
+                    "[%s] Source content ID %d not found or has no corrected text",
+                    trace_id,
+                    source_content_id,
+                )
+                return False
+
+            pipeline = QuizGenerationPipeline()
+            (
+                quiz_output_obj,
+                quality_report_obj,
+                token_usage,
+            ) = await pipeline.run_regeneration(
+                corrected_text=source_obj.corrected_text,
+                difficulty=difficulty,
+                num_questions=num_questions,
+                trace_id=trace_id,
+                status_callback=update_status,
+            )
+
+            source_obj.status = "completed"
+            
+            # Combine token usage with previous
+            if source_obj.meta_info:
+                old_usage = source_obj.meta_info.get("token_usage", {})
+                new_usage = token_usage
+                # Just append a list of usages or update total
+                # For simplicity, we just add total
+                old_total = old_usage.get("total_tokens", 0) if isinstance(old_usage, dict) else 0
+                source_obj.meta_info["token_usage"] = {
+                    "total_tokens": old_total + new_usage.get("total_tokens", 0)
+                }
+            
+            db.add(source_obj)
+
+            draft_in = {
+                "source_content_id": source_obj.id,
+                "difficulty": difficulty,
+                "num_questions": num_questions,
+                "quiz_data": quiz_output_obj.model_dump(),
+                "quality_report": quality_report_obj.model_dump(),
+                "status": "pending_review",
+                "owner_id": source_obj.owner_id,
+            }
+            await ai_draft_quiz_repo.create(db, obj_in=draft_in)
+            await db.commit()
+            logger.info("[%s] Regeneration task completed successfully", trace_id)
+            return True
+
+        except Exception as e:
+            logger.error("[%s] Regeneration pipeline failed: %s", trace_id, e, exc_info=True)
+            await update_status("failed", error_msg=str(e))
+            raise e
+        finally:
+            await dispose_current_loop_engine()
+
+
+@celery_app.task(
+    name="ai_content.regenerate_quiz_pipeline",
+    autoretry_for=(Exception,),
+    retry_backoff=True,
+    retry_kwargs={"max_retries": 3},
+)
+def run_quiz_regeneration_task(
+    source_content_id: int,
+    difficulty: str,
+    num_questions: int,
+):
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            raise RuntimeError("Loop is closed")
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    return loop.run_until_complete(
+        run_quiz_regeneration_pipeline(
+            source_content_id=source_content_id,
+            difficulty=difficulty,
+            num_questions=num_questions,
+        )
+    )

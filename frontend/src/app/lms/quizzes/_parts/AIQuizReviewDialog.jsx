@@ -24,6 +24,7 @@ import CDialog from "@/components/ui/CDialog"
 import CForm from "@/components/ui/CForm"
 import CTextField from "@/components/form/CTextField"
 import CPageLoader from "@/components/ui/CPageLoader"
+import CButton from "@/components/ui/CButton"
 
 import {
   useUpdateAIDraftQuizMutation,
@@ -35,6 +36,8 @@ export default function AIQuizReviewDialog({
   onClose,
   draftData,
   onConfirmed,
+  onRegenerate,
+  isRegenerating,
 }) {
   const [questions, setQuestions] = useState([])
   const [quizTitle, setQuizTitle] = useState("")
@@ -117,12 +120,24 @@ export default function AIQuizReviewDialog({
               <Typography variant="h6" fontWeight={700}>
                 AI Quality Audit Report
               </Typography>
-              <Chip
-                icon={<CheckCircleOutlineIcon />}
-                label={`Score: ${qualityScore}/100`}
-                color={qualityScore >= 80 ? "success" : qualityScore >= 60 ? "warning" : "error"}
-                fontWeight={700}
-              />
+              <Stack direction="row" spacing={2} alignItems="center">
+                {onRegenerate && (
+                  <CButton
+                    label="Regenerate"
+                    onClick={onRegenerate}
+                    loading={isRegenerating}
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                  />
+                )}
+                <Chip
+                  icon={<CheckCircleOutlineIcon />}
+                  label={`Score: ${qualityScore}/100`}
+                  color={qualityScore >= 80 ? "success" : qualityScore >= 60 ? "warning" : "error"}
+                  fontWeight={700}
+                />
+              </Stack>
             </Stack>
 
             {issues.length > 0 && (

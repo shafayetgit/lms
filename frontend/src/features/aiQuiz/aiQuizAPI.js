@@ -13,6 +13,15 @@ const aiQuizAPI = api.injectEndpoints({
       invalidatesTags: ["AI_QUIZZES"],
     }),
 
+    regenerateAIQuiz: builder.mutation({
+      query: ({ sourcePublicId, formData }) => ({
+        url: `${PREFIX}/regenerate/${sourcePublicId}`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["AI_QUIZZES"],
+    }),
+
     getAIGenerationStatus: builder.query({
       query: sourcePublicId => `${PREFIX}/status/${sourcePublicId}`,
       providesTags: (result, error, sourcePublicId) => [{ type: "AI_QUIZZES", id: sourcePublicId }],
@@ -46,6 +55,7 @@ const aiQuizAPI = api.injectEndpoints({
 
 export const {
   useGenerateAIQuizMutation,
+  useRegenerateAIQuizMutation,
   useGetAIGenerationStatusQuery,
   useLazyGetAIGenerationStatusQuery,
   useGetAIDraftQuizQuery,

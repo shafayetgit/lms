@@ -307,3 +307,151 @@ class QuizGenerationPipeline(BaseWorkflow):
         )
 
         return corrected_text_obj, quiz_output_obj, quality_report_obj, token_usage
+
+    async def run_regeneration(
+        self,
+        corrected_text: str,
+        difficulty: str = "medium",
+        num_questions: int = 5,
+        trace_id: str = "",
+        status_callback: Callable[[str], Awaitable[None]] | None = None,
+    ) -> tuple[QuizOutput, QualityReport, dict]:
+        pipeline_start = time.monotonic()
+        logger.info(
+            "[%s] Regeneration Pipeline started | difficulty=%s num_questions=%d",
+            trace_id,
+            difficulty,
+            num_questions,
+        )
+
+        # Step 3: Generate Quiz from corrected text
+        if status_callback:
+            await status_callback("generating")
+
+        generation_prompt = quiz_generation.USER_PROMPT_TEMPLATE.format(
+            difficulty=difficulty,
+            num_questions=num_questions,
+            source_text=corrected_text,
+        )
+        quiz_output_obj: QuizOutput = await self.provider.generate_response(
+            prompt=generation_prompt,
+            system_prompt=quiz_generation.SYSTEM_PROMPT,
+            response_model=QuizOutput,
+            temperature=0.4,
+        )
+        generation_usage = self.provider.last_usage.copy()
+
+        # Validate generated quiz and auto-retry if issues are found
+        from app.ai.tools.quiz_validator import QuizOutputValidator
+        validator = QuizOutputValidator()
+        is_valid, issues = validator.validate(quiz_output_obj, num_questions)
+
+        if not is_valid:
+            logger.warning(
+                "[%s] Quiz validation failed on first attempt. Issues:\n%s",
+                trace_id,
+                "\n".join(f"- {issue}" for issue in issues),
+            )
+
+            # Retry with feedback
+            retry_prompt = (
+                f"{generation_prompt}\n\n"
+                "CRITICAL: The previous output was invalid. Please regenerate the quiz, resolving the following validation errors:\n"
+                + "\n".join(f"- {issue}" for issue in issues)
+            )
+
+            logger.info("[%s] Retrying quiz generation (attempt 2)...", trace_id)
+            quiz_output_obj = await self.provider.generate_response(
+                prompt=retry_prompt,
+                system_prompt=quiz_generation.SYSTEM_PROMPT,
+                response_model=QuizOutput,
+                temperature=0.3,
+            )
+
+            # Accumulate retry token usage
+            retry_usage = self.provider.last_usage.copy()
+            generation_usage["prompt_tokens"] += retry_usage.get("prompt_tokens", 0)
+            generation_usage["completion_tokens"] += retry_usage.get("completion_tokens", 0)
+            generation_usage["total_tokens"] += retry_usage.get("total_tokens", 0)
+
+            # Re-validate second attempt
+            is_valid, issues = validator.validate(quiz_output_obj, num_questions)
+            if not is_valid:
+                logger.error(
+                    "[%s] Quiz validation failed on second attempt. Proceeding with issues. Issues:\n%s",
+                    trace_id,
+                    "\n".join(f"- {issue}" for issue in issues),
+                )
+            else:
+                logger.info("[%s] Quiz validation passed on second attempt.", trace_id)
+        else:
+            logger.info("[%s] Quiz validation passed on first attempt.", trace_id)
+
+        logger.info(
+            "[%s] Step 3 complete | questions_generated=%d title=%s",
+            trace_id,
+            len(quiz_output_obj.questions),
+            quiz_output_obj.title,
+        )
+
+        # Step 4: Audit / Quality Check the generated quiz
+        if status_callback:
+            await status_callback("auditing")
+
+        try:
+            quiz_json_str = quiz_output_obj.model_dump_json(indent=2)
+            audit_prompt = quality_check.USER_PROMPT_TEMPLATE.format(
+                quiz_json=quiz_json_str
+            )
+            quality_report_obj: QualityReport = await self.provider.generate_response(
+                prompt=audit_prompt,
+                system_prompt=quality_check.SYSTEM_PROMPT,
+                response_model=QualityReport,
+                temperature=0.1,
+            )
+            audit_usage = self.provider.last_usage.copy()
+            logger.info(
+                "[%s] Step 4 complete | quality_score=%d is_passing=%s issues=%d",
+                trace_id,
+                quality_report_obj.score,
+                quality_report_obj.is_passing,
+                len(quality_report_obj.issues),
+            )
+        except Exception as e:
+            logger.error(
+                "[%s] Quality audit failed, proceeding without audit. Error: %s",
+                trace_id,
+                str(e),
+            )
+            quality_report_obj = QualityReport(
+                score=0,
+                is_passing=False,
+                issues=["Audit could not be performed"],
+                suggestions=[],
+            )
+            audit_usage = {
+                "prompt_tokens": 0,
+                "completion_tokens": 0,
+                "total_tokens": 0,
+            }
+
+        # Aggregate token usage across all steps
+        token_usage = {
+            "text_correction": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+            "quiz_generation": generation_usage,
+            "quality_check": audit_usage,
+            "total_tokens": (
+                generation_usage.get("total_tokens", 0)
+                + audit_usage.get("total_tokens", 0)
+            ),
+        }
+
+        total_time = time.monotonic() - pipeline_start
+        logger.info(
+            "[%s] Regeneration Pipeline finished | total_time=%.2fs total_tokens=%d",
+            trace_id,
+            total_time,
+            token_usage["total_tokens"],
+        )
+
+        return quiz_output_obj, quality_report_obj, token_usage

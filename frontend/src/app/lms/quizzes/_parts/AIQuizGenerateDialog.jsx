@@ -16,6 +16,7 @@ import CButton from "@/components/ui/CButton"
 
 import {
   useGenerateAIQuizMutation,
+  useRegenerateAIQuizMutation,
   useLazyGetAIGenerationStatusQuery,
   useLazyGetAIDraftQuizQuery,
 } from "@/features/aiQuiz/aiQuizAPI"
@@ -36,6 +37,7 @@ export default function AIQuizGenerateDialog() {
   const [draftQuizData, setDraftQuizData] = useState(null)
 
   const [generateAIQuiz, { isLoading: isInitiating }] = useGenerateAIQuizMutation()
+  const [regenerateAIQuiz, { isLoading: isRegenerating }] = useRegenerateAIQuizMutation()
   const [triggerStatus] = useLazyGetAIGenerationStatusQuery()
   const [triggerDraft] = useLazyGetAIDraftQuizQuery()
 
@@ -232,6 +234,24 @@ export default function AIQuizGenerateDialog() {
         onClose={() => setReviewOpen(false)}
         draftData={draftQuizData}
         onConfirmed={resetForm}
+        onRegenerate={async () => {
+          try {
+            const formData = new FormData()
+            formData.append("difficulty", difficulty)
+            formData.append("num_questions", numQuestions)
+            
+            const res = await regenerateAIQuiz({
+              sourcePublicId,
+              formData,
+            }).unwrap()
+            setReviewOpen(false)
+            setOpen(true)
+            startPollingStatus(sourcePublicId)
+          } catch (err) {
+            toast.error(err?.data?.message || "Failed to initiate regeneration.")
+          }
+        }}
+        isRegenerating={isRegenerating}
       />
     </>
   )
