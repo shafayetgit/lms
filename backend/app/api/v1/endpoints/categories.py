@@ -1,15 +1,13 @@
-import re
-from typing import List
-from app.core.responses import create_response, update_response
-from app.models.category import CategoryBadge
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.deps import get_db
 from app.core.dependencies import PermissionChecker
+from app.models.category import CategoryBadge
 from app.schemas.category import (
     CategoryCreate,
     CategoryListResponse,
-    CategoryRead,
     CategoryReadResponse,
     CategoryUpdate,
 )
