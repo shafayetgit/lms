@@ -9,6 +9,10 @@ export const QUIZ_TIPS = {
         text: "Specify the duration and passing score to automate progress tracking.",
       },
       { label: "Active Status", text: "Only active quizzes will be visible to enrolled students." },
+      {
+        label: "AI Generation",
+        text: "Upload PDFs, DOCX, TXT, or images to auto-generate structured quizzes with quality audits.",
+      },
     ],
   },
   details: {

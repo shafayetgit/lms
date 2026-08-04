@@ -10,9 +10,7 @@ class Settings(BaseSettings):
     REDIS_URL: str = Field(
         default="redis://localhost:6379/0", validation_alias="REDIS_URL"
     )
-    CACHE_TTL: int = Field(
-        default=86400, validation_alias="CACHE_TTL"
-    )
+    CACHE_TTL: int = Field(default=86400, validation_alias="CACHE_TTL")
 
     # Celery (Background Tasks)
     CELERY_ENABLED: bool = Field(default=False, validation_alias="CELERY_ENABLED")
@@ -46,7 +44,6 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = Field(
         default="http://localhost:3000", validation_alias="FRONTEND_URL"
     )
-
 
     # OTP Settings
     OTP_EXPIRE_MINUTES: int = Field(default=10, validation_alias="OTP_EXPIRE_MINUTES")
@@ -92,6 +89,12 @@ class Settings(BaseSettings):
     PASSWORD_REQUIRE_SPECIAL_CHARS: bool = Field(
         default=True, validation_alias="PASSWORD_REQUIRE_SPECIAL_CHARS"
     )
+
+    LLM_PROVIDER: str = Field(validation_alias="LLM_PROVIDER")
+    LLM_BASE_URL: str | None = Field(validation_alias="LLM_BASE_URL")
+    LLM_API_KEY: str | None = Field(validation_alias="LLM_API_KEY")
+    LLM_MODEL: str = Field(validation_alias="LLM_MODEL")
+    LLM_TIMEOUT: float = Field(default=180.0, validation_alias="LLM_TIMEOUT")
 
     # Media Storage
     MEDIA_PROVIDER: str = Field(

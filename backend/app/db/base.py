@@ -1,10 +1,12 @@
 from datetime import datetime, timezone
 from typing import Optional
-from sqlalchemy import DateTime, BigInteger, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+from sqlalchemy import BigInteger, DateTime, String
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from uuid_utils import uuid7
 
 from app.core.context import current_user_id
+
 
 class Base(DeclarativeBase):
     """
@@ -22,7 +24,7 @@ class Base(DeclarativeBase):
         nullable=False,
     )
 
-    owner_id: Mapped[Optional[int]] = mapped_column(
+    owner_id: Mapped[int | None] = mapped_column(
         default=lambda: current_user_id.get(),
         nullable=True,
         index=True,
@@ -42,17 +44,35 @@ class Base(DeclarativeBase):
         nullable=True,
     )
 
-from app.models.batch import Batch, BatchCourse, BatchEnrollment, BatchTimetable, BatchFeedback
-from app.models.program import Program, ProgramCourse, ProgramMember
+
+from app.models.ai_quiz import AIDraftQuiz
+from app.models.ai_source_content import AISourceContent
 from app.models.assignment import Assignment, AssignmentSubmission
-from app.models.certificate import Certificate, CertificateEvaluation, CertificateRequest
-from app.models.payment import Coupon, Payment
-from app.models.payment_gateway import PaymentGatewayConfig
 from app.models.badge import Badge, BadgeAssignment
-from app.models.live_class import LiveClass
-from app.models.settings import LMSSettings
-from app.models.tracking import LessonNote, VideoWatchDuration, CourseInterest, RelatedCourse
-from app.models.invitation import Invitation
+from app.models.batch import (
+    Batch,
+    BatchCourse,
+    BatchEnrollment,
+    BatchFeedback,
+    BatchTimetable,
+)
+from app.models.certificate import (
+    Certificate,
+    CertificateEvaluation,
+    CertificateRequest,
+)
 from app.models.email_account import EmailAccount
 from app.models.email_template import EmailTemplate
+from app.models.invitation import Invitation
+from app.models.live_class import LiveClass
 from app.models.notification import Notification
+from app.models.payment import Coupon, Payment
+from app.models.payment_gateway import PaymentGatewayConfig
+from app.models.program import Program, ProgramCourse, ProgramMember
+from app.models.settings import LMSSettings
+from app.models.tracking import (
+    CourseInterest,
+    LessonNote,
+    RelatedCourse,
+    VideoWatchDuration,
+)

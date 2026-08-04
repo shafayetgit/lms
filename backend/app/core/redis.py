@@ -12,9 +12,27 @@ class RedisManager:
     """
     _pool: Optional[aioredis.ConnectionPool] = None
     _client: Optional[aioredis.Redis] = None
+    _loop = None
 
     @classmethod
     def get_client(cls) -> Optional[aioredis.Redis]:
+        import asyncio
+        try:
+            current_loop = asyncio.get_running_loop()
+        except RuntimeError:
+            current_loop = None
+
+        if cls._client is not None and cls._loop is not current_loop:
+            if cls._pool:
+                try:
+                    if current_loop and current_loop.is_running():
+                        current_loop.create_task(cls._pool.disconnect())
+                except Exception:
+                    pass
+            cls._client = None
+            cls._pool = None
+            cls._loop = None
+
         if cls._client is None:
             try:
                 settings = init_settings()
@@ -26,6 +44,7 @@ class RedisManager:
                     socket_connect_timeout=2.0,
                 )
                 cls._client = aioredis.Redis(connection_pool=cls._pool)
+                cls._loop = current_loop
                 logger.info("Initialized Redis connection pool successfully")
             except Exception as e:
                 logger.warning(f"Failed to initialize Redis connection pool: {e}")
